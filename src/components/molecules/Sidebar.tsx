@@ -28,7 +28,7 @@ const SideBar = () => {
   const sidebarLinks = [
     {
       label: "Collections",
-      icon: <CollectionIcon />,
+      icon: <CollectionsIcon />,
       subLinks: [
         { label: "Popular collections", link: "/collections" },
         { label: "Drop calendar", link: "/settings" },
@@ -47,7 +47,7 @@ const SideBar = () => {
     },
     {
       label: "Activities",
-      icon: <ActivitiesIcon />,
+      icon: <ActivityIcon />,
       link: "/create-new-nft",
     },
     {
@@ -65,9 +65,9 @@ const SideBar = () => {
   ];
 
   const socialLinks = [
-    { icon: <IOSIcon />, label: "iOS App" },
+    { icon: <IosIcon />, label: "iOS App" },
     { icon: <DiscordIcon />, label: "Discord" },
-    { icon: <TikTokIcon />, label: "TikTok" },
+    { icon: <TiktokIcon />, label: "TikTok" },
     { icon: <YoutubeIcon />, label: "Youtube" },
     { icon: <TwitterIcon />, label: "Twitter" },
     { icon: <InstagramIcon />, label: "Instagram" },
@@ -76,17 +76,17 @@ const SideBar = () => {
   return (
     <div className="sidebar-container">
       <div className="sidebar-btn">
-        <img
+        {/* <Image
           src="/vectors/close-icon.svg"
           alt="close-mobile-tab-img"
           onClick={handleMobileModalToggle}
-        />
+        /> */}
         <span className="block m-1">
           <Button title="Connect Wallet" prefix={<WalletIcon />} outline />
         </span>
       </div>
       {sidebarLinks.map((item) => (
-        <SidebarMenu key={item.label} item={item} />
+        <SidebarLink key={item.label} item={item} />
       ))}
       <div className="social-links">
         {socialLinks.map(({ icon, label }) => (

@@ -6,6 +6,7 @@
 
 /* import components */
 @import "./Atom.module.css";
+@import "./Molecules.module.css";
 
 @layer base {
   @font-face {

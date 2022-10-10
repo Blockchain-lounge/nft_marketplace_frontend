@@ -3,7 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import CaretDown from "./vectors/caret-down";
 
-const SidebarMenu = ({ item }: { item: any }) => {
+const SidebarLink = ({ item }: { item: any }) => {
   const [openSubmenu, setOpenSubmenu] = useState(false);
   const handleOpenSubmenu = () => setOpenSubmenu(!openSubmenu);
 
@@ -23,13 +23,16 @@ const SidebarMenu = ({ item }: { item: any }) => {
   //   }
   // };
   // const activeSubIndex = localStorage.getItem("activeSubNav");
-  const currentPath = window.location.pathname;
+  let currentPath;
+  // if (window !== undefined) {
+  //   currentPath = window.location.pathname;
+  // }
 
   return item.subLinks ? (
     <div
       className={clsx(
         "sidebar-menu",
-        item.link === currentPath && "bg-[#212346]"
+        // item.link === currentPath && "bg-[#212346]"
       )}
     >
       <div className="sidebar-title-wrapper">
@@ -96,4 +99,4 @@ const SidebarMenu = ({ item }: { item: any }) => {
   );
 };
 
-export default SidebarMenu;
+export default SidebarLink;

@@ -18,3 +18,122 @@
 .sidebar-container {
   @apply h-[54rem] lg:h-screen lg:px-[1.125rem] relative mt-[0.8rem];
 }
+
+/* connect-wallet header */
+.connect-header-wrapper {
+  @apply flex items-center font-medium relative after:absolute after:w-full after:bottom-[-0.75rem] after:h-[0.3125rem] after:rounded-t-md after:right-0 capitalize gap-x-1;
+}
+
+/* connect wallet stage 1 */
+.connect-wallet-stage-1 {
+  @apply px-10 py-8 flex flex-col;
+}
+
+.connect-wallet-stage-1-more {
+  @apply mt-6 mb-10 grid grid-cols-2 gap-8;
+}
+
+.connect-wallet-stage-1-data {
+  @apply flex items-center gap-x-6 p-5 px-7 rounded-xl border-[#2C2C43] border-[0.0625rem] text-white hover:border-[#2E76EE] hover:bg-[#2e74ee1c];
+}
+
+.connect-wallet-stage-1-data > span {
+  @apply text-lg font-medium;
+}
+
+/* connect wallet tab */
+.connect-header-tab {
+  @apply pb-3 flex justify-center gap-x-16 w-full border-[#33364D] border-b-[0.0625rem];
+}
+
+/* display wallet */
+.display-wallet-wrapper {
+  @apply w-full;
+}
+
+.display-wallet-section-1 {
+  @apply grid grid-cols-2 mb-3;
+}
+
+.display-wallet-ext {
+  @apply bg-white p-7 rounded-l-xl flex flex-col justify-center items-center;
+}
+
+.display-wallet-ext > h1 {
+  @apply text-3xl font-bold max-w-[16rem] mb-4 text-center;
+}
+.display-wallet-ext > span {
+  @apply block bg-[#2257E7] text-white text-xl font-medium py-3 w-[30%] md:w-[75%] text-center rounded-lg;
+}
+
+.display-wallet-guide {
+  @apply bg-[#FAFBFC] px-7 py-14 rounded-r-xl flex flex-col gap-y-8;
+}
+
+.display-wallet-guide > span {
+  @apply flex justify-end;
+}
+
+.display-wallet-guide-list {
+  @apply flex flex-col gap-y-7 pb-10;
+}
+
+.display-wallet-guide-name {
+  @apply flex justify-center items-center gap-x-6;
+}
+
+.display-wallet-guide-icon {
+  @apply h-10 w-10 grid place-items-center rounded-full shadow shadow-[#cfd0d0cf];
+}
+
+.display-wallet-guide-description {
+  @apply text-lg font-medium w-3/5 leading-tight;
+}
+
+.display-wallet-section-2 {
+  @apply grid grid-cols-2;
+}
+.display-wallet-section-2-scan {
+  @apply bg-white p-7 rounded-l-xl flex flex-col justify-center items-center;
+}
+
+.display-wallet-section-2-scan > span {
+  @apply block text-lg text-[#AAAAAA] font-medium w-[30%] md:w-[80%] rounded-lg;
+}
+
+.display-wallet-section-2-scan > h1 {
+  @apply text-3xl font-bold mb-4 text-center;
+}
+
+.display-wallet-section-2-qr {
+  @apply bg-[#FAFBFC] p-7 rounded-r-xl flex justify-center;
+}
+
+/* hero card */
+.hero-card-wrapper {
+  @apply h-[16.9075rem] w-[13.6706rem] bg-[url('/images/bg-2.png')] rounded-[1.774rem] py-[0.86rem] px-[0.75rem] flex flex-col justify-between items-center;
+}
+
+.hero-card-wrapper > img {
+  @apply object-cover mb-[0.65rem];
+}
+
+.hero-card-wrapper > .title {
+  @apply font-medium text-[1.06rem] text-white;
+}
+.hero-card-wrapper > .price {
+  @apply font-medium text-[0.875rem] text-[#c5c5cb];
+}
+
+/* mini user profile */
+.mini-user-profile-wrapper {
+  @apply w-[20.0625rem] h-[25.625rem] bg-bg-3 absolute top-[14%] z-10 rounded-[1.125rem]  border-[#34364C] border-[0.0625rem] p-[1.875rem] flex flex-col gap-y-[2.125rem];
+}
+
+.mini-user-profile-links {
+  @apply flex items-center text-white gap-x-6 font-medium hover:cursor-pointer;
+}
+
+.mini-user-toggle-btn.react-toggle--checked .react-toggle-track {
+  @apply bg-[#0F94F2];
+}

@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Button, Input } from '../components/atoms'
+import { Sidebar } from '../components/molecules'
 
 
 const Home: NextPage = () => {
@@ -15,7 +16,7 @@ const Home: NextPage = () => {
       <main>
         <Button />
         <Input />
-        
+        <Sidebar />
       </main>
     </div>
   )

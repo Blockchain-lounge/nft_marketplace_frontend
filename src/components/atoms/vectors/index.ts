@@ -36,7 +36,7 @@ export { default as ShortNextArrow } from "./short-next-arrow";
 export { default as SignOutIcon } from "./sign-out-icon";
 export { default as SolanaIcon } from "./solana-icon";
 export { default as SupportIcon } from "./support-icon";
-export { default as TezosIcon } from "./tezoz-icon";
+export { default as TezozIcon } from "./tezoz-icon";
 export { default as TiktokIcon } from "./tiktok-icon";
 export { default as TorusIcon } from "./activities-icon";
 export { default as TrendingIcon } from "./trending-icon";

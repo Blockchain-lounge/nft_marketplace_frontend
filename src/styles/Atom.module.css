@@ -29,7 +29,6 @@
 
 /* input */
 
-
 .input-wrapper {
   @apply h-[3.3125rem] px-3 lg:px-[1.25rem] bg-transparent flex items-center flex-row-reverse lg:flex-row rounded-[0.56rem] gap-x-[0.625rem] w-full border-[#34364C] border-[0.0625rem] text-white;
 }
@@ -40,3 +39,41 @@ input {
 
 /* loader */
 
+/* sidebar link */
+.sidebar-menu {
+  @apply block py-[0.9375rem] px-[1rem] mb-2 rounded-[0.625rem] text-white font-medium select-none hover:bg-[#212346] cursor-pointer;
+}
+
+.sidebar-title-wrapper {
+  @apply flex items-center justify-between;
+}
+.sidebar-title {
+  @apply flex gap-x-[0.75rem] items-center;
+}
+
+.sidebar-toggle-btn {
+  transition: transform 0.3s;
+}
+.sidebar-open {
+  transform: rotate(180deg);
+}
+
+.sidebar-submenu {
+  @apply pt-[.25em] overflow-hidden h-0;
+}
+
+.sidebar-submenu-wrapper {
+  @apply grid grid-cols-[0.2fr_1fr];
+}
+
+.sidebar-submenu-wrapper > span {
+  @apply text-[0.9375rem] text-[#B9B9C0] hover:text-white my-1;
+}
+
+.sidebar-open {
+  @apply h-auto;
+}
+
+.sidebar-tag {
+  @apply text-[0.625rem] text-[#3CABFA] font-medium py-[0.03rem] ml-2 px-2 rounded-[3.125rem] bg-gradient-to-r from-[#2f79f9a1] to-[#3daefa46];
+}
