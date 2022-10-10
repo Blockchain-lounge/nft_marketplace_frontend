@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { ReactNode } from "react";
+import React, { ReactNode, Component } from "react";
 
 interface IConnectWalletHeader {
   isActive?: boolean;

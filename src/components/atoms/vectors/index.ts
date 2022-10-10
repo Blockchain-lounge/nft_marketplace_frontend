@@ -1,4 +1,4 @@
-export { default as ActivityIcon } from './activities-icon'
+export { default as ActivityIcon } from "./activities-icon";
 export { default as ArrowDown } from "./arrow-down";
 export { default as CaretDown } from "./caret-down";
 export { default as CaretUp } from "./caret-up";
@@ -18,6 +18,7 @@ export { default as FooterGoogleIcon } from "./footer-google-icon";
 export { default as FooterTwitterIcon } from "./footer-twitter-icon";
 export { default as FooterYoutubeIcon } from "./footer-youtube-icon";
 export { default as GamesIcon } from "./games-icon";
+export { default as GlobalIcon } from "./global-icon";
 export { default as InstagramIcon } from "./instagram-icon";
 export { default as IntroIcon } from "./intro-icon";
 export { default as IosIcon } from "./ios-icon";
@@ -44,6 +45,3 @@ export { default as TwitterIcon } from "./twitter-icon";
 export { default as WalletConnect } from "./wallet-connect";
 export { default as WalletIcon } from "./wallet-icon";
 export { default as YoutubeIcon } from "./youtube-icon";
-
-
-

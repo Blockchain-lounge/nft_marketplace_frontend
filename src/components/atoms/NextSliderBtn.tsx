@@ -1,7 +1,6 @@
 import ShortNextArrowIcon from "./vectors/short-next-arrow";
 
-
-const NextSliderBtn = (onClickProps: { onClick: any }) => {
+const NextSliderBtn = (onClickProps: { onClick?: any }) => {
   const { onClick } = onClickProps;
 
   return (
