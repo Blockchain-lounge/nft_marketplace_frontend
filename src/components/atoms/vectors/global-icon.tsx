@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const GlobalIcon = (props) => (
+const GlobalIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     className="w-6 h-6"
     fill="none"

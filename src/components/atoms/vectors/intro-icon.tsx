@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const IntroIcon = (props) => (
+const IntroIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={24}
     height={24}

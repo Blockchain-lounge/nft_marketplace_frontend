@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const SettingsIcon = (props) => (
+const SettingsIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={30}
     height={30}

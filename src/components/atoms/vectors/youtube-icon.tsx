@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const YoutubeIcon = (props) => (
+const YoutubeIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={21}
     height={20}

@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const TwitterFooterIcon = (props) => (
+const TwitterFooterIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={34}
     height={27}

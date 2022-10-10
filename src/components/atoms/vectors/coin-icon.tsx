@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const CoinIcon = (props) => (
+const CoinIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={19}
     height={18}

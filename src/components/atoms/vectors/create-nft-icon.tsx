@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const CreateNftIcon = (props) => (
+const CreateNftIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={30}
     height={30}

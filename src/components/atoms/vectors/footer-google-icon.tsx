@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const GooglePlusFooterIcon = (props) => (
+const GooglePlusFooterIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={30}
     height={27}

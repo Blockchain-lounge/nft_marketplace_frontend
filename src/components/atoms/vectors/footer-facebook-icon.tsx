@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const FacebookTwitterIcon = (props) => (
+const FacebookTwitterIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={15}
     height={27}

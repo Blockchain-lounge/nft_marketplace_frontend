@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const IOSIcon = (props) => (
+const IOSIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={21}
     height={20}

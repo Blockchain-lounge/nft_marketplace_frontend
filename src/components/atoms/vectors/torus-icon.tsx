@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-const TorusIcon = ({ twclx }) => {
+const TorusIcon = ({ twclx }: { twclx?: string }) => {
   return (
     <div>
       <img

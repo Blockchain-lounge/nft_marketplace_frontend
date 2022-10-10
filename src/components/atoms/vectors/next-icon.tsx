@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const NextIcon = (props) => (
+const NextIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={52}
     height={24}

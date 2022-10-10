@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const ProfileIcon = (props) => (
+const ProfileIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={30}
     height={30}

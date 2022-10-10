@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const LikesIcon = (props) => (
+const LikesIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={17}
     height={15}

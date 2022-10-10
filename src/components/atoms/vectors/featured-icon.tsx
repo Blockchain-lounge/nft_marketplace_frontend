@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const FeaturedIcon = (props) => (
+const FeaturedIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={20}
     height={20}

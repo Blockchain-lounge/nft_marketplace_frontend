@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const PolygonIcon = (props) => (
+const PolygonIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={24}
     height={24}

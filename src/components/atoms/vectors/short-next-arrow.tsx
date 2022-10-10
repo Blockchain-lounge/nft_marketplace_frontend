@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const ShortNextArrowIcon = (props) => (
+const ShortNextArrowIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={24}
     height={25}

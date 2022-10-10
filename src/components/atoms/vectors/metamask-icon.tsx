@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-const MetaMaskIcon = ({ twclx }) => {
+const MetaMaskIcon = ({ twclx }: { twclx?: string }) => {
   return (
     <div>
       <img

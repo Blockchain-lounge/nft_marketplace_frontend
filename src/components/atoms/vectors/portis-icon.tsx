@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-const PortisIcon = ({ twclx }) => {
+const PortisIcon = ({ twclx }: { twclx?: string }) => {
   return (
     <div>
       <img

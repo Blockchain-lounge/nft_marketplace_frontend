@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const SecureIcon = (props) => (
+const SecureIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     className="w-6 h-6"
     fill="none"

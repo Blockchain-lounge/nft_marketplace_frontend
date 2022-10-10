@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-const CoinBaseIcon = ({ twclx }) => {
+const CoinBaseIcon = ({ twclx }: { twclx?: string }) => {
   return (
     <div>
       <img

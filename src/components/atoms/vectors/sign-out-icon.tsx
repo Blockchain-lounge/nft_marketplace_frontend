@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const SignOutIcon = (props) => (
+const SignOutIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={30}
     height={30}

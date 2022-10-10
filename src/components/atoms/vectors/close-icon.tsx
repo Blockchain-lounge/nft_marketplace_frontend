@@ -1,4 +1,6 @@
-const CloseIcon = (props) => (
+import { SVGProps } from "react";
+
+const CloseIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     className="w-6 h-6"
     fill="#222237"

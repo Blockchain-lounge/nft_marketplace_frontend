@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-const WallectConnectIcon = ({ twclx }) => {
+const WallectConnectIcon = ({ twclx }: { twclx?: string }) => {
   return (
     <div>
       <img

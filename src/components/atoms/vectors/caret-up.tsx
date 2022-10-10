@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const CaretUp = (props) => (
+const CaretUp = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={16}
     height={16}

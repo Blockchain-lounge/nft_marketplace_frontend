@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const CreateCollectionIcon = (props) => (
+const CreateCollectionIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={30}
     height={30}

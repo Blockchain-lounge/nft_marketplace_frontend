@@ -1,4 +1,6 @@
-const LinkIcon = (props) => (
+import { SVGProps } from "react";
+
+const LinkIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     className="w-6 h-6"
     fill="none"
