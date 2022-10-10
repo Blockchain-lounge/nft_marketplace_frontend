@@ -1,5 +1,3 @@
-import React, { memo } from "react";
-
 import Slider from "react-slick";
 
 import "slick-carousel/slick/slick.css";
@@ -8,7 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 import NftMediumCard from "../molecules/NftMediumCard";
 import { NextSliderBtn } from "@/src/components/atoms";
 
-const Sliders = ({ data = [] }) => {
+const NftSlider = ({ data = [] }) => {
   const settings = {
     infinite: false,
     speed: 500,
@@ -56,4 +54,4 @@ const Sliders = ({ data = [] }) => {
   );
 };
 
-export default memo(Sliders);
+export default NftSlider;
