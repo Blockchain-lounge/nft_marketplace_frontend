@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-const WallectConnectIcon = ({ twclx }: { twclx?: string }) => {
+const WalletConnectIcon = ({ twclx }: { twclx?: string }) => {
   return (
     <div>
       <img
@@ -12,4 +12,4 @@ const WallectConnectIcon = ({ twclx }: { twclx?: string }) => {
   );
 };
 
-export default WallectConnectIcon;
+export default WalletConnectIcon;

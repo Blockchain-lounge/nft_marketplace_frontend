@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import "./heading-style.scss";
+
 
 interface IHeading {
   title: string;

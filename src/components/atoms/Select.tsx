@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import CaretDown from "./vectors/caret-down";
-import "./select-styles.scss";
+
 
 const Select = ({
   title,

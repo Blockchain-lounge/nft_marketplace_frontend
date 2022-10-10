@@ -1,0 +1,42 @@
+@tailwind components;
+
+/* button */
+.btn-wrapper {
+  @apply flex justify-center items-center h-[3.625rem] w-full max-w-[12.0625rem] bg-gradient-to-r from-[#2F79F9] to-[#3DAEFA] rounded-[0.625rem] p-[0.05rem];
+}
+
+.btn {
+  @apply flex justify-center items-center gap-x-[0.875rem] h-full  text-base font-medium text-white rounded-[0.6rem] capitalize;
+}
+
+.btn-outline {
+  @apply bg-[#16162D] w-[11.9rem];
+}
+
+.btn-primary {
+  @apply w-full;
+}
+
+/* heading */
+.hd {
+  @apply text-[3.625rem] font-['Sf_Pro'] font-bold block text-white leading-[4.325rem];
+}
+
+/* hero-indicator */
+.hero-indicator {
+  @apply flex gap-x-4 items-center;
+}
+
+/* input */
+
+
+.input-wrapper {
+  @apply h-[3.3125rem] px-3 lg:px-[1.25rem] bg-transparent flex items-center flex-row-reverse lg:flex-row rounded-[0.56rem] gap-x-[0.625rem] w-full border-[#34364C] border-[0.0625rem] text-white;
+}
+
+input {
+  @apply text-[1.125rem] focus:outline-0 bg-transparent lg:w-full;
+}
+
+/* loader */
+

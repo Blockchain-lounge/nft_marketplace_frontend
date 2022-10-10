@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import SearchIcon from "./vectors/search-icon";
-import "./input-style.scss";
+
 
 interface InputProps {
   placeholder: string;

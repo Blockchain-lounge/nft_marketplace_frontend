@@ -4,6 +4,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* import components */
+@import "./Atom.module.css";
+
 @layer base {
   @font-face {
     font-family: "Sf Pro";

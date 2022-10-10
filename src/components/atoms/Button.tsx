@@ -1,6 +1,6 @@
 import React, { ReactNode, ButtonHTMLAttributes } from "react";
 import clsx from "clsx";
-import "./button-styles.scss";
+
 
 interface IButton {
   title: string;

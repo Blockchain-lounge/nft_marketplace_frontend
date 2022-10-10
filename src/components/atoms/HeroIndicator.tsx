@@ -1,7 +1,7 @@
 import React, { SetStateAction, useState } from "react";
 // import NextIndicator from "../vectors/next-icon";
 import clsx from "clsx";
-import "./hero-indicator-styles.scss";
+
 
 interface IHeroIndicator {
   arr: any;
