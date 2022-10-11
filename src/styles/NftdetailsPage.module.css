@@ -1,0 +1,76 @@
+.nft-detail-wrapper {
+  @apply h-screen overflow-auto pb-[9.375rem];
+}
+
+.nft-detail-wrapper-content {
+  @apply flex-col-reverse flex lg:flex-row justify-between items-center gap-x-[3.94rem] p-[1.125rem] rounded-3xl lg:rounded-none mb-12;
+}
+
+.nft-detail-wrapper p {
+  @apply text-[1.125rem] text-[#E0EEFF] leading-[2.125rem] tracking-[0.03rem] mt-[1.5rem] mb-[2.375rem];
+}
+
+.nft-detail-tag-price {
+  @apply flex items-center space-x-6 lg:space-x-3 mt-4;
+}
+
+.nft-detail-tag {
+  @apply flex gap-6 lg:gap-x-4;
+}
+
+.nft-detail-tag-label {
+  @apply py-[0.3rem] lg:py-[0.625rem] px-2 lg:px-3 border-none outline-none relative z-[1] rounded-[0.5rem] bg-gradient-to-r from-[#2f79f9] to-[#3daefa];
+}
+
+.nft-detail-tag-label::before {
+  @apply absolute left-[0.085rem] lg:left-[0.0625rem] right-[0.07rem] lg:right-[0.0625rem] top-[0.07rem] lg:top-[0.0625rem] bottom-[0.0625rem] content-[""] rounded-[0.5rem] bg-[#16172e] -z-[1];
+}
+
+.nft-detail-tag-label::after {
+  @apply content-[attr(data)] text-[0.875rem] font-medium  bg-gradient-to-r  from-[#2f79f9] to-[#3daefa] text-transparent;
+  -webkit-background-clip: text;
+}
+
+.nft-detail-price {
+  @apply flex items-center;
+}
+
+.nft-detail-price-label {
+  @apply text-[0.875rem] font-medium text-[#878ca9];
+}
+
+/* .nft-detail-mint {
+} */
+
+.nft-detail-mint-token-tag {
+  @apply flex justify-between items-center mb-[0.3rem];
+}
+
+.nft-detail-mint-label {
+  @apply font-bold text-lg;
+}
+
+.nft-detail-mint-tag {
+  @apply py-[0.5rem] px-3 border-none outline-none relative z-[1] rounded-[0.5rem];
+}
+
+.nft-detail-mint-tag::before {
+  @apply absolute left-[0.0625rem] right-[0.0625rem] top-[0.0625rem] bottom-[0.0625rem] content-[""] rounded-[0.5rem] bg-[#7381FF1A] -z-[1];
+}
+
+.nft-detail-mint-tag::after {
+  @apply content-[attr(data)] text-[0.875rem] font-medium  bg-gradient-to-r  from-[#2f79f9] to-[#3daefa] text-transparent;
+  -webkit-background-clip: text;
+}
+
+.nft-detail-mint-price {
+  @apply flex;
+}
+
+.nft-detail-price-tag {
+  @apply mr-[0.875rem];
+}
+
+.nft-detail-detail-img img {
+  @apply rounded-xl;
+}

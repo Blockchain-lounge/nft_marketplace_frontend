@@ -1,5 +1,11 @@
 import { Dispatch, SetStateAction, useState } from "react";
 
+import { useAccount, useConnect, useSignMessage, useDisconnect } from "wagmi";
+import { MetaMaskConnector } from "wagmi/connectors/metaMask";
+import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+import axios from "axios";
+
 import {
   WalletConnect,
   EthereumIcon,
@@ -9,6 +15,8 @@ import {
   TorusIcon,
 } from "../atoms/vectors";
 
+import useWalletAuth from "@/src/hooks/useWalletAuth";
+
 interface IConnectWalletStage1 {
   setStage: Dispatch<SetStateAction<number>>;
   stage: number;
@@ -16,26 +24,93 @@ interface IConnectWalletStage1 {
 
 const ConnectWalletStage1 = ({ setStage, stage }: IConnectWalletStage1) => {
   const [showMore, setShowMore] = useState(false);
-  const handleStageChange = () => {
-    setStage(stage + 1);
+  const { connectAsync } = useConnect();
+  const { disconnectAsync } = useDisconnect();
+  const { isConnected } = useAccount();
+  const { signMessageAsync } = useSignMessage();
+
+  const handleAuth = async (wal: string) => {
+    if (isConnected) {
+      await disconnectAsync();
+    }
+
+    console.log("Connect To Site Via Wallet");
+
+    const userData: Record<string, string | number> = { network: "evm" };
+
+    if (wal === "meta") {
+      const { account, chain } = await connectAsync({
+        connector: new MetaMaskConnector({}),
+      });
+      userData.address = account;
+      userData.chain = chain.id;
+    }
+
+    if (wal === "coin") {
+      const { account, chain } = await connectAsync({
+        connector: new CoinbaseWalletConnector({}),
+      });
+      userData.address = account;
+      userData.chain = chain.id;
+    }
+
+    if (wal === "wal") {
+      const { account, chain } = await connectAsync({
+        connector: new WalletConnectConnector({ options: { qrcode: true } }),
+      });
+      userData.address = account;
+      userData.chain = chain.id;
+    }
+
+    console.log({ userData });
+
+    console.log("Sending Connected Account and Chain ID to Moralis Auth API");
+
+    const { data } = await axios.post("/api/auth/request-message", userData, {
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+
+    console.log("Received Signature Request From Moralis Auth API");
+
+    const message = data.message;
+
+    const signature = await signMessageAsync({ message });
+
+    console.log({ signature });
   };
 
+  const handleStageChange = (wal: string) => handleAuth(wal);
+
   const wallets = [
-    { name: "Metamask", icon: <MetamaskIcon />, action: handleStageChange },
+    {
+      name: "Metamask",
+      icon: <MetamaskIcon />,
+      action: () => handleStageChange("meta"),
+    },
     {
       name: "Wallet connect",
       icon: <WalletConnect />,
-      action: handleStageChange,
+      action: () => handleStageChange("wal"),
     },
-    { name: "Coinbase", icon: <CoinBaseIcon />, action: handleStageChange },
+    {
+      name: "Coinbase",
+      icon: <CoinBaseIcon />,
+      action: () => handleStageChange("coin"),
+    },
     {
       name: "MyEtherWallet",
       icon: <EthereumIcon />,
-      action: handleStageChange,
+      action: () => handleStageChange,
     },
-    { name: "Portis", icon: <PortisIcon />, action: handleStageChange },
-    { name: "Coinbase", icon: <CoinBaseIcon />, action: handleStageChange },
-    { name: "Torus", icon: <TorusIcon />, action: handleStageChange },
+    { name: "Portis", icon: <PortisIcon />, action: () => handleStageChange },
+    {
+      name: "Coinbase",
+      icon: <CoinBaseIcon />,
+      action: () => handleStageChange,
+    },
+    { name: "Torus", icon: <TorusIcon />, action: () => handleStageChange },
   ];
 
   const handleShowMore = () => setShowMore(!showMore);

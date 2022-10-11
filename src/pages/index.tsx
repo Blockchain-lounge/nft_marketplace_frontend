@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { useRouter } from "next/router";
 
 import { FeaturedIcon } from "@/src/components/atoms/vectors";
 
@@ -30,7 +31,7 @@ import { NextPage } from "next";
 const Home: NextPage = () => {
   const [heroData, setHeroData] = useState(heroCards);
   const [activeCard, setActiveCard] = useState(heroData[0]);
-  //   const navigate = useNavigate();
+  const { push } = useRouter();
 
   return (
     <DashboardLayout>
@@ -43,7 +44,7 @@ const Home: NextPage = () => {
               <p className="lg:max-w-xl">{activeCard.content}</p>
               <Button
                 title={activeCard.cta}
-                // onClick={() => navigate("/nft-detail-page")}
+                onClick={() => push("/nft-detail-page")}
               />
             </div>
             <div className="hero-img-cards">

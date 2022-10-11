@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useState } from "react";
 import { SidebarLink, Button } from "@/src/components/atoms";
 import {
@@ -7,23 +8,25 @@ import {
   GamesIcon,
   ActivityIcon,
   SupportIcon,
-  IosIcon,
   DiscordIcon,
+  SnapchatIcon,
   TiktokIcon,
   YoutubeIcon,
   TwitterIcon,
   InstagramIcon,
   WalletIcon,
 } from "@/src/components/atoms/vectors";
-// import { useDispatch } from "react-redux";
-// import { toggleMobileModal } from "../../../reducers/modalReudcer";
+
+import { useDispatch } from "react-redux";
+
+import { toggleMobileModal } from "@/src/reducers/modalReducer";
 
 const SideBar = () => {
-  //   const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [isActiveIndex, setActiveIndex] = useState(null);
-  //   const handleMobileModalToggle = () => {
-  //     dispatch(toggleMobileModal());
-  //   };
+  const handleMobileModalToggle = () => {
+    dispatch(toggleMobileModal());
+  };
 
   const sidebarLinks = [
     {
@@ -65,22 +68,22 @@ const SideBar = () => {
   ];
 
   const socialLinks = [
-    { icon: <IosIcon />, label: "iOS App" },
-    { icon: <DiscordIcon />, label: "Discord" },
-    { icon: <TiktokIcon />, label: "TikTok" },
-    { icon: <YoutubeIcon />, label: "Youtube" },
     { icon: <TwitterIcon />, label: "Twitter" },
+    { icon: <DiscordIcon />, label: "Discord" },
     { icon: <InstagramIcon />, label: "Instagram" },
+    { icon: <YoutubeIcon />, label: "Youtube" },
+    { icon: <SnapchatIcon />, label: "SnapChat" },
+    { icon: <TiktokIcon />, label: "TikTok" },
   ];
 
   return (
     <div className="sidebar-container">
       <div className="sidebar-btn">
-        {/* <Image
+        <img
           src="/vectors/close-icon.svg"
           alt="close-mobile-tab-img"
           onClick={handleMobileModalToggle}
-        /> */}
+        />
         <span className="block m-1">
           <Button title="Connect Wallet" prefix={<WalletIcon />} outline />
         </span>
@@ -91,7 +94,7 @@ const SideBar = () => {
       <div className="social-links">
         {socialLinks.map(({ icon, label }) => (
           <span key={label} className="social-link">
-            {icon} {label}
+            {icon}
           </span>
         ))}
       </div>

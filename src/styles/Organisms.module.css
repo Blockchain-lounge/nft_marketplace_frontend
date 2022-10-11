@@ -30,7 +30,7 @@ footer span {
 /* Modal */
 
 .modal-overlay {
-  @apply absolute inset-0 z-20;
+  @apply absolute inset-0 z-30;
 }
 .modal-overlay-bg {
   background: rgba(8, 10, 29, 0.5);
@@ -46,7 +46,7 @@ footer span {
   transform-style: ease-in;
 }
 
-.modal-wrap .open {
+.modal-open {
   @apply inset-0;
 }
 

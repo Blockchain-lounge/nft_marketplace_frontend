@@ -1,5 +1,5 @@
 export { default as ActivityIcon } from "./activities-icon";
-export { default as ArrowDown } from "./arrow-down";
+export { default as ArrowBack } from "./arrow-back";
 export { default as CaretDown } from "./caret-down";
 export { default as CaretUp } from "./caret-up";
 export { default as CloseIcon } from "./close-icon";
@@ -21,7 +21,7 @@ export { default as GamesIcon } from "./games-icon";
 export { default as GlobalIcon } from "./global-icon";
 export { default as InstagramIcon } from "./instagram-icon";
 export { default as IntroIcon } from "./intro-icon";
-export { default as IosIcon } from "./ios-icon";
+
 export { default as LikesIcon } from "./likes-icon";
 export { default as LinkIcon } from "./link-icon";
 export { default as MetamaskIcon } from "./metamask-icon";
@@ -35,6 +35,7 @@ export { default as SecureIcon } from "./secure-icon";
 export { default as SettingsIcon } from "./settings-icon";
 export { default as ShortNextArrow } from "./short-next-arrow";
 export { default as SignOutIcon } from "./sign-out-icon";
+export { default as SnapchatIcon } from "./snapchat-icon";
 export { default as SolanaIcon } from "./solana-icon";
 export { default as SupportIcon } from "./support-icon";
 export { default as TezozIcon } from "./tezoz-icon";

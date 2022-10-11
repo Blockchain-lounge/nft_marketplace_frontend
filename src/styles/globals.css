@@ -5,17 +5,27 @@
 @tailwind utilities;
 
 /* import components */
+@import "./DashboardLayout.module.css";
 @import "./Atom.module.css";
 @import "./Molecules.module.css";
 @import "./Organisms.module.css";
-@import "./DashboardLayout.module.css";
 @import "./Homepage.module.css";
+@import "./NftdetailsPage.module.css";
 
 @layer base {
   @font-face {
     font-family: "Sf Pro";
     src: url("/sf-pro-font/SF-Pro-Display-Bold.ttf") format("truetype");
   }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+
   html,
   body {
     font-family: "DM Sans", "Sf Pro", sans-serif;
@@ -32,6 +42,11 @@
 }
 
 @layer components {
+  @media only screen and (max-width: 1024px) {
+    :root {
+      font-size: 12px;
+    }
+  }
   a {
     color: inherit;
     text-decoration: none;

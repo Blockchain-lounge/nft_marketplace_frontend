@@ -2,33 +2,40 @@ import { ReactNode } from "react";
 
 import clsx from "clsx";
 
-import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
-
 import { NavBar } from "@/src/components/organisms";
 import { Sidebar } from "@/src/components/molecules";
 
-const DashboardLayout = ({
-  children,
-  active = true,
-}: {
-  children: ReactNode;
-  active?: boolean;
-}) => {
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { useDispatch } from "react-redux";
+import { toggleMobileModal } from "../reducers/modalReducer";
+
+const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const isMobileModal = useSelector(
     (state: RootState) => state.modal.isMobileModalOpen
   );
+
+  const dispatch = useDispatch();
+
+  const handleMobileModalToggle = () => {
+    dispatch(toggleMobileModal());
+  };
 
   return (
     <div className="flex flex-col w-full">
       <NavBar />
       <div className="layout-wrapper">
-        {isMobileModal && <div className="layout-overlay"></div>}
+        {isMobileModal && (
+          <div
+            className="layout-overlay"
+            onClick={handleMobileModalToggle}
+          ></div>
+        )}
 
         <aside
           className={clsx(
             "aside",
-            isMobileModal ? "-left-[-2rem]" : "-left-[40rem]"
+            isMobileModal ? "hide-mobile-modal" : "show-mobile-modal"
           )}
         >
           <Sidebar />

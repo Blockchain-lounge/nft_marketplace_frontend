@@ -2,38 +2,16 @@ import clsx from "clsx";
 import { useState } from "react";
 import Link from "next/link";
 import CaretDown from "./vectors/caret-down";
+import { useRouter } from "next/router";
 
 const SidebarLink = ({ item }: { item: any }) => {
   const [openSubmenu, setOpenSubmenu] = useState(false);
   const handleOpenSubmenu = () => setOpenSubmenu(!openSubmenu);
-
-  // const [activeState, setActiveState] = useState({ state: false, index: -1 });
-  // const handleisActive = (value) => {
-  //   if (value.hasOwnProperty("subLinks")) {
-  //     if (activeState.state && activeState.index == index) {
-  //       setActiveState({ ...activeState, state: false });
-  //     } else {
-  //       setActiveState({ state: true, index: index });
-  //       localStorage.setItem("activeSubNav", index);
-  //     }
-  //     return;
-  //   } else {
-  //     localStorage.removeItem("activeSubNav");
-  //     navigate(`${value.link}`);
-  //   }
-  // };
-  // const activeSubIndex = localStorage.getItem("activeSubNav");
-  let currentPath;
-  // if (window !== undefined) {
-  //   currentPath = window.location.pathname;
-  // }
+  const { pathname } = useRouter();
 
   return item.subLinks ? (
     <div
-      className={clsx(
-        "sidebar-menu"
-        // item.link === currentPath && "bg-[#212346]"
-      )}
+      className={clsx("sidebar-menu", item.link === pathname && "bg-[#212346]")}
     >
       <div className="sidebar-title-wrapper">
         <div className="sidebar-title">
@@ -52,15 +30,16 @@ const SidebarLink = ({ item }: { item: any }) => {
         </span>
         {item.tag && <span className="sidebar-tag">{item.tag}</span>}
       </div>
-      <div className={clsx("sidebar-submenu", openSubmenu && "sidebar-open")}>
+      <div
+        className={clsx(
+          "sidebar-submenu",
+          openSubmenu && "sidebar-sublink-open"
+        )}
+      >
         {item.subLinks &&
           item.subLinks.map((value: any) => (
-            <Link
-              key={value.label}
-              className="sidebar-submenu-wrapper"
-              href={value.link}
-            >
-              <a>
+            <Link key={value.label} href={value.link}>
+              <a className="sidebar-submenu-wrapper">
                 <div></div>
                 <span>{value.label}</span>
               </a>
@@ -70,7 +49,12 @@ const SidebarLink = ({ item }: { item: any }) => {
     </div>
   ) : (
     <Link href={item.link}>
-      <a className={clsx("sidebar-menu", "bg-[#212346]")}>
+      <a
+        className={clsx(
+          "sidebar-menu",
+          item.link === pathname && "bg-[#212346]"
+        )}
+      >
         <div className="sidebar-title-wrapper">
           <div className="sidebar-title">
             <span className="sidebar-icon">{item.icon}</span>

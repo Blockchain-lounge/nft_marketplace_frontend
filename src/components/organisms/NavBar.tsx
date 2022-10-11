@@ -1,15 +1,9 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import { useState } from "react";
+import { useRouter } from "next/router";
 
-import {
-  useAccount,
-  useConnect,
-  useSignMessage,
-  useDisconnect,
-  useEnsAvatar,
-  useEnsName,
-} from "wagmi";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import axios from "axios";
 
@@ -105,6 +99,10 @@ const NavBar = () => {
   const handleShowProfile = () => {
     setShowProfile(!showProfile);
   };
+
+  const { push } = useRouter();
+
+  console.log(process.env.MORALIS_API_KEY);
   return (
     <nav>
       <div className="nav-status center">
@@ -131,7 +129,7 @@ const NavBar = () => {
           src="/images/cloudax1.svg"
           alt="nav-logo"
           className="w-[11.6875rem] lg:max-w-full"
-          // onClick={() => navigate("/")}
+          onClick={() => push("/")}
         />
         <div className="nav-tab">
           <div className="sub-nav-input">
@@ -167,7 +165,7 @@ const NavBar = () => {
               title="Connect Wallet"
               prefix={<WalletIcon />}
               outline
-              onClick={handleAuth}
+              onClick={handleWalletConnect}
               twClasses="hidden lg:flex"
             />
           )}

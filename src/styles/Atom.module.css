@@ -127,7 +127,7 @@ span {
   @apply text-[0.9375rem] text-[#B9B9C0] hover:text-white my-1;
 }
 
-.sidebar-open {
+.sidebar-sublink-open {
   @apply h-auto;
 }
 
