@@ -1,0 +1,110 @@
+/*Footer*/
+footer {
+  @apply bg-[#1A1A30]  w-full py-[3rem] pb-[5rem] lg:py-[3.6562rem]  lg:pl-[2.5625rem] lg:pr-[10.125rem] flex flex-col lg:flex-row justify-around lg:items-start;
+}
+
+.footer-icon-copy {
+  @apply order-4 lg:-order-1 flex flex-col items-center lg:block mt-8 lg:mt-0;
+}
+.footer-icons {
+  @apply flex gap-x-[2.3125rem];
+}
+.footer-copy {
+  @apply text-xl mt-4 text-[#A5AEC1] lg:mt-[3.875rem];
+}
+
+footer > span {
+  @apply block;
+}
+
+.about-links {
+  @apply flex flex-col mb-8 lg:mb-0 gap-x-[1.125rem];
+}
+.footer-link-title {
+  @apply font-medium text-2xl text-white leading-[2.21875rem] mb-3 lg:mb-[1.125rem];
+}
+.footer-links {
+  @apply text-xl text-[#A5AEC1] leading-10 lg:leading-[3.15625rem];
+}
+
+/* Modal */
+
+.modal-overlay {
+  @apply absolute inset-0 z-20;
+}
+.modal-overlay-bg {
+  background: rgba(8, 10, 29, 0.5);
+  backdrop-filter: blur(15px);
+}
+.modal-active-bg {
+  @apply bg-bg-4;
+}
+.modal-wrap {
+  @apply absolute -top-[100vh] flex justify-center z-30;
+  transition-property: top;
+  transition-delay: 5000;
+  transform-style: ease-in;
+}
+
+.modal-wrap .open {
+  @apply inset-0;
+}
+
+.modal-box {
+  @apply w-[48.125rem] mx-auto my-14 h-fit pb-7 rounded-[1.25rem];
+}
+
+.modal-head {
+  @apply flex justify-between items-center pt-7 px-10 mb-6;
+}
+.modal-head h1 {
+  @apply text-white font-medium text-[1.75rem];
+}
+
+/*Nav Bar*/
+
+nav {
+  @apply lg:border-[#34364C] lg:border-b-[0.0625rem] overflow-hidden max-w-full relative lg:static;
+}
+
+.nav-status {
+  @apply hidden lg:flex bg-[#1F1F35] h-10 w-full  justify-between items-center;
+}
+
+.nav-status-title {
+  @apply text-white font-medium text-[0.875rem];
+}
+.nav-status-value {
+  @apply ml-[0.4rem] text-[#3694FA] text-[0.875rem] font-medium;
+}
+
+.nav-select {
+  @apply flex items-center gap-x-[0.375rem] cursor-pointer text-white;
+}
+
+.main-nav {
+  @apply flex justify-between items-center pt-[2.8125rem] pb-6 overflow-hidden w-full lg:pt-[1.5rem] lg:pb-[1.25rem];
+}
+
+.mobile-menu {
+  @apply block lg:hidden;
+}
+.nav-auth {
+  @apply hidden lg:block;
+}
+
+.nav-tab {
+  @apply lg:w-3/5 lg:grid lg:grid-cols-[0.5fr_0.5fr] items-center lg:gap-x-[2.5rem];
+}
+
+.sub-nav-tab,
+.sub-nav-input {
+  @apply hidden lg:block;
+}
+.nav-mobile-search {
+  @apply relative h-16 rounded-xl border-[#ffffff24] border-[0.0625rem] p-[1rem] flex justify-center items-center lg:hidden;
+}
+
+.mobile-tab {
+  @apply lg:hidden;
+}
