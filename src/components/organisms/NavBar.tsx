@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 import { useState } from "react";
 
 import {
@@ -22,7 +24,7 @@ import {
 } from "@/src/components/atoms/vectors";
 
 import {
-  ConnectWallect,
+  ConnectWallet,
   DisplayWallet,
   MiniUserProfile,
   MiniUserWallet,
@@ -31,17 +33,17 @@ import {
 
 import Modal from "@/src/components/organisms/Modal";
 
-// import { toggleLoggedInUser } from "../../../reducers/authReducer";
+import { toggleLoggedInUser } from "@/src/reducers/authReducer";
 import { useSelector, useDispatch } from "react-redux";
-// import { toggleMobileModal } from "../../../reducers/modalReudcer";
+import { toggleMobileModal } from "@/src/reducers/modalReducer";
+import { RootState } from "@/src/store/store";
 
 const NavBar = () => {
   const { connectAsync } = useConnect();
   const { disconnectAsync } = useDisconnect();
   const { isConnected } = useAccount();
-  const { signMessageAsync } = useSignMessage();
 
-  //   const isLoggedIn = useSelector(({ auth }) => auth.isLoggedIn);
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
 
   const [showProfile, setShowProfile] = useState(false);
@@ -50,8 +52,6 @@ const NavBar = () => {
 
   const [activeTab, setActiveTab] = useState(0);
   const [stage, setStage] = useState(0);
-
-  //   const navigate = useNavigate();
 
   const handleAuth = async () => {
     //disconnects the web3 provider if it's already active
@@ -126,11 +126,12 @@ const NavBar = () => {
         <span className="mobile-menu" onClick={handleMobileModal}>
           <img src="/vectors/mobile-menu.svg" />
         </span>
+
         <img
           src="/images/cloudax1.svg"
           alt="nav-logo"
           className="w-[11.6875rem] lg:max-w-full"
-          onClick={() => navigate("/")}
+          // onClick={() => navigate("/")}
         />
         <div className="nav-tab">
           <div className="sub-nav-input">

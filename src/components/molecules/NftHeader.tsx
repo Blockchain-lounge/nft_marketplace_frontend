@@ -5,7 +5,7 @@ import { ShortNextArrow } from "@/src/components/atoms/vectors";
 
 interface INftheader {
   heading: string;
-  selectTitle: string;
+  selectTitle?: string;
 }
 
 const NftHeader = ({ heading, selectTitle }: INftheader) => {

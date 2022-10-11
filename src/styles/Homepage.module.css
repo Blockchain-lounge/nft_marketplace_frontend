@@ -1,0 +1,37 @@
+.home-wrapper {
+  @apply h-screen overflow-auto pb-[9.375rem];
+}
+
+.home-wrapper .hero {
+  @apply flex-col-reverse flex lg:flex-row justify-between items-center gap-x-[3.94rem] p-[1.125rem] lg:p-0 rounded-3xl lg:rounded-none bg-bg-2 lg:bg-transparent;
+}
+
+.home-wrapper .hero p {
+  @apply text-[1.125rem] text-[#E0EEFF] leading-[2.125rem] tracking-[0.03rem] mt-[1rem] mb-[2.375rem];
+}
+
+.hero-img-cards {
+  @apply relative lg:w-[55.375rem] justify-self-end;
+}
+
+.hero-img-cards img {
+  @apply w-full h-full rounded-2xl object-cover flex-1;
+}
+
+.hero-img {
+  @apply flex max-w-[30rem] h-[25rem] lg:h-[44.5625rem] lg:max-w-[54.73rem];
+}
+
+.hero-cards {
+  @apply hidden lg:absolute bottom-[-2.2rem] right-[2.47125rem] lg:flex gap-x-[1.25rem];
+}
+
+.hero-section-1 {
+}
+
+.hero-section-1-collection {
+  @apply grid md:grid-cols-2 xl:grid-cols-3 gap-y-[2.125rem] gap-x-[2.1875rem] mt-[3.625rem];
+}
+.mobile-see-all-btn {
+  @apply flex items-center justify-center rounded-[0.625rem] py-[1.5rem] font-medium border-[#414760] border-[0.0625rem] mt-6 hover:border-[#2E76EE] hover:bg-[#2e74ee1c] lg:hidden;
+}

@@ -37,7 +37,7 @@
   @apply flex items-center gap-x-6 p-5 px-7 rounded-xl border-[#2C2C43] border-[0.0625rem] text-white hover:border-[#2E76EE] hover:bg-[#2e74ee1c];
 }
 
-.connect-wallet-stage-1-data > span {
+.connect-wallet-stage-1-data span {
   @apply text-lg font-medium;
 }
 
@@ -59,10 +59,10 @@
   @apply bg-white p-7 rounded-l-xl flex flex-col justify-center items-center;
 }
 
-.display-wallet-ext > h1 {
+.display-wallet-ext h1 {
   @apply text-3xl font-bold max-w-[16rem] mb-4 text-center;
 }
-.display-wallet-ext > span {
+.display-wallet-ext span {
   @apply block bg-[#2257E7] text-white text-xl font-medium py-3 w-[30%] md:w-[75%] text-center rounded-lg;
 }
 
@@ -70,7 +70,7 @@
   @apply bg-[#FAFBFC] px-7 py-14 rounded-r-xl flex flex-col gap-y-8;
 }
 
-.display-wallet-guide > span {
+.display-wallet-guide span {
   @apply flex justify-end;
 }
 
@@ -97,11 +97,11 @@
   @apply bg-white p-7 rounded-l-xl flex flex-col justify-center items-center;
 }
 
-.display-wallet-section-2-scan > span {
+.display-wallet-section-2-scan span {
   @apply block text-lg text-[#AAAAAA] font-medium w-[30%] md:w-[80%] rounded-lg;
 }
 
-.display-wallet-section-2-scan > h1 {
+.display-wallet-section-2-scan h1 {
   @apply text-3xl font-bold mb-4 text-center;
 }
 
@@ -114,14 +114,14 @@
   @apply h-[16.9075rem] w-[13.6706rem] bg-[url('/images/bg-2.png')] rounded-[1.774rem] py-[0.86rem] px-[0.75rem] flex flex-col justify-between items-center;
 }
 
-.hero-card-wrapper > img {
+.hero-card-wrapper img {
   @apply object-cover mb-[0.65rem];
 }
 
-.hero-card-wrapper > .title {
+.hero-card-wrapper .title {
   @apply font-medium text-[1.06rem] text-white;
 }
-.hero-card-wrapper > .price {
+.hero-card-wrapper .price {
   @apply font-medium text-[0.875rem] text-[#c5c5cb];
 }
 
@@ -228,11 +228,11 @@
   backdrop-filter: blur(10px);
 }
 
-.nmc-wrapper-img .likes > span {
+.nmc-wrapper-img .likes span {
   @apply text-white leading-[1.3018rem];
 }
 
-.nmc-wrapper-img > img {
+.nmc-wrapper-img img {
   @apply w-full h-full rounded-t-[0.9475rem] object-cover;
 }
 .nmc-wrapper-2 {
@@ -244,7 +244,7 @@
 .nmc-wrapper-3 {
   @apply flex items-center mt-3;
 }
-.nmc-wrapper-3 > img {
+.nmc-wrapper-3 img {
   @apply h-10 w-10 rounded-[50%] mr-[0.875rem];
 }
 
@@ -277,7 +277,7 @@
   @apply font-bold text-[2.5rem] text-[#9096A5] mr-[1.375rem] block;
 }
 
-.nft-mini-cards-wrapper > .img {
+.nft-mini-cards-wrapper .img {
   @apply h-[4.375rem] w-[4.375rem] rounded-[0.75rem] object-cover mr-[1.25rem];
 }
 

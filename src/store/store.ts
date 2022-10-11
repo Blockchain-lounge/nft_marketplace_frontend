@@ -1,6 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "../reducers/authReducer";
-import modalReudcer from "../reducers/modalReudcer";
+import { useDispatch } from "react-redux";
+
+import authReducer from "@/src/reducers/authReducer";
+import modalReudcer from "@/src/reducers/modalReducer";
 
 const store = configureStore({
   reducer: {
@@ -8,5 +10,10 @@ const store = configureStore({
     modal: modalReudcer,
   },
 });
+
+export type RootState = ReturnType<typeof store.getState>;
+
+export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch: () => AppDispatch = useDispatch;
 
 export default store;

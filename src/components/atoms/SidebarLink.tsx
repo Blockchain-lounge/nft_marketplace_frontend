@@ -31,7 +31,7 @@ const SidebarLink = ({ item }: { item: any }) => {
   return item.subLinks ? (
     <div
       className={clsx(
-        "sidebar-menu",
+        "sidebar-menu"
         // item.link === currentPath && "bg-[#212346]"
       )}
     >
@@ -69,14 +69,8 @@ const SidebarLink = ({ item }: { item: any }) => {
       </div>
     </div>
   ) : (
-    <Link
-      className={clsx(
-        "sidebar-menu",
-        item.link === currentPath && "bg-[#212346]"
-      )}
-      href={item.link}
-    >
-      <a>
+    <Link href={item.link}>
+      <a className={clsx("sidebar-menu", "bg-[#212346]")}>
         <div className="sidebar-title-wrapper">
           <div className="sidebar-title">
             <span className="sidebar-icon">{item.icon}</span>

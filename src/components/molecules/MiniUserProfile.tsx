@@ -14,7 +14,7 @@ import {
 
 interface IMiniUserProfile {
   showProfile: boolean;
-  onClick: () => void;
+  onClick?: () => void;
   handleSignOut: () => void;
 }
 

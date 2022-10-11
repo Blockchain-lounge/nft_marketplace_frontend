@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import clsx from "clsx";
 import React, { ReactNode, useRef } from "react";
 import { useClickAway } from "react-use";
@@ -9,7 +10,7 @@ interface Imodal {
   openModal: boolean;
   title: string;
   closeModal: (val: boolean) => void;
-  twClx: string;
+  twClx?: string;
   active: boolean;
 }
 

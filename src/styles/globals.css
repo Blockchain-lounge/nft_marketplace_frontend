@@ -8,11 +8,26 @@
 @import "./Atom.module.css";
 @import "./Molecules.module.css";
 @import "./Organisms.module.css";
+@import "./DashboardLayout.module.css";
+@import "./Homepage.module.css";
 
 @layer base {
   @font-face {
     font-family: "Sf Pro";
     src: url("/sf-pro-font/SF-Pro-Display-Bold.ttf") format("truetype");
+  }
+  html,
+  body {
+    font-family: "DM Sans", "Sf Pro", sans-serif;
+    scroll-behavior: smooth !important;
+    background-image: url("/images/Market-place-bg.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    max-width: 100%;
   }
 }
 

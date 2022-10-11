@@ -3,8 +3,8 @@ import { CoinIcon } from "@/src/components/atoms/vectors";
 interface IHerocard {
   img: string;
   title: string;
-  price: string;
-  onClick: () => void;
+  price: number;
+  onClick?: () => void;
 }
 
 const HeroCard = ({ img, title, price, onClick }: IHerocard) => {

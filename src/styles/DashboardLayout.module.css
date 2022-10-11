@@ -1,0 +1,17 @@
+.layout-wrapper {
+  @apply h-full lg:grid lg:grid-cols-[18.0625rem_1fr] lg:z-0;
+}
+
+.layout-overlay {
+  @apply fixed inset-0 z-10 lg:hidden lg:z-0;
+  background: #080a1d80;
+  backdrop-filter: blur(10px);
+}
+
+.aside {
+  @apply fixed z-20 top-[8%] transition-[left] lg:z-0 duration-300 bg-[#16162db7] pt-5 px-6 rounded-[1.25rem] lg:top-0 lg:p-0 lg:bg-transparent lg:rounded-none lg:left-0 lg:relative lg:border-[#34364C] lg:border-r-[0.0625rem];
+}
+
+.aside-2 {
+  @apply mt-6 lg:mt-[0.8rem];
+}

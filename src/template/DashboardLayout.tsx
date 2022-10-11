@@ -1,12 +1,23 @@
+import { ReactNode } from "react";
+
 import clsx from "clsx";
 
-import NavBar from "../../components/organisms/nav-bar";
-import AsideBar from "../../components/molecules/aside";
-import "./layout-1.scss";
 import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
-const DashboardLayout = ({ children, active = true }) => {
-  const isMobileModal = useSelector(({ modal }) => modal.isMobileModalOpen);
+import { NavBar } from "@/src/components/organisms";
+import { Sidebar } from "@/src/components/molecules";
+
+const DashboardLayout = ({
+  children,
+  active = true,
+}: {
+  children: ReactNode;
+  active?: boolean;
+}) => {
+  const isMobileModal = useSelector(
+    (state: RootState) => state.modal.isMobileModalOpen
+  );
 
   return (
     <div className="flex flex-col w-full">
@@ -20,7 +31,7 @@ const DashboardLayout = ({ children, active = true }) => {
             isMobileModal ? "-left-[-2rem]" : "-left-[40rem]"
           )}
         >
-          <AsideBar />
+          <Sidebar />
         </aside>
         <div className="aside-2 text-white">{children}</div>
       </div>
