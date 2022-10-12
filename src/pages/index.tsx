@@ -26,7 +26,6 @@ import {
 
 import { useState } from "react";
 import { NextPage } from "next";
-// import { useNavigate } from "react-router-dom";
 
 const Home: NextPage = () => {
   const [heroData, setHeroData] = useState(heroCards);

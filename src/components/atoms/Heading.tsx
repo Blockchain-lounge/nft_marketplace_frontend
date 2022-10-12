@@ -1,7 +1,6 @@
 import React from "react";
 import clsx from "clsx";
 
-
 interface IHeading {
   title: string;
   twClasses?: string;

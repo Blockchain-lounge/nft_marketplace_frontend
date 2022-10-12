@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import clsx from "clsx";
 
 import {
@@ -23,7 +24,7 @@ const Footer = () => {
     "Collection",
   ];
   return (
-    <footer className="center">
+    <footer className="footer center">
       <div className="-order-1">
         <img
           src="/images/cloudax1.svg"

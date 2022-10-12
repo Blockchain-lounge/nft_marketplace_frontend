@@ -1,5 +1,5 @@
 /*Footer*/
-footer {
+.footer {
   @apply bg-[#1A1A30]  w-full py-[3rem] pb-[5rem] lg:py-[3.6562rem]  lg:pl-[2.5625rem] lg:pr-[10.125rem] flex flex-col lg:flex-row justify-around lg:items-start;
 }
 
@@ -25,6 +25,25 @@ footer span {
 }
 .footer-links {
   @apply text-xl text-[#A5AEC1] leading-10 lg:leading-[3.15625rem];
+}
+
+/*Footer2*/
+
+.footer-2 {
+  @apply p-10 border-[#ffffff5c] border-t-[0.5px] mt-[5rem];
+}
+
+.footer-2-link-wrapper,
+.footer-2 {
+  @apply flex items-center gap-x-[0.875rem];
+}
+
+.footer-2-link {
+  @apply text-[#ffffff5c] font-medium;
+}
+
+.footer-2-link-indicator {
+  @apply h-[0.191875rem] w-[0.191875rem] bg-[#ffffff5c] rounded-full;
 }
 
 /* Modal */

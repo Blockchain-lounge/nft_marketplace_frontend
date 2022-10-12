@@ -11,6 +11,8 @@
 @import "./Organisms.module.css";
 @import "./Homepage.module.css";
 @import "./NftdetailsPage.module.css";
+@import "./EarningLayout.module.css";
+@import "./Earnings.module.css";
 
 @layer base {
   @font-face {
