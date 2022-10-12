@@ -26,9 +26,10 @@ const Modal = ({
   useClickAway(ref, () => {
     closeModal(false);
   });
-  console.log({ openModal, active });
+  // console.log({ openModal, active });
   return (
     <div className="Modal">
+      {/*the overlay behind modal, children passed inbetween modal, twClx: for additional styles.*/}
       {openModal && (
         <div
           className={clsx(

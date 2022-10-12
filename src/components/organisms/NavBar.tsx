@@ -102,7 +102,6 @@ const NavBar = () => {
 
   const { push } = useRouter();
 
-  console.log(process.env.MORALIS_API_KEY);
   return (
     <nav>
       <div className="nav-status center">
