@@ -1,14 +1,38 @@
-import React from "react";
-import { TotalEarningCard } from "../components/molecules";
-import EarningLayout from "../template/EarningLayout";
+import { TotalEarningCard } from "@/src/components/molecules";
+import EarningLayout from "@/src/template/EarningLayout";
 
 const TotalEarningsHistory = () => {
-  const totalEarningData = [1, 2, 3, 4];
+  const totalEarningData = [
+    {
+      imgUrl: "/images/Dreamy-ape.png",
+      transactionType: "sell",
+      coinName: "CloneX#5434",
+      receiver: "0xb4d...002d",
+    },
+    {
+      imgUrl: "/images/Dreamy-ape.png",
+      transactionType: "sell",
+      coinName: "CloneX#5434",
+      receiver: "0xb4d...002d",
+    },
+    {
+      imgUrl: "/images/Dreamy-ape.png",
+      transactionType: "sell",
+      coinName: "CloneX#5434",
+      receiver: "0xb4d...002d",
+    },
+    {
+      imgUrl: "/images/Dreamy-ape.png",
+      transactionType: "sell",
+      coinName: "CloneX#5434",
+      receiver: "0xb4d...002d",
+    },
+  ];
   return (
     <EarningLayout title="Earnings History">
       <div className="total-earnings-history-wrapper">
-        {totalEarningData.map((value) => (
-          <TotalEarningCard key={value} />
+        {totalEarningData.map((value, i) => (
+          <TotalEarningCard {...value} key={value.coinName + i + "#"} />
         ))}
       </div>
     </EarningLayout>

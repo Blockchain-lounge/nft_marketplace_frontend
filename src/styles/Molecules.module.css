@@ -359,7 +359,9 @@
   @apply text-white;
 }
 
-.total-earning-transaction-date-time span {
+.total-earning-transaction-date-time span,
+.total-earning-transaction-details
+  .total-earning-withdrawn-transaction-details {
   @apply font-medium text-[#A2A3B8];
 }
 

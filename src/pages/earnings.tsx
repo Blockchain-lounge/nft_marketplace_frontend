@@ -14,7 +14,7 @@ const EarningPage = () => {
       label: "Amount withdrawn",
       coinsAmount: 68.3,
       remainingAmount: "383,154.42",
-      history: "/total-withdrawn-history",
+      history: "/total-withdrawal-history",
     },
   ];
   return (
