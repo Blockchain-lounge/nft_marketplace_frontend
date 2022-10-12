@@ -105,6 +105,39 @@
   @apply bg-[#FAFBFC] p-7 rounded-r-xl flex justify-center;
 }
 
+/*Earnings Card*/
+.earnings-card-wrapper {
+  @apply h-[19.375rem] p-10 rounded-[0.625rem] flex flex-col justify-between capitalize;
+}
+
+.earnings-card-label,
+.earnings-card-remainig-amt-bal {
+  @apply text-2xl font-medium;
+}
+.earnings-card-coin-bal {
+  @apply flex items-center gap-x-4;
+}
+.earnings-card-coin-amt {
+  @apply font-bold text-5xl;
+}
+
+.earnings-card-amount-bal {
+  @apply flex items-center justify-between mt-3;
+}
+
+.earnings-card-remainig-amt-bal {
+  @apply text-[#A2A3B8];
+}
+
+.earnings-card-view-history {
+  @apply flex items-center gap-x-[0.375rem];
+}
+
+.earnings-card-history {
+  @apply text-xl font-medium  bg-gradient-to-r  from-[#2f79f9] to-[#3daefa] text-transparent;
+  -webkit-background-clip: text;
+}
+
 /* hero card */
 .hero-card-wrapper {
   @apply h-[16.9075rem] w-[13.6706rem] bg-[url('/images/bg-2.png')] rounded-[1.774rem] py-[0.86rem] px-[0.75rem] flex flex-col justify-between items-center;
@@ -302,4 +335,44 @@
 
 .nft-mini-cards-val3 {
   @apply text-base font-medium text-[#BDBFC7];
+}
+
+/*Total Earning Card*/
+
+.total-earning-card-wrapper {
+  @apply h-[7.375rem] p-6 bg-[#99a0ff0c] rounded-[1.25rem] flex justify-between items-center;
+}
+.total-earning-details {
+  @apply flex items-center gap-x-[1.75rem];
+}
+
+.total-earning-details img {
+  @apply h-[4.375rem] w-[4.375rem] rounded-full object-cover;
+}
+
+.total-earning-transaction-details p,
+.total-earning-transaction-details p span {
+  @apply text-[#A2A3B8] font-bold text-[1.375rem] mb-2;
+}
+
+.total-earning-transaction-details p span {
+  @apply text-white;
+}
+
+.total-earning-transaction-date-time span,
+.total-earning-transaction-details
+  .total-earning-withdrawn-transaction-details {
+  @apply font-medium text-[#A2A3B8];
+}
+
+.total-earning-bal {
+  @apply flex flex-col gap-y-3;
+}
+
+.total-earning-coin-sold {
+  @apply flex font-bold text-xl items-center gap-1;
+}
+
+.total-earning-coin-sold-receiver {
+  @apply font-medium text-[#A2A3B8];
 }

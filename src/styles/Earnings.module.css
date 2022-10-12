@@ -1,0 +1,7 @@
+.earnings-cards {
+  @apply grid grid-cols-2 gap-10 shadow;
+}
+
+.total-earnings-history-wrapper {
+  @apply flex flex-col gap-y-8;
+}

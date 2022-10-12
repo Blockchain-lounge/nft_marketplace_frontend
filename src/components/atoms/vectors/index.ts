@@ -21,7 +21,7 @@ export { default as GamesIcon } from "./games-icon";
 export { default as GlobalIcon } from "./global-icon";
 export { default as InstagramIcon } from "./instagram-icon";
 export { default as IntroIcon } from "./intro-icon";
-
+export { default as BigCoinIcon } from "./big-coin";
 export { default as LikesIcon } from "./likes-icon";
 export { default as LinkIcon } from "./link-icon";
 export { default as MetamaskIcon } from "./metamask-icon";
@@ -43,6 +43,7 @@ export { default as TiktokIcon } from "./tiktok-icon";
 export { default as TorusIcon } from "./activities-icon";
 export { default as TrendingIcon } from "./trending-icon";
 export { default as TwitterIcon } from "./twitter-icon";
+export { default as ViewHistoryArrowIcon } from "./view-history-arrow";
 export { default as WalletConnect } from "./wallet-connect";
 export { default as WalletIcon } from "./wallet-icon";
 export { default as YoutubeIcon } from "./youtube-icon";

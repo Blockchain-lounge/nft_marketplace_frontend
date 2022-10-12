@@ -1,0 +1,15 @@
+.earnings-wrapper {
+  @apply h-screen overflow-auto pt-4 pb-40;
+}
+
+.earnings-actions {
+  @apply flex items-center justify-between mb-6;
+}
+
+.earnings-title-btn {
+  @apply flex items-center gap-x-7;
+}
+
+.earnings-title-btn h1 {
+  @apply text-[2.5rem] font-dm-sans font-bold;
+}
