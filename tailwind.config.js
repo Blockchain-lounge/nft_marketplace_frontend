@@ -14,6 +14,7 @@ module.exports = {
         // "bg-5": "#999FFF",
         "txt-1": "#399CE1",
         "txt-2": "#A5A5B2",
+        "txt-3": "#bcbbbb",
       },
       fontFamily: {
         "dm-sans": ["DM\\ Sans", "sans-serif"],

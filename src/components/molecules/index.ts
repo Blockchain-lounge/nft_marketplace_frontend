@@ -1,5 +1,4 @@
 export { default as ConnectWallet } from "./ConnectWallet";
-export { default as ConnectWalletHeader } from "./ConnectWalletHeader";
 export { default as ConnectWalletStage1 } from "./ConnectWalletStage1";
 export { default as ConnectWalletTab } from "./ConnectWalletTab";
 export { default as DisplayWallet } from "./DisplayWallet";

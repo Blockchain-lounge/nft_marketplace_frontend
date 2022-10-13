@@ -1,8 +1,7 @@
 import React, { ReactNode, ButtonHTMLAttributes } from "react";
 import clsx from "clsx";
 
-
-interface IButton {
+export interface IButton {
   title: string;
   outline?: boolean;
   twClasses?: string;

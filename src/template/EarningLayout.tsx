@@ -24,7 +24,7 @@ const EarningLayout = ({
   };
   return (
     <DashboardLayout>
-      <div className="earnings-wrapper">
+      <div className="sub-layout-wrapper">
         <div className="center">
           <div className="earnings-actions">
             <div className="earnings-title-btn">
