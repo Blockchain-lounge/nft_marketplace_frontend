@@ -13,6 +13,7 @@
 @import "./NftdetailsPage.module.css";
 @import "./EarningLayout.module.css";
 @import "./Earnings.module.css";
+@import "./Profile.module.css";
 
 @layer base {
   @font-face {

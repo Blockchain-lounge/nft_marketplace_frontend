@@ -1,0 +1,32 @@
+.profile-banner {
+  @apply h-[13.4375rem] rounded-[1.125rem] bg-[url('/images/user-profile-banner.png')] bg-contain bg-no-repeat relative;
+}
+
+.profile-banner img {
+  @apply h-[9.375rem] w-[9.375rem] rounded-full object-cover absolute left-[50%] top-[100%] border-[#16162D] border-[0.6rem];
+  transform: translate(-50%, -50%);
+}
+
+.profile-actions {
+  @apply mt-[1.875rem];
+}
+
+.profile-action {
+  @apply flex items-center justify-end gap-x-[0.875rem];
+}
+
+.profile-user-info {
+  @apply grid place-items-center gap-y-[0.84375rem] mt-[0.625rem];
+}
+
+.profile-user-name {
+  @apply font-semibold text-[1.75rem];
+}
+
+.profile-user-address {
+  @apply flex items-center space-x-[0.625rem];
+}
+
+.profile-user-address span {
+  @apply font-medium text-[#bcbbbb];
+}
