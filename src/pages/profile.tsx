@@ -1,4 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
+import { useState } from "react";
+import { useRouter } from "next/router";
 import DashboardLayout from "@/src/template/DashboardLayout";
 import { Footer2 } from "@/src/components/organisms";
 import {
@@ -6,17 +8,18 @@ import {
   EditIcon,
   ProfileLinkIcon,
 } from "../components/atoms/vectors";
-import { Button } from "../components/atoms";
+import { Button, GradientButton } from "../components/atoms";
 import { ConnectWalletTab } from "@/src/components/molecules";
-import { useState } from "react";
 
 const Profile = () => {
   const [prodileActiveTab, setProfileActiveTab] = useState(0);
+  const { push } = useRouter();
   const profileTab = [
     { text: "Owned", count: 0 },
     { text: "Created", count: 0 },
-    { text: "Favourite", count: 0 },
+    { text: "Activity" },
   ];
+  const handleNavigateToHome = () => push("/");
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper">
@@ -37,11 +40,27 @@ const Profile = () => {
               </div>
             </div>
           </div>
-          <ConnectWalletTab
-            tabs={profileTab}
-            activeTab={prodileActiveTab}
-            setActiveTab={setProfileActiveTab}
-          />
+          <div className="profile-tab">
+            <ConnectWalletTab
+              tabs={profileTab}
+              activeTab={prodileActiveTab}
+              setActiveTab={setProfileActiveTab}
+            />
+          </div>
+          <div className="profile-user-nfts">
+            <img src="/images/404-illustration.png" alt="empty-nfts" />
+            <span className="profile-empty-nft-title">
+              You do not own any NFT
+            </span>
+            <p className="profile-empty-nft-description">
+              There&apos;s lots of other NFTs to explore
+            </p>
+            {/* <Button title="Explore NFTs" outline /> */}
+            <GradientButton
+              title="Explore NFTs"
+              onClick={handleNavigateToHome}
+            />
+          </div>
         </div>
         <Footer2 />
       </div>

@@ -16,6 +16,7 @@ const ConnectWalletTabHeader = ({
   ICON,
   count,
 }: IConnectWalletHeader) => {
+  console.log(count);
   return (
     <div
       onClick={onClick}
@@ -29,11 +30,15 @@ const ConnectWalletTabHeader = ({
       <span className={clsx(isActive ? "text-[#3CABFA]" : "text-[#b9b9c0]")}>
         {text}
       </span>
-      {count ? (
-        <span className="connect-header-wrapper-count">{count}</span>
-      ) : (
-        ""
-      )}
+
+      <span
+        className={clsx(
+          "connect-header-wrapper-count",
+          count !== undefined ? "grid place-content-center" : "hidden"
+        )}
+      >
+        {count}
+      </span>
     </div>
   );
 };

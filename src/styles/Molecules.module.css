@@ -21,7 +21,7 @@
 }
 
 .connect-header-wrapper-count {
-  @apply text-[0.75rem] border-[#858585] border-[1px] h-[1.25rem] w-[1.25rem] p-[0.1562rem] grid place-content-center rounded-full;
+  @apply text-[0.75rem] border-[#858585] border-[1px] h-[1.25rem] w-[1.25rem] p-[0.1562rem] rounded-full;
 }
 
 /* connect wallet stage 1 */

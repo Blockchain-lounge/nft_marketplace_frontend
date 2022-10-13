@@ -1,5 +1,5 @@
 .profile-banner {
-  @apply h-[13.4375rem] rounded-[1.125rem] bg-[url('/images/user-profile-banner.png')] bg-contain bg-no-repeat relative;
+  @apply h-[13.4375rem] rounded-[1.125rem] bg-[url('/images/user-profile-banner.png')] bg-cover bg-no-repeat relative;
 }
 
 .profile-banner img {
@@ -28,5 +28,20 @@
 }
 
 .profile-user-address span {
-  @apply font-medium text-[#bcbbbb];
+  @apply font-medium text-txt-2;
+}
+
+.profile-tab {
+  @apply mx-auto max-w-[23rem] my-6;
+}
+
+.profile-user-nfts {
+  @apply flex flex-col justify-center items-center;
+}
+
+.profile-empty-nft-title {
+  @apply text-3xl font-bold mt-6;
+}
+.profile-empty-nft-description {
+  @apply font-medium text-base text-txt-2 my-4;
 }

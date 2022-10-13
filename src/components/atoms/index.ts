@@ -1,6 +1,7 @@
 export { default as Button } from "./Button";
 export { default as Heading } from "./Heading";
 export { default as ConnectWalletTabHeader } from "./connect-wallet-header";
+export { default as GradientButton } from "./GradientButton";
 export { default as HeroIndicator } from "./HeroIndicator";
 export { default as Input } from "./Input";
 export { default as Loader } from "./Loader";
