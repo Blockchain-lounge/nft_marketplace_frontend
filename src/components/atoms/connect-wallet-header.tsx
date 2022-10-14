@@ -16,7 +16,6 @@ const ConnectWalletTabHeader = ({
   ICON,
   count,
 }: IConnectWalletHeader) => {
-  console.log(count);
   return (
     <div
       onClick={onClick}

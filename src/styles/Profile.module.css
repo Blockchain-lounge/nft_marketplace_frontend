@@ -15,6 +15,10 @@
   @apply flex items-center justify-end gap-x-[0.875rem];
 }
 
+.profile-nft-section {
+  @apply mt-12;
+}
+
 .profile-user-info {
   @apply grid place-items-center gap-y-[0.84375rem] mt-[0.625rem];
 }
@@ -31,6 +35,10 @@
   @apply font-medium text-txt-2;
 }
 
+.user-profile-owned-nfts {
+  @apply grid grid-cols-4 gap-[2.06rem];
+}
+
 .profile-tab {
   @apply mx-auto max-w-[23rem] my-6;
 }
@@ -44,4 +52,24 @@
 }
 .profile-empty-nft-description {
   @apply font-medium text-base text-txt-2 my-4;
+}
+
+.profile-activity-headers-tab {
+  @apply grid grid-cols-[0.3fr_0.2fr_0.2fr_0.3fr];
+}
+
+.profile-activity-header {
+  @apply font-medium text-sm text-txt-2;
+}
+
+.profile-activity-item {
+}
+
+.profile-activity-price-wrapper {
+}
+
+.profile-activity-sender-wrapper {
+}
+
+.profile-activity-receiver-wrapper {
 }

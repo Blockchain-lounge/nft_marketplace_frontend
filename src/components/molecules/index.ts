@@ -9,6 +9,7 @@ export { default as MiniUserWallet } from "./MiniUserWallet";
 export { default as NavTab } from "./NavTab";
 export { default as NftHeaderCard } from "./NftHeader";
 export { default as NftMediumCard } from "./NftMediumCard";
+export { default as NftMediumCard2 } from "./NftMediumCard2";
 export { default as NftMiniCard } from "./NftMiniCard";
 export { default as NftSlider } from "./NftSlider";
 export { default as Sidebar } from "./Sidebar";

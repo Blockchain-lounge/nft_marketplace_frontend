@@ -1,8 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 import clsx from "clsx";
+import { CoinIcon, OutlineLikesIcon } from "@/src/components/atoms/vectors";
 
-import { CoinIcon, LikesIcon } from "@/src/components/atoms/vectors";
-
-interface INftcard {
+export interface INftcard {
   price: string;
   imgUrl: string;
   name: string;
@@ -14,13 +14,13 @@ const NftCard = ({ price, imgUrl, name, owner, status }: Partial<INftcard>) => {
   return (
     <div className="nmc-wrapper">
       <div className="nmc-wrapper-img">
-        <div className="likes">
-          <LikesIcon />
+        <div className="nmc-wrapper-likes">
+          <OutlineLikesIcon />
           <span>295</span>
         </div>
-        <img src={imgUrl} alt="Dreamy Ape" />
+        <img src={imgUrl} alt={name} />
       </div>
-      <div className="nmc-wrapper-2">
+      <div className="nmc-sub-wrapper">
         {status && (
           <span
             className={clsx(
