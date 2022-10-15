@@ -4,23 +4,29 @@ import { useRouter } from "next/router";
 import DashboardLayout from "@/src/template/DashboardLayout";
 import { Footer2 } from "@/src/components/organisms";
 import {
+  CoinIcon,
   CopyIcon,
   EditIcon,
   ProfileLinkIcon,
-} from "../components/atoms/vectors";
-import { Button, GradientButton } from "../components/atoms";
+} from "@/src/components/atoms/vectors";
+import { Button, GradientButton } from "@/src/components/atoms";
 import { ConnectWalletTab, NftMediumCard2 } from "@/src/components/molecules";
-import { userCreatedProfileDatas, userOwnedProfileDatas } from "../store/data";
+import {
+  userCreatedProfileDatas,
+  userOwnedProfileDatas,
+} from "@/src/store/data";
 
 const Profile = () => {
   const [profileActiveTab, setProfileActiveTab] = useState(0);
   const [data, setData] = useState(true);
   const { push } = useRouter();
+  // console.log(navigator);
   const profileTab = [
     { text: "Owned", count: userOwnedProfileDatas.length },
     { text: "Created", count: userCreatedProfileDatas.length },
     { text: "Activity" },
   ];
+  const profileActivityList = [0, 1, 2, 3];
   const profileActivityHeaders = ["Item", "Price", "From", "To"];
   const handleNavigateToHome = () => push("/");
   return (
@@ -77,31 +83,53 @@ const Profile = () => {
                           {header}
                         </span>
                       ))}
-                      {/*list of activities*/}
-                      <div className="profile-activity-list">
-                        <div className="profile-activity-item">
-                          <img src="" alt="" />
-                          <div className="profile-activity-coin-info-wrapper">
-                            <span className="profile-activity-coin-name"></span>
-                            <span className="profile-activity-coin-tx-type"></span>
+                    </div>
+                    {/*list of activities*/}
+                    <div className="profile-activities-wrapper">
+                      {profileActivityList.map((activity) => (
+                        <div key={activity} className="profile-activity-list">
+                          <div className="profile-activity-item">
+                            <img src="/images/profile-nft.png" alt="coin-img" />
+                            <div className="profile-activity-coin-info-wrapper">
+                              <span className="text-[1.375rem] font-bold">
+                                CloneX #4537
+                              </span>
+                              <span className="profile-activity-coin-tx-type text-txt-2">
+                                Sold
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="profile-activity-price-wrapper">
+                            <span className="profile-activity-coin-price">
+                              <CoinIcon /> 4.5k
+                            </span>
+                            <span className="profile-activity-amount text-txt-2">
+                              $5,954,532
+                            </span>
+                          </div>
+
+                          <div className="profile-activity-sender-wrapper">
+                            <img src="/images/ape.png" alt="sender-img" />
+                            <span className="profile-activity-sender">
+                              0xf7ec…952d
+                            </span>
+                          </div>
+
+                          <div className="profile-activity-receiver-wrapper">
+                            <div className="profile-activity-receiver">
+                              <img
+                                src="/images/hero-dashboard.jpg"
+                                alt="receiver-img"
+                              />
+                              <span>0xf7ec…952d</span>
+                            </div>
+                            <span className="profile-activity-receiver-time text-txt-1">
+                              1 hour ago
+                            </span>
                           </div>
                         </div>
-
-                        <div className="profile-activity-price-wrapper">
-                          <span className="profile-activity-coin-price"></span>
-                          <span className="profile-activity-amount"></span>
-                        </div>
-
-                        <div className="profile-activity-sender-wrapper">
-                          <img src="" alt="" />
-                          <span className="profile-activity-sender"></span>
-                        </div>
-
-                        <div className="profile-activity-receiver-wrapper">
-                          <div className="profile-activity-receiver"></div>
-                          <span className="profile-activity-receiver-time"></span>
-                        </div>
-                      </div>
+                      ))}
                     </div>
                   </div>
                 ) : null}
