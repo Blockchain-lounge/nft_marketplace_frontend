@@ -53,9 +53,19 @@
 }
 
 @layer components {
-  @media only screen and (max-width: 1024px) {
+  /* @media only screen and (max-width: 1024px) {
     :root {
       font-size: 12px;
+    }
+  } */
+  @media only screen and (max-width: 1280px) {
+    :root {
+      font-size: 12px;
+    }
+  }
+  @media only screen and (min-width: 1536px) {
+    :root {
+      font-size: 16px;
     }
   }
   a {

@@ -7,7 +7,7 @@ const NavTab = () => {
   const [active, setActive] = useState(0);
   const tabsArr = ["All", "Art", "CGI", "Gaming", "Utility"];
   return (
-    <div className="tab-wrapper">
+    <div className="nav-tab-wrapper">
       {tabsArr.map((tab, i) => (
         <div key={tab}>
           <span

@@ -28,13 +28,14 @@ const useWalletAuth = () => {
       userData.chain = chain.id;
     }
 
-    // if (wal === "coin") {
-    //   const { account, chain } = await connectAsync({
-    //     connector: new CoinbaseWalletConnector({}),
-    //   });
-    //   userData.address = account;
-    //   userData.chain = chain.id;
-    // }
+    if (wal === "coin") {
+      const { account, chain } = await connectAsync({
+        //@ts-ignore
+        connector: new CoinbaseWalletConnector({}),
+      });
+      userData.address = account;
+      userData.chain = chain.id;
+    }
 
     if (wal === "wal") {
       const { account, chain } = await connectAsync({

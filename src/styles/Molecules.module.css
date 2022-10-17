@@ -1,6 +1,6 @@
 /* sidebar */
 .sidebar-container {
-  @apply h-[54rem] lg:h-screen lg:px-[1.125rem] relative lg:mt-[0.8rem];
+  @apply h-[54rem] 2xl:h-screen  relative lg:mt-[0.8rem];
 }
 
 .sidebar-btn {
@@ -8,11 +8,11 @@
 }
 
 .social-links {
-  @apply grid grid-cols-3 gap-x-3 gap-y-5 cursor-pointer absolute w-[100%] lg:w-[87%] bottom-8 lg:bottom-[20%];
+  @apply grid grid-cols-3 gap-x-3 gap-y-5 cursor-pointer absolute w-[100%]  bottom-8 lg:bottom-[20%];
 }
 
 .social-link {
-  @apply h-[3.625rem] w-[3.625rem] rounded-full border-[0.0625rem] border-[#404861] text-[0.8125rem] text-white grid place-items-center;
+  @apply h-[3.625rem] w-[3.625rem] rounded-full border-[0.0625rem]  border-[#404861] text-white grid place-items-center;
 }
 
 /* connect-wallet header */
@@ -210,12 +210,12 @@
 
 /*Nav Tab*/
 
-.tab-wrapper {
+.nav-tab-wrapper {
   @apply h-[3.625rem] px-[1.5625rem] flex items-center justify-between bg-[#1D1F3E] rounded-[0.625rem];
 }
 
 .tab {
-  @apply font-medium text-base text-white cursor-pointer;
+  @apply text-white cursor-pointer;
 }
 .tab::before {
   @apply absolute content-[''] bg-white h-[0.3125rem] w-full rounded-t-[0.24rem] bottom-[-1rem];
