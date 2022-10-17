@@ -164,7 +164,7 @@
 }
 
 .mini-user-profile-links {
-  @apply grid grid-cols-[0.5fr_1fr] items-center text-white font-medium hover:cursor-pointer;
+  @apply grid grid-cols-[0.35fr_1fr] items-center text-white font-medium hover:cursor-pointer;
 }
 
 .mini-user-toggle-btn.react-toggle--checked .react-toggle-track {
@@ -177,9 +177,9 @@
   @apply bg-bg-3 w-[20rem] h-[23.56rem] p-6 absolute top-[14%] z-10 rounded-[1.125rem] border-[#34364C] border-[0.0625rem] flex flex-col;
 } */
 
-/* .mini-wallet-info {
-  @apply flex items-center;
-} */
+.mini-wallet-info {
+  @apply grid grid-cols-[0.5fr_1fr];
+}
 
 .mini-wallet-name {
   @apply text-sm font-medium leading-[1.301rem] text-white;

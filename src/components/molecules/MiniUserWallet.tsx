@@ -39,11 +39,11 @@ const MiniUserWallet = ({
       )}
     >
       {userWalletLinks.map(({ icon, link }) => (
-        <div key={link} className="mini-user-profile-links" onClick={onClick}>
+        <div key={link} className="mini-wallet-info" onClick={onClick}>
           {icon} <span className="mini-user-profile-link">{link}</span>
         </div>
       ))}
-      <div className="mini-user-profile-links">
+      <div className="mini-wallet-info">
         <CoinBaseIcon twclx="h-[2.5rem]" />
         <div className="flex flex-col">
           <span className="mini-wallet-name">Coinbase wallet</span>

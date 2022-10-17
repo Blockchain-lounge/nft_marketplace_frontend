@@ -1,15 +1,8 @@
 import clsx from "clsx";
 
-import Toggle from "react-toggle";
-import "react-toggle/style.css";
-
 import {
-  ProfileIcon,
-  SettingsIcon,
   CreateNftIcon,
   CreateCollectionIcon,
-  NightMode,
-  SignOutIcon,
 } from "@/src/components/atoms/vectors";
 
 interface IMiniUserProfile {
@@ -41,10 +34,7 @@ const CreateNftNavOptions = ({ showOptions, onClick }: IMiniUserProfile) => {
     >
       {createNftLinks.map(({ icon, link }) => (
         <div key={link} className="mini-user-profile-links" onClick={onClick}>
-          {icon}{" "}
-          <span className="mini-user-profile-link flex-1 hover:text-[#3694FA]">
-            {link}
-          </span>
+          {icon} <span className="mini-user-profile-link">{link}</span>
         </div>
       ))}
     </div>

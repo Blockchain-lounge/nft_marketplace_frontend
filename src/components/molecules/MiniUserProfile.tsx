@@ -48,9 +48,24 @@ const MiniUserProfile = ({
       )}
     >
       {userMiniProfileLinks.map(({ icon, link }) => (
-        <div key={link} className="mini-user-profile-links" onClick={onClick}>
+        <div
+          key={link}
+          className={clsx(
+            "mini-user-profile-links",
+            link === "Night Mode" && "grid-cols-[0.5fr_1fr_0.2fr]"
+          )}
+          onClick={() => {
+            if (link === "Night Mode") return;
+            onClick;
+          }}
+        >
           {icon}{" "}
-          <span className="mini-user-profile-link flex-1 hover:text-[#3694FA]">
+          <span
+            className={clsx(
+              "mini-user-profile-link",
+              link === "Night Mode" && "mr-[1rem]"
+            )}
+          >
             {link}
           </span>
           {link === "Night Mode" && (
