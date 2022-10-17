@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
-import axios from "axios";
+// import axios from "axios";
 
 import Button from "@/src/components/atoms/Button";
 
@@ -13,12 +13,14 @@ import InputField from "@/src/components/atoms/Input";
 
 import {
   CaretDown,
+  CartIcon,
   SearchIcon,
   WalletIcon,
 } from "@/src/components/atoms/vectors";
 
 import {
   ConnectWallet,
+  CreateNftNavOptions,
   DisplayWallet,
   MiniUserProfile,
   MiniUserWallet,
@@ -41,8 +43,10 @@ const NavBar = () => {
   const dispatch = useDispatch();
 
   const [showProfile, setShowProfile] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
   const [showBal, setShowBal] = useState(false);
+  const [showCreateNft, setShowCreateNft] = useState(false);
+
+  const [openModal, setOpenModal] = useState(false);
 
   const [activeTab, setActiveTab] = useState(0);
   const [stage, setStage] = useState(0);
@@ -100,6 +104,10 @@ const NavBar = () => {
     setShowProfile(!showProfile);
   };
 
+  const handleShowCreateNftOption = () => {
+    setShowCreateNft(!showCreateNft);
+  };
+
   const { push } = useRouter();
 
   return (
@@ -144,19 +152,32 @@ const NavBar = () => {
         <div className="nav-auth">
           {isLoggedIn ? (
             <div className="flex items-center gap-x-4">
+              <span className="mr-[0.5rem]" onClick={handleShowCreateNftOption}>
+                Create
+              </span>
               <img
                 src="/images/Dreamy-ape.png"
                 alt="user-img"
                 className="h-12 w-12 rounded-full"
                 onClick={handleShowProfile}
               />
-              <div className="p-[12px]">
-                <WalletIcon onClick={handleShowBal} />
+              <div className="flex space-x-[1rem]">
+                <span className="nav-create-nft">
+                  <WalletIcon onClick={handleShowBal} />
+                </span>
+                <span className="nav-create-nft">
+                  <CartIcon />
+                </span>
               </div>
-              <MiniUserWallet showBal={showBal} handleSignOut={handleLogin} />
+              <MiniUserWallet showBal={showBal} />
               <MiniUserProfile
                 showProfile={showProfile}
+                onClick={handleShowProfile}
                 handleSignOut={handleLogin}
+              />
+              <CreateNftNavOptions
+                showOptions={showCreateNft}
+                onClick={handleShowCreateNftOption}
               />
             </div>
           ) : (

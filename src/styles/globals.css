@@ -42,6 +42,14 @@
     height: 100vh;
     max-width: 100%;
   }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 @layer components {

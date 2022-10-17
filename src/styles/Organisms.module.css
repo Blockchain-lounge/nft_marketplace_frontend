@@ -127,3 +127,7 @@ nav {
 .mobile-tab {
   @apply lg:hidden;
 }
+
+.nav-create-nft {
+  @apply h-12 w-12 grid place-content-center border-[#ffffff30] border-[0.05rem] rounded-[0.75rem];
+}

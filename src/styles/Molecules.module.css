@@ -160,11 +160,11 @@
 
 /* mini user profile */
 .mini-user-profile-wrapper {
-  @apply w-[20.0625rem] h-[25.625rem] bg-bg-3 absolute top-[14%] z-10 rounded-[1.125rem]  border-[#34364C] border-[0.0625rem] p-[1.875rem] flex flex-col gap-y-[2.125rem];
+  @apply bg-bg-3 absolute top-[14%] z-10 rounded-[1.125rem]  border-[#34364C] border-[0.0625rem] p-[1.875rem] flex flex-col gap-y-[2.125rem];
 }
 
 .mini-user-profile-links {
-  @apply flex items-center text-white gap-x-6 font-medium hover:cursor-pointer;
+  @apply grid grid-cols-[0.5fr_1fr] items-center text-white font-medium hover:cursor-pointer;
 }
 
 .mini-user-toggle-btn.react-toggle--checked .react-toggle-track {
@@ -173,20 +173,20 @@
 
 /*Mini User Wallet*/
 
-.mini-wallet-wrapper {
+/* .mini-wallet-wrapper {
   @apply bg-bg-3 w-[20rem] h-[23.56rem] p-6 absolute top-[14%] z-10 rounded-[1.125rem] border-[#34364C] border-[0.0625rem] flex flex-col;
-}
+} */
 
-.mini-wallet-info {
+/* .mini-wallet-info {
   @apply flex items-center;
-}
+} */
 
 .mini-wallet-name {
-  @apply ml-[0.875rem] text-base font-medium leading-[1.301rem] text-white;
+  @apply text-sm font-medium leading-[1.301rem] text-white;
 }
 
 .mini-wallet-address {
-  @apply ml-[0.875rem] text-xs font-medium leading-4 text-[#B9BAC1];
+  @apply text-xs leading-4 text-[#B9BAC1];
 }
 
 .mini-wallet-bal {
@@ -244,14 +244,14 @@
 /*Nft Medium Card */
 
 .nmc-wrapper {
-  @apply rounded-[0.9375rem] bg-white w-[24.625rem];
+  @apply rounded-[0.975rem] bg-white max-w-[24.625rem];
 }
 
 .nmc-wrapper-img {
-  @apply h-[22.375rem] w-full relative;
+  @apply h-[22.375rem] w-full relative rounded-t-[0.975rem];
 }
 
-.nmc-wrapper-img .likes {
+.nmc-wrapper-likes {
   @apply absolute py-[0.9375rem] px-5 h-[3.1875rem] flex justify-center items-center rounded-[0.75rem] right-5 top-5 space-x-[0.5625rem];
   background: linear-gradient(
     147.75deg,
@@ -261,14 +261,15 @@
   backdrop-filter: blur(10px);
 }
 
-.nmc-wrapper-img .likes span {
+.nmc-wrapper-likes span {
   @apply text-white leading-[1.3018rem];
 }
 
-.nmc-wrapper-img img {
-  @apply w-full h-full rounded-t-[0.9475rem] object-cover;
+.nmc-wrapper-img img,
+.nmc-wrapper2-img img {
+  @apply w-full h-full rounded-t-[0.975rem] object-cover;
 }
-.nmc-wrapper-2 {
+.nmc-sub-wrapper {
   @apply pt-[1.25rem] pb-[1.71rem] px-6;
 }
 .nmc-status {
@@ -298,6 +299,40 @@
 
 .nmc-wrapper-4 .price-wrapper .coin {
   @apply text-[#2B2E32] font-medium text-base flex items-center;
+}
+
+/*Nft Medium 2 Card */
+
+.nmc-wrapper2-img {
+  @apply h-[19.125rem] w-full relative rounded-[0.975rem];
+}
+
+.nmc-sub-wrapper-2 {
+  @apply flex justify-between items-center mb-[0.375rem];
+}
+
+.nmc-wrapper2-likes {
+  @apply p-[0.562rem] h-[2.7rem];
+}
+
+.nmc-wrapper2-likes span {
+  @apply text-[0.8118rem];
+}
+
+.nmc-sub-wrapper-2 span {
+  @apply text-black;
+}
+
+.nmc-sub-wrapper-2 .name {
+  @apply text-lg font-bold;
+}
+
+.nmc-sub-wrapper-2 .coin {
+  @apply flex items-center font-bold;
+}
+
+.nmc-sub-wrapper-2-owner {
+  @apply text-black;
 }
 
 /*Nft Mini Cards*/

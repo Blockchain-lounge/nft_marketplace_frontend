@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const LikesIcon = (props: React.SVGProps<SVGSVGElement>) => (
+const OutlineLikesIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={17}
     height={15}
@@ -15,4 +15,4 @@ const LikesIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export default LikesIcon;
+export default OutlineLikesIcon;

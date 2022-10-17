@@ -149,3 +149,57 @@ export const nft4Datas = [
     owner: "Bayc",
   },
 ];
+
+export const userOwnedProfileDatas = [
+  {
+    imgUrl: "/images/profile-nft.png",
+    name: "CloneX",
+  },
+  {
+    imgUrl: "/images/profile-nft.png",
+    name: "CloneX",
+  },
+  {
+    imgUrl: "/images/profile-nft.png",
+    name: "CryptoPunk",
+  },
+  {
+    imgUrl: "/images/profile-nft.png",
+    name: "CryptoPunk",
+  },
+  {
+    imgUrl: "/images/profile-nft.png",
+    name: "CloneX",
+  },
+  {
+    imgUrl: "/images/profile-nft.png",
+    name: "CloneX",
+  },
+  {
+    imgUrl: "/images/profile-nft.png",
+    name: "CryptoPunk",
+  },
+  {
+    imgUrl: "/images/profile-nft.png",
+    name: "CryptoPunk",
+  },
+];
+
+export const userCreatedProfileDatas = [
+  {
+    imgUrl: "/images/hero-dashboard.jpg",
+    name: "CloneX",
+  },
+  {
+    imgUrl: "/images/profile-nft.png",
+    name: "CloneX",
+  },
+  {
+    imgUrl: "/images/ape.png",
+    name: "CryptoPunk",
+  },
+  {
+    imgUrl: "/images/profile-nft.png",
+    name: "CryptoPunk",
+  },
+];
