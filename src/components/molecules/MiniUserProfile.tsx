@@ -6,8 +6,6 @@ import "react-toggle/style.css";
 import {
   ProfileIcon,
   SettingsIcon,
-  CreateNftIcon,
-  CreateCollectionIcon,
   NightMode,
   SignOutIcon,
 } from "@/src/components/atoms/vectors";
@@ -35,16 +33,6 @@ const MiniUserProfile = ({
       to: "",
     },
     {
-      link: "Create NFT",
-      icon: <CreateNftIcon />,
-      to: "",
-    },
-    {
-      link: "Create Collection",
-      icon: <CreateCollectionIcon />,
-      to: "",
-    },
-    {
       link: "Night Mode",
       icon: <NightMode />,
       to: "",
@@ -60,12 +48,9 @@ const MiniUserProfile = ({
       )}
     >
       {userMiniProfileLinks.map(({ icon, link }) => (
-        <div key={link} className="mini-user-profile-links">
+        <div key={link} className="mini-user-profile-links" onClick={onClick}>
           {icon}{" "}
-          <span
-            className="mini-user-profile-link flex-1 hover:text-[#3694FA]"
-            onClick={onClick}
-          >
+          <span className="mini-user-profile-link flex-1 hover:text-[#3694FA]">
             {link}
           </span>
           {link === "Night Mode" && (

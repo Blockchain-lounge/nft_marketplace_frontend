@@ -1,38 +1,58 @@
 import clsx from "clsx";
 
-import { Button } from "@/src/components/atoms";
-import { CoinBaseIcon } from "@/src/components/atoms/vectors";
+import {
+  WalletIcon2,
+  EarningsIcon,
+  CoinBaseIcon,
+} from "@/src/components/atoms/vectors";
 
 interface IMiniuserwallet {
   showBal: boolean;
-  handleSignOut: () => void;
+  // handleSignOut?: () => void;
+  onClick?: () => void;
 }
 
-const MiniUserWallet = ({ showBal, handleSignOut }: IMiniuserwallet) => {
+const MiniUserWallet = ({
+  showBal,
+
+  onClick,
+}: IMiniuserwallet) => {
+  const userWalletLinks = [
+    {
+      link: "Wallets",
+      icon: <WalletIcon2 />,
+      to: "",
+    },
+    {
+      link: "View earnings",
+      icon: <EarningsIcon />,
+      to: "/earnings",
+    },
+  ];
   return (
     <div
       className={clsx(
-        "mini-wallet-wrapper",
+        "mini-user-profile-wrapper",
         showBal
           ? "transition-[right] duration-300 right-6"
           : "transition-[right] ease-in-out duration-300 right-[-50rem]"
       )}
     >
-      <div className="mini-wallet-info">
-        <CoinBaseIcon twclx="h-[1.875rem]" />
-        <span className="mini-wallet-name">Coinbase wallet</span>
-        <span className="mini-wallet-address">0xdE8cF...1C79</span>
-      </div>
-      <div className="mini-wallet-bal">
-        <div className="mini-wallet-bal-info">
-          <span className="mini-wallet-bal-title">Total Balance</span>
-          <span className="mini-wallet-bal-amount">$278,000</span>
+      {userWalletLinks.map(({ icon, link }) => (
+        <div key={link} className="mini-user-profile-links" onClick={onClick}>
+          {icon} <span className="mini-user-profile-link">{link}</span>
         </div>
-        <Button title="Add funds" twClasses="max-w-[14.5625rem]" />
+      ))}
+      <div className="mini-user-profile-links">
+        <CoinBaseIcon twclx="h-[2.5rem]" />
+        <div className="flex flex-col">
+          <span className="mini-wallet-name">Coinbase wallet</span>
+          <span className="mini-wallet-address">Default wallet</span>
+        </div>
       </div>
-      <span className="mini-wallet-disconnect" onClick={handleSignOut}>
+      {/* <span className="mini-wallet-disconnect" onClick={handleSignOut}>
         Disconnect wallet
-      </span>
+      </span> */}
     </div>
   );
 };

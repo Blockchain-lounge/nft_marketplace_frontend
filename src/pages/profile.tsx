@@ -31,7 +31,7 @@ const Profile = () => {
   const handleNavigateToHome = () => push("/");
   return (
     <DashboardLayout>
-      <div className="sub-layout-wrapper">
+      <div className="sub-layout-wrapper scrollbar-hide">
         <div className="center">
           <div className="profile-banner">
             <img src="/images/ape.png" alt="user-profile-img" />

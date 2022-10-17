@@ -160,11 +160,11 @@
 
 /* mini user profile */
 .mini-user-profile-wrapper {
-  @apply w-[20.0625rem] h-[25.625rem] bg-bg-3 absolute top-[14%] z-10 rounded-[1.125rem]  border-[#34364C] border-[0.0625rem] p-[1.875rem] flex flex-col gap-y-[2.125rem];
+  @apply bg-bg-3 absolute top-[14%] z-10 rounded-[1.125rem]  border-[#34364C] border-[0.0625rem] p-[1.875rem] flex flex-col gap-y-[2.125rem];
 }
 
 .mini-user-profile-links {
-  @apply flex items-center text-white gap-x-6 font-medium hover:cursor-pointer;
+  @apply grid grid-cols-[0.5fr_1fr] items-center text-white font-medium hover:cursor-pointer;
 }
 
 .mini-user-toggle-btn.react-toggle--checked .react-toggle-track {
@@ -173,20 +173,20 @@
 
 /*Mini User Wallet*/
 
-.mini-wallet-wrapper {
+/* .mini-wallet-wrapper {
   @apply bg-bg-3 w-[20rem] h-[23.56rem] p-6 absolute top-[14%] z-10 rounded-[1.125rem] border-[#34364C] border-[0.0625rem] flex flex-col;
-}
+} */
 
-.mini-wallet-info {
+/* .mini-wallet-info {
   @apply flex items-center;
-}
+} */
 
 .mini-wallet-name {
-  @apply ml-[0.875rem] text-base font-medium leading-[1.301rem] text-white;
+  @apply text-sm font-medium leading-[1.301rem] text-white;
 }
 
 .mini-wallet-address {
-  @apply ml-[0.875rem] text-xs font-medium leading-4 text-[#B9BAC1];
+  @apply text-xs leading-4 text-[#B9BAC1];
 }
 
 .mini-wallet-bal {
