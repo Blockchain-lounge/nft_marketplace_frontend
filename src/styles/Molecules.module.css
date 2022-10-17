@@ -167,6 +167,10 @@
   @apply grid grid-cols-[0.35fr_1fr] items-center text-white font-medium hover:cursor-pointer;
 }
 
+.mini-profile-toggle {
+  @apply grid-cols-[0.5fr_1fr_0.2fr];
+}
+
 .mini-user-toggle-btn.react-toggle--checked .react-toggle-track {
   @apply bg-[#0F94F2];
 }

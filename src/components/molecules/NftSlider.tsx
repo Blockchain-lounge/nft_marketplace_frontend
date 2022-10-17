@@ -10,7 +10,7 @@ const NftSlider = ({ data = [] }: { data?: any }) => {
   const settings = {
     infinite: false,
     speed: 500,
-    slidesToShow: 3.5,
+    slidesToShow: 3,
     slidesToScroll: 1,
     dots: false,
     nextArrow: <NextSliderBtn />,

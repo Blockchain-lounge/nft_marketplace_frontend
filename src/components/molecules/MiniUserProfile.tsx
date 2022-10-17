@@ -12,7 +12,7 @@ import {
 
 interface IMiniUserProfile {
   showProfile: boolean;
-  onClick?: () => void;
+  onClick: (val: boolean) => void;
   handleSignOut: () => void;
 }
 
@@ -52,11 +52,11 @@ const MiniUserProfile = ({
           key={link}
           className={clsx(
             "mini-user-profile-links",
-            link === "Night Mode" && "grid-cols-[0.5fr_1fr_0.2fr]"
+            link === "Night Mode" && "mini-profile-toggle"
           )}
           onClick={() => {
             if (link === "Night Mode") return;
-            onClick;
+            onClick(!showProfile);
           }}
         >
           {icon}{" "}

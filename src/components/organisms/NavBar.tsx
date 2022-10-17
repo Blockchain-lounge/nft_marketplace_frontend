@@ -172,7 +172,7 @@ const NavBar = () => {
               <MiniUserWallet showBal={showBal} />
               <MiniUserProfile
                 showProfile={showProfile}
-                onClick={handleShowProfile}
+                onClick={setShowProfile}
                 handleSignOut={handleLogin}
               />
               <CreateNftNavOptions

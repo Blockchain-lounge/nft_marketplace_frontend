@@ -9,7 +9,7 @@
 }
 
 .aside {
-  @apply fixed z-20 top-[8%] transition-[left] lg:z-0 duration-300 bg-[#16162db7] pt-5 px-5 lg:px-6 lg:pt-5 rounded-[1.25rem] lg:top-0 lg:bg-transparent lg:rounded-none lg:left-0 lg:relative lg:border-[#34364C] lg:border-r-[0.0625rem];
+  @apply fixed z-20 top-[8%] transition-[left] lg:z-0 duration-300 bg-[#16162db7] pt-5 px-5 lg:px-6 lg:pt-0 rounded-[1.25rem] lg:top-0 lg:bg-transparent lg:rounded-none lg:left-0 lg:relative lg:border-[#34364C] lg:border-r-[0.0625rem];
 }
 
 .hide-mobile-modal {
