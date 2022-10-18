@@ -21,7 +21,7 @@ module.exports = {
         "sf-pro": ["Sf\\ Pro", "sans-serif"],
       },
       borderColor: {
-        "border-1-line": "#99a0ff64",
+        "border-1-line": "#99a0ff57",
       },
     },
   },

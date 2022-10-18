@@ -177,7 +177,7 @@ const NavBar = () => {
               />
               <CreateNftNavOptions
                 showOptions={showCreateNft}
-                onClick={handleShowCreateNftOption}
+                onClick={setShowCreateNft}
               />
             </div>
           ) : (

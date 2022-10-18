@@ -1,0 +1,30 @@
+.create-new-nft-wrapper {
+  @apply grid grid-cols-2;
+}
+
+.create-new-nft-form {
+  @apply mt-4 space-y-[1.5rem];
+}
+
+.create-new-nft-wrapper-2 {
+  @apply space-y-[0.3rem];
+}
+
+.create-new-nft-wrapper-2-label,
+.create-new-nft-wrapper-2-label-type {
+  @apply block;
+}
+.create-new-nft-wrapper-2-label-type {
+  @apply text-sm text-txt-2;
+}
+
+.create-new-nft-listing-type {
+  @apply flex justify-between items-center gap-x-5;
+}
+.create-new-nft-price {
+  @apply grid grid-cols-[0.2fr_1fr] gap-x-4;
+}
+
+.create-new-nft-gas-fee-wrapper {
+  @apply bg-bg-5 p-6 rounded-xl w-[50%] space-y-2;
+}

@@ -4,6 +4,7 @@ export { default as ConnectWalletTabHeader } from "./connect-wallet-header";
 export { default as GradientButton } from "./GradientButton";
 export { default as HeroIndicator } from "./HeroIndicator";
 export { default as Input } from "./Input";
+export { default as Input2 } from "./Input-2";
 export { default as Loader } from "./Loader";
 export { default as NextSliderBtn } from "./NextSliderBtn";
 export { default as Select } from "./Select";

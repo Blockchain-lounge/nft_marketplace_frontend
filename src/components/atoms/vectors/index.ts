@@ -1,5 +1,7 @@
 export { default as ActivityIcon } from "./activities-icon";
 export { default as ArrowBack } from "./arrow-back";
+export { default as AuctionIcon } from "./auction-icon";
+export { default as BidIcon } from "./bid-icon";
 export { default as CaretDown } from "./caret-down";
 export { default as CaretUp } from "./caret-up";
 export { default as CartIcon } from "./cart-icon";
@@ -17,12 +19,15 @@ export { default as EthIcon } from "./eth-icon";
 export { default as EthereumIcon } from "./ethereum-icon";
 export { default as ExploreIcon } from "./explore-icon";
 export { default as FeaturedIcon } from "./featured-icon";
+export { default as FixedPriceIcon } from "./fixed-price-icon";
+
 export { default as FooterFacebookIcon } from "./footer-facebook-icon";
 export { default as FooterGoogleIcon } from "./footer-google-icon";
 export { default as FooterTwitterIcon } from "./footer-twitter-icon";
 export { default as FooterYoutubeIcon } from "./footer-youtube-icon";
 export { default as GamesIcon } from "./games-icon";
 export { default as GlobalIcon } from "./global-icon";
+export { default as ImgUploadIcon } from "./img-upload-icon";
 export { default as InstagramIcon } from "./instagram-icon";
 export { default as IntroIcon } from "./intro-icon";
 export { default as BigCoinIcon } from "./big-coin";

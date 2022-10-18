@@ -33,37 +33,37 @@ const SideBar = () => {
       label: "Collections",
       icon: <CollectionsIcon />,
       subLinks: [
-        { label: "Popular collections", link: "/collections" },
-        { label: "Drop calendar", link: "/settings" },
-        { label: "Auctions", link: "/settings" },
+        { label: "Popular collections", link: "" },
+        { label: "Drop calendar", link: "" },
+        { label: "Auctions", link: "" },
       ],
     },
     {
       label: "Explore",
       icon: <ExploreIcon />,
-      link: "/profile",
+      link: "",
     },
     {
       label: "Trending",
       icon: <TrendingIcon />,
-      link: "/create-new-nft",
+      link: "",
     },
     {
       label: "Activities",
       icon: <ActivityIcon />,
-      link: "/create-new-nft",
+      link: "",
     },
     {
       label: "Cloudax Games",
       icon: <GamesIcon />,
-      link: "/create-new-nft",
+      link: "",
       tag: "coming",
     },
 
     {
       label: "Support",
       icon: <SupportIcon />,
-      link: "/create-new-nft",
+      link: "",
     },
   ];
 
