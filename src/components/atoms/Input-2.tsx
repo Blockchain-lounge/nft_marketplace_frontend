@@ -1,17 +1,24 @@
-const Input2 = ({
+import { ChangeEvent, FC, InputHTMLAttributes } from "react";
+
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  placeholder?: string;
+  name: string;
+  type?: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  belowDesc?: string;
+  suffix?: string;
+}
+
+const Input2: FC<InputProps> = ({
   label,
   placeholder,
   name,
   type = "text",
   belowDesc,
   suffix,
-}: {
-  label?: string;
-  placeholder?: string;
-  name: string;
-  type?: string;
-  belowDesc?: string;
-  suffix?: string;
+  onChange,
+  ...rest
 }) => {
   return (
     <div>
@@ -21,7 +28,14 @@ const Input2 = ({
         </label>
       )}
       <div className="select">
-        <input type={type} name={name} id={name} placeholder={placeholder} />
+        <input
+          type={type}
+          name={name}
+          id={name}
+          placeholder={placeholder}
+          onChange={onChange}
+          {...rest}
+        />
         {suffix && <span className="text-txt-2">{suffix}</span>}
       </div>
       {belowDesc && (

@@ -1,4 +1,5 @@
 export { default as ActivityIcon } from "./activities-icon";
+export { default as AddIcon } from "./add-icon";
 export { default as ArrowBack } from "./arrow-back";
 export { default as AuctionIcon } from "./auction-icon";
 export { default as BidIcon } from "./bid-icon";

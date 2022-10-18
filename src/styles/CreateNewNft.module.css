@@ -28,3 +28,10 @@
 .create-new-nft-gas-fee-wrapper {
   @apply bg-bg-5 p-6 rounded-xl w-[50%] space-y-2;
 }
+
+.create-new-nft-properties {
+  @apply flex items-center space-x-4;
+}
+.create-new-nft-wrapper-preview {
+  @apply mx-auto max-w-[50%] w-full;
+}
