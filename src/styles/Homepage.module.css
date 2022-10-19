@@ -11,7 +11,7 @@
 }
 
 .hero-img-cards {
-  @apply relative w-full xl:w-[55.375rem] justify-self-end;
+  @apply relative w-full lg:h-[40rem] 2xl:h-[44rem] xl:w-[55.375rem] justify-self-end;
 }
 
 .hero-img-cards img {
@@ -19,11 +19,15 @@
 }
 
 .hero-img {
-  @apply flex max-w-[28rem] h-[25rem] lg:h-[44.5625rem] lg:max-w-[54.73rem];
+  @apply flex max-w-[28rem] h-[25rem] lg:h-[44rem]  lg:max-w-[54.73rem];
 }
 
+/* .hero-img > img {
+  @apply h-[25rem] lg:h-[44rem]  lg:max-w-[24.73rem];
+} */
+
 .hero-cards {
-  @apply hidden lg:absolute bottom-[-2.2rem] right-[2.47125rem] lg:flex gap-x-[1.25rem];
+  @apply hidden lg:absolute lg:bottom-[-7.6rem] 2xl:bottom-[-7rem] right-[2.47125rem] lg:flex gap-x-[1.25rem];
 }
 
 .hero-section-1 {

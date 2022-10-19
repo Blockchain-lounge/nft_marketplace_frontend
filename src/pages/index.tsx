@@ -69,7 +69,7 @@ const Home: NextPage = () => {
                     />
                   ))}
               </div>
-              <div className="flex w-full mb-4 lg:mb-0 items-center justify-center lg:block mt-4 lg:mt-[2.6875rem]">
+              <div className="flex w-full mb-4 lg:mb-0 items-center justify-center lg:block mt-4 lg:mt-0">
                 <HeroIndicator
                   arr={heroData}
                   active={activeCard}
