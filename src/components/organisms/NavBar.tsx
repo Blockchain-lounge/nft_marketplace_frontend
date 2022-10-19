@@ -7,6 +7,8 @@ import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 // import axios from "axios";
 
+import useWalletAuth from "@/src/hooks/useWalletAuth";
+
 import Button from "@/src/components/atoms/Button";
 
 import InputField from "@/src/components/atoms/Input";
@@ -51,17 +53,25 @@ const NavBar = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [stage, setStage] = useState(0);
 
-  const handleAuth = async () => {
-    //disconnects the web3 provider if it's already active
-    if (isConnected) {
-      await disconnectAsync();
-    }
-    // enabling the web3 provider metamask
-    const { account, chain } = await connectAsync({
-      connector: new InjectedConnector(),
-    });
-    console.log(account);
-  };
+  const [handleAuth, signature] = useWalletAuth();
+
+  // wallet connect
+  const [walletAddress, setWalletAddress] = useState<string>("");
+
+  const successMessage = "Wallet Connected Successfully";
+  const errorMessage = "Kindly Install Metamask and Connect";
+
+  // const handleAuth = async () => {
+  //   //disconnects the web3 provider if it's already active
+  //   if (isConnected) {
+  //     await disconnectAsync();
+  //   }
+  //   // enabling the web3 provider metamask
+  //   const { account, chain } = await connectAsync({
+  //     connector: new InjectedConnector(),
+  //   });
+  //   console.log(account);
+  // };
 
   const statusArr = [
     {
@@ -85,6 +95,8 @@ const NavBar = () => {
   const handleWalletConnect = () => {
     setOpenModal(!openModal);
     dispatch(toggleLoggedInUser());
+
+    // connect to wallet
   };
 
   const handleLogin = () => {

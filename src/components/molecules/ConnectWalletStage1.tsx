@@ -16,6 +16,7 @@ import {
 } from "../atoms/vectors";
 
 import useWalletAuth from "@/src/hooks/useWalletAuth";
+import { getAccountAddress } from "@/src/utilities/auth";
 
 interface IConnectWalletStage1 {
   setStage: Dispatch<SetStateAction<number>>;
@@ -29,65 +30,67 @@ const ConnectWalletStage1 = ({ setStage, stage }: IConnectWalletStage1) => {
   const { isConnected } = useAccount();
   const { signMessageAsync } = useSignMessage();
 
-  const handleAuth = async (wal: string) => {
-    if (isConnected) {
-      await disconnectAsync();
-    }
+  const [handleAuth, signature] = useWalletAuth()
 
-    console.log("Connect To Site Via Wallet");
+  // const handleAuth = async (wal: string) => {
+  //   if (isConnected) {
+  //     await disconnectAsync();
+  //   }
 
-    const userData: Record<string, string | number> = { network: "evm" };
+  //   console.log("Connect To Site Via Wallet");
 
-    if (wal === "meta") {
-      const { account, chain } = await connectAsync({
-        connector: new MetaMaskConnector({}),
-      });
-      userData.address = account;
-      userData.chain = chain.id;
-    }
+  //   const userData: Record<string, string | number> = { network: "evm" };
 
-    if (wal === "coin") {
-      const { account, chain } = await connectAsync({
-        connector: new CoinbaseWalletConnector({}),
-      });
-      userData.address = account;
-      userData.chain = chain.id;
-    }
+  //   if (wal === "meta") {
+  //     const { account, chain } = await connectAsync({
+  //       connector: new MetaMaskConnector({}),
+  //     });
+  //     userData.address = account;
+  //     userData.chain = chain.id;
+  //   }
 
-    if (wal === "wal") {
-      const { account, chain } = await connectAsync({
-        connector: new WalletConnectConnector({ options: { qrcode: true } }),
-      });
-      userData.address = account;
-      userData.chain = chain.id;
-    }
+  //   if (wal === "coin") {
+  //     const { account, chain } = await connectAsync({
+  //       connector: new CoinbaseWalletConnector({}),
+  //     });
+  //     userData.address = account;
+  //     userData.chain = chain.id;
+  //   }
 
-    console.log({ userData });
+  //   if (wal === "wal") {
+  //     const { account, chain } = await connectAsync({
+  //       connector: new WalletConnectConnector({ options: { qrcode: true } }),
+  //     });
+  //     userData.address = account;
+  //     userData.chain = chain.id;
+  //   }
 
-    console.log("Sending Connected Account and Chain ID to Moralis Auth API");
+  //   console.log({ userData });
 
-    const { data } = await axios.post("/api/auth/request-message", userData, {
-      headers: {
-        "content-type": "application/json",
-      },
-    });
+  //   console.log("Sending Connected Account and Chain ID to Moralis Auth API");
 
-    console.log("Received Signature Request From Moralis Auth API");
+  //   const { data } = await axios.post("/api/auth/request-message", userData, {
+  //     headers: {
+  //       "content-type": "application/json",
+  //     },
+  //   });
 
-    const message = data.message;
+  //   console.log("Received Signature Request From Moralis Auth API");
 
-    const signature = await signMessageAsync({ message });
+  //   const message = data.message;
 
-    console.log({ signature });
-  };
+  //   const signature = await signMessageAsync({ message });
 
-  const handleStageChange = (wal: string) => handleAuth(wal);
+  //   console.log({ signature });
+  // };
+
+  const handleStageChange = (wal: string) => handleAuth!(wal);
 
   const wallets = [
     {
       name: "Metamask",
       icon: <MetamaskIcon />,
-      action: () => handleStageChange("meta"),
+      action: () => getAccountAddress(),
     },
     {
       name: "Wallet connect",

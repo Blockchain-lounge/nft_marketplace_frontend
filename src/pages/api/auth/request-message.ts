@@ -3,7 +3,7 @@ import Moralis from "moralis";
 
 const config = {
   domain: process.env.APP_DOMAIN,
-  statement: "Web Login.",
+  statement: "Hello <user>, Kindly sign this message to authenticate and authorize your identity.",
   uri: process.env.NEXTAUTH_URL,
   timeout: 60,
 };
