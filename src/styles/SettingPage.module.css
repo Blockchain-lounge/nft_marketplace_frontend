@@ -1,0 +1,7 @@
+.settings-tab {
+  @apply flex items-center justify-evenly mb-4 max-w-[50%] mx-auto;
+}
+
+.setting-edit-profile-form {
+  @apply mt-20 flex flex-col gap-y-8;
+}

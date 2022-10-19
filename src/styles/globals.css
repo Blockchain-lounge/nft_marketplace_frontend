@@ -15,6 +15,7 @@
 @import "./Earnings.module.css";
 @import "./Profile.module.css";
 @import "./CreateNewNft.module.css";
+@import "./SettingPage.module.css";
 
 @layer base {
   @font-face {

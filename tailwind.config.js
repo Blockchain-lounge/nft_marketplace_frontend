@@ -15,6 +15,7 @@ module.exports = {
         "txt-1": "#399CE1",
         "txt-2": "#A5A5B2",
         "txt-3": "#bcbbbb",
+        "positive-color": "#2AC769",
       },
       fontFamily: {
         "dm-sans": ["DM\\ Sans", "sans-serif"],

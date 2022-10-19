@@ -35,3 +35,6 @@
 .create-new-nft-wrapper-preview {
   @apply mx-auto max-w-[50%] w-full;
 }
+.create-new-nft-success {
+  @apply flex flex-col justify-center items-center gap-y-3 p-3;
+}

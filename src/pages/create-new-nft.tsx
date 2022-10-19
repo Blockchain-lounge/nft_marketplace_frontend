@@ -7,16 +7,23 @@ import {
   ArrowBack,
   AuctionIcon,
   BidIcon,
+  CheckIcon,
   CloseIcon,
   CoinIcon,
+  DiscordIcon,
+  FbIcon,
   FixedPriceIcon,
   ImgUploadIcon,
+  LinkIcon,
+  ProfileLinkIcon,
+  TwitterIcon,
 } from "../components/atoms/vectors";
-import { Footer2 } from "../components/organisms";
+import { Footer2, Modal } from "../components/organisms";
 import DashboardLayout from "../template/DashboardLayout";
 import { Button, Input2, Select } from "../components/atoms";
 
 const CreateNewNft = () => {
+  const [showModal, setShowModal] = useState(false);
   const [file, setFile] = useState<FileList | null>(null);
   const [nftPayload, setNftPayload] = useState({
     coinPrice: "",
@@ -62,15 +69,8 @@ const CreateNewNft = () => {
       !nftPayload.supply.trim()
     )
       return;
+    setShowModal(true);
     console.log({ nftPayload, file, priceListType });
-    setNftPayload({
-      coinPrice: "",
-      name: "",
-      description: "",
-      supply: "",
-      royalties: "",
-    });
-    setFile(null);
   };
 
   return (
@@ -289,14 +289,16 @@ const CreateNewNft = () => {
                 <div className="w-full bg-white rounded-b-2xl p-4 flex flex-col ">
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-black text-[1.3rem]">
-                      CloneX #4141
+                      {nftPayload.name || "CloneX #X1411"}
                     </span>
                     <span className="flex text-black text-[1.3rem]">
                       <CoinIcon color="black" />
-                      {7.89}
+                      {nftPayload.coinPrice || 7.89}
                     </span>
                   </div>
-                  <span className="text-[1.1rem] text-black ">CloneX</span>
+                  <span className="text-[1.1rem] text-black ">
+                    {nftPayload.name.split(" ")[0] || "CloneX"}
+                  </span>
                 </div>
               </div>
             </div>
@@ -304,6 +306,60 @@ const CreateNewNft = () => {
         </div>
         <Footer2 />
       </div>
+      <Modal
+        openModal={showModal}
+        closeModal={setShowModal}
+        noTop
+        modalWt="w-[30rem]"
+      >
+        <div className="create-new-nft-success">
+          <div className="mt-4 h-40 w-40 relative">
+            <img
+              src={
+                file
+                  ? //@ts-ignore
+                    URL.createObjectURL([...file][0])
+                  : ""
+              }
+              alt=""
+              className={`object-cover h-full w-full rounded-2xl`}
+            />
+            <span className="absolute right-[0.3rem] bottom-[-0.7rem] bg-positive-color h-8 w-8 grid place-items-center rounded-full border-bg-1 border-[2.5px]">
+              <CheckIcon color="#15152E" />
+            </span>
+          </div>
+          <span className="text-lg">Your item has been created</span>
+          <span className="text-sm font-medium mx-auto max-w-[60%] text-center text-txt-2">
+            {nftPayload.name} from {nftPayload.name.split(" ")[0]} Collection
+            has been listed for sale
+          </span>
+          <div className="flex flex-col items-center gap-y-2 my-2">
+            <span className="text-sm text-txt-3">Share to</span>
+            <span className="flex items-center gap-x-6">
+              <ProfileLinkIcon />
+              <FbIcon />
+              <TwitterIcon />
+              <DiscordIcon />
+            </span>
+          </div>
+          <span className="crete-new-nft-icons"></span>
+          <Button
+            title="View listing"
+            outline
+            onClick={() => {
+              setShowModal((prev) => !prev);
+              setNftPayload({
+                coinPrice: "",
+                name: "",
+                description: "",
+                supply: "",
+                royalties: "",
+              });
+              setFile(null);
+            }}
+          />
+        </div>
+      </Modal>
     </DashboardLayout>
   );
 };

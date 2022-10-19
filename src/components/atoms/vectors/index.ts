@@ -5,6 +5,7 @@ export { default as AuctionIcon } from "./auction-icon";
 export { default as BidIcon } from "./bid-icon";
 export { default as CaretDown } from "./caret-down";
 export { default as CaretUp } from "./caret-up";
+export { default as CheckIcon } from "./check-icon";
 export { default as CartIcon } from "./cart-icon";
 export { default as CloseIcon } from "./close-icon";
 export { default as CoinBaseIcon } from "./coin-base-icon";
@@ -19,6 +20,7 @@ export { default as EarningsIcon } from "./earning-icon";
 export { default as EthIcon } from "./eth-icon";
 export { default as EthereumIcon } from "./ethereum-icon";
 export { default as ExploreIcon } from "./explore-icon";
+export { default as FbIcon } from "./fb-icon";
 export { default as FeaturedIcon } from "./featured-icon";
 export { default as FixedPriceIcon } from "./fixed-price-icon";
 

@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useRouter } from "next/router";
 
 import Toggle from "react-toggle";
 import "react-toggle/style.css";
@@ -21,16 +22,17 @@ const MiniUserProfile = ({
   onClick,
   handleSignOut,
 }: IMiniUserProfile) => {
+  const { push } = useRouter();
   const userMiniProfileLinks = [
     {
       link: "Profile",
       icon: <ProfileIcon />,
-      to: "",
+      to: "/profile",
     },
     {
       link: "Settings",
       icon: <SettingsIcon />,
-      to: "",
+      to: "/settings",
     },
     {
       link: "Night Mode",
@@ -47,7 +49,7 @@ const MiniUserProfile = ({
           : "transition-[right] ease-in-out duration-300 right-[-50rem]"
       )}
     >
-      {userMiniProfileLinks.map(({ icon, link }) => (
+      {userMiniProfileLinks.map(({ icon, link, to }) => (
         <div
           key={link}
           className={clsx(
@@ -57,6 +59,7 @@ const MiniUserProfile = ({
           onClick={() => {
             if (link === "Night Mode") return;
             onClick(!showProfile);
+            push(to);
           }}
         >
           {icon}{" "}
