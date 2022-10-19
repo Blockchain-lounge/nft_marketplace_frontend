@@ -14,6 +14,8 @@
 @import "./EarningLayout.module.css";
 @import "./Earnings.module.css";
 @import "./Profile.module.css";
+@import "./CreateNewNft.module.css";
+@import "./SettingPage.module.css";
 
 @layer base {
   @font-face {
@@ -40,7 +42,7 @@
     margin: 0;
     padding: 0;
     height: 100vh;
-    max-width: 100%;
+    /* max-width: 100%; */
   }
 
   .scrollbar-hide::-webkit-scrollbar {
@@ -53,9 +55,15 @@
 }
 
 @layer components {
-  @media only screen and (max-width: 1024px) {
+  @media only screen and (max-width: 1536px) {
     :root {
       font-size: 12px;
+    }
+  }
+
+  @media only screen and (min-width: 1536px) {
+    :root {
+      font-size: 14px;
     }
   }
   a {

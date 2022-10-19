@@ -1,6 +1,6 @@
 /* sidebar */
 .sidebar-container {
-  @apply h-[54rem] lg:h-screen lg:px-[1.125rem] relative lg:mt-[0.8rem];
+  @apply h-[54rem] 2xl:h-screen  relative lg:mt-[0.8rem];
 }
 
 .sidebar-btn {
@@ -8,11 +8,11 @@
 }
 
 .social-links {
-  @apply grid grid-cols-3 gap-x-3 gap-y-5 cursor-pointer absolute w-[100%] lg:w-[87%] bottom-8 lg:bottom-[20%];
+  @apply grid grid-cols-3 gap-x-3 gap-y-5 cursor-pointer absolute w-[100%]  bottom-8 lg:bottom-[20%];
 }
 
 .social-link {
-  @apply h-[3.625rem] w-[3.625rem] rounded-full border-[0.0625rem] border-[#404861] text-[0.8125rem] text-white grid place-items-center;
+  @apply h-[3.625rem] w-[3.625rem] rounded-full border-[0.0625rem]  border-[#404861] text-white grid place-items-center;
 }
 
 /* connect-wallet header */
@@ -138,7 +138,7 @@
 }
 
 .earnings-card-history {
-  @apply text-xl font-medium  bg-gradient-to-r  from-[#2f79f9] to-[#3daefa] text-transparent;
+  @apply font-medium  bg-gradient-to-r  from-[#2f79f9] to-[#3daefa] text-transparent;
   -webkit-background-clip: text;
 }
 
@@ -164,7 +164,11 @@
 }
 
 .mini-user-profile-links {
-  @apply grid grid-cols-[0.5fr_1fr] items-center text-white font-medium hover:cursor-pointer;
+  @apply grid grid-cols-[0.35fr_1fr] items-center text-white font-medium hover:cursor-pointer;
+}
+
+.mini-profile-toggle {
+  @apply grid-cols-[0.5fr_1fr_0.2fr];
 }
 
 .mini-user-toggle-btn.react-toggle--checked .react-toggle-track {
@@ -177,9 +181,9 @@
   @apply bg-bg-3 w-[20rem] h-[23.56rem] p-6 absolute top-[14%] z-10 rounded-[1.125rem] border-[#34364C] border-[0.0625rem] flex flex-col;
 } */
 
-/* .mini-wallet-info {
-  @apply flex items-center;
-} */
+.mini-wallet-info {
+  @apply grid grid-cols-[0.5fr_1fr];
+}
 
 .mini-wallet-name {
   @apply text-sm font-medium leading-[1.301rem] text-white;
@@ -210,16 +214,16 @@
 
 /*Nav Tab*/
 
-.tab-wrapper {
+.nav-tab-wrapper {
   @apply h-[3.625rem] px-[1.5625rem] flex items-center justify-between bg-[#1D1F3E] rounded-[0.625rem];
 }
 
 .tab {
-  @apply font-medium text-base text-white cursor-pointer;
+  @apply text-white cursor-pointer pb-[0.9rem];
 }
-.tab::before {
+/* .tab::before {
   @apply absolute content-[''] bg-white h-[0.3125rem] w-full rounded-t-[0.24rem] bottom-[-1rem];
-}
+} */
 
 .tab-select {
   @apply flex items-center text-[#9f9f9f] gap-x-[0.375rem] cursor-pointer;

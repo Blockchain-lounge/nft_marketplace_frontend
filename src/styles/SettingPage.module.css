@@ -1,0 +1,11 @@
+.settings-tab {
+  @apply flex items-center justify-between mb-8 max-w-[80%] lg:max-w-[50%] mx-auto;
+}
+
+.setting-edit-profile-form {
+  @apply mt-20 flex flex-col gap-y-8;
+}
+
+.setting-my-links {
+  @apply flex flex-col gap-y-7 h-[50vh] 2xl:h-[60vh];
+}

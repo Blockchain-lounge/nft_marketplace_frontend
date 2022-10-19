@@ -15,13 +15,15 @@ module.exports = {
         "txt-1": "#399CE1",
         "txt-2": "#A5A5B2",
         "txt-3": "#bcbbbb",
+        "positive-color": "#2AC769",
+        "negative-color": "#FB4E4E",
       },
       fontFamily: {
         "dm-sans": ["DM\\ Sans", "sans-serif"],
         "sf-pro": ["Sf\\ Pro", "sans-serif"],
       },
       borderColor: {
-        "border-1-line": "#99a0ff64",
+        "border-1-line": "#99a0ff57",
       },
     },
   },

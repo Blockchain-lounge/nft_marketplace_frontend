@@ -1,20 +1,14 @@
 import clsx from "clsx";
-
-import Toggle from "react-toggle";
-import "react-toggle/style.css";
+import { useRouter } from "next/router";
 
 import {
-  ProfileIcon,
-  SettingsIcon,
   CreateNftIcon,
   CreateCollectionIcon,
-  NightMode,
-  SignOutIcon,
 } from "@/src/components/atoms/vectors";
 
 interface IMiniUserProfile {
   showOptions: boolean;
-  onClick?: () => void;
+  onClick: (val: boolean) => void;
 }
 
 const CreateNftNavOptions = ({ showOptions, onClick }: IMiniUserProfile) => {
@@ -22,14 +16,15 @@ const CreateNftNavOptions = ({ showOptions, onClick }: IMiniUserProfile) => {
     {
       link: "Create NFT",
       icon: <CreateNftIcon />,
-      to: "",
+      to: "/create-new-nft",
     },
     {
       link: "Create Collection",
       icon: <CreateCollectionIcon />,
-      to: "",
+      to: "/create-collection",
     },
   ];
+  const { push } = useRouter();
   return (
     <div
       className={clsx(
@@ -39,12 +34,16 @@ const CreateNftNavOptions = ({ showOptions, onClick }: IMiniUserProfile) => {
           : "transition-[right] ease-in-out duration-300 right-[-50rem]"
       )}
     >
-      {createNftLinks.map(({ icon, link }) => (
-        <div key={link} className="mini-user-profile-links" onClick={onClick}>
-          {icon}{" "}
-          <span className="mini-user-profile-link flex-1 hover:text-[#3694FA]">
-            {link}
-          </span>
+      {createNftLinks.map(({ icon, link, to }) => (
+        <div
+          key={link}
+          className="mini-user-profile-links"
+          onClick={() => {
+            push(to);
+            onClick(!showOptions);
+          }}
+        >
+          {icon} <span className="mini-user-profile-link">{link}</span>
         </div>
       ))}
     </div>

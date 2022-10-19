@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { CoinIcon } from "@/src/components/atoms/vectors";
 
 interface IHerocard {

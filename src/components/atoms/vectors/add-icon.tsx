@@ -1,9 +1,10 @@
+import * as React from "react";
 import { SVGProps } from "react";
 
-const CloseIcon = (props: SVGProps<SVGSVGElement>) => (
+const AddIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     className="w-6 h-6"
-    fill="#222237"
+    fill="none"
     stroke={props.color || "currentColor"}
     viewBox="0 0 24 24"
     xmlns="http://www.w3.org/2000/svg"
@@ -13,9 +14,9 @@ const CloseIcon = (props: SVGProps<SVGSVGElement>) => (
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}
-      d="M6 18 18 6M6 6l12 12"
+      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
     />
   </svg>
 );
 
-export default CloseIcon;
+export default AddIcon;

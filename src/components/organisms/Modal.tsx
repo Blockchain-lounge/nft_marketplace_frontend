@@ -6,12 +6,14 @@ import { useClickAway } from "react-use";
 import { CloseIcon } from "@/src/components/atoms/vectors";
 
 interface Imodal {
-  children: any;
+  children: ReactNode;
   openModal: boolean;
-  title: string;
+  title?: string;
   closeModal: (val: boolean) => void;
+  noTop?: boolean;
+  modalWt?: string;
   twClx?: string;
-  active: boolean;
+  active?: boolean;
 }
 
 const Modal = ({
@@ -19,7 +21,9 @@ const Modal = ({
   openModal,
   title,
   closeModal,
+  modalWt,
   twClx,
+  noTop,
   active,
 }: Imodal) => {
   const ref = useRef(null);
@@ -42,11 +46,15 @@ const Modal = ({
       )}
       <div className={clsx("modal-wrap", openModal && "modal-open")}>
         <div
-          className={clsx("modal-box", active ? "bg-transparent" : "bg-bg-4")}
+          className={clsx(
+            "modal-box",
+            active ? "bg-transparent" : "bg-bg-4",
+            modalWt ?? "w-[48.125rem]"
+          )}
           ref={ref}
         >
           {!active && (
-            <div className="modal-head">
+            <div className={clsx("modal-head", noTop && "hidden")}>
               <div></div>
               <h1>{title}</h1>
               <span onClick={() => closeModal(false)}>

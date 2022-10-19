@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useRouter } from "next/router";
 
 import Toggle from "react-toggle";
 import "react-toggle/style.css";
@@ -12,7 +13,7 @@ import {
 
 interface IMiniUserProfile {
   showProfile: boolean;
-  onClick?: () => void;
+  onClick: (val: boolean) => void;
   handleSignOut: () => void;
 }
 
@@ -21,16 +22,17 @@ const MiniUserProfile = ({
   onClick,
   handleSignOut,
 }: IMiniUserProfile) => {
+  const { push } = useRouter();
   const userMiniProfileLinks = [
     {
       link: "Profile",
       icon: <ProfileIcon />,
-      to: "",
+      to: "/profile",
     },
     {
       link: "Settings",
       icon: <SettingsIcon />,
-      to: "",
+      to: "/settings",
     },
     {
       link: "Night Mode",
@@ -47,10 +49,26 @@ const MiniUserProfile = ({
           : "transition-[right] ease-in-out duration-300 right-[-50rem]"
       )}
     >
-      {userMiniProfileLinks.map(({ icon, link }) => (
-        <div key={link} className="mini-user-profile-links" onClick={onClick}>
+      {userMiniProfileLinks.map(({ icon, link, to }) => (
+        <div
+          key={link}
+          className={clsx(
+            "mini-user-profile-links",
+            link === "Night Mode" && "mini-profile-toggle"
+          )}
+          onClick={() => {
+            if (link === "Night Mode") return;
+            onClick(!showProfile);
+            push(to);
+          }}
+        >
           {icon}{" "}
-          <span className="mini-user-profile-link flex-1 hover:text-[#3694FA]">
+          <span
+            className={clsx(
+              "mini-user-profile-link",
+              link === "Night Mode" && "mr-[1rem]"
+            )}
+          >
             {link}
           </span>
           {link === "Night Mode" && (

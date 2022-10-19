@@ -181,15 +181,15 @@ const NavBar = () => {
                   <CartIcon />
                 </span>
               </div>
-              <MiniUserWallet showBal={showBal} />
+              <MiniUserWallet showBal={showBal} onClick={setShowBal} />
               <MiniUserProfile
                 showProfile={showProfile}
-                onClick={handleShowProfile}
+                onClick={setShowProfile}
                 handleSignOut={handleLogin}
               />
               <CreateNftNavOptions
                 showOptions={showCreateNft}
-                onClick={handleShowCreateNftOption}
+                onClick={setShowCreateNft}
               />
             </div>
           ) : (

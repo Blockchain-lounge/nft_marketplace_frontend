@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { useRouter } from "next/router";
-
+import Image from "next/image";
 import { FeaturedIcon } from "@/src/components/atoms/vectors";
 
 import { HeroIndicator, Button, Heading, Tag } from "@/src/components/atoms";
@@ -48,7 +48,13 @@ const Home: NextPage = () => {
             </div>
             <div className="hero-img-cards">
               <div className="hero-img">
-                <img src={activeCard.img} alt={activeCard.title + "-img"} />
+                <Image
+                  priority
+                  layout="fill"
+                  objectFit="cover"
+                  src={activeCard.img}
+                  alt={activeCard.title + "-img"}
+                />
               </div>
               <div className="hero-cards">
                 {heroData
@@ -63,7 +69,7 @@ const Home: NextPage = () => {
                     />
                   ))}
               </div>
-              <div className="flex w-full mb-4 lg:mb-0 items-center justify-center lg:block mt-4 lg:mt-[2.6875rem]">
+              <div className="flex w-full mb-4 lg:mb-0 items-center justify-center lg:block mt-4 lg:mt-0">
                 <HeroIndicator
                   arr={heroData}
                   active={activeCard}

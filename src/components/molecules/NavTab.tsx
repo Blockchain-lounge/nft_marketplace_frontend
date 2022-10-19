@@ -7,11 +7,11 @@ const NavTab = () => {
   const [active, setActive] = useState(0);
   const tabsArr = ["All", "Art", "CGI", "Gaming", "Utility"];
   return (
-    <div className="tab-wrapper">
+    <div className="nav-tab-wrapper">
       {tabsArr.map((tab, i) => (
         <div key={tab}>
           <span
-            className={clsx("tab", i === active && "relative")}
+            className={clsx("tab", i === active && "border-b-2")}
             onClick={() => setActive(i)}
           >
             {tab}

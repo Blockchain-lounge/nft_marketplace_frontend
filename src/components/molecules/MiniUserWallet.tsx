@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useRouter } from "next/router";
 
 import {
   WalletIcon2,
@@ -9,19 +10,15 @@ import {
 interface IMiniuserwallet {
   showBal: boolean;
   // handleSignOut?: () => void;
-  onClick?: () => void;
+  onClick: (val: boolean) => void;
 }
 
-const MiniUserWallet = ({
-  showBal,
-
-  onClick,
-}: IMiniuserwallet) => {
+const MiniUserWallet = ({ showBal, onClick }: IMiniuserwallet) => {
   const userWalletLinks = [
     {
       link: "Wallets",
       icon: <WalletIcon2 />,
-      to: "",
+      to: "/",
     },
     {
       link: "View earnings",
@@ -29,6 +26,7 @@ const MiniUserWallet = ({
       to: "/earnings",
     },
   ];
+  const { push } = useRouter();
   return (
     <div
       className={clsx(
@@ -38,12 +36,19 @@ const MiniUserWallet = ({
           : "transition-[right] ease-in-out duration-300 right-[-50rem]"
       )}
     >
-      {userWalletLinks.map(({ icon, link }) => (
-        <div key={link} className="mini-user-profile-links" onClick={onClick}>
+      {userWalletLinks.map(({ icon, link, to }) => (
+        <div
+          key={link}
+          className="mini-wallet-info items-center"
+          onClick={() => {
+            onClick(!showBal);
+            push(to);
+          }}
+        >
           {icon} <span className="mini-user-profile-link">{link}</span>
         </div>
       ))}
-      <div className="mini-user-profile-links">
+      <div className="mini-wallet-info">
         <CoinBaseIcon twclx="h-[2.5rem]" />
         <div className="flex flex-col">
           <span className="mini-wallet-name">Coinbase wallet</span>
