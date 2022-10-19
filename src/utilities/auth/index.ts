@@ -33,7 +33,7 @@ ${accounts[0]}
 Nonce:
 34`;
 
-    if (accounts.length) {
+    if (accounts.length > 0) {
       const signature = await signer.signMessage(message);
 
       const response = await axios.post(
