@@ -11,7 +11,7 @@ const NavTab = () => {
       {tabsArr.map((tab, i) => (
         <div key={tab}>
           <span
-            className={clsx("tab", i === active && "relative")}
+            className={clsx("tab", i === active && "border-b-2")}
             onClick={() => setActive(i)}
           >
             {tab}

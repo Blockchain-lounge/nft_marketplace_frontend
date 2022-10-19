@@ -11,7 +11,7 @@
 }
 
 .hero-img-cards {
-  @apply relative lg:w-[55.375rem] justify-self-end;
+  @apply relative w-full xl:w-[55.375rem] justify-self-end;
 }
 
 .hero-img-cards img {
@@ -19,7 +19,7 @@
 }
 
 .hero-img {
-  @apply flex max-w-[30rem] h-[25rem] lg:h-[44.5625rem] lg:max-w-[54.73rem];
+  @apply flex max-w-[28rem] h-[25rem] lg:h-[44.5625rem] lg:max-w-[54.73rem];
 }
 
 .hero-cards {
