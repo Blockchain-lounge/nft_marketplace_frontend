@@ -4,7 +4,13 @@ import clsx from "clsx";
 import DashboardLayout from "../template/DashboardLayout";
 import { Footer2 } from "../components/organisms";
 import Image from "next/image";
-import { ImgUploadIcon, InstagramIcon } from "../components/atoms/vectors";
+import {
+  CheckIcon,
+  FbIcon,
+  ImgUploadIcon,
+  InstagramIcon,
+  TwitterIcon,
+} from "../components/atoms/vectors";
 import { Button, Input2 } from "../components/atoms";
 
 const Settings = () => {
@@ -24,7 +30,21 @@ const Settings = () => {
     { label: "Notifications", stage: "notifications" },
   ];
 
-  const settingLinks = [{ icon: <InstagramIcon />, label: "" }];
+  const [userProfileLinks, setUserProfileLinks] = useState([
+    {
+      icon: <InstagramIcon />,
+      label: "@theoneof_theone23579",
+      connected: true,
+    },
+    {
+      icon: <TwitterIcon />,
+      label: "Connect twitter account",
+      connected: false,
+    },
+    { icon: <FbIcon />, label: "Connect facebook account", connected: false },
+    { icon: <FbIcon />, label: "Connect facebook account", connected: false },
+    { icon: <FbIcon />, label: "Connect facebook account", connected: false },
+  ]);
 
   const handleFieldChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -53,7 +73,7 @@ const Settings = () => {
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper">
-        <div className="center mx-auto max-w-[60%]">
+        <div className="center mx-auto max-w-[90%] lg:max-w-[70%]">
           <div className="settings-tab">
             {settingStages.map(({ label, stage }) => (
               <div
@@ -64,7 +84,13 @@ const Settings = () => {
                 key={stage}
                 onClick={() => setSettingStage((prev) => stage)}
               >
-                <span className="earnings-card-history mx-4 cursor-pointer">
+                <span
+                  className={clsx(
+                    stage === settingStage
+                      ? "earnings-card-history mx-4 cursor-pointer"
+                      : "mx-4 cursor-pointer text-txt-2"
+                  )}
+                >
                   {label}
                 </span>
               </div>
@@ -75,12 +101,9 @@ const Settings = () => {
             <div className="setting-edit-profile">
               <div className="h-56 rounded-3xl relative">
                 <div className="h-32 w-32 absolute -bottom-14 left-6 rounded-full border-bg-3 border-[4px] z-10">
-                  <div
-                    className={`h-full w-full rounded-full ${
-                      !userImg ? "hidden" : "block"
-                    }`}
-                  >
+                  <div className={`h-full w-full rounded-full relative`}>
                     <Image
+                      priority
                       src={
                         userImg
                           ? //@ts-ignore
@@ -204,7 +227,44 @@ const Settings = () => {
               </form>
             </div>
           ) : settingStage === "my-links" ? (
-            <div className="setting-my-links"></div>
+            <div className="setting-my-links">
+              {userProfileLinks.map(({ label, icon, connected }, i) => (
+                <div
+                  key={label + i}
+                  className="grid grid-cols-[0.8fr_0.2fr] items-center"
+                >
+                  <div
+                    className={clsx(
+                      "flex items-center justify-between py-4 px-5 rounded-xl",
+                      connected ? "bg-bg-5" : "border border-bg-5"
+                    )}
+                  >
+                    <span className="flex items-center gap-x-5">
+                      {icon} {label}
+                    </span>
+                    <span
+                      className={clsx(
+                        "text-positive-color gap-x-3",
+                        connected ? "flex" : "hidden"
+                      )}
+                    >
+                      <span className="bg-positive-color h-6 w-6 grid place-items-center rounded-full">
+                        <CheckIcon color="#15152E" />
+                      </span>
+                      Connected
+                    </span>
+                  </div>
+                  <span
+                    className={clsx(
+                      "text-negative-color text-center",
+                      connected ? "block" : "hidden"
+                    )}
+                  >
+                    Disconnect
+                  </span>
+                </div>
+              ))}
+            </div>
           ) : settingStage === "notifications" ? (
             <div className="setting-notifications"></div>
           ) : null}
