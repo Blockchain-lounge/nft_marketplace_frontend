@@ -14,7 +14,6 @@ import {
   FbIcon,
   FixedPriceIcon,
   ImgUploadIcon,
-  LinkIcon,
   ProfileLinkIcon,
   TwitterIcon,
 } from "../components/atoms/vectors";

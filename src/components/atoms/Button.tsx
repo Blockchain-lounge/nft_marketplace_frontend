@@ -19,13 +19,18 @@ const Button = ({
   suffix,
 }: IButton) => {
   return (
-    <div className={clsx("btn-wrapper", twClasses)} onClick={onClick}>
-      <button className={clsx("btn", outline ? "btn-outline" : "btn-primary")}>
-        {prefix && <span>{prefix}</span>}
-        <span>{title}</span>
-        {suffix && <span>{suffix}</span>}
-      </button>
-    </div>
+    <button
+      className={clsx(
+        "btn",
+        outline ? "btn-outline" : "btn-primary",
+        twClasses
+      )}
+      onClick={onClick}
+    >
+      {prefix && <span>{prefix}</span>}
+      <span>{title}</span>
+      {suffix && <span>{suffix}</span>}
+    </button>
   );
 };
 

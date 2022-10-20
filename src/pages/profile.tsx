@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import DashboardLayout from "@/src/template/DashboardLayout";
 import { Footer2 } from "@/src/components/organisms";
 import {
@@ -62,7 +63,11 @@ const Profile = () => {
                 {profileActiveTab === 0 ? (
                   <div className="user-profile-owned-nfts">
                     {userOwnedProfileDatas.map((val, i) => (
-                      <NftMediumCard2 key={val.name + i} {...val} />
+                      <Link key={val.name + i} href={`/view-nft/${val.name}`}>
+                        <a>
+                          <NftMediumCard2 {...val} />
+                        </a>
+                      </Link>
                     ))}
                   </div>
                 ) : profileActiveTab === 1 ? (

@@ -24,6 +24,7 @@ module.exports = {
       },
       borderColor: {
         "border-1-line": "#99a0ff57",
+        "border-2-line": "#6a6b7a",
       },
     },
   },

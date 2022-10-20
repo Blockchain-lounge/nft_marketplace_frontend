@@ -9,8 +9,8 @@ const useWalletAuth = () => {
   const { disconnectAsync } = useDisconnect();
   const { isConnected } = useAccount();
   const { signMessageAsync } = useSignMessage();
-  
-  let signature
+
+  let signature;
 
   const handleAuth = async (wal: string) => {
     if (isConnected) {
@@ -29,15 +29,6 @@ const useWalletAuth = () => {
       userData.chain = chain.id;
     }
 
-<<<<<<< HEAD
-    // if (wal === "coin") {
-    //   const { account, chain } = await connectAsync({
-    //     connector: new CoinbaseWalletConnector({}),
-    //   });
-    //   userData.address = account;
-    //   userData.chain = chain.id;
-    // }
-=======
     if (wal === "coin") {
       const { account, chain } = await connectAsync({
         //@ts-ignore
@@ -46,7 +37,6 @@ const useWalletAuth = () => {
       userData.address = account;
       userData.chain = chain.id;
     }
->>>>>>> 80aebf4e767c47b5a1fc225b6102fd6e1cc086cc
 
     if (wal === "wal") {
       const { account, chain } = await connectAsync({
@@ -72,7 +62,7 @@ const useWalletAuth = () => {
 
     console.log(signature);
   };
-  
+
   return [handleAuth, signature];
 };
 

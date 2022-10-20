@@ -7,16 +7,16 @@ import Image from "next/image";
 import {
   CheckIcon,
   FbIcon,
-  ImgUploadIcon,
   InstagramIcon,
   TwitterIcon,
 } from "../components/atoms/vectors";
-import { Button, Input2 } from "../components/atoms";
+import { Button, CheckBox, Input2 } from "../components/atoms";
 
 const Settings = () => {
   /*Setting screen are divided into stages*/
   const [settingStage, setSettingStage] = useState("edit-profile");
   const [userImgBanner, setUserImgBanner] = useState<FileList | null>(null);
+  const [checked, setChecked] = useState(false);
   const [userImg, setUserImg] = useState<FileList | null>(null);
   const [userDetailsPayload, setUserDetailsPayload] = useState({
     username: "",
@@ -266,7 +266,16 @@ const Settings = () => {
               ))}
             </div>
           ) : settingStage === "notifications" ? (
-            <div className="setting-notifications"></div>
+            <div className="setting-notifications">
+              <CheckBox
+                check={checked}
+                checked={checked}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setChecked((prev) => !prev)
+                }
+                label="Email-"
+              />
+            </div>
           ) : null}
         </div>
         <Footer2 />

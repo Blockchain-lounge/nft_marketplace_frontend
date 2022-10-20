@@ -156,7 +156,7 @@ export const userOwnedProfileDatas = [
     name: "CloneX",
   },
   {
-    imgUrl: "/images/profile-nft.png",
+    imgUrl: "/images/nftsample2.png",
     name: "CloneX",
   },
   {
@@ -164,7 +164,7 @@ export const userOwnedProfileDatas = [
     name: "CryptoPunk",
   },
   {
-    imgUrl: "/images/profile-nft.png",
+    imgUrl: "/images/nftsample3.png",
     name: "CryptoPunk",
   },
   {
@@ -176,7 +176,7 @@ export const userOwnedProfileDatas = [
     name: "CloneX",
   },
   {
-    imgUrl: "/images/profile-nft.png",
+    imgUrl: "/images/buyNftSample.png",
     name: "CryptoPunk",
   },
   {
