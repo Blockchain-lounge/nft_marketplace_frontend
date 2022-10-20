@@ -41,7 +41,6 @@ const ConnectWalletStage1 = ({ setStage, stage }: IConnectWalletStage1) => {
 
   //   const userData: Record<string, string | number> = { network: "evm" };
 
-<<<<<<< HEAD
   //   if (wal === "meta") {
   //     const { account, chain } = await connectAsync({
   //       connector: new MetaMaskConnector({}),
@@ -49,7 +48,6 @@ const ConnectWalletStage1 = ({ setStage, stage }: IConnectWalletStage1) => {
   //     userData.address = account;
   //     userData.chain = chain.id;
   //   }
-=======
     // if (wal === "coin") {
     //   const { account, chain } = await connectAsync({
     //     connector: new CoinbaseWalletConnector({}),
@@ -57,7 +55,6 @@ const ConnectWalletStage1 = ({ setStage, stage }: IConnectWalletStage1) => {
     //   userData.address = account;
     //   userData.chain = chain.id;
     // }
->>>>>>> 80aebf4e767c47b5a1fc225b6102fd6e1cc086cc
 
   //   if (wal === "coin") {
   //     const { account, chain } = await connectAsync({
