@@ -3,11 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 
-import { useAccount, useConnect, useDisconnect } from "wagmi";
-import { InjectedConnector } from "wagmi/connectors/injected";
+
 // import axios from "axios";
 
-import useWalletAuth from "@/src/hooks/useWalletAuth";
+// import useWalletAuth from "@/src/hooks/useWalletAuth";
 
 import Button from "@/src/components/atoms/Button";
 
@@ -37,9 +36,7 @@ import { toggleMobileModal } from "@/src/reducers/modalReducer";
 import { RootState } from "@/src/store/store";
 
 const NavBar = () => {
-  const { connectAsync } = useConnect();
-  const { disconnectAsync } = useDisconnect();
-  const { isConnected } = useAccount();
+
 
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
@@ -53,7 +50,7 @@ const NavBar = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [stage, setStage] = useState(0);
 
-  const [handleAuth, signature] = useWalletAuth();
+
 
   // wallet connect
   const [walletAddress, setWalletAddress] = useState<string>("");
