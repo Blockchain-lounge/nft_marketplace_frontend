@@ -15,8 +15,8 @@ import {
   TorusIcon,
 } from "../atoms/vectors";
 
-import useWalletAuth from "@/src/hooks/useWalletAuth";
-import { getAccountAddress } from "@/src/utilities/auth";
+// import useWalletAuth from "@/src/hooks/useWalletAuth";
+import { getAddress } from "@/src/utilities/auth";
 
 interface IConnectWalletStage1 {
   setStage: Dispatch<SetStateAction<number>>;
@@ -25,12 +25,9 @@ interface IConnectWalletStage1 {
 
 const ConnectWalletStage1 = ({ setStage, stage }: IConnectWalletStage1) => {
   const [showMore, setShowMore] = useState(false);
-  const { connectAsync } = useConnect();
-  const { disconnectAsync } = useDisconnect();
-  const { isConnected } = useAccount();
-  const { signMessageAsync } = useSignMessage();
 
-  const [handleAuth, signature] = useWalletAuth()
+
+
 
   // const handleAuth = async (wal: string) => {
   //   if (isConnected) {
@@ -41,7 +38,6 @@ const ConnectWalletStage1 = ({ setStage, stage }: IConnectWalletStage1) => {
 
   //   const userData: Record<string, string | number> = { network: "evm" };
 
-<<<<<<< HEAD
   //   if (wal === "meta") {
   //     const { account, chain } = await connectAsync({
   //       connector: new MetaMaskConnector({}),
@@ -49,7 +45,6 @@ const ConnectWalletStage1 = ({ setStage, stage }: IConnectWalletStage1) => {
   //     userData.address = account;
   //     userData.chain = chain.id;
   //   }
-=======
     // if (wal === "coin") {
     //   const { account, chain } = await connectAsync({
     //     connector: new CoinbaseWalletConnector({}),
@@ -57,7 +52,6 @@ const ConnectWalletStage1 = ({ setStage, stage }: IConnectWalletStage1) => {
     //   userData.address = account;
     //   userData.chain = chain.id;
     // }
->>>>>>> 80aebf4e767c47b5a1fc225b6102fd6e1cc086cc
 
   //   if (wal === "coin") {
   //     const { account, chain } = await connectAsync({
@@ -94,36 +88,36 @@ const ConnectWalletStage1 = ({ setStage, stage }: IConnectWalletStage1) => {
   //   console.log({ signature });
   // };
 
-  const handleStageChange = (wal: string) => handleAuth!(wal);
+ 
 
   const wallets = [
     {
       name: "Metamask",
       icon: <MetamaskIcon />,
-      action: () => getAccountAddress(),
+      action: () => getAddress(),
     },
     {
       name: "Wallet connect",
       icon: <WalletConnect />,
-      action: () => handleStageChange("wal"),
+      action: () => {},
     },
     {
       name: "Coinbase",
       icon: <CoinBaseIcon />,
-      action: () => handleStageChange("coin"),
+      action: () => {},
     },
     {
       name: "MyEtherWallet",
       icon: <EthereumIcon />,
-      action: () => handleStageChange,
+      action: () => {},
     },
-    { name: "Portis", icon: <PortisIcon />, action: () => handleStageChange },
+    { name: "Portis", icon: <PortisIcon />, action: () => {} },
     {
       name: "Coinbase",
       icon: <CoinBaseIcon />,
-      action: () => handleStageChange,
+      action: () => {},
     },
-    { name: "Torus", icon: <TorusIcon />, action: () => handleStageChange },
+    { name: "Torus", icon: <TorusIcon />, action: () => {} },
   ];
 
   const handleShowMore = () => setShowMore(!showMore);
