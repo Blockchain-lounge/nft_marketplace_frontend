@@ -14,6 +14,7 @@ import {
   FbIcon,
   FixedPriceIcon,
   ImgUploadIcon,
+  LikeIcon,
   ProfileLinkIcon,
   TwitterIcon,
 } from "../components/atoms/vectors";
@@ -254,7 +255,7 @@ const CreateNewNft = () => {
               </div>
               <Button title="Create" />
             </form>
-            <div className="create-new-nft-wrapper-preview">
+            <div className="create-new-nft-wrapper-preview max-w-[50%]">
               <div className="create-new-nft-wrapper-2">
                 <span className="create-new-nft-wrapper-2-label">Preview</span>
                 <span className="create-new-nft-wrapper-2-label-type">
@@ -263,6 +264,12 @@ const CreateNewNft = () => {
               </div>
               <div className="h-[25rem] mt-4">
                 <div className="h-[100%] relative">
+                  {file && (
+                    <div className="nmc-wrapper-likes nmc-wrapper2-likes z-10">
+                      <LikeIcon />
+                      <span>298</span>
+                    </div>
+                  )}
                   <span
                     className={clsx(
                       !file
@@ -344,7 +351,7 @@ const CreateNewNft = () => {
           <span className="crete-new-nft-icons"></span>
           <Button
             title="View listing"
-            outline
+            outline2
             onClick={() => {
               setShowModal((prev) => !prev);
               setNftPayload({

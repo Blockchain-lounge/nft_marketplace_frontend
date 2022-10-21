@@ -1,14 +1,12 @@
 import { useState } from "react";
 import Image from "next/image";
 import clsx from "clsx";
-import { Button } from "../../components/atoms";
+import { Button, Select } from "../../components/atoms";
 import {
   CaretDown,
   CartIcon,
   CoinIcon,
-  ExternalLinkIcon,
   LikeIcon,
-  LinkIcon,
   StatIcon,
 } from "../../components/atoms/vectors";
 import { Footer2 } from "../../components/organisms";
@@ -93,7 +91,7 @@ const ViewNft = () => {
             <div className="relative">
               <Image
                 priority
-                src="/images/buyNftSample.png"
+                src="/images/profile-nft.png"
                 alt="buy-nft-sample"
                 layout="fill"
                 objectFit="cover"
@@ -178,13 +176,12 @@ const ViewNft = () => {
                   Last sale price 10.8 ETH
                 </span>
                 <div className="w-full flex flex-col gap-y-4">
-                  <div className="flex gap-x-5">
-                    <Button title="Buy now" twClasses="w-full" />
-                    <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
-                      <CartIcon />
+                  {/* <Select title="Offers" /> */}
+                  <div className="create-new-nft-wrapper-2">
+                    <span className="create-new-nft-wrapper-2-label">
+                      Offers
                     </span>
                   </div>
-                  <Button title="Place a bid" twClasses="w-full" outline2 />
                 </div>
               </div>
             </div>

@@ -160,11 +160,11 @@
 
 /* mini user profile */
 .mini-user-profile-wrapper {
-  @apply bg-bg-3 absolute top-[14%] z-10 rounded-[1.125rem]  border-[#34364C] border-[0.0625rem] p-[1.875rem] flex flex-col gap-y-[2.125rem];
+  @apply bg-bg-3 absolute top-[14%] 2xl:top-[12%] z-10 rounded-[1.125rem]  border-[#34364C] border-[0.0625rem] p-[1.875rem] flex flex-col gap-y-[2.125rem];
 }
 
 .mini-user-profile-links {
-  @apply grid grid-cols-[0.35fr_1fr] items-center text-white font-medium hover:cursor-pointer;
+  @apply grid grid-cols-[0.35fr_1fr] items-center text-white font-medium hover:cursor-pointer gap-x-3;
 }
 
 .mini-profile-toggle {

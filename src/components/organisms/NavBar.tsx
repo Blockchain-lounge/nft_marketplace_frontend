@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 
-
 // import axios from "axios";
 
 // import useWalletAuth from "@/src/hooks/useWalletAuth";
@@ -20,9 +19,10 @@ import {
 } from "@/src/components/atoms/vectors";
 
 import {
-  ConnectWallet,
+  // ConnectWallet,
+  ConnectWalletStage1,
   CreateNftNavOptions,
-  DisplayWallet,
+  // DisplayWallet,
   MiniUserProfile,
   MiniUserWallet,
   NavTab,
@@ -34,10 +34,9 @@ import { toggleLoggedInUser } from "@/src/reducers/authReducer";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleMobileModal } from "@/src/reducers/modalReducer";
 import { RootState } from "@/src/store/store";
+import Image from "next/image";
 
 const NavBar = () => {
-
-
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
 
@@ -47,10 +46,8 @@ const NavBar = () => {
 
   const [openModal, setOpenModal] = useState(false);
 
-  const [activeTab, setActiveTab] = useState(0);
+  // const [activeTab, setActiveTab] = useState(0);
   const [stage, setStage] = useState(0);
-
-
 
   // wallet connect
   const [walletAddress, setWalletAddress] = useState<string>("");
@@ -164,12 +161,15 @@ const NavBar = () => {
               <span className="mr-[0.5rem]" onClick={handleShowCreateNftOption}>
                 Create
               </span>
-              <img
-                src="/images/Dreamy-ape.png"
-                alt="user-img"
-                className="h-12 w-12 rounded-full"
-                onClick={handleShowProfile}
-              />
+              <div className="relative h-12 w-12">
+                <Image
+                  src="/images/Dreamy-ape.png"
+                  alt="user-img"
+                  layout="fill"
+                  className="rounded-full"
+                  onClick={handleShowProfile}
+                />
+              </div>
               <div className="flex space-x-[1rem]">
                 <span className="nav-create-nft">
                   <WalletIcon onClick={handleShowBal} />
@@ -207,20 +207,8 @@ const NavBar = () => {
         openModal={openModal}
         title="Connect a wallet to continue"
         closeModal={setOpenModal}
-        active={stage > 0}
       >
-        <div className="flex">
-          {stage === 0 ? (
-            <ConnectWallet
-              stage={stage}
-              setStage={setStage}
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-            />
-          ) : (
-            <DisplayWallet closeModal={setOpenModal} setStage={setStage} />
-          )}
-        </div>
+        <ConnectWalletStage1 stage={stage} setStage={setStage} />
       </Modal>
     </nav>
   );

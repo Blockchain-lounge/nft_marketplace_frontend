@@ -1,19 +1,21 @@
 import { Button, Select } from "@/src/components/atoms";
 import {
   CaretDown,
-  CartIcon,
   CoinIcon,
+  ExternalLinkIcon,
   LikeIcon,
+  StatIcon,
 } from "@/src/components/atoms/vectors";
+import EyeIcon from "@/src/components/atoms/vectors/eye-icon";
 import { Footer2 } from "@/src/components/organisms";
 import DashboardLayout from "@/src/template/DashboardLayout";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
 
 const ViewNft = () => {
-  const router = useRouter();
-  const { id } = router.query;
+  const { query, push } = useRouter();
+  const { id } = query;
+
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper">
@@ -88,8 +90,12 @@ const ViewNft = () => {
 
                 <div className="w-full flex flex-col gap-y-4">
                   <div className="flex gap-x-5">
-                    <Button title="Edit" twClasses="w-full" outline />
-                    <Button title="Sell" twClasses="w-full" />
+                    <Button title="Edit" twClasses="w-full" outline2 />
+                    <Button
+                      title="Sell"
+                      onClick={() => push(`/list-nft-for-sale/${id}`)}
+                      twClasses="w-full"
+                    />
                   </div>
                   <Select title="Offers" />
                 </div>
@@ -152,20 +158,22 @@ const ViewNft = () => {
             </span>
 
             <div className="view-nft-details">
-              <h2 className="text-2xl font-bold ">Details</h2>
-              <div className="div">
-                <div className="flex items-center">
-                  <CoinIcon /> <span className="block mr-3">Ethereum</span>{" "}
-                  <span className="text-txt-2">(ERC-721)</span>
-                </div>
-                <div className="flex items-center">
+              <h2 className="text-2xl font-bold my-4">Details</h2>
+              <div className="space-y-4">
+                <div className="flex items-center gap-x-2">
                   <CoinIcon />{" "}
-                  <span className="block mr-3">View on Etherscan</span>
+                  <span className="block font-medium ml-2">Ethereum</span>{" "}
                   <span className="text-txt-2">(ERC-721)</span>
                 </div>
-                <div className="flex items-center">
-                  <CoinIcon /> <span className="block mr-3">Open original</span>{" "}
-                  <span className="text-txt-2">(ERC-721)</span>
+                <div className="flex items-center gap-x-2">
+                  <StatIcon />{" "}
+                  <span className="block font-medium">View on Etherscan</span>
+                  <ExternalLinkIcon />
+                </div>
+                <div className="flex items-center gap-x-2">
+                  <EyeIcon />{" "}
+                  <span className="block font-medium">Open original</span>{" "}
+                  <ExternalLinkIcon />{" "}
                 </div>
               </div>
             </div>

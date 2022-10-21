@@ -1,13 +1,8 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import ConnectWalletStage1 from "./ConnectWalletStage1";
 import ConnectWalletTab from "./ConnectWalletTab";
 
-import {
-  EthIcon,
-  SolanaIcon,
-  TezozIcon,
-  PolygonIcon,
-} from "@/src/components/atoms/vectors";
+import { EthIcon } from "@/src/components/atoms/vectors";
 
 interface IConnectWallet {
   stage: number;
@@ -22,12 +17,7 @@ const ConnectWallet = ({
   activeTab,
   setActiveTab,
 }: IConnectWallet) => {
-  const tab = [
-    { text: "Ethereum", icon: EthIcon, iconName: "eth" },
-    { text: "solana", icon: SolanaIcon, iconName: "solana" },
-    { text: "Tezoz", icon: TezozIcon, iconName: "tezoz" },
-    { text: "polygon", icon: PolygonIcon, iconName: "polygon" },
-  ];
+  const tab = [{ text: "Ethereum", icon: EthIcon, iconName: "eth" }];
   return (
     <div className="w-full">
       <ConnectWalletTab

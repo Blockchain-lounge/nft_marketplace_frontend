@@ -4,6 +4,7 @@ import clsx from "clsx";
 export interface IButton {
   title: string;
   outline?: boolean;
+  outline2?: boolean;
   twClasses?: string;
   onClick?: () => void;
   prefix?: ReactNode;
@@ -13,6 +14,7 @@ export interface IButton {
 const Button = ({
   title,
   outline,
+  outline2,
   twClasses,
   onClick,
   prefix,
@@ -22,7 +24,7 @@ const Button = ({
     <button
       className={clsx(
         "btn",
-        outline ? "btn-outline" : "btn-primary",
+        outline ? "btn-outline" : outline2 ? "btn-outline-2" : "btn-primary",
         twClasses
       )}
       onClick={onClick}
