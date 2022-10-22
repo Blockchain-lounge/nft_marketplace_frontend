@@ -35,10 +35,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { toggleMobileModal } from "@/src/reducers/modalReducer";
 import { RootState } from "@/src/store/store";
 import Image from "next/image";
+import CreateCollection from "./CreateCollection";
 
 const NavBar = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
+
+  const [modalType, setModaltype] = useState("wallet");
 
   const [showProfile, setShowProfile] = useState(false);
   const [showBal, setShowBal] = useState(false);
@@ -187,6 +190,8 @@ const NavBar = () => {
               <CreateNftNavOptions
                 showOptions={showCreateNft}
                 onClick={setShowCreateNft}
+                modalType={setModaltype}
+                showModal={setOpenModal}
               />
             </div>
           ) : (
@@ -205,10 +210,25 @@ const NavBar = () => {
       </div>
       <Modal
         openModal={openModal}
-        title="Connect a wallet to continue"
+        title={
+          modalType === "collection"
+            ? "Create collection"
+            : "Connect a wallet to continue"
+        }
         closeModal={setOpenModal}
       >
-        <ConnectWalletStage1 stage={stage} setStage={setStage} />
+        {modalType === "collection" ? (
+          <CreateCollection
+            closeModal={setOpenModal}
+            changeModalType={setModaltype}
+          />
+        ) : (
+          <ConnectWalletStage1
+            stage={stage}
+            setStage={setStage}
+            closeModal={setOpenModal}
+          />
+        )}
       </Modal>
     </nav>
   );

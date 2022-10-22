@@ -20,18 +20,25 @@ import {
 
 interface IConnectWalletStage1 {
   setStage: Dispatch<SetStateAction<number>>;
+  closeModal: Dispatch<SetStateAction<boolean>>;
   stage: number;
 }
 
-const ConnectWalletStage1 = ({ setStage, stage }: IConnectWalletStage1) => {
+const ConnectWalletStage1 = ({
+  closeModal,
+  setStage,
+  stage,
+}: IConnectWalletStage1) => {
   const [showMore, setShowMore] = useState(false);
-
 
   const wallets = [
     {
       name: "Metamask",
       icon: <MetamaskIcon />,
-      action: () => verifySignature(),
+      action: () => {
+        verifySignature();
+        closeModal(false);
+      },
     },
     {
       name: "Wallet connect",
