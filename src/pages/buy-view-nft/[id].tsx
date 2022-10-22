@@ -14,7 +14,7 @@ import DashboardLayout from "../../template/DashboardLayout";
 import EyeIcon from "@/src/components/atoms/vectors/eye-icon";
 
 const ViewNft = () => {
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const [modalType, setModaltype] = useState("buy");
 
   const [viewNftStage, setViewNftStage] = useState("overview");
