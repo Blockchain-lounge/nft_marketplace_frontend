@@ -20,7 +20,7 @@ const SellSingleNft = () => {
     name: "Jakes💸",
     price: "4.5",
   });
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const nftOwnersInfo = [
     {
       label: "Creator",
