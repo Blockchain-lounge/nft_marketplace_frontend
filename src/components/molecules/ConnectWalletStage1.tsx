@@ -17,6 +17,7 @@ import {
   signMessage,
   verifySignature,
 } from "@/src/utilities/auth/wallet";
+import { createNFT } from "@/src/utilities/token";
 
 interface IConnectWalletStage1 {
   setStage: Dispatch<SetStateAction<number>>;
@@ -31,7 +32,7 @@ const ConnectWalletStage1 = ({ setStage, stage }: IConnectWalletStage1) => {
     {
       name: "Metamask",
       icon: <MetamaskIcon />,
-      action: () => verifySignature(),
+      action: () => createNFT(),
     },
     {
       name: "Wallet connect",

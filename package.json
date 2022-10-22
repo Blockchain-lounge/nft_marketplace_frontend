@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@metamask/providers": "^10.0.0",
     "@reduxjs/toolkit": "^1.8.6",
     "axios": "^1.1.2",
     "clsx": "^1.2.1",

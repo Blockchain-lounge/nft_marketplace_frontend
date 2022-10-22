@@ -5,9 +5,12 @@ const infuraId = "9b05e0c5512547158db49730e2b19609";
 
 const baseUrl = "https://cloudax-api.herokuapp.com";
 
-const provider = new ethers.providers.JsonRpcProvider(
+export const handleProvider = () => {
+  const provider = new ethers.providers.JsonRpcProvider(
   `https://goerli.infura.io/v3/${infuraId}`
-);
+)
+return provider
+}
 
 const message = "Helloo... Nigga";
 
