@@ -6,9 +6,7 @@ import {
   CaretDown,
   CartIcon,
   CoinIcon,
-  ExternalLinkIcon,
   LikeIcon,
-  LinkIcon,
   StatIcon,
 } from "../../components/atoms/vectors";
 import { Footer2 } from "../../components/organisms";
@@ -89,7 +87,7 @@ const ViewNft = () => {
     <DashboardLayout>
       <div className="sub-layout-wrapper">
         <div className="center space-y-8">
-          <div className="view-wrapper-hero">
+          <div className="view-wrapper-hero grid-cols-[0.5fr_1fr]">
             <div className="relative">
               <Image
                 priority

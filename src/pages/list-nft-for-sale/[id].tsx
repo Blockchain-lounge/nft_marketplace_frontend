@@ -19,7 +19,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 
 const ListNft = () => {
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(true);
   const {
     push,
     query: { id },
