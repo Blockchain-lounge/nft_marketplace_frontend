@@ -5,6 +5,12 @@ const infuraId = "9b05e0c5512547158db49730e2b19609";
 
 const baseUrl = "https://cloudax-api.herokuapp.com";
 
+const message = "Hello world";
+
+const provider = new ethers.providers.JsonRpcProvider(
+  `https://goerli.infura.io/v3/${infuraId}`
+);
+
 export const getAddress = async () => {
   if (!window.ethereum) {
     const failMessage = "Kindly Install Metamask and connect your wallet";
@@ -14,85 +20,144 @@ export const getAddress = async () => {
   }
 
   try {
-    // const provider = new ethers.providers.JsonRpcProvider(
-    //   `https://goerli.infura.io/v3/${infuraId}`
-    // );
-
     const accounts = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
+
+    const walletAddress = accounts[0];
+
+    // 1. Connect address
+    if (accounts.length) {
+      try {
+        const { data } = await axios.post(
+          `${baseUrl}/api/user/auth/connected_address`,
+          {
+            address: walletAddress,
+          }
+        );
+
+        console.log("connect address successful : ", data);
+
+        if (data) {
+          const signature = await signMessage(walletAddress);
+          // 2. get address profile
+          try {
+            const { data } = await axios.get(
+              `${baseUrl}/api/user/auth/address_details/${walletAddress}`
+            );
+
+            console.log("get address profile successful : ", data);
+            console.log(walletAddress);
+
+            if (data) {
+              // 3. verify signature
+              const signer = provider.getSigner(walletAddress);
+              const signedMessage = await signer.signMessage(message);
+
+              try {
+                const { data } = await axios.post(
+                  `${baseUrl}/api/user/auth/verify_signature`,
+                  {
+                    message: "Hello World",
+                    signature:
+                      "0xe8ea7d0c7c12f0c4a55cf5eff254fc103ef8703bbf31d1cb565153b69e6f99063b8f73d80de1b9189951c0844c75e7c660626b9b1e785dcabb4078df5f5135b21b",
+                    address: "0x079456f158db4090e9e67d063b97ec19f9674bb9",
+                  }
+                );
+
+                console.log("verify signature successful : ", data);
+                return data;
+              } catch (e: any) {
+                return console.error("error verifying signature : ", e.message);
+              }
+            }
+            return data;
+          } catch (e: any) {
+            return console.error("error getting address profile : ", e.message);
+          }
+        }
+        return data;
+      } catch (e: any) {
+        return console.error("error connecting address : ", e.message);
+      }
+    }
     console.log(accounts);
-    return accounts;
   } catch (e: any) {
-    console.log("error occured", e.message);
+    console.error("error occured", e.message);
   }
 };
 
-// for metamask
-// check if metamask is available
+const verifyMessage = async (
+  message: string,
+  address: string,
+  signature: string
+) => {
+  try {
+    const signerAddr = ethers.utils.verifyMessage(message, signature);
+    if (signerAddr.toLowerCase() !== address.toLowerCase()) {
+      console.log("Invalid signature");
+     
+    }
 
-// connect Metamask
-// export const getAccountAddress = async () => {
-//   if (!window.ethereum) {
-//     return;
-//   }
+    console.log("signer address: ", signerAddr)
+    console.log("address: ", address)
+    return signerAddr
+  } catch (e: any) {
+    console.log("error verifying message: ", e.message)
+  }
+};
 
-//   // go ahead
-//   try {
-//     const provider = new ethers.providers.JsonRpcProvider(
-//       `https://goerli.infura.io/v3/${infuraId}`
-//     );
+export const signMessage = async (address: string) => {
+  try {
+    // const provider = new ethers.providers.JsonRpcProvider(
+    //   `https://goerli.infura.io/v3/${infuraId}`
+    // );
+    // const message = "Hello World";
 
-//     // ask for accounts
-//     const accounts = await window.ethereum.request({ method: "eth_accounts" });
-//     const signer = provider.getSigner();
+    if (window.ethereum !== undefined) {
+      const ethereum = window.ethereum;
+      const provider = new ethers.providers.Web3Provider(ethereum as any);
+      const signer = provider.getSigner();
+      const signature = await signer.signMessage(message);
+      console.log("signature", signature);
+      // console.log('message', message)
+      if (message !== undefined && message !== null) {
+        const verificationResponse = verifyMessage(message, address, signature);
+        console.log("verifcation response", verificationResponse)
+        return verificationResponse;
+      }
 
-// //     const message = `Hello NO NAME, Welcome to Cloudax!
-// // Please approve this transaction to securely sign-in to Cloudax.
-// // Feel free to checkout out our Terms of use & Privacy Policy: https://opensea.io/tos
-// // This is a totally free request and will not cost you any gas fees.
-// // You will automatically be logged out after 24 hours.
-// // Selected wallet address:
-// // ${accounts[0]}
-// // Nonce:
-// // 34`;
+      console.log("signer: ", signer)
 
-//     if (accounts.length > 0) {
-//       const signature = await signer.signMessage(message);
+    }
+  } catch (e: any) {
+    console.log("error signing message: ", e.message)
+    
+  }
+};
 
-//       const response = await axios.post(
-//         `${baseUrl}/api/user/auth/connected_address`,
-//         {
-//           address: accounts[0],
-//         }
-//       );
+const sign2 =
+  "0xe3c6d9bdddf2cd5aaa6bf32f721597e4e961489f80e556d07080081b8d6bd7044146cc86322ba12343144ab360dc08a56049b5335ea41497a646c6fe37769d7a1c";
 
-//       const { result } = await response.data;
+export const verifySignature = async () => {
+  try {
+    const { data } = await axios.post(
+      `${baseUrl}/api/user/auth/verify_signature`,
+      {
+        message: "Hello World",
+        signature:
+          "0xe8ea7d0c7c12f0c4a55cf5eff254fc103ef8703bbf31d1cb565153b69e6f99063b8f73d80de1b9189951c0844c75e7c660626b9b1e785dcabb4078df5f5135b21b",
+        address: "0x079456f158db4090e9e67d063b97ec19f9674bb9",
+      }
+    );
 
-//       if (result) {
-//         const response = await axios.get(
-//           `${baseUrl}/api/user/auth/address_details/${accounts[0]}`
-//         );
+    console.log("successfully verified signature. ", data)
+    return
+  } catch (e: any) {
+    console.log("error occured while verifying signature", e.message)
+    return
+  }
+}
 
-//         const data = await response.data;
-
-//         // 3. verify signature
-//         const resp = await axios.post(
-//           `${baseUrl}/api/user/auth/verify_signature`,
-//           {
-//             message,
-//             signature,
-//             address: accounts[0],
-//           }
-//         );
-//         console.log(data);
-//       }
-//       console.log(signature);
-//     } else {
-//       console.log("error getting signature");
-//     }
-
-//   } catch (error: any) {
-//     console.log("Error occured!...", error.message);
-//   }
-// };
+// localStorage.setItem("", {})
+// localStorage.getItem("")

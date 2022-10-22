@@ -17,6 +17,12 @@ import {
 
 // import useWalletAuth from "@/src/hooks/useWalletAuth";
 import { getAddress } from "@/src/utilities/auth";
+import {
+  connectWallet,
+  getAddressProfile,
+  signMessage,
+  verifySignature,
+} from "@/src/utilities/auth/wallet";
 
 interface IConnectWalletStage1 {
   setStage: Dispatch<SetStateAction<number>>;
@@ -25,9 +31,6 @@ interface IConnectWalletStage1 {
 
 const ConnectWalletStage1 = ({ setStage, stage }: IConnectWalletStage1) => {
   const [showMore, setShowMore] = useState(false);
-
-
-
 
   // const handleAuth = async (wal: string) => {
   //   if (isConnected) {
@@ -45,13 +48,13 @@ const ConnectWalletStage1 = ({ setStage, stage }: IConnectWalletStage1) => {
   //     userData.address = account;
   //     userData.chain = chain.id;
   //   }
-    // if (wal === "coin") {
-    //   const { account, chain } = await connectAsync({
-    //     connector: new CoinbaseWalletConnector({}),
-    //   });
-    //   userData.address = account;
-    //   userData.chain = chain.id;
-    // }
+  // if (wal === "coin") {
+  //   const { account, chain } = await connectAsync({
+  //     connector: new CoinbaseWalletConnector({}),
+  //   });
+  //   userData.address = account;
+  //   userData.chain = chain.id;
+  // }
 
   //   if (wal === "coin") {
   //     const { account, chain } = await connectAsync({
@@ -88,13 +91,11 @@ const ConnectWalletStage1 = ({ setStage, stage }: IConnectWalletStage1) => {
   //   console.log({ signature });
   // };
 
- 
-
   const wallets = [
     {
       name: "Metamask",
       icon: <MetamaskIcon />,
-      action: () => getAddress(),
+      action: () => verifySignature(),
     },
     {
       name: "Wallet connect",
@@ -162,3 +163,5 @@ const ConnectWalletStage1 = ({ setStage, stage }: IConnectWalletStage1) => {
   );
 };
 export default ConnectWalletStage1;
+
+// export getServerSide
