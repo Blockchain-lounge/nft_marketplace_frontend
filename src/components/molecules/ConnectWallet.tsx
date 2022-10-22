@@ -5,8 +5,8 @@ import ConnectWalletTab from "./ConnectWalletTab";
 import { EthIcon } from "@/src/components/atoms/vectors";
 
 interface IConnectWallet {
-  stage: number;
-  setStage: Dispatch<SetStateAction<number>>;
+  stage?: number;
+  setStage?: Dispatch<SetStateAction<number>>;
   activeTab: number;
   setActiveTab: Dispatch<SetStateAction<number>>;
 }
@@ -25,7 +25,7 @@ const ConnectWallet = ({
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
-      {activeTab === 0 ? (
+      {/* {activeTab === 0 ? (
         <ConnectWalletStage1 stage={stage} setStage={setStage} />
       ) : activeTab === 1 ? (
         <ConnectWalletStage1 stage={stage} setStage={setStage} />
@@ -35,7 +35,7 @@ const ConnectWallet = ({
         <ConnectWalletStage1 stage={stage} setStage={setStage} />
       ) : (
         <ConnectWalletStage1 stage={stage} setStage={setStage} />
-      )}
+      )} */}
     </div>
   );
 };
