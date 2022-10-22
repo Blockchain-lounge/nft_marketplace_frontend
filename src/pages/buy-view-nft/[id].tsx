@@ -191,8 +191,8 @@ const ViewNft = () => {
                 <span className="text-lg font-medium">
                   Last sale price 10.8 ETH
                 </span>
-                <div className="w-full flex flex-col gap-y-4">
-                  <div className="flex gap-x-5">
+                <div className="flex flex-col gap-y-4 w-full">
+                  <div className="flex gap-x-5 w-full">
                     <Button
                       title="Buy now"
                       twClasses="w-full"
