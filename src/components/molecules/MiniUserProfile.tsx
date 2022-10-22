@@ -34,11 +34,6 @@ const MiniUserProfile = ({
       icon: <SettingsIcon />,
       to: "/settings",
     },
-    {
-      link: "Night Mode",
-      icon: <NightMode />,
-      to: "",
-    },
   ];
   return (
     <div

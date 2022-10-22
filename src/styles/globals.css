@@ -12,10 +12,11 @@
 @import "./Homepage.module.css";
 @import "./NftdetailsPage.module.css";
 @import "./EarningLayout.module.css";
-@import "./Earnings.module.css";
-@import "./Profile.module.css";
-@import "./CreateNewNft.module.css";
+@import "./EarningsPage.module.css";
+@import "./ProfilePage.module.css";
+@import "./CreateNewNftPage.module.css";
 @import "./SettingPage.module.css";
+@import "./ViewNftPage.module.css";
 
 @layer base {
   @font-face {
@@ -35,7 +36,7 @@
   body {
     font-family: "DM Sans", "Sf Pro", sans-serif;
     scroll-behavior: smooth !important;
-    background-image: url("/images/Market-place-bg.jpg");
+    background-image: url("/images/bg-3.png");
     background-size: cover;
     background-repeat: no-repeat;
     overflow: hidden;

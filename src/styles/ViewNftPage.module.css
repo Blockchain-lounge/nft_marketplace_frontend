@@ -1,0 +1,25 @@
+.view-wrapper-hero {
+  @apply grid grid-cols-[0.5fr_1fr] h-[40%] gap-x-8;
+}
+
+.view-hero-nft-owner {
+  @apply flex items-center gap-x-14;
+}
+
+.view-hero-nft-info {
+}
+
+.view-hero-nft-cta-wrapper {
+  @apply w-3/4 flex flex-col items-center gap-y-4 border border-border-1-line p-4 rounded-[1.25rem];
+}
+
+.view-hero-nft-link {
+  @apply relative h-6 w-6;
+}
+
+.view-nft-stage {
+  @apply capitalize text-txt-2 pb-4 cursor-pointer;
+}
+
+.view-nft-description {
+}

@@ -2,19 +2,43 @@
 
 /* button */
 .btn-wrapper {
-  @apply flex justify-center items-center h-[3.625rem] w-full max-w-[12.0625rem] bg-gradient-to-r from-[#2F79F9] to-[#3DAEFA] rounded-[0.625rem] p-[0.05rem];
+  @apply flex justify-center items-center;
 }
 
 .btn {
-  @apply flex justify-center items-center gap-x-[0.875rem] h-full  text-base font-medium text-white rounded-[0.6rem] capitalize;
+  @apply flex justify-center items-center gap-x-[0.875rem] h-[3.625rem] w-[11.9rem]  text-base font-medium text-white rounded-[0.6rem] capitalize;
 }
 
 .btn-outline {
-  @apply bg-[#16162D] w-[11.9rem];
+  @apply bg-[#16162D] border-[#2f79f9de] border-[1px];
+}
+
+.btn-outline-2 {
+  @apply bg-[#16162D] border-border-1-line border-[1px];
 }
 
 .btn-primary {
-  @apply w-full;
+  @apply bg-gradient-to-r from-[#2F79F9] to-[#3DAEFA] rounded-[0.625rem];
+}
+
+/*Check Box*/
+
+.checkbox {
+  @apply appearance-none h-6 w-6 rounded-[0.2rem] relative;
+}
+
+.checkbox:checked {
+  @apply bg-contain bg-gradient-to-br from-[#2F79F9] to-[#3DAEFA];
+}
+
+.checkbox::before {
+  @apply absolute content-[""] top-[50%] left-[50%] w-full h-full bg-[url('/images/tick.svg')] bg-no-repeat bg-[length:12px_12px];
+  transform: translate(-35%, -35%);
+  display: none;
+}
+
+.checkbox:checked::before {
+  display: block;
 }
 
 /* heading */
