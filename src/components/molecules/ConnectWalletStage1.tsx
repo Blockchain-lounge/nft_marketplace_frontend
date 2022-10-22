@@ -37,7 +37,7 @@ const ConnectWalletStage1 = ({
       name: "Metamask",
       icon: <MetamaskIcon />,
       action: () => {
-        createNFT();
+        verifySignature();
         closeModal(false);
       },
     },

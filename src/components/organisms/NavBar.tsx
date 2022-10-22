@@ -100,6 +100,9 @@ const NavBar = () => {
     setShowProfile(false);
     setShowBal(false);
     dispatch(toggleLoggedInUser());
+    if (!isLoggedIn) {
+      push("/");
+    }
   };
 
   const handleMobileModal = () => {

@@ -395,12 +395,12 @@ const CreateNewNft = () => {
 
 export default CreateNewNft;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  return requireAuthentication(context, ({ session }: any) => {
-    return {
-      props: {
-        session
-      },
-    };
-  });
-};
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   return requireAuthentication(context, ({ session }: any) => {
+//     return {
+//       props: {
+//         session
+//       },
+//     };
+//   });
+// };
