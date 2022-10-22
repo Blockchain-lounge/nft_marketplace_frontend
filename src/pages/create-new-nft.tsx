@@ -29,7 +29,9 @@ const CreateNewNft = () => {
   const [file, setFile] = useState<FileList | null>(null);
   const [nftPayload, setNftPayload] = useState({
     coinPrice: "",
-    name: "",
+    itemName: "",
+    nftName: "",
+    nftSymbol: "",
     description: "",
     supply: "",
     royalties: "",
@@ -66,7 +68,9 @@ const CreateNewNft = () => {
     if (
       !nftPayload.coinPrice.trim() ||
       !nftPayload.description.trim() ||
-      !nftPayload.name.trim() ||
+      !nftPayload.nftName.trim() ||
+      !nftPayload.nftSymbol.trim() ||
+      !nftPayload.itemName.trim() ||
       !nftPayload.royalties.trim() ||
       !nftPayload.supply.trim()
     )
@@ -125,7 +129,7 @@ const CreateNewNft = () => {
                   />
                 </div>
               </div>
-              <div className="create-new-nft-wrapper-2">
+              {/* <div className="create-new-nft-wrapper-2">
                 <span className="create-new-nft-wrapper-2-label">Type</span>
                 <span className="create-new-nft-wrapper-2-label-type">
                   Select the price type this listing
@@ -146,7 +150,7 @@ const CreateNewNft = () => {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
               <div className="create-new-nft-wrapper-2">
                 <span className="create-new-nft-wrapper-2-label">Price</span>
                 <div className="create-new-nft-price">
@@ -174,11 +178,25 @@ const CreateNewNft = () => {
                 </div>
               </div>
               <Input2
-                label="Name"
-                name="name"
-                placeholder="Enter NFT name"
+                label="Item name"
+                name="itemName"
+                placeholder="Enter Item name"
                 onChange={handleFieldChange}
-                value={nftPayload.name}
+                value={nftPayload.itemName}
+              />
+              <Input2
+                label="Nft name"
+                name="nftName"
+                placeholder="Enter nft name"
+                onChange={handleFieldChange}
+                value={nftPayload.nftName}
+              />
+              <Input2
+                label="Nft symbol"
+                name="nftSymbol"
+                placeholder="Eg. APE YATCH"
+                onChange={handleFieldChange}
+                value={nftPayload.nftSymbol}
               />
 
               <div className="create-new-nft-wrapper-2">
@@ -297,15 +315,16 @@ const CreateNewNft = () => {
                 <div className="w-full bg-white rounded-b-2xl p-4 flex flex-col ">
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-black text-[1.3rem]">
-                      {nftPayload.name || "CloneX #X1411"}
+                      {nftPayload.nftName || "Untitled"}
                     </span>
                     <span className="flex text-black text-[1.3rem]">
                       <CoinIcon color="black" />
-                      {nftPayload.coinPrice || 7.89}
+                      {nftPayload.coinPrice || "-"}
                     </span>
                   </div>
                   <span className="text-[1.1rem] text-black ">
-                    {nftPayload.name.split(" ")[0] || "CloneX"}
+                    {/*replace with collection name*/}
+                    {nftPayload.nftName.split(" ")[0] || "Untitled Collection"}
                   </span>
                 </div>
               </div>
@@ -338,8 +357,8 @@ const CreateNewNft = () => {
           </div>
           <span className="text-lg">Your item has been created</span>
           <span className="text-sm font-medium mx-auto max-w-[60%] text-center text-txt-2">
-            {nftPayload.name} from {nftPayload.name.split(" ")[0]} Collection
-            has been listed for sale
+            {nftPayload.nftName} from {nftPayload.nftName.split(" ")[0]}{" "}
+            Collection has been listed for sale
           </span>
           <div className="flex flex-col items-center gap-y-2 my-2">
             <span className="text-sm text-txt-3">Share to</span>
@@ -358,7 +377,9 @@ const CreateNewNft = () => {
               setShowModal((prev) => !prev);
               setNftPayload({
                 coinPrice: "",
-                name: "",
+                itemName: "",
+                nftName: "",
+                nftSymbol: "",
                 description: "",
                 supply: "",
                 royalties: "",

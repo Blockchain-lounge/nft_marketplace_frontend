@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { useRouter } from "next/router";
 import clsx from "clsx";
 import { CoinIcon, OutlineLikesIcon } from "@/src/components/atoms/vectors";
 
@@ -11,8 +12,9 @@ export interface INftcard {
 }
 
 const NftCard = ({ price, imgUrl, name, owner, status }: Partial<INftcard>) => {
+  const { push } = useRouter();
   return (
-    <div className="nmc-wrapper">
+    <div className="nmc-wrapper" onClick={() => push(`/buy-view-nft/${name}`)}>
       <div className="nmc-wrapper-img">
         <div className="nmc-wrapper-likes">
           <OutlineLikesIcon />

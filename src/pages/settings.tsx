@@ -27,7 +27,7 @@ const Settings = () => {
   const settingStages = [
     { label: "Edit profile", stage: "edit-profile" },
     { label: "My links", stage: "my-links" },
-    { label: "Notifications", stage: "notifications" },
+    // { label: "Notifications", stage: "notifications" },
   ];
 
   const [userProfileLinks, setUserProfileLinks] = useState([
@@ -265,18 +265,20 @@ const Settings = () => {
                 </div>
               ))}
             </div>
-          ) : settingStage === "notifications" ? (
-            <div className="setting-notifications">
-              <CheckBox
-                check={checked}
-                checked={checked}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  setChecked((prev) => !prev)
-                }
-                label="Email-"
-              />
-            </div>
-          ) : null}
+          ) : // : settingStage === "notifications" ? (
+          //   <div className="setting-notifications">
+          //     <CheckBox
+          //       check={checked}
+          //       checked={checked}
+          //       onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          //         setChecked((prev) => !prev)
+          //       }
+          //       label="Email-"
+          //     />
+          //   </div>
+          // )
+
+          null}
         </div>
         <Footer2 />
       </div>

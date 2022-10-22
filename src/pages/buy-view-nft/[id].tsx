@@ -1,21 +1,22 @@
 import { useState } from "react";
 import Image from "next/image";
 import clsx from "clsx";
-import { Button } from "../../components/atoms";
+import { Button, Input2, Select } from "../../components/atoms";
 import {
   CaretDown,
   CartIcon,
   CoinIcon,
-  ExternalLinkIcon,
   LikeIcon,
-  LinkIcon,
   StatIcon,
 } from "../../components/atoms/vectors";
-import { Footer2 } from "../../components/organisms";
+import { Footer2, Modal } from "../../components/organisms";
 import DashboardLayout from "../../template/DashboardLayout";
 import EyeIcon from "@/src/components/atoms/vectors/eye-icon";
 
 const ViewNft = () => {
+  const [showModal, setShowModal] = useState(true);
+  const [modalType, setModaltype] = useState("buy");
+
   const [viewNftStage, setViewNftStage] = useState("overview");
   const nftOwnersInfo = [
     {
@@ -85,14 +86,27 @@ const ViewNft = () => {
       icon: "/vectors/export.svg",
     },
   ];
+
+  const handleBuy = () => {
+    {
+      /*write your payment info here*/
+    }
+    setShowModal((prev) => !prev);
+  };
+  const handleBid = () => {
+    {
+      /*write your bid info here*/
+    }
+    setShowModal((prev) => !prev);
+    setModaltype("buy");
+  };
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper">
         <div className="center space-y-8">
-          <div className="view-wrapper-hero">
+          <div className="view-wrapper-hero grid-cols-[0.5fr_1fr]">
             <div className="relative">
               <Image
-                priority
                 src="/images/buyNftSample.png"
                 alt="buy-nft-sample"
                 layout="fill"
@@ -179,12 +193,27 @@ const ViewNft = () => {
                 </span>
                 <div className="w-full flex flex-col gap-y-4">
                   <div className="flex gap-x-5">
-                    <Button title="Buy now" twClasses="w-full" />
+                    <Button
+                      title="Buy now"
+                      twClasses="w-full"
+                      onClick={() => {
+                        setModaltype("buy");
+                        setShowModal((prev) => !prev);
+                      }}
+                    />
                     <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
                       <CartIcon />
                     </span>
                   </div>
-                  <Button title="Place a bid" twClasses="w-full" outline2 />
+                  <Button
+                    title="Place a bid"
+                    twClasses="w-full"
+                    outline2
+                    onClick={() => {
+                      setModaltype("bid");
+                      setShowModal((prev) => !prev);
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -427,6 +456,139 @@ const ViewNft = () => {
         </div>
         <Footer2 />
       </div>
+      <Modal
+        title={modalType === "buy" ? "Checkout" : "Place a bid"}
+        openModal={showModal}
+        closeModal={setShowModal}
+        modalWt="w-[40rem]"
+      >
+        {modalType === "bid" ? (
+          <div className="flex flex-col items-center max-w-[85%] mx-auto gap-y-5">
+            <span className="font-bold text-txt-2 text-base max-w-[80%] text-center">
+              You are about to place a bid for{" "}
+              <span className="text-txt-2">Express Depot </span>
+              from <span className="text-txt-2">Town Star collection.</span>
+            </span>
+            <div className="flex items-center justify-between w-full bg-bg-5 py-4 px-6 rounded-[1.25rem]">
+              <div className="flex gap-x-3 items-center">
+                <span className="block relative h-14 w-14">
+                  <Image
+                    src="/logos/coinbase-logo.png"
+                    alt="wallet-logo"
+                    layout="fill"
+                    className="rounded-full"
+                  />
+                </span>
+                <div className="flex flex-col">
+                  <span className="text-lg font-medium">Coinbase</span>
+                  <span className="text-txt-2 font-medium">0xb4d...002d </span>
+                </div>
+              </div>
+              <span className="text-positive-color bg-[#00800022] py-3 px-4 rounded-3xl">
+                Connected
+              </span>
+            </div>
+
+            <div className="create-new-nft-wrapper-2 w-full">
+              <span className="create-new-nft-wrapper-2-label">Your bid</span>
+              <div className="create-new-nft-price">
+                <Select title="ETH" icon={<CoinIcon />} />
+                <Input2
+                  name="coinPrice"
+                  placeholder="0.00"
+                  // onChange={handleFieldChange}
+                  // value={nftPayload.coinPrice}
+                />
+              </div>
+            </div>
+            <div className="create-new-nft-wrapper-2 w-full">
+              <span className="create-new-nft-wrapper-2-label">
+                Bid expiration
+              </span>
+              <Select title="7 days" />
+            </div>
+            <div className="create-new-nft-wrapper-2 w-full">
+              <Input2
+                label="Quantity"
+                name="quantity"
+                placeholder="1"
+                // onChange={handleFieldChange}
+                // value={nftPayload.coinPrice}
+              />
+            </div>
+            <div className="flex justify-between items-center w-full">
+              <span className="text-txt-2">Balance</span>
+              <span className="flex">
+                <CoinIcon />
+                47.8
+              </span>
+            </div>
+            <div className="flex justify-between items-center w-full">
+              <span className="text-txt-2">Service Fee (0%)</span>
+              <span className="flex">
+                <CoinIcon />0
+              </span>
+            </div>
+            <div className="flex justify-between items-center w-full">
+              <span className="text-txt-2">You Will Pay</span>
+              <span className="flex">
+                <CoinIcon />
+                6.95
+              </span>
+            </div>
+            <Button title="Place bid" onClick={handleBid} twClasses="w-full" />
+          </div>
+        ) : (
+          <div className="flex flex-col items-center max-w-[85%] mx-auto gap-y-5">
+            <span className="font-bold flex gap-x-1 ">
+              You are about to purchase
+              <span className="text-txt-2">CloneX#821</span>
+              from
+              <span className="text-txt-2">Jakes💸</span>
+            </span>
+            <div className="flex items-center justify-between w-full bg-bg-5 py-4 px-6 rounded-[1.25rem]">
+              <div className="flex gap-x-3 items-center">
+                <span className="block relative h-14 w-14">
+                  <Image
+                    src="/logos/coinbase-logo.png"
+                    alt="wallet-logo"
+                    layout="fill"
+                    className="rounded-full"
+                  />
+                </span>
+                <div className="flex flex-col">
+                  <span className="text-lg font-medium">Coinbase</span>
+                  <span className="text-txt-2 font-medium">0xb4d...002d </span>
+                </div>
+              </div>
+              <span className="text-positive-color bg-[#00800022] py-3 px-4 rounded-3xl">
+                Connected
+              </span>
+            </div>
+            <div className="flex justify-between items-center w-full">
+              <span className="text-txt-2">Balance</span>
+              <span className="flex">
+                <CoinIcon />
+                47.8
+              </span>
+            </div>
+            <div className="flex justify-between items-center w-full">
+              <span className="text-txt-2">Service Fee (0%)</span>
+              <span className="flex">
+                <CoinIcon />0
+              </span>
+            </div>
+            <div className="flex justify-between items-center w-full">
+              <span className="text-txt-2">You Will Pay</span>
+              <span className="flex">
+                <CoinIcon />
+                6.95
+              </span>
+            </div>
+            <Button title="Pay" onClick={handleBuy} />
+          </div>
+        )}
+      </Modal>
     </DashboardLayout>
   );
 };

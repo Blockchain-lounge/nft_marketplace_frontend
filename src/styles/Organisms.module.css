@@ -1,3 +1,8 @@
+/*Create Collection*/
+.create-collection-wrapper {
+  @apply flex flex-col;
+}
+
 /*Footer*/
 .footer {
   @apply bg-[#1A1A30]  w-full py-[3rem] pb-[5rem] lg:py-[3.6562rem]  lg:pl-[2.5625rem] lg:pr-[10.125rem] flex flex-col lg:flex-row justify-around lg:items-start;

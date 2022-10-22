@@ -1,20 +1,26 @@
 import { useState } from "react";
 import Image from "next/image";
 import clsx from "clsx";
-import { Button, Select } from "../../components/atoms";
+
 import {
   CaretDown,
-  CartIcon,
   CoinIcon,
   LikeIcon,
   StatIcon,
 } from "../../components/atoms/vectors";
-import { Footer2 } from "../../components/organisms";
+import { Footer2, Modal } from "../../components/organisms";
 import DashboardLayout from "../../template/DashboardLayout";
 import EyeIcon from "@/src/components/atoms/vectors/eye-icon";
+import { Button } from "@/src/components/atoms";
 
-const ViewNft = () => {
+const SellSingleNft = () => {
   const [viewNftStage, setViewNftStage] = useState("overview");
+  const [isOffer, setIsOffer] = useState(true);
+  const [offer, setOffer] = useState({
+    name: "Jakes💸",
+    price: "4.5",
+  });
+  const [showModal, setShowModal] = useState(true);
   const nftOwnersInfo = [
     {
       label: "Creator",
@@ -83,20 +89,110 @@ const ViewNft = () => {
       icon: "/vectors/export.svg",
     },
   ];
+  const offerBidders = [
+    {
+      bidder: "0x7a20d...9257",
+      imgUrl: "/images/nftsample2.png",
+      price: "4.5",
+      name: "Jakes💸",
+    },
+    {
+      bidder: "0x7a20d...9257",
+      imgUrl: "/images/nftSample3.png",
+      price: "4.5",
+      name: "Ernest",
+    },
+    {
+      bidder: "0x7a20d...9257",
+      imgUrl: "/images/ape.png",
+      price: "4.5",
+      name: "Seed",
+    },
+    {
+      bidder: "0x7a20d...9257",
+      imgUrl: "/images/nftsample2.png",
+      price: "4.5",
+      name: "Jackal💸",
+    },
+    {
+      bidder: "0x7a20d...9257",
+      imgUrl: "/images/ape.png",
+      price: "4.5",
+      name: "Ruby",
+    },
+    {
+      bidder: "0x7a20d...9257",
+      imgUrl: "/images/nftsample2.png",
+      price: "4.5",
+      name: "Riddy💸",
+    },
+    {
+      bidder: "0x7a20d...9257",
+      imgUrl: "/images/ape.png",
+      price: "4.5",
+      name: "Riddy",
+    },
+    {
+      bidder: "0x7a20d...9257",
+      imgUrl: "/images/nftsample2.png",
+      price: "4.5",
+      name: "Marcel",
+    },
+  ];
+
   return (
     <DashboardLayout>
-      <div className="sub-layout-wrapper">
+      <div className="sub-layout-wrapper scrollbar-hide">
         <div className="center space-y-8">
-          <div className="view-wrapper-hero">
-            <div className="relative">
-              <Image
-                priority
-                src="/images/profile-nft.png"
-                alt="buy-nft-sample"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-xl"
-              />
+          <div className="view-wrapper-hero grid-cols-[0.3fr_0.35fr_0.35fr]">
+            <div>
+              <div className="relative h-[90%]">
+                <Image
+                  priority
+                  src="/images/profile-nft.png"
+                  alt="buy-nft-sample"
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-xl"
+                />
+              </div>
+              <div className="flex gap-x-6 items-center mt-2 h-[10%]">
+                <span className="flex gap-x-2 items-center">
+                  <LikeIcon /> 298
+                </span>
+                <span className="view-hero-nft-link">
+                  <Image
+                    src="/icon-svg/discord.svg"
+                    alt="view-nft-links"
+                    layout="fill"
+                    objectFit="contain"
+                  />
+                </span>
+                <span className="view-hero-nft-link">
+                  <Image
+                    src="/icon-svg/twitter.svg"
+                    alt="view-nft-links"
+                    layout="fill"
+                    objectFit="contain"
+                  />
+                </span>
+                <span className="view-hero-nft-link">
+                  <Image
+                    src="/icon-svg/telegram.svg"
+                    alt="view-nft-links"
+                    layout="fill"
+                    objectFit="contain"
+                  />
+                </span>
+                <span className="view-hero-nft-link border border-border-1-line p-4 rounded-md">
+                  <Image
+                    src="/icon-svg/options.svg"
+                    alt="view-nft-links"
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                </span>
+              </div>
             </div>
             <div className="space-y-4">
               <div>
@@ -175,52 +271,56 @@ const ViewNft = () => {
                 <span className="text-lg font-medium">
                   Last sale price 10.8 ETH
                 </span>
-                <div className="w-full flex flex-col gap-y-4">
-                  {/* <Select title="Offers" /> */}
-                  <div className="create-new-nft-wrapper-2">
-                    <span className="create-new-nft-wrapper-2-label">
-                      Offers
-                    </span>
-                  </div>
-                </div>
               </div>
             </div>
-            <div className="flex gap-x-6 mt-6 items-center">
-              <span className="flex gap-x-2 items-center">
-                <LikeIcon /> 298
+            <div className="create-new-nft-wrapper-2 border border-border-1-line p-4 rounded-[1.25rem]">
+              <span className="create-new-nft-wrapper-2-label  pb-2 mb-2 border-b border-border-1-line">
+                Offers
               </span>
-              <span className="view-hero-nft-link">
-                <Image
-                  src="/icon-svg/discord.svg"
-                  alt="view-nft-links"
-                  layout="fill"
-                  objectFit="contain"
-                />
-              </span>
-              <span className="view-hero-nft-link">
-                <Image
-                  src="/icon-svg/twitter.svg"
-                  alt="view-nft-links"
-                  layout="fill"
-                  objectFit="contain"
-                />
-              </span>
-              <span className="view-hero-nft-link">
-                <Image
-                  src="/icon-svg/telegram.svg"
-                  alt="view-nft-links"
-                  layout="fill"
-                  objectFit="contain"
-                />
-              </span>
-              <span className="view-hero-nft-link border border-border-1-line p-4 rounded-md">
-                <Image
-                  src="/icon-svg/options.svg"
-                  alt="view-nft-links"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </span>
+              {!isOffer ? (
+                <div className="flex flex-col justify-center items-center h-[90%] gap-y-4">
+                  <div className="relative h-[50%] w-[70%] ">
+                    <Image
+                      src="/images/no-offer.svg"
+                      alt="buy-nft-sample"
+                      layout="fill"
+                      objectFit="contain"
+                    />
+                  </div>
+                  <span className="create-new-nft-wrapper-2-label px-4 py-2">
+                    No offers yet
+                  </span>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-y-4 pt-2 h-[35vh] overflow-auto scrollbar-hide">
+                  {offerBidders.map(({ bidder, imgUrl, price, name }, i) => (
+                    <div
+                      key={bidder + i}
+                      className="flex items-center justify-between"
+                      onClick={() => {
+                        setOffer({ name, price });
+                        setShowModal(true);
+                      }}
+                    >
+                      <div className="flex items-center gap-x-4">
+                        <div className="relative h-14 w-14">
+                          <Image
+                            src={imgUrl}
+                            alt={bidder}
+                            layout="fill"
+                            objectFit="contain"
+                            className="rounded-full"
+                          />
+                        </div>
+                        <span className="text-lg font-medium">{bidder}</span>
+                      </div>
+                      <span className="flex items-center text-lg font-bold">
+                        <CoinIcon /> {price}k
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           {/*Stages Mode*/}
@@ -423,9 +523,38 @@ const ViewNft = () => {
           </div>
         </div>
         <Footer2 />
+        <Modal
+          title="Offer"
+          openModal={showModal}
+          closeModal={setShowModal}
+          modalWt="w-[25rem]"
+        >
+          <div
+            className="flex flex-col items-center gap-y-6
+          "
+          >
+            <span className="text-lg font-bold max-w-[14rem] text-center">
+              {offer.name}{" "}
+              <span className="text-lg text-txt-2">placed an offer for</span>{" "}
+              CloneX#1234
+            </span>
+            <span className="flex items-center text-2xl font-bold">
+              <CoinIcon /> {offer.price}
+            </span>
+            <div className="w-full flex flex-col items-center gap-y-5">
+              {/*button has an onclick function to write to*/}
+              <Button
+                title="Accept"
+                twClasses="w-[80%]"
+                onClick={() => setShowModal(false)}
+              />
+              <Button title="Decline" outline2 twClasses="w-[80%]" />
+            </div>
+          </div>
+        </Modal>
       </div>
     </DashboardLayout>
   );
 };
 
-export default ViewNft;
+export default SellSingleNft;

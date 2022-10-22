@@ -16,6 +16,7 @@ const Input2: FC<InputProps> = ({
   name,
   type = "text",
   belowDesc,
+  required,
   suffix,
   onChange,
   ...rest
@@ -23,8 +24,11 @@ const Input2: FC<InputProps> = ({
   return (
     <div>
       {label && (
-        <label htmlFor={name} className="block mb-2">
-          {label}
+        <label
+          htmlFor={name}
+          className="flex items-center gap-x-2 mb-2 text-white"
+        >
+          {label} {required && <span className="text-txt-2">(required)</span>}
         </label>
       )}
       <div className="select">
@@ -33,6 +37,7 @@ const Input2: FC<InputProps> = ({
           name={name}
           id={name}
           placeholder={placeholder}
+          className="text-white"
           onChange={onChange}
           {...rest}
         />

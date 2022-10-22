@@ -96,14 +96,13 @@ const verifyMessage = async (
     const signerAddr = ethers.utils.verifyMessage(message, signature);
     if (signerAddr.toLowerCase() !== address.toLowerCase()) {
       console.log("Invalid signature");
-     
     }
 
-    console.log("signer address: ", signerAddr)
-    console.log("address: ", address)
-    return signerAddr
+    console.log("signer address: ", signerAddr);
+    console.log("address: ", address);
+    return signerAddr;
   } catch (e: any) {
-    console.log("error verifying message: ", e.message)
+    console.log("error verifying message: ", e.message);
   }
 };
 
@@ -123,16 +122,14 @@ export const signMessage = async (address: string) => {
       // console.log('message', message)
       if (message !== undefined && message !== null) {
         const verificationResponse = verifyMessage(message, address, signature);
-        console.log("verifcation response", verificationResponse)
+        console.log("verifcation response", verificationResponse);
         return verificationResponse;
       }
 
-      console.log("signer: ", signer)
-
+      console.log("signer: ", signer);
     }
   } catch (e: any) {
-    console.log("error signing message: ", e.message)
-    
+    console.log("error signing message: ", e.message);
   }
 };
 
@@ -151,13 +148,13 @@ export const verifySignature = async () => {
       }
     );
 
-    console.log("successfully verified signature. ", data)
-    return
+    console.log("successfully verified signature. ", data);
+    return;
   } catch (e: any) {
-    console.log("error occured while verifying signature", e.message)
-    return
+    console.log("error occured while verifying signature", e.message);
+    return;
   }
-}
+};
 
 // localStorage.setItem("", {})
 // localStorage.getItem("")

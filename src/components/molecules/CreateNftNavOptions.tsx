@@ -5,13 +5,21 @@ import {
   CreateNftIcon,
   CreateCollectionIcon,
 } from "@/src/components/atoms/vectors";
+import { Dispatch, SetStateAction } from "react";
 
 interface IMiniUserProfile {
   showOptions: boolean;
   onClick: (val: boolean) => void;
+  modalType: Dispatch<SetStateAction<string>>;
+  showModal: Dispatch<SetStateAction<boolean>>;
 }
 
-const CreateNftNavOptions = ({ showOptions, onClick }: IMiniUserProfile) => {
+const CreateNftNavOptions = ({
+  showOptions,
+  onClick,
+  modalType,
+  showModal,
+}: IMiniUserProfile) => {
   const createNftLinks = [
     {
       link: "Create NFT",
@@ -21,7 +29,7 @@ const CreateNftNavOptions = ({ showOptions, onClick }: IMiniUserProfile) => {
     {
       link: "Create Collection",
       icon: <CreateCollectionIcon />,
-      to: "/create-collection",
+      action: "collection",
     },
   ];
   const { push } = useRouter();
@@ -34,13 +42,19 @@ const CreateNftNavOptions = ({ showOptions, onClick }: IMiniUserProfile) => {
           : "transition-[right] ease-in-out duration-300 right-[-50rem]"
       )}
     >
-      {createNftLinks.map(({ icon, link, to }) => (
+      {createNftLinks.map(({ icon, link, to, action }) => (
         <div
           key={link}
           className="mini-user-profile-links"
           onClick={() => {
-            push(to);
+            if (to) {
+              push(to);
+            }
             onClick(!showOptions);
+            if (action) {
+              showModal(true);
+              modalType("collection");
+            }
           }}
         >
           {icon} <span className="mini-user-profile-link">{link}</span>
