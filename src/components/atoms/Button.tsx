@@ -9,6 +9,7 @@ export interface IButton {
   onClick?: () => void;
   prefix?: ReactNode;
   suffix?: ReactNode;
+  wt?: string;
 }
 
 const Button = ({
@@ -19,12 +20,14 @@ const Button = ({
   onClick,
   prefix,
   suffix,
+  wt,
 }: IButton) => {
   return (
     <button
       className={clsx(
         "btn",
         outline ? "btn-outline" : outline2 ? "btn-outline-2" : "btn-primary",
+        wt ? wt : "w-[11.9rem]",
         twClasses
       )}
       onClick={onClick}

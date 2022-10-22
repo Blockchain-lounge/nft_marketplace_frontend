@@ -195,7 +195,7 @@ const ViewNft = () => {
                   <div className="flex gap-x-5 w-full">
                     <Button
                       title="Buy now"
-                      twClasses="!w-full"
+                      wt="w-full"
                       onClick={() => {
                         setModaltype("buy");
                         setShowModal((prev) => !prev);
@@ -207,7 +207,7 @@ const ViewNft = () => {
                   </div>
                   <Button
                     title="Place a bid"
-                    twClasses="!w-full"
+                    wt="w-full"
                     outline2
                     onClick={() => {
                       setModaltype("bid");
