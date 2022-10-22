@@ -21,6 +21,8 @@ import {
 import { Footer2, Modal } from "../components/organisms";
 import DashboardLayout from "../template/DashboardLayout";
 import { Button, Input2, Select } from "../components/atoms";
+import { GetServerSideProps } from "next";
+import { requireAuthentication } from "../utilities/auth/requireAuthentication";
 
 const CreateNewNft = () => {
   const [showModal, setShowModal] = useState(false);
@@ -371,3 +373,13 @@ const CreateNewNft = () => {
 };
 
 export default CreateNewNft;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return requireAuthentication(context, ({ session }: any) => {
+    return {
+      props: {
+        session
+      },
+    };
+  });
+};
