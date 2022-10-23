@@ -24,7 +24,8 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="flex flex-col w-full">
       <NavBar />
-      <div className="layout-wrapper">
+
+      <div className="layout-wrapper ">
         {isMobileModal && (
           <div
             className="layout-overlay"

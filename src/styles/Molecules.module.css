@@ -160,11 +160,11 @@
 
 /* mini user profile */
 .mini-user-profile-wrapper {
-  @apply bg-bg-3 absolute top-[14%] 2xl:top-[12%] z-10 rounded-[1.125rem]  border-[#34364C] border-[0.0625rem] p-[1.875rem] flex flex-col gap-y-[2.125rem];
+  @apply bg-bg-3 absolute top-[14%] 2xl:top-[12%] z-10 rounded-[1.125rem] border-[#34364C] border-[0.0625rem] p-[0.8rem] flex flex-col hover:cursor-pointer w-56;
 }
 
 .mini-user-profile-links {
-  @apply grid grid-cols-[0.35fr_1fr] items-center text-white font-medium hover:cursor-pointer gap-x-3;
+  @apply grid grid-cols-[0.35fr_1fr] items-center text-white font-medium gap-x-3 py-[0.8rem] px-[1rem] hover:bg-bg-5 hover:rounded-lg;
 }
 
 .mini-profile-toggle {
@@ -177,12 +177,8 @@
 
 /*Mini User Wallet*/
 
-/* .mini-wallet-wrapper {
-  @apply bg-bg-3 w-[20rem] h-[23.56rem] p-6 absolute top-[14%] z-10 rounded-[1.125rem] border-[#34364C] border-[0.0625rem] flex flex-col;
-} */
-
 .mini-wallet-info {
-  @apply grid grid-cols-[0.5fr_1fr];
+  @apply grid grid-cols-[0.5fr_1fr] py-[0.8rem] px-[1rem] hover:bg-bg-5 hover:rounded-lg;
 }
 
 .mini-wallet-name {

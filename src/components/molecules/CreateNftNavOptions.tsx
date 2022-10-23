@@ -37,10 +37,9 @@ const CreateNftNavOptions = ({
     <div
       className={clsx(
         "mini-user-profile-wrapper",
-        showOptions
-          ? "transition-[right] duration-300 right-20"
-          : "transition-[right] ease-in-out duration-300 right-[-50rem]"
+        showOptions ? "flex duration-300 right-32" : "hidden"
       )}
+      onMouseLeave={() => onClick(!showOptions)}
     >
       {createNftLinks.map(({ icon, link, to, action }) => (
         <div
@@ -50,7 +49,7 @@ const CreateNftNavOptions = ({
             if (to) {
               push(to);
             }
-            onClick(!showOptions);
+
             if (action) {
               showModal(true);
               modalType("collection");
