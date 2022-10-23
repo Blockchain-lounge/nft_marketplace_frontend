@@ -41,7 +41,7 @@ const MiniUserProfile = ({
         "mini-user-profile-wrapper",
         showProfile ? "flex duration-300 right-12" : "hidden"
       )}
-      // onMouseLeave={() => onClick(false)}
+      onMouseLeave={() => onClick(false)}
     >
       {userMiniProfileLinks.map(({ icon, link, to }) => (
         <div

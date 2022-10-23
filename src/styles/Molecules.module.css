@@ -160,7 +160,7 @@
 
 /* mini user profile */
 .mini-user-profile-wrapper {
-  @apply bg-bg-3 absolute top-[14%] 2xl:top-[12%] z-10 rounded-[1.125rem] border-[#34364C] border-[0.0625rem] p-[0.8rem] flex flex-col hover:cursor-pointer w-56;
+  @apply bg-bg-3 absolute top-[14%] 2xl:top-[12%] z-10 rounded-[1.125rem] border-[#34364C] border-[0.0625rem] p-[0.8rem] flex-col hover:cursor-pointer w-56;
 }
 
 .mini-user-profile-links {
