@@ -33,7 +33,7 @@ const MiniUserWallet = ({ showBal, onClick }: IMiniuserwallet) => {
         "mini-user-profile-wrapper",
         showBal ? "flex duration-300 right-2" : "hidden"
       )}
-      onMouseLeave={() => onClick(!showBal)}
+      onMouseLeave={() => onClick(false)}
     >
       {userWalletLinks.map(({ icon, link, to }) => (
         <div

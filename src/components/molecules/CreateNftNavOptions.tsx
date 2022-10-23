@@ -39,7 +39,7 @@ const CreateNftNavOptions = ({
         "mini-user-profile-wrapper",
         showOptions ? "flex duration-300 right-32" : "hidden"
       )}
-      onMouseLeave={() => onClick(!showOptions)}
+      onMouseLeave={() => onClick(false)}
     >
       {createNftLinks.map(({ icon, link, to, action }) => (
         <div
