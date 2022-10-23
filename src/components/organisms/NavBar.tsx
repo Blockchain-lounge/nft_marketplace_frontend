@@ -164,10 +164,16 @@ const NavBar = () => {
         <div className="nav-auth">
           {isLoggedIn ? (
             <div className="flex items-center gap-x-4">
-              <span className="mr-[0.5rem]" onClick={handleShowCreateNftOption}>
+              <span
+                className="mr-[0.5rem]"
+                onMouseEnter={handleShowCreateNftOption}
+              >
                 Create
               </span>
-              <div className="relative h-12 w-12">
+              <div
+                className="relative h-12 w-12"
+                onMouseEnter={handleShowProfile}
+              >
                 <Image
                   src="/images/Dreamy-ape.png"
                   alt="user-img"
@@ -177,8 +183,8 @@ const NavBar = () => {
                 />
               </div>
               <div className="flex space-x-[1rem]">
-                <span className="nav-create-nft">
-                  <WalletIcon onClick={handleShowBal} />
+                <span className="nav-create-nft" onMouseEnter={handleShowBal}>
+                  <WalletIcon />
                 </span>
                 <span className="nav-create-nft">
                   <CartIcon />

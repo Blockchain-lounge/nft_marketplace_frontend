@@ -39,25 +39,25 @@ const MiniUserProfile = ({
     <div
       className={clsx(
         "mini-user-profile-wrapper",
-        showProfile
-          ? "transition-[right] duration-300 right-12"
-          : "transition-[right] ease-in-out duration-300 right-[-50rem]"
+        showProfile ? "flex duration-300 right-12" : "hidden"
       )}
+      onMouseLeave={() => onClick(!showProfile)}
     >
       {userMiniProfileLinks.map(({ icon, link, to }) => (
         <div
           key={link}
           className={clsx(
-            "mini-user-profile-links",
-            link === "Night Mode" && "mini-profile-toggle"
+            "mini-user-profile-links"
+            // link === "Night Mode" && "mini-profile-toggle"
           )}
           onClick={() => {
-            if (link === "Night Mode") return;
-            onClick(!showProfile);
+            // if (link === "Night Mode") return;
+
             push(to);
           }}
         >
-          {icon}{" "}
+          <span>{icon}</span>
+
           <span
             className={clsx(
               "mini-user-profile-link",
@@ -66,14 +66,14 @@ const MiniUserProfile = ({
           >
             {link}
           </span>
-          {link === "Night Mode" && (
+          {/* {link === "Night Mode" && (
             <Toggle
               defaultChecked={false}
               icons={false}
               className="mini-user-toggle-btn"
               // onChange={this.handleTofuChange}
             />
-          )}
+          )} */}
         </div>
       ))}
       <div className="mini-user-profile-links">
