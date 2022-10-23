@@ -54,6 +54,7 @@ const Home: NextPage = () => {
                   objectFit="cover"
                   src={activeCard.img}
                   alt={activeCard.title + "-img"}
+                  className="rounded-2xl"
                 />
               </div>
               <div className="hero-cards">
@@ -69,7 +70,7 @@ const Home: NextPage = () => {
                     />
                   ))}
               </div>
-              <div className="flex w-full mb-4 lg:mb-0 items-center justify-center lg:block mt-4 lg:mt-0">
+              <div className="flex w-full mb-4 lg:mb-0 items-center justify-center lg:block">
                 <HeroIndicator
                   arr={heroData}
                   active={activeCard}
