@@ -62,7 +62,7 @@ const ListNft = () => {
             </div>
           </div>
           {/*Price*/}
-          <div className="create-new-nft-wrapper-2 space-y-8">
+          <div className="space-y-8">
             <div className="space-y-2">
               <span className="create-new-nft-wrapper-2-label ">Price</span>
               <div className="create-new-nft-price">
