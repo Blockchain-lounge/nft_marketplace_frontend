@@ -132,11 +132,11 @@ const ViewNft = () => {
 
                 <div className="w-full flex flex-col gap-y-4">
                   <div className="flex gap-x-5">
-                    <Button title="Edit" twClasses="w-full" outline2 />
+                    <Button title="Edit" wt="w-full" outline2 />
                     <Button
                       title="Sell"
                       onClick={() => push(`/list-nft-for-sale/${id}`)}
-                      twClasses="w-full"
+                      wt="w-full"
                     />
                   </div>
                 </div>

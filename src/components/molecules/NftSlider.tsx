@@ -10,7 +10,7 @@ const NftSlider = ({ data = [] }: { data?: any }) => {
   const settings = {
     infinite: false,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 4,
     slidesToScroll: 1,
     dots: false,
     nextArrow: <NextSliderBtn />,
@@ -26,9 +26,27 @@ const NftSlider = ({ data = [] }: { data?: any }) => {
         },
       },
       {
+        breakpoint: 1280,
+        settings: {
+          slidesToShow: 2.5,
+          slidesToScroll: 2,
+          infinite: false,
+          dots: false,
+        },
+      },
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2.3,
+          slidesToScroll: 2,
+          infinite: false,
+          dots: false,
+        },
+      },
+      {
         breakpoint: 600,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 1.5,
           slidesToScroll: 2,
           initialSlide: 2,
         },
@@ -36,7 +54,7 @@ const NftSlider = ({ data = [] }: { data?: any }) => {
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 1.1,
+          slidesToShow: 1,
           slidesToScroll: 1,
         },
       },
