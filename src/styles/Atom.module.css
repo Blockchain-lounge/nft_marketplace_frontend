@@ -167,7 +167,7 @@ span {
 /*Tag*/
 
 .tag {
-  @apply h-[2.375rem] lg:border-[#2f79f9de] border-[1px] rounded-[0.625rem] flex items-center justify-center w-full max-w-[9.875rem];
+  @apply h-[2.375rem] lg:border-[#2f79f9de] lg:border-[1px] rounded-[0.625rem] flex items-center justify-center w-full max-w-[9.875rem];
 }
 
 .tag span {
