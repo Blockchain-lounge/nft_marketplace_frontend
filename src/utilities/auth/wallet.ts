@@ -7,10 +7,10 @@ const baseUrl = "https://cloudax-api.herokuapp.com";
 
 export const handleProvider = () => {
   const provider = new ethers.providers.JsonRpcProvider(
-  `https://goerli.infura.io/v3/${infuraId}`
-)
-return provider
-}
+    `https://goerli.infura.io/v3/${infuraId}`
+  );
+  return provider;
+};
 
 const message = "Helloo... Nigga";
 
@@ -104,7 +104,7 @@ export const verifySignature = async () => {
         window.localStorage.setItem("token", loginToken[1]);
       }
     }
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (e: any) {
     console.log("e", e.message);

@@ -11,16 +11,18 @@ import {
   TwitterIcon,
 } from "../components/atoms/vectors";
 import { Button, CheckBox, Input2 } from "../components/atoms";
+// import { apiPost } from "../utilities/requests/apiRequest";
+import UseAuth from "../hooks/useAuth";
 
 const Settings = () => {
   /*Setting screen are divided into stages*/
   const [settingStage, setSettingStage] = useState("edit-profile");
   const [userImgBanner, setUserImgBanner] = useState<FileList | null>(null);
-  const [checked, setChecked] = useState(false);
+  // const [checked, setChecked] = useState(false);
+  const [notification, setNotification] = useState("");
   const [userImg, setUserImg] = useState<FileList | null>(null);
   const [userDetailsPayload, setUserDetailsPayload] = useState({
     username: "",
-    name: "",
     userEmail: "",
     bio: "",
   });
@@ -29,7 +31,6 @@ const Settings = () => {
     { label: "My links", stage: "my-links" },
     // { label: "Notifications", stage: "notifications" },
   ];
-
   const [userProfileLinks, setUserProfileLinks] = useState([
     {
       icon: <InstagramIcon />,
@@ -46,6 +47,8 @@ const Settings = () => {
     { icon: <FbIcon />, label: "Connect facebook account", connected: false },
   ]);
 
+  const [handleRequest, data] = UseAuth("/user/store");
+
   const handleFieldChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -56,18 +59,22 @@ const Settings = () => {
     });
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
     if (
       !userDetailsPayload.bio ||
-      !userDetailsPayload.name ||
       !userDetailsPayload.userEmail ||
       !userDetailsPayload.username
     )
       return;
-    //  setShowModal(true);
-    console.log({ userDetailsPayload, userImg, userImgBanner });
+
+    handleRequest({
+      ...userDetailsPayload,
+      email: userDetailsPayload.userEmail,
+    }).then((res) => setNotification(res.message));
+
+    setTimeout(() => {
+      setNotification("");
+    }, 100);
   };
 
   return (
@@ -96,7 +103,11 @@ const Settings = () => {
               </div>
             ))}
           </div>
-
+          {notification && (
+            <p className="text-3xl text-positive-color text-center my-4 w-full">
+              {notification}
+            </p>
+          )}
           {settingStage === "edit-profile" ? (
             <div className="setting-edit-profile">
               <div className="h-56 rounded-3xl relative">
@@ -185,10 +196,7 @@ const Settings = () => {
                   </span>
                 </label>
               </div>
-              <form
-                className="setting-edit-profile-form"
-                onSubmit={handleSubmit}
-              >
+              <div className="setting-edit-profile-form">
                 <Input2
                   name="username"
                   label="Username"
@@ -196,13 +204,13 @@ const Settings = () => {
                   onChange={handleFieldChange}
                   value={userDetailsPayload.username}
                 />
-                <Input2
+                {/* <Input2
                   name="name"
                   label="Name"
                   placeholder="Peter Doe"
                   onChange={handleFieldChange}
                   value={userDetailsPayload.name}
-                />
+                /> */}
                 <Input2
                   name="userEmail"
                   label="Email"
@@ -223,8 +231,8 @@ const Settings = () => {
                     value={userDetailsPayload.bio}
                   ></textarea>
                 </div>
-                <Button title="Update profile" />
-              </form>
+                <Button title="Update profile" onClick={handleSubmit} />
+              </div>
             </div>
           ) : settingStage === "my-links" ? (
             <div className="setting-my-links">
