@@ -1,11 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-
-// import axios from "axios";
-
-// import useWalletAuth from "@/src/hooks/useWalletAuth";
 
 import Button from "@/src/components/atoms/Button";
 
@@ -19,10 +15,8 @@ import {
 } from "@/src/components/atoms/vectors";
 
 import {
-  // ConnectWallet,
   ConnectWalletStage1,
   CreateNftNavOptions,
-  // DisplayWallet,
   MiniUserProfile,
   MiniUserWallet,
   NavTab,
@@ -36,39 +30,29 @@ import { toggleMobileModal } from "@/src/reducers/modalReducer";
 import { RootState } from "@/src/store/store";
 import Image from "next/image";
 import CreateCollection from "./CreateCollection";
+import { apiGet } from "@/src/utilities/requests/apiRequest";
+import { verifySignature } from "@/src/utilities/auth/wallet";
 
 const NavBar = () => {
-  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
+
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   const [modalType, setModaltype] = useState("wallet");
 
   const [showProfile, setShowProfile] = useState(false);
+
   const [showBal, setShowBal] = useState(false);
+
   const [showCreateNft, setShowCreateNft] = useState(false);
 
   const [openModal, setOpenModal] = useState(false);
 
-  // const [activeTab, setActiveTab] = useState(0);
   const [stage, setStage] = useState(0);
 
-  // wallet connect
-  const [walletAddress, setWalletAddress] = useState<string>("");
-
-  const successMessage = "Wallet Connected Successfully";
-  const errorMessage = "Kindly Install Metamask and Connect";
-
-  // const handleAuth = async () => {
-  //   //disconnects the web3 provider if it's already active
-  //   if (isConnected) {
-  //     await disconnectAsync();
-  //   }
-  //   // enabling the web3 provider metamask
-  //   const { account, chain } = await connectAsync({
-  //     connector: new InjectedConnector(),
-  //   });
-  //   console.log(account);
-  // };
+  useEffect(() => {
+    const token = window.localStorage.getItem("token");
+  }, []);
 
   const statusArr = [
     {
@@ -90,16 +74,12 @@ const NavBar = () => {
   ];
 
   const handleWalletConnect = () => {
-    setOpenModal(!openModal);
-    dispatch(toggleLoggedInUser());
-
-    // connect to wallet
+    verifySignature().then((res) => dispatch(toggleLoggedInUser()));
   };
 
   const handleLogin = () => {
     setShowProfile(false);
     setShowBal(false);
-    dispatch(toggleLoggedInUser());
     if (!isLoggedIn) {
       push("/");
     }

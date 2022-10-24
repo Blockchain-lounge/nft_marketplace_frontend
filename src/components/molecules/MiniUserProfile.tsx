@@ -7,9 +7,11 @@ import "react-toggle/style.css";
 import {
   ProfileIcon,
   SettingsIcon,
-  NightMode,
+  // NightMode,
   SignOutIcon,
 } from "@/src/components/atoms/vectors";
+import { toggleLoggedInUser } from "@/src/reducers/authReducer";
+import { useDispatch } from "react-redux";
 
 interface IMiniUserProfile {
   showProfile: boolean;
@@ -22,6 +24,7 @@ const MiniUserProfile = ({
   onClick,
   handleSignOut,
 }: IMiniUserProfile) => {
+  const dispatch = useDispatch();
   const { push } = useRouter();
   const userMiniProfileLinks = [
     {
@@ -35,6 +38,11 @@ const MiniUserProfile = ({
       to: "/settings",
     },
   ];
+  const handleSignout = () => {
+    window.localStorage.clear();
+    dispatch(toggleLoggedInUser());
+    push("/");
+  };
   return (
     <div
       className={clsx(
@@ -80,7 +88,7 @@ const MiniUserProfile = ({
         <SignOutIcon />
         <span
           className="mini-user-profile-link text-[#FB4E4E]"
-          onClick={handleSignOut}
+          onClick={handleSignout}
         >
           Sign out
         </span>

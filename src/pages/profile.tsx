@@ -17,19 +17,32 @@ import {
   userOwnedProfileDatas,
 } from "@/src/store/data";
 
+import UseFetch from "../hooks/useFetch";
+
 const Profile = () => {
   const [profileActiveTab, setProfileActiveTab] = useState(0);
-  const [data, setData] = useState(true);
+  const [openTab, setData] = useState(true);
+
+  // const [user, setUser] = useState<null | Record<string, string>>(null);
+  const [data, isLoading] = UseFetch("/user/my_profile");
+
   const { push } = useRouter();
-  // console.log(navigator);
+
   const profileTab = [
     { text: "Owned", count: userOwnedProfileDatas.length },
     { text: "Created", count: userCreatedProfileDatas.length },
     { text: "Activity" },
   ];
+
   const profileActivityList = [0, 1, 2, 3];
   const profileActivityHeaders = ["Item", "Price", "From", "To"];
+
   const handleNavigateToHome = () => push("/");
+
+  if (isLoading) {
+    return <div className="text-white font-bold text-7xl">loading</div>;
+  }
+
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper scrollbar-hide">
@@ -44,7 +57,9 @@ const Profile = () => {
               <Button title="Sell NFT" />
             </div>
             <div className="profile-user-info">
-              <span className="profile-user-name">Peter Doe</span>
+              <span className="profile-user-name">
+                {data?.username as string}
+              </span>
               <div className="profile-user-address">
                 <span>0xdE8cF...1C79</span> <CopyIcon />
               </div>
@@ -58,7 +73,7 @@ const Profile = () => {
             />
           </div>
           <div className="profile-nft-section">
-            {data ? (
+            {openTab ? (
               <div>
                 {profileActiveTab === 0 ? (
                   <div className="user-profile-owned-nfts">
