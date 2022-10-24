@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 
 const infuraId = "9b05e0c5512547158db49730e2b19609";
 
-const baseUrl = "https://cloudax-api.herokuapp.com";
+export const baseUrl = "https://cloudax-api.herokuapp.com";
 
 const message = "Hello world";
 
