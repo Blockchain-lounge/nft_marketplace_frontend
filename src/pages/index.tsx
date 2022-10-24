@@ -14,7 +14,7 @@ import {
 
 import DashboardLayout from "@/src/template/DashboardLayout";
 
-import { Footer } from "@/src/components/organisms";
+import { Footer, Footer2 } from "@/src/components/organisms";
 
 import {
   heroCards,
@@ -26,10 +26,13 @@ import {
 
 import { useState } from "react";
 import { NextPage } from "next";
+import { RootState } from "../store/store";
+import { useSelector } from "react-redux";
 
 const Home: NextPage = () => {
   const [heroData, setHeroData] = useState(heroCards);
   const [activeCard, setActiveCard] = useState(heroData[0]);
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const { push } = useRouter();
 
   return (
@@ -112,7 +115,7 @@ const Home: NextPage = () => {
             <NftSlider data={nft4Datas} />
           </section>
         </div>
-        <Footer />
+        {isLoggedIn ? <Footer2 /> : <Footer />}
       </div>
     </DashboardLayout>
   );

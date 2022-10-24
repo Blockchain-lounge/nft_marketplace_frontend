@@ -52,7 +52,7 @@ const Profile = () => {
           </div>
           <div className="profile-actions">
             <div className="profile-action">
-              <EditIcon />
+              <EditIcon onClick={() => push("/settings")} />
               <ProfileLinkIcon />
               <Button title="Sell NFT" />
             </div>

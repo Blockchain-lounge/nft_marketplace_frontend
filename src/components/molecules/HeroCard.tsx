@@ -11,8 +11,8 @@ interface IHerocard {
 const HeroCard = ({ img, title, price, onClick }: IHerocard) => {
   return (
     <div className="hero-card-wrapper" onClick={onClick}>
-      <div className="h-[11.875rem] rounded-[1.25rem] flex">
-        <img src={img} alt={title} className="flex-1" />
+      <div className="h-[11.875rem] flex">
+        <img src={img} alt={title} className="flex-1 rounded-[1.25rem]" />
       </div>
       <span className="title">{title}</span>
       <div className="flex items-center">

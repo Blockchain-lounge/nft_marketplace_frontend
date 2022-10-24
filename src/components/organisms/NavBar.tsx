@@ -30,7 +30,7 @@ import { toggleMobileModal } from "@/src/reducers/modalReducer";
 import { RootState } from "@/src/store/store";
 import Image from "next/image";
 import CreateCollection from "./CreateCollection";
-import { apiGet } from "@/src/utilities/requests/apiRequest";
+
 import { verifySignature } from "@/src/utilities/auth/wallet";
 
 const NavBar = () => {
@@ -137,9 +137,11 @@ const NavBar = () => {
           <span className="nav-mobile-search">
             <SearchIcon />
           </span>
-          <div className="sub-nav-tab">
-            <NavTab />
-          </div>
+          {!isLoggedIn && (
+            <div className="sub-nav-tab">
+              <NavTab />
+            </div>
+          )}
         </div>
         <div className="nav-auth">
           {isLoggedIn ? (

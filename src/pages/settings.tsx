@@ -1,6 +1,11 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import clsx from "clsx";
 
+import { useRouter } from "next/router";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import DashboardLayout from "../template/DashboardLayout";
 import { Footer2 } from "../components/organisms";
 import Image from "next/image";
@@ -15,12 +20,14 @@ import { Button, CheckBox, Input2 } from "../components/atoms";
 import UseAuth from "../hooks/useAuth";
 
 const Settings = () => {
+  const { push } = useRouter();
   /*Setting screen are divided into stages*/
   const [settingStage, setSettingStage] = useState("edit-profile");
   const [userImgBanner, setUserImgBanner] = useState<FileList | null>(null);
   // const [checked, setChecked] = useState(false);
   const [notification, setNotification] = useState("");
   const [userImg, setUserImg] = useState<FileList | null>(null);
+
   const [userDetailsPayload, setUserDetailsPayload] = useState({
     username: "",
     userEmail: "",
@@ -70,7 +77,10 @@ const Settings = () => {
     handleRequest({
       ...userDetailsPayload,
       email: userDetailsPayload.userEmail,
-    }).then((res) => setNotification(res.message));
+    }).then((res) => {
+      toast(res.message);
+      push("/profile");
+    });
 
     setTimeout(() => {
       setNotification("");
@@ -103,11 +113,7 @@ const Settings = () => {
               </div>
             ))}
           </div>
-          {notification && (
-            <p className="text-3xl text-positive-color text-center my-4 w-full">
-              {notification}
-            </p>
-          )}
+          <ToastContainer />
           {settingStage === "edit-profile" ? (
             <div className="setting-edit-profile">
               <div className="h-56 rounded-3xl relative">
