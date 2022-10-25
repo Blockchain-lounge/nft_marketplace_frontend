@@ -12,6 +12,7 @@ import { Footer2, Modal } from "../../components/organisms";
 import DashboardLayout from "../../template/DashboardLayout";
 import EyeIcon from "@/src/components/atoms/vectors/eye-icon";
 import { Button } from "@/src/components/atoms";
+import { Tab } from "@/src/components/molecules";
 
 const SellSingleNft = () => {
   const [viewNftStage, setViewNftStage] = useState("overview");
@@ -324,20 +325,12 @@ const SellSingleNft = () => {
             </div>
           </div>
           {/*Stages Mode*/}
-          <div className="flex gap-x-10 items-center border-b-[0.1px] border-border-2-line">
-            {viewNftStages.map((stage) => (
-              <span
-                key={stage}
-                onClick={() => setViewNftStage(stage)}
-                className={clsx(
-                  "view-nft-stage",
-                  stage === viewNftStage && "text-white border-b-[2.5px]"
-                )}
-              >
-                {stage}
-              </span>
-            ))}
-          </div>
+
+          <Tab
+            stages={viewNftStages}
+            placeholder={viewNftStage}
+            setStage={setViewNftStage}
+          />
           <div className="view-nft-stages">
             {viewNftStage === "overview" ? (
               <div>

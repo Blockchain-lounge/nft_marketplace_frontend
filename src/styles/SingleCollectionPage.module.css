@@ -1,0 +1,19 @@
+.single-collection-info {
+  @apply mt-16 flex justify-between;
+}
+
+.single-collection-filter {
+  @apply mt-8 grid grid-cols-[0.1fr_0.6fr_0.2fr_0.1fr] items-center gap-x-4;
+}
+
+.single-collection-grids {
+  @apply flex items-center justify-between p-4 bg-bg-5 rounded-xl;
+}
+
+.single-collection-items {
+  @apply space-y-8;
+}
+
+/* .single-collection-lists {
+  @apply flex;
+} */

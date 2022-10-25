@@ -52,12 +52,14 @@ const Home: NextPage = () => {
             <div className="hero-img-cards">
               <div className="hero-img">
                 <Image
-                  priority
+                  // priority
                   layout="fill"
                   objectFit="cover"
                   src={activeCard.img}
                   alt={activeCard.title + "-img"}
                   className="rounded-2xl"
+                  placeholder="blur"
+                  blurDataURL={activeCard.img}
                 />
               </div>
               <div className="hero-cards">

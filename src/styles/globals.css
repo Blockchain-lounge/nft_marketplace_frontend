@@ -7,6 +7,7 @@
 /* import components */
 @import "./DashboardLayout.module.css";
 @import "./Atom.module.css";
+@import "./CollectionPage.module.css";
 @import "./Molecules.module.css";
 @import "./Organisms.module.css";
 @import "./Homepage.module.css";
@@ -17,6 +18,11 @@
 @import "./CreateNewNftPage.module.css";
 @import "./SettingPage.module.css";
 @import "./ViewNftPage.module.css";
+@import "./SingleCollectionPage.module.css";
+@import "./Activities.module.css";
+@import "./CloudaxGames.module.css";
+@import "./Explore.module.css";
+@import "./Ranking.module.css";
 
 @layer base {
   @font-face {
