@@ -74,7 +74,8 @@ const NavBar = () => {
   ];
 
   const handleWalletConnect = () => {
-    verifySignature().then((res) => dispatch(toggleLoggedInUser()));
+    // verifySignature().then((res) => dispatch(toggleLoggedInUser()));
+    alert('')
   };
 
   const handleLogin = () => {
