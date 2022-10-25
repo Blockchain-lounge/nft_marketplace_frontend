@@ -1,0 +1,7 @@
+.collection-page-top {
+  @apply flex items-center justify-between mb-12;
+}
+
+.collection-page-sub-top {
+  @apply flex gap-x-5 items-center;
+}

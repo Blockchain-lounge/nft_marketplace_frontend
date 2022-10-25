@@ -9,12 +9,13 @@ module.exports = {
       colors: {
         "bg-1": "#16162D",
         "bg-2": "#1F1F35",
-        "bg-3": "#17182F",
+        "bg-3": "#1A1C38",
         "bg-4": "#15152E",
         "bg-5": "#1d1e38",
         "txt-1": "#399CE1",
         "txt-2": "#A5A5B2",
         "txt-3": "#bcbbbb",
+        "txt-4": "#767A7F",
         "positive-color": "#2AC769",
         "negative-color": "#FB4E4E",
       },
@@ -25,6 +26,7 @@ module.exports = {
       borderColor: {
         "border-1-line": "#99a0ff57",
         "border-2-line": "#6a6b7a",
+        "border-3-line": "#34364C",
       },
     },
   },
