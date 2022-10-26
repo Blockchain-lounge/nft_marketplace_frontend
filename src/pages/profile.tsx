@@ -9,7 +9,7 @@ import {
   EditIcon,
   ProfileLinkIcon,
 } from "@/src/components/atoms/vectors";
-import { Button, GradientButton } from "@/src/components/atoms";
+import { Button, GradientButton, Loader } from "@/src/components/atoms";
 import {
   ActivityCard,
   ConnectWalletTab,
@@ -43,7 +43,11 @@ const Profile = () => {
   const handleNavigateToHome = () => push("/");
 
   if (isLoading) {
-    return <div className="text-white font-bold text-7xl">loading</div>;
+    return (
+      <div className="h-screen inset-0 flex justify-center items-center">
+        <Loader />
+      </div>
+    );
   }
 
   return (
