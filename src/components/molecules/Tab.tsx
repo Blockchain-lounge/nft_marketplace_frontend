@@ -11,7 +11,7 @@ const Tab = ({
   setStage: Dispatch<SetStateAction<string>>;
 }) => {
   return (
-    <div className="flex gap-x-10 items-center border-b-[0.1px] border-border-2-line">
+    <div className="flex gap-x-11 items-center border-b-[0.1px] border-border-2-line my-12">
       {stages.map((stage: string) => (
         <span
           key={stage}

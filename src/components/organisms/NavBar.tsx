@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useState } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import Button from "@/src/components/atoms/Button";
@@ -33,18 +33,28 @@ import CreateCollection from "./CreateCollection";
 
 import { verifySignature } from "@/src/utilities/auth/wallet";
 
-const NavBar = () => {
+interface INav {
+  showProfile: boolean;
+  showBal: boolean;
+  showCreateNft: boolean;
+  setShowProfile: Dispatch<SetStateAction<boolean>>;
+  setShowBal: Dispatch<SetStateAction<boolean>>;
+  setShowCreateNft: Dispatch<SetStateAction<boolean>>;
+}
+
+const NavBar: FC<INav> = ({
+  showBal,
+  showProfile,
+  setShowBal,
+  setShowCreateNft,
+  setShowProfile,
+  showCreateNft,
+}) => {
   const dispatch = useDispatch();
 
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   const [modalType, setModaltype] = useState("wallet");
-
-  const [showProfile, setShowProfile] = useState(false);
-
-  const [showBal, setShowBal] = useState(false);
-
-  const [showCreateNft, setShowCreateNft] = useState(false);
 
   const [openModal, setOpenModal] = useState(false);
 
@@ -76,9 +86,6 @@ const NavBar = () => {
   const handleLogin = () => {
     setShowProfile(false);
     setShowBal(false);
-    if (!isLoggedIn) {
-      push("/");
-    }
   };
 
   const handleMobileModal = () => {
@@ -86,16 +93,16 @@ const NavBar = () => {
   };
 
   const handleShowBal = () => {
-    setShowBal(!showBal);
+    setShowBal((prev) => !prev);
+    console.log("show my profile");
   };
   const handleShowProfile = () => {
-    setShowProfile(!showProfile);
+    setShowProfile((prev) => !prev);
   };
 
   const handleShowCreateNftOption = () => {
-    setShowCreateNft(!showCreateNft);
+    setShowCreateNft((prev) => !prev);
   };
-
   const { push } = useRouter();
 
   return (
@@ -123,7 +130,7 @@ const NavBar = () => {
         <img
           src="/images/cloudax1.svg"
           alt="nav-logo"
-          className="w-[11.6875rem] lg:max-w-full"
+          className="w-[11.6875rem] lg:max-w-full cursor-pointer"
           onClick={() => push("/")}
         />
         <div className="nav-tab">
@@ -144,26 +151,25 @@ const NavBar = () => {
             <div className="flex items-center gap-x-4">
               <span
                 className="mr-[0.5rem] cursor-pointer"
-                onMouseEnter={handleShowCreateNftOption}
+                onClick={handleShowCreateNftOption}
               >
                 Create
               </span>
               <div
                 className="relative h-12 w-12 cursor-pointer"
-                onMouseEnter={handleShowProfile}
+                onClick={handleShowProfile}
               >
                 <Image
                   src="/images/avatar.png"
                   alt="user-img"
                   layout="fill"
                   className="rounded-full"
-                  onClick={handleShowProfile}
                 />
               </div>
               <div className="flex space-x-[1rem] cursor-pointer">
                 <span
                   className="nav-create-nft cursor-pointer"
-                  onMouseEnter={handleShowBal}
+                  onClick={handleShowBal}
                 >
                   <WalletIcon />
                 </span>

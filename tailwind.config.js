@@ -28,6 +28,10 @@ module.exports = {
         "border-2-line": "#6a6b7a",
         "border-3-line": "#34364C",
       },
+      gridTemplateColumns: {
+        // added new 4 column grid as new4
+        new3: "repeat(3, minmax(100px, 1fr))",
+      },
     },
   },
   plugins: [],
