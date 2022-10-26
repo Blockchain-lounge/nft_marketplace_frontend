@@ -49,18 +49,21 @@ interface INav {
   setShowCreateNft: Dispatch<SetStateAction<boolean>>;
 }
 
-const NavBar = () => {
+const NavBar: FC<INav> = ({
+  showBal,
+  showProfile,
+  setShowBal,
+  setShowCreateNft,
+  setShowProfile,
+  showCreateNft,
+}) => {
   const dispatch = useDispatch();
 
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   const [modalType, setModaltype] = useState("wallet");
 
-  const [showProfile, setShowProfile] = useState(false);
-
-  const [showBal, setShowBal] = useState(false);
-
-  const [showCreateNft, setShowCreateNft] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
 
   const [openModal, setOpenModal] = useState(false);
 
