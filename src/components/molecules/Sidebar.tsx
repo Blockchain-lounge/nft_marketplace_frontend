@@ -23,7 +23,6 @@ import { toggleMobileModal } from "@/src/reducers/modalReducer";
 
 const SideBar = () => {
   const dispatch = useDispatch();
-  const [isActiveIndex, setActiveIndex] = useState(null);
   const handleMobileModalToggle = () => {
     dispatch(toggleMobileModal());
   };
@@ -32,38 +31,39 @@ const SideBar = () => {
     {
       label: "Collections",
       icon: <CollectionsIcon />,
-      subLinks: [
-        { label: "Popular collections", link: "" },
-        { label: "Drop calendar", link: "" },
-        { label: "Auctions", link: "" },
-      ],
+      link: "/collections",
+      // subLinks: [
+      //   { label: "Popular collections", link: "" },
+      //   { label: "Drop calendar", link: "" },
+      //   { label: "Auctions", link: "" },
+      // ],
     },
     {
       label: "Explore",
       icon: <ExploreIcon />,
-      link: "",
+      link: "/explore",
     },
     {
       label: "Trending",
       icon: <TrendingIcon />,
-      link: "",
+      link: "/trending",
     },
     {
       label: "Activities",
       icon: <ActivityIcon />,
-      link: "",
+      link: "/activities",
     },
     {
       label: "Cloudax Games",
       icon: <GamesIcon />,
-      link: "",
+      link: "/cloudax-games",
       tag: "coming",
     },
 
     {
       label: "Support",
       icon: <SupportIcon />,
-      link: "",
+      link: "/support",
     },
   ];
 

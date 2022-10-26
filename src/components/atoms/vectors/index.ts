@@ -24,6 +24,7 @@ export { default as Eyecoin } from "./eye-icon";
 export { default as ExternalLinkIcon } from "./external-link";
 export { default as FbIcon } from "./fb-icon";
 export { default as FeaturedIcon } from "./featured-icon";
+export { default as FilterIcon } from "./filter";
 export { default as FixedPriceIcon } from "./fixed-price-icon";
 
 export { default as FooterFacebookIcon } from "./footer-facebook-icon";
@@ -35,6 +36,7 @@ export { default as GlobalIcon } from "./global-icon";
 export { default as ImgUploadIcon } from "./img-upload-icon";
 export { default as InstagramIcon } from "./instagram-icon";
 export { default as IntroIcon } from "./intro-icon";
+
 export { default as BigCoinIcon } from "./big-coin";
 export { default as LikeIcon } from "./like-icon";
 export { default as OutlineLikesIcon } from "./outline-likes-icon";
@@ -49,10 +51,12 @@ export { default as ProfileLinkIcon } from "./profile-link";
 export { default as SearchIcon } from "./search-icon";
 export { default as SecureIcon } from "./secure-icon";
 export { default as SettingsIcon } from "./settings-icon";
+export { default as SendIcon } from "./send-icon";
 export { default as ShortNextArrow } from "./short-next-arrow";
 export { default as SignOutIcon } from "./sign-out-icon";
 export { default as SnapchatIcon } from "./snapchat-icon";
 export { default as SolanaIcon } from "./solana-icon";
+export { default as StarVerify } from "./star-verify";
 export { default as SupportIcon } from "./support-icon";
 export { default as StatIcon } from "./stat-icon";
 export { default as TezozIcon } from "./tezoz-icon";

@@ -161,28 +161,31 @@ const NavBar = () => {
           {isConnected == true ? (
             <div className="flex items-center gap-x-4">
               <span
-                className="mr-[0.5rem]"
+                className="mr-[0.5rem] cursor-pointer"
                 onMouseEnter={handleShowCreateNftOption}
               >
                 Create
               </span>
               <div
-                className="relative h-12 w-12"
+                className="relative h-12 w-12 cursor-pointer"
                 onMouseEnter={handleShowProfile}
               >
                 <Image
-                  src="/images/Dreamy-ape.png"
+                  src="/images/avatar.png"
                   alt="user-img"
                   layout="fill"
                   className="rounded-full"
                   onClick={handleShowProfile}
                 />
               </div>
-              <div className="flex space-x-[1rem]">
-                <span className="nav-create-nft" onMouseEnter={handleShowBal}>
+              <div className="flex space-x-[1rem] cursor-pointer">
+                <span
+                  className="nav-create-nft cursor-pointer"
+                  onMouseEnter={handleShowBal}
+                >
                   <WalletIcon />
                 </span>
-                <span className="nav-create-nft">
+                <span className="nav-create-nft cursor-pointer">
                   <CartIcon />
                 </span>
               </div>

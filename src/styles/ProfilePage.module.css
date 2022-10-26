@@ -54,7 +54,10 @@
   @apply font-medium text-base text-txt-2 my-4;
 }
 
-.profile-activity-headers-tab,
+.profile-activity-headers-tab {
+  @apply grid grid-cols-[0.3fr_0.2fr_0.2fr_0.3fr] px-6 mb-[1.875rem];
+}
+
 .profile-activity-list {
   @apply grid grid-cols-[0.3fr_0.2fr_0.2fr_0.3fr] px-6 mb-[1.875rem];
 }

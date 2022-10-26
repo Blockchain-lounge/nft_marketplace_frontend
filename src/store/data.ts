@@ -203,3 +203,40 @@ export const userCreatedProfileDatas = [
     name: "CryptoPunk",
   },
 ];
+
+export const singleCollectionsDatas = [
+  {
+    imgUrl: "/images/profile-nft.png",
+    name: "CloneX",
+    time: true,
+    price: "7.89",
+  },
+  {
+    imgUrl: "/images/nftsample2.png",
+    name: "CloneX",
+  },
+  {
+    imgUrl: "/images/profile-nft.png",
+    name: "CryptoPunk",
+  },
+  {
+    imgUrl: "/images/nftsample3.png",
+    name: "CryptoPunk",
+  },
+  {
+    imgUrl: "/images/profile-nft.png",
+    name: "CloneX",
+  },
+  {
+    imgUrl: "/images/profile-nft.png",
+    name: "CloneX",
+  },
+  {
+    imgUrl: "/images/buyNftSample.png",
+    name: "CryptoPunk",
+  },
+  {
+    imgUrl: "/images/profile-nft.png",
+    name: "CryptoPunk",
+  },
+];

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import {
   WalletIcon2,
   EarningsIcon,
-  CoinBaseIcon,
+  MetamaskIcon,
 } from "@/src/components/atoms/vectors";
 
 interface IMiniuserwallet {
@@ -48,7 +48,7 @@ const MiniUserWallet = ({ showBal, onClick }: IMiniuserwallet) => {
         </div>
       ))}
       <div className="mini-wallet-info">
-        <CoinBaseIcon twclx="h-[2.5rem]" />
+        <MetamaskIcon twclx="h-[2.5rem]" />
         <div className="flex flex-col">
           <span className="mini-wallet-name">Coinbase wallet</span>
           <span className="mini-wallet-address">Default wallet</span>

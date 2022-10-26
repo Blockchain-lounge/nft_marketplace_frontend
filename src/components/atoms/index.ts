@@ -1,5 +1,6 @@
 export { default as Button } from "./Button";
 export { default as Heading } from "./Heading";
+export { default as Heading2 } from "./Heading2";
 export { default as ConnectWalletTabHeader } from "./connect-wallet-header";
 export { default as CheckBox } from "./Checkbox";
 export { default as GradientButton } from "./GradientButton";
