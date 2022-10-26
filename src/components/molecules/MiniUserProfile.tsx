@@ -12,6 +12,7 @@ import {
 } from "@/src/components/atoms/vectors";
 import { toggleLoggedInUser } from "@/src/reducers/authReducer";
 import { useDispatch } from "react-redux";
+import {disconnectWallet} from "../../functions/onChain/authFunction";
 
 interface IMiniUserProfile {
   showProfile: boolean;
@@ -88,7 +89,7 @@ const MiniUserProfile = ({
         <SignOutIcon />
         <span
           className="mini-user-profile-link text-[#FB4E4E]"
-          onClick={handleSignout}
+          onClick={disconnectWallet}
         >
           Sign out
         </span>
