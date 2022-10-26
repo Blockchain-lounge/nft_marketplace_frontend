@@ -1,13 +1,13 @@
 import { ethers } from 'ethers';
 import { apiRequest } from '../offChain/apiRequests';
 import {
-  redirectUrl
+  redirectUrl,
+  signInMessage
 } from "../offChain/generalFunctions";
-const { ethereum } = window;
+
 
 export const connectedAccount = async () => {
   return BasicAuth().then((response) => {
-
     if (response == true) {
       const authName = 'authName';
       const authUser = checkAuth(authName);
@@ -22,22 +22,23 @@ export const connectedAccount = async () => {
 
 export const connectedAccountId = async () => {
   return BasicAuth().then((response) => {
+    
     if (response == true) {
       const authName = 'authName';
       const authUser = checkAuth(authName);
       const authAccount = JSON.parse(authUser).address;
       const HEADER = {};
-      const REQUEST_URL = 'is_address_valid/'+authAccount;
+      const REQUEST_URL = 'user/auth/is_address_valid/' + authAccount;
       const METHOD = "GET";
       const DATA = {};
-      return apiRequest(REQUEST_URL,METHOD,DATA,HEADER) 
-          .then(function (response) {
+      return apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
+        .then(function (response) {
           return response;
-          });
-        }
-        else {
-          return null;
-        }
+        });
+    }
+    else {
+      return null;
+    }
   });
 
 }
@@ -49,29 +50,51 @@ export const SignInAuth = async () => {
   }
   return true;
 }
+
 export const BasicAuth = async () => {
-  const authName = 'authName';
-  const authUser = checkAuth(authName);
-  if (authUser == null) {
-    return false;
-  }
-  if(JSON.parse(authUser).address.length > 0){
-    const authAccount = JSON.parse(authUser).address;
-    const HEADER = {};
-    const REQUEST_URL = 'is_address_valid/'+authAccount;
-    const METHOD = "GET";
-    const DATA = {}
-    const ethereumAccounts = await ethereum.request({ method: "eth_accounts" });
-    return apiRequest(REQUEST_URL,METHOD,DATA,HEADER) 
-        .then(function (response) {
-          if(response !==null){
-            const response = ethereumAccounts.length > 0 && ethereumAccounts[0] == authAccount ? true : false
-            return response;
+  try {
+    if (!(window as any).ethereum) {
+      //check if Metamask wallet is not installed
+      alert("You must install Metamask first");
+      return;
+    }
+
+    return (window as any).ethereum
+      .request({
+        method: "eth_accounts",
+      })
+      .then((wallets: string[]) => {
+        if (wallets[0] && wallets[0] !== null) {
+          const authName = 'authName';
+          const authUser = checkAuth(authName);
+          if (authUser == null) {
+            return false;
           }
-        });
+          if (JSON.parse(authUser).address.length > 0) {
+            const authAccount = JSON.parse(authUser).address;
+            const HEADER = {};
+            const REQUEST_URL = 'user/auth/is_address_valid/' + authAccount;
+            const METHOD = "GET";
+            const DATA = {}
+            return apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
+            .then(function (response) {
+              if (response !== null) {
+                const response = wallets.length > 0 && wallets[0] == authAccount ? true : false
+                return response;
+                }
+              });
+          }
+          else {
+            return false
+          }
+        }
+      })
+      .catch((error: any) => {
+        alert(`Something went wrong`);
+      });
   }
-  else{
-    return false
+  catch (err) {
+    alert(`Something went wrong`);
   }
 }
 
@@ -81,85 +104,176 @@ export async function disconnectWallet() {
   const authName = "authName";
   const cookieExpiration = 30; //Days
   const isAuth = checkAuth(authName);
-  if (isAuth !==null && isAuth.length > 0) {
+  if (isAuth !== null && isAuth.length > 0) {
     const res = deleteAuth(authName);
   }
   const authSession = "auth.session";
   const isSignedIn = checkAuth(authSession);
-  if (isSignedIn !==null && isSignedIn.length > 0) {
+  if (isSignedIn !== null && isSignedIn.length > 0) {
     const res = deleteAuth(authSession);
-    const HEADER = 'authenticated';
-      const REQUEST_URL = 'auth/logout';
-      const METHOD = "POST";
-      const DATA = {};
-      apiRequest(REQUEST_URL, METHOD, DATA, HEADER);
   }
   const jwtAuthName = "jwtAccess";
   const isJWTAuth = checkAuth(jwtAuthName);
-  if (isJWTAuth !==null && isJWTAuth.length > 0) {
+  if (isJWTAuth !== null && isJWTAuth.length > 0) {
     const res = deleteAuth(jwtAuthName);
   }
   window.location.href = '/';
 }
 
 export async function connectUserWallet() {
-  const onboard = '';//await getWeb3OnBoardModal();
-  const wallets = '';//await onboard.connectWallet();
-  const provider = new ethers.providers.Web3Provider(ethereum);
-  const { chainId, name } = await provider.getNetwork();
-  const query = new URLSearchParams(window.location.search);
-  var ref = query.get('ref');
-  // if(name !=='rinkeby' || chainId !== 4){
-  //   var errorMessages = 'Only Rinkeby addresses are allowed';
-  //   swNot('error', errorMessages)
-  //   return
-  // }
-  if(wallets[0] && wallets[0] !== null)
-  {
-    // const { accounts: [], chains[], provider } = wallets[0];
-    const account = '';//accounts[0].address;
-    var formData = {
-      address: account
+  try {
+    if (!(window as any).ethereum) {
+      //check if Metamask wallet is not installed
+      alert("You must install Metamask first");
+      return;
     }
+
+    (window as any).ethereum
+      .request({
+        method: "eth_requestAccounts",
+      })
+      .then((wallets: string[]) => {
+        if (wallets[0] && wallets[0] !== null) {
+          const account = wallets[0];
+          var formData = {
+            address: account
+          }
+          const HEADER = {};
+          const REQUEST_URL = 'user/auth/connected_address';
+          const METHOD = "POST";
+          const DATA = formData
+          apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
+            .then(function (response) {
+              if (response.data.result && response.data.result == true && response.status == 200 || response.status == 201) {
+                // const provider = provider;
+                const isConnected = true;
+                ///setting the cookies
+                const authName = "authName";
+                const cookieValue = {
+                  address: account,
+                  isConnected: isConnected,
+                }
+                const cookieExpiration = 30; //Days
+                setAuth(authName, cookieValue, cookieExpiration);
+
+                //get a users detail & sign a signature
+                getUserDetails(account);
+              }
+              else {
+                alert('Unable to successfully complete the wallet connection process');
+              }
+            });
+        }
+      })
+      .catch((error: any) => {
+        alert(`Something went wrong: ${error}`);
+      });
+  }
+  catch (error) {
+    window.alert('You need to connect your wallet to continue.');
+    return;
+  }
+}
+
+export async function getUserDetails(address: string) {
   const HEADER = {};
-  const REQUEST_URL = 'auth/connect_with_address';
-  const METHOD = "POST";
-  const DATA = formData
+  const REQUEST_URL = 'user/auth/address_details/' + address;
+  const METHOD = "GET";
+  const DATA = {};
+
   apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
     .then(function (response) {
-      if (response.data.result == true && response.status == 200 || response.status == 201) {
-        // const provider = provider;
-        const isConnected = true;
-        ///setting the cookies
-        const authName = "authName";
-        const cookieValue = {
-          address: account,
-          isConnected: isConnected,
+      if (response.status && response.status == 200) {
+        var result = response.data;
+        if (result.result !== true && result.error && result.error == null) {
+          alert('Unexpected errors occured!');
+          return;
         }
-        const cookieExpiration = 30; //Days
-        var url = null;
-        if(ref !== null && ref !== undefined){
-          url = '/signature/'+account+'?ref='+ref;
+        else if (result.result !== true && result.error && result.error !== null) {
+          alert(result.error);
+          return;
         }
-        else{
-          url = '/signature/'+account;
+        else {
+          /// Signature
+          signInNow(result.data.nounce, result.data.username, address)
         }
-        setAuth(authName, cookieValue, cookieExpiration);
-
-        // redirectUrl(url);
-        redirectUrl(url);
-        // Don't forget to unsubscribe when your app or component un mounts to prevent memory leaks
-        // unsubscribe();
-
       }
-      else {
-        alert('Unable to successfully complete the wallet connection process');
+      else if (response.status && response.status !== 200) {
+        alert('Unexpected errors occured!');
+        return;
       }
     });
+
+}
+
+export async function signInNow(nounce: number, username: string, address: string) {
+  try {
+    const message: string = await signInMessage(username, nounce, address);
+    const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+    const signer = provider.getSigner();
+    const signature = await signer.signMessage(message);
+
+    if (message !== undefined && message !== null) {
+      verifyMessage(message, address, signature);
+    }
+  } catch (err) {
+    alert('Please you need to sign the transaction to continue!');
+    return;
   }
 
 }
 
+const verifyMessage = async (message: string, address: string, signature: string) => {
+  try {
+    const signerAddr = await ethers.utils.verifyMessage(message, signature);
+    if (signerAddr !== address) {
+      const HEADER = {};
+      const REQUEST_URL = 'user/auth/verify_signature';
+      const METHOD = "POST";
+      const DATA = {
+        message: message,
+        signature: signature,
+        address: address
+      };
+
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
+        .then(function (response) {
+          if (response.status == 200) {
+            var result = response.data;
+            if (result.result !== true && result.error && result.error == null) {
+              alert('Unexpected errors occured!');
+              return;
+            }
+            else if (result.result !== true && result.error && result.error !== null) {
+              alert(result.error);
+              return;
+            }
+            else {
+              const authName = "auth.session";
+              const cookieValue = result.token.split(' ')[1];
+              const cookieExpiration = 1; //Days
+              setAuth(authName, cookieValue, cookieExpiration);
+              redirectUrl('/');
+            }
+          }
+          else {
+            alert('Unexpected error, please try again!');
+            return;
+          }
+        });
+    }
+    else {
+      alert('Invalid Address or Signature!');
+      return;
+    }
+
+    return true;
+  } catch (err) {
+    // console.log(err);
+    alert('Unexpected error, please try again!');
+    return;
+  }
+};
 
 export function setAuth(authName: string, authValue: {}, authExpirationInDays: number) {
   const d = new Date();

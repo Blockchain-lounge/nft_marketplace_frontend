@@ -24,7 +24,6 @@ export function apiRequest(REQUEST_URL: string,METHOD: string,DATA:{},HEADER:{})
             "Content-Type": "application/json"
         };
     }
-
     return axios({
         method: METHOD,
         url: API_URL+REQUEST_URL,
