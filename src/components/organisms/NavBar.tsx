@@ -30,8 +30,11 @@ import { toggleMobileModal } from "@/src/reducers/modalReducer";
 import { RootState } from "@/src/store/store";
 import Image from "next/image";
 import CreateCollection from "./CreateCollection";
-
-import { verifySignature } from "@/src/utilities/auth/wallet";
+import {connectUserWallet, connectedAccount} from "../../functions/onChain/authFunction";
+// import { verifySignature } from "@/src/utilities/auth/wallet";
+import { 
+  // getWalletBalance, 
+  account_listener } from '../../functions/onChain/generalFunction';
 
 const NavBar = () => {
   const dispatch = useDispatch();
@@ -39,6 +42,8 @@ const NavBar = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   const [modalType, setModaltype] = useState("wallet");
+
+  const [isConnected, setIsConnected] = useState(false);
 
   const [showProfile, setShowProfile] = useState(false);
 
@@ -49,6 +54,23 @@ const NavBar = () => {
   const [openModal, setOpenModal] = useState(false);
 
   const [stage, setStage] = useState(0);
+  const [connectedAddress, setConnectedAddress] = useState(null);
+
+  account_listener();
+  useEffect(() => {
+    connectedAccount().then((response) => {
+        if (response !== null) {
+          setConnectedAddress(response);
+          setIsConnected(true)
+        }
+
+        // if(connectedAddress !== null){
+        //     getWalletBalance(connectedAddress).then((response) => {
+        //         setState({ balanceInEth: response });
+        //     });
+        // }
+    });
+}, [connectedAddress,isConnected]);
 
   const statusArr = [
     {
@@ -68,10 +90,6 @@ const NavBar = () => {
       value: "3,009 TPS",
     },
   ];
-
-  const handleWalletConnect = () => {
-    verifySignature().then((res) => dispatch(toggleLoggedInUser()));
-  };
 
   const handleLogin = () => {
     setShowProfile(false);
@@ -133,14 +151,14 @@ const NavBar = () => {
           <span className="nav-mobile-search">
             <SearchIcon />
           </span>
-          {!isLoggedIn && (
+          {!isConnected == true && (
             <div className="sub-nav-tab">
               <NavTab />
             </div>
           )}
         </div>
         <div className="nav-auth">
-          {isLoggedIn ? (
+          {isConnected == true ? (
             <div className="flex items-center gap-x-4">
               <span
                 className="mr-[0.5rem] cursor-pointer"
@@ -189,7 +207,7 @@ const NavBar = () => {
               title="Connect Wallet"
               prefix={<WalletIcon />}
               outline
-              onClick={handleWalletConnect}
+              onClick={connectUserWallet}
               twClasses="hidden lg:flex"
             />
           )}
