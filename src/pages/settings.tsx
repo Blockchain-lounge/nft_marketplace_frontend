@@ -25,7 +25,7 @@ const Settings = () => {
   const [settingStage, setSettingStage] = useState("edit-profile");
   const [userImgBanner, setUserImgBanner] = useState<FileList | null>(null);
   // const [checked, setChecked] = useState(false);
-  const [notification, setNotification] = useState("");
+  // const [notification, setNotification] = useState("");
   const [userImg, setUserImg] = useState<FileList | null>(null);
 
   const [userDetailsPayload, setUserDetailsPayload] = useState({
@@ -54,7 +54,7 @@ const Settings = () => {
     { icon: <FbIcon />, label: "Connect facebook account", connected: false },
   ]);
 
-  const [handleRequest, data] = UseAuth("/user/store");
+  const [handleRequest] = UseAuth("/user/store");
 
   const handleFieldChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -66,7 +66,7 @@ const Settings = () => {
     });
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (
       !userDetailsPayload.bio ||
       !userDetailsPayload.userEmail ||
@@ -81,10 +81,6 @@ const Settings = () => {
       toast(res.message);
       push("/profile");
     });
-
-    setTimeout(() => {
-      setNotification("");
-    }, 100);
   };
 
   return (

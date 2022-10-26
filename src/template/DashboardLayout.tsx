@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useCallback, useState } from "react";
 
 import clsx from "clsx";
 
@@ -16,16 +16,31 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
   );
 
   const dispatch = useDispatch();
-
   const handleMobileModalToggle = () => {
     dispatch(toggleMobileModal());
   };
+  const [showProfile, setShowProfile] = useState(false);
+  const [showBal, setShowBal] = useState(false);
+  const [showCreateNft, setShowCreateNft] = useState(false);
+
+  const handleCloseAllModal = useCallback(() => {
+    setShowBal(false);
+    setShowProfile(false);
+    setShowCreateNft(false);
+  }, []);
 
   return (
     <div className="flex flex-col w-full">
-      <NavBar />
+      <NavBar
+        showProfile={showProfile}
+        setShowProfile={setShowProfile}
+        showBal={showBal}
+        setShowBal={setShowBal}
+        showCreateNft={showCreateNft}
+        setShowCreateNft={setShowCreateNft}
+      />
 
-      <div className="layout-wrapper ">
+      <div className="layout-wrapper">
         {isMobileModal && (
           <div
             className="layout-overlay"
@@ -41,7 +56,9 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
         >
           <Sidebar />
         </aside>
-        <div className="aside-2 text-white">{children}</div>
+        <div className="aside-2 text-white" onMouseEnter={handleCloseAllModal}>
+          {children}
+        </div>
       </div>
     </div>
   );

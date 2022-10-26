@@ -15,7 +15,10 @@ const NftCard2 = ({
 }) => {
   const { push } = useRouter();
   return (
-    <div className="nmc-wrapper" onClick={() => push(`/view-nft/${name}`)}>
+    <div
+      className="nmc-wrapper cursor-pointer"
+      onClick={() => push(`/view-nft/${name}`)}
+    >
       <div className="nmc-wrapper2-img">
         <div className="nmc-wrapper-likes nmc-wrapper2-likes">
           <LikeIcon />

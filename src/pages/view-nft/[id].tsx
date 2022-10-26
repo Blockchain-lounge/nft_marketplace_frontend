@@ -121,7 +121,7 @@ const ViewNft = () => {
                   <div className="p-3 bg-bg-5 rounded-[1.25rem] w-full">
                     <span className="text-txt-2 block mb-4">Price</span>
                     <div className="">
-                      <span className="flex items-center text-[1.5rem] -ml-2">
+                      <span className="flex items-center text-[1.5rem] gap-x-1">
                         <CoinIcon />
                         6.95
                       </span>
@@ -184,15 +184,15 @@ const ViewNft = () => {
               <div className="space-y-4">
                 <div className="flex items-center gap-x-2">
                   <CoinIcon />{" "}
-                  <span className="block font-medium ml-2">Ethereum</span>{" "}
+                  <span className="block font-medium ">Ethereum</span>{" "}
                   <span className="text-txt-2">(ERC-721)</span>
                 </div>
-                <div className="flex items-center gap-x-2">
+                <div className="flex items-center gap-x-2 cursor-pointer">
                   <StatIcon />{" "}
                   <span className="block font-medium">View on Etherscan</span>
                   <ExternalLinkIcon />
                 </div>
-                <div className="flex items-center gap-x-2">
+                <div className="flex items-center gap-x-2 cursor-pointer">
                   <EyeIcon />{" "}
                   <span className="block font-medium">Open original</span>{" "}
                   <ExternalLinkIcon />{" "}

@@ -1,2 +1,6 @@
 .explore-wrapper {
 }
+
+.explore-items-wrapper {
+  @apply flex flex-wrap justify-between gap-7;
+}
