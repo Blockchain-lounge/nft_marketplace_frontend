@@ -122,7 +122,7 @@ input {
 /*Select*/
 
 .select {
-  @apply py-[0.85rem] lg:py-[1.15625rem] px-2 lg:px-[1.25rem] rounded-[0.5rem] border-[1px] border-border-1-line flex items-center justify-between gap-x-4;
+  @apply py-[0.85rem] lg:py-4 px-2 lg:px-3 rounded-[0.5rem] border-[1px] border-border-1-line flex items-center justify-between gap-x-4;
 }
 
 span {

@@ -42,7 +42,9 @@ const EarningsCard = ({
               className="earnings-card-view-history"
               onClick={handleNavigateToHistory}
             >
-              <span className="earnings-card-history">view history</span>
+              <span className="earnings-card-history cursor-pointer">
+                view history
+              </span>
               <ViewHistoryArrowIcon />
             </div>
           )}

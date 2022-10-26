@@ -52,7 +52,6 @@ const Home: NextPage = () => {
             <div className="hero-img-cards">
               <div className="hero-img">
                 <Image
-                  // priority
                   layout="fill"
                   objectFit="cover"
                   src={activeCard.img}

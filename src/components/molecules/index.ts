@@ -20,3 +20,4 @@ export { default as Sidebar } from "./Sidebar";
 export { default as Tab } from "./Tab";
 export { default as Tab2 } from "./Tab2";
 export { default as TotalEarningCard } from "./TotalEarningCard";
+export { default as TransactionCard } from "./TransactionCard";
