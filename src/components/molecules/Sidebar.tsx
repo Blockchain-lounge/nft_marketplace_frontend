@@ -44,9 +44,9 @@ const SideBar = () => {
       link: "/explore",
     },
     {
-      label: "Trending",
+      label: "Ranking",
       icon: <TrendingIcon />,
-      link: "/trending",
+      link: "/ranking",
     },
     {
       label: "Activities",

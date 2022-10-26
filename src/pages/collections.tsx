@@ -1,5 +1,3 @@
-import clsx from "clsx";
-import Image from "next/image";
 import React, { useState } from "react";
 import { Heading2, Select } from "../components/atoms";
 import { CoinIcon, StarVerify } from "../components/atoms/vectors";
