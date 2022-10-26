@@ -21,6 +21,7 @@ import {
 } from "@/src/store/data";
 
 import UseFetch from "../hooks/useFetch";
+import Image from "next/image";
 
 const Profile = () => {
   const [profileActiveTab, setProfileActiveTab] = useState(0);
@@ -55,12 +56,30 @@ const Profile = () => {
       <div className="sub-layout-wrapper scrollbar-hide">
         <div className="center">
           <div className="profile-banner">
-            <img src="/images/ape.png" alt="user-profile-img" />
+            <Image
+              src="/images/user-profile-banner.png"
+              alt="banner-img"
+              layout="fill"
+              objectFit="cover"
+            />
+            <div className="profile-user-img">
+              <Image
+                src="/images/avatar.png"
+                alt="user-img"
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
           </div>
           <div className="profile-actions">
             <div className="profile-action">
-              <EditIcon onClick={() => push("/settings")} />
-              <ProfileLinkIcon />
+              <div
+                className="rounded-lg border-border-3-line border p-3"
+                onClick={() => push("/settings")}
+              >
+                <EditIcon />
+              </div>
+
               <Button title="Sell NFT" />
             </div>
             <div className="profile-user-info">
