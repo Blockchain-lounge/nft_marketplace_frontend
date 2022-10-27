@@ -1,5 +1,8 @@
+import Image from "next/image";
 import React, { useState } from "react";
-import { Heading2, Select } from "../components/atoms";
+import { Heading2, Select, SelectCheckBox } from "../components/atoms";
+import { ISelectCheckProps } from "../components/atoms/SelectCheckbox";
+import { CloseIcon } from "../components/atoms/vectors";
 import { Tab2, TransactionCard } from "../components/molecules";
 import { Footer2 } from "../components/organisms";
 import DashboardLayout from "../template/DashboardLayout";
@@ -33,7 +36,9 @@ const Activities = () => {
       checked: false,
     },
   ]);
-  const [selectedCollection, setSelectedCollection] = useState([]);
+  const [selectedCollection, setSelectedCollection] = useState<
+    ISelectCheckProps[]
+  >([]);
 
   const tabs = ["1 h", "6 h", "24 h", "1 w", "1 m", "All"];
 
@@ -132,32 +137,6 @@ const Activities = () => {
     },
   ];
   const events = ["All", "Sales", "listings", "offers", "transfers"];
-  // const collections = [
-  //   {
-  //     label: "Clonex",
-  //     isVerified: true,
-  //     img: "/images/nftsample2.png",
-  //     checked: false,
-  //   },
-  //   {
-  //     label: "VibeyApe",
-  //     isVerified: false,
-  //     img: "/images/ape.png",
-  //     checked: false,
-  //   },
-  //   {
-  //     label: "Clonex",
-  //     isVerified: false,
-  //     img: "/images/nftsample2.png",
-  //     checked: false,
-  //   },
-  //   {
-  //     label: "Clonex",
-  //     isVerified: false,
-  //     img: "/images/nftSample3.png",
-  //     checked: false,
-  //   },
-  // ];
 
   return (
     <DashboardLayout>
@@ -172,14 +151,58 @@ const Activities = () => {
                 onClick={setCurrentEvent}
                 lists={events}
               />
-              {/* <Select title="Collection" />
-              <Select title="Chains" /> */}
+              <SelectCheckBox
+                lists={collections}
+                //@ts-ignore
+                setLists={setCollections}
+                title="Collection"
+                selectedLists={selectedCollection}
+                newLists={setSelectedCollection}
+              />
+              {/* <Select title="Chains" /> */}
             </div>
             <Tab2
               tabs={tabs}
               activeTab={currentTab}
               setActiveTab={setCurrentTab}
             />
+          </div>
+          <div className="flex items-center gap-x-4 mb-6">
+            {selectedCollection.map((val, i) => (
+              <div
+                key={val.label + i}
+                className="p-4 bg-bg-5 rounded-md gap-x-4 flex items-center"
+              >
+                <div className="flex items-center gap-x-3">
+                  {val.img && (
+                    <span className="relative h-[2.375rem] w-[2.375rem]">
+                      <Image
+                        src={val.img as string}
+                        alt={val.label}
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded-full"
+                      />
+                    </span>
+                  )}
+                  {val.label}
+                  {val.isVerified && (
+                    <span className="relative h-5 w-5">
+                      <Image
+                        src="/images/verify.svg"
+                        alt={val.label}
+                        layout="fill"
+                        objectFit="cover"
+                      />
+                    </span>
+                  )}
+                </div>
+                {/* <span className="font-medium">{val}</span> */}
+                <span className="cursor-pointer">
+                  <CloseIcon />
+                </span>
+              </div>
+            ))}
           </div>
           <div className="total-earnings-history-wrapper">
             {activitiesData.map((txn, i) => (
