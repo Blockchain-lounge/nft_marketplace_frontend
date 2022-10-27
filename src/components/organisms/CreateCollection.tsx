@@ -46,7 +46,7 @@ const CreateCollection: FC<ICollectionProps> = ({
     var msg = '';
     if (!files[0] || files[0].size == 0 || files[0].size == null) {
       msg = 'Collection cover art is required!';
-      alert(msg);
+      toast(msg);
       setValidationError(true);
       return false;
     }
@@ -116,26 +116,16 @@ const CreateCollection: FC<ICollectionProps> = ({
       toast('Internal server occured!');
       return;
     }
-    
 
-    // toast(res.message);
-
-    // setTimeout(() => {
-    //   setNotification("");
-    // }, 100);
   };
-  // const handleSubmit = () => {
-  //   closeModal((prev) => !prev);
-  //   //@ts-ignore
-  //   changeModalType("wallet");
-  // };
+
   return (
     <div className="create-new-nft-form max-w-[90%] mx-auto">
       <ToastContainer />
       <div className="create-new-nft-wrapper-2">
         <span className="create-new-nft-wrapper-2-label">File/Media</span>
         <span className="create-new-nft-wrapper-2-label-type">
-          File types supported: JPG and PNG. Max size: 5 MB
+          File types supported: JPG, JPEG and PNG. Max size: 5 MB
         </span>
         <div className="h-56 rounded-lg relative mt-2">
           <input

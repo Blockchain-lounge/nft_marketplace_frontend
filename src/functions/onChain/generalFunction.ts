@@ -8,26 +8,26 @@ export const getNetworkDetails = async () => {
   return chainId;
 };
 
-//   export const findEvents = (eventName: string,eventsList: [],addArgs: boolean)=>{
-//     if(eventsList.length>0){
-//       for(var i = 0; i <= eventsList.length; i++)
-//       {
-//           if(eventsList[i]
-//             && eventsList[i] !== undefined
-//             && eventsList[i].event
-//             && eventsList[i].event !==undefined
-//             && eventsList[i].event == eventName){
-//               if(addArgs !== undefined && addArgs == true){
-//                 return eventsList[i].args
-//               }
-//               else{
-//                 return true
-//               }
-//             }
-//       }
-//       return false;
-//   }
-//   }
+  export const findEvents = (eventName: string,eventsList: [],addArgs: boolean)=>{
+    if(eventsList.length>0){
+      for(var i = 0; i <= eventsList.length; i++)
+      {
+          if(eventsList[i]
+            && eventsList[i] !== undefined
+            && eventsList[i].event
+            && eventsList[i].event !==undefined
+            && eventsList[i].event == eventName){
+              if(addArgs !== undefined && addArgs == true){
+                return eventsList[i].args
+              }
+              else{
+                return true
+              }
+            }
+      }
+      return false;
+  }
+  }
 
 //@ts-ignore
 export const findTrnxHash = (eventName, eventsList) => {

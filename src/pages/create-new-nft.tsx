@@ -1,6 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import Router from "next/router";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import Image from "next/image";
 import clsx from "clsx";
 import {
   AddIcon,
@@ -23,24 +25,17 @@ import DashboardLayout from "../template/DashboardLayout";
 import { Button, Input2, Select } from "../components/atoms";
 import { GetServerSideProps } from "next";
 import { requireAuthentication } from "../utilities/auth/requireAuthentication";
-
 // const IPFSCLIENT = require('ipfs-http-client');
-// const projectId = process.env.REACT_APP_INFURA_IPFS_PROJECT_ID
-// const projectSecret = process.env.REACT_APP_INFURA_IPFS_PROJECT_SECRET
-// const projectIdAndSecret = `${projectId}:${projectSecret}`
-// const IPFS = IPFSCLIENT({
-//     host: 'ipfs.infura.io',
-//     port: 5001,
-//     protocol: 'https',
-//     headers: {
-//         authorization: `Basic ${Buffer.from(projectIdAndSecret).toString(
-//             'base64'
-//         )}`,
-//     },
-// });
-// const REACT_APP_IPFS_URL = APPCONFIG.IPFS_URL;
+import { create } from 'ipfs-http-client'
+import APPCONFIG from '../constants/Config';
+import abi from '../artifacts/abi.json';
+import { ethers } from 'ethers';
+import { findEvents } from '../functions/onChain/generalFunction';
+import { apiRequest } from '../functions/offChain/apiRequests';
 
-
+import {
+  connectedAccount,
+} from "../functions/onChain/authFunction";
 const CreateNewNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [file, setFile] = useState<FileList | null>(null);
@@ -52,6 +47,7 @@ const CreateNewNft = () => {
     description: "",
     supply: "",
     royalties: "",
+    collection: ""
   });
   const [properties, setProperties] = useState([
     { label: "clothe", value: "Hoodie" },
@@ -59,6 +55,40 @@ const CreateNewNft = () => {
     { label: "Apetype", value: "Glasses" },
   ]);
   const [priceListType, setPriceListType] = useState("");
+  const [userCollectionList, setUserCollectionList] = useState([]);
+  const [nftImage, setNftImage] = useState([]);
+  const [nftCoverImage, setNftCoverImage] = useState('');
+  const [nftBufferCoverImage, setNftBufferCoverImage] = useState('');
+  const [validationError, setValidationError] = useState(false);
+  const [connectedAddress, setConnectedAddress] = useState(null);
+
+  const projectId = process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_ID
+  const projectSecret = process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_SECRET
+  const projectIdAndSecret = `${projectId}:${projectSecret}`
+  const IPFS_URL = APPCONFIG.IPFS_URL;
+  var baseURI = APPCONFIG.TOKEN_BASE_URL;
+  const client = create({
+    host: 'ipfs.infura.io',
+    port: 5001,
+    protocol: 'https',
+    headers: {
+      authorization: `Basic ${Buffer.from(projectIdAndSecret).toString(
+        'base64'
+      )}`,
+    },
+  });
+
+  // const IPFS = IPFSCLIENT({
+  //   host: 'ipfs.infura.io',
+  //   port: 5001,
+  //   protocol: 'https',
+  //   headers: {
+  //     authorization: `Basic ${Buffer.from(projectIdAndSecret).toString(
+  //       'base64'
+  //     )}`,
+  //   },
+  // });
+
   const priceListingTypes = [
     { type: "Fixed price", icon: <FixedPriceIcon /> },
     { type: "Open for bids", icon: <BidIcon /> },
@@ -79,23 +109,170 @@ const CreateNewNft = () => {
     });
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleImageFieldChange = (e) => {
+    const { files } = e.target;
+    var msg = '';
+    if (!files[0] || files[0].size == 0 || files[0].size == null) {
+      msg = 'Item image is required!';
+      alert(msg);
+      setValidationError(true);
+      return false;
+    }
+    var fullFileName = (files[0].name);
+    fullFileName = fullFileName.toLowerCase();
+    var fileExt = fullFileName.substring(0, 1) === '.' ? '' : fullFileName.split('.').slice(1).pop() || '';
+    var fileExtArr = ['jpg', 'jpeg', 'png'];
+
+    if (fileExtArr.indexOf(fileExt) <= -1) {
+      msg = 'Only images of type jpg, jpeg, png are allowed'
+      toast(msg);
+      return false;
+    }
+
+    if (files[0].name >= 20480) {
+      // 20mb * 1024kb = 5120
+      msg = 'File is larger than 20mb'
+      toast(msg);
+      return false;
+    }
+    setNftImage(files[0]);
+    setNftCoverImage(URL.createObjectURL(files[0]));
+
+    const reader = new window.FileReader();
+
+    reader.readAsArrayBuffer(files[0]);
+    reader.onloadend = () => {
+      setNftBufferCoverImage(Buffer(reader.result));
+    }
+  }
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (
-      !nftPayload.coinPrice.trim() ||
-      !nftPayload.description.trim() ||
-      !nftPayload.nftName.trim() ||
-      !nftPayload.nftSymbol.trim() ||
-      !nftPayload.itemName.trim() ||
-      !nftPayload.royalties.trim() ||
-      !nftPayload.supply.trim()
-    )
+    var msg = '';
+    if (!nftPayload.coinPrice.trim()) {
+      msg = 'Item price is still empty'
+      toast(msg);
       return;
-    setShowModal(true);
-    console.log({ nftPayload, file, priceListType });
-  };
+    }
+    else if (!nftPayload.description.trim()) {
+      msg = 'Item description is still empty'
+      toast(msg);
+      return;
+    }
+    else if (!nftPayload.itemName.trim()) {
+      msg = 'Item name is still empty'
+      toast(msg);
+      return;
+    }
+    else if (!nftPayload.royalties.trim()) {
+      msg = 'Item royalties is still empty'
+      toast(msg);
+      return;
+    }
+    else if (isNaN(parseFloat(nftPayload.royalties)) === true) {
+      msg = 'Item royalties must be a valid positive number'
+      toast(msg);
+      return;
+    }
+    else if (!nftPayload.supply.trim()) {
+      msg = 'Item supply is still empty'
+      toast(msg);
+      return;
+    }
+    else if (isNaN(parseFloat(nftPayload.supply)) === true) {
+      msg = 'Item supply must be a valid positive number'
+      toast(msg);
+      return;
+    }
+    else if (validationError === true) {
+      msg = 'Please check the uploaded Item image'
+      toast(msg);
+      return;
+    }
+    else {
+      const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(APPCONFIG.SmartContractAddress, abi.abi, signer);
+      const price = ethers.utils.parseUnits(nftPayload.coinPrice.toString(), 'ether');
+      toast('Please approve this transaction...');
 
+      const transaction = await contract.createItem(connectedAddress, price, nftPayload.supply, parseInt(nftPayload.royalties));
+      var tnx = await transaction.wait();
+      console.log(tnx)
+      const events = findEvents('ItemCreated', tnx.events, true);
+      if (events === true) {
+        toast('On-chain transaction completed...');
+        return
+      }
+      else if (events !== undefined && events.length > 0 && events !== true) {
+        const itemId = events.itemId.toNumber();
+        baseURI = baseURI + itemId;
+      }
+      else {
+        toast('We were unable to complete the creation of your NFT!');
+        return
+      }
+      try {
+        // var IPFSItemres = await IPFS.add(nftBufferCoverImage);
+        // const IPFSItemres = await client.add(nftImage);
+        // const itemIPFSURL = IPFS_URL + IPFSItemres.hash;
+        // console.log(itemIPFSURL)
+      } catch (error) {
+        toast('Something went wrong while uploading to IPFS, please try again!');
+        return;
+      }
+
+      try {
+        var formData = {
+          item_title: nftPayload.itemName,
+          item_description: nftPayload.description,
+          item_price: nftPayload.coinPrice,
+          item_quantity: nftPayload.supply,
+          item_art_url: 'itemIPFSURL',
+          item_base_url: baseURI,
+          collection_id: '6340b5aca06f00a4f5d4b1c7'
+        }
+        toast('Finalizing the transaction off-chain...');
+        const HEADER = 'authenticated';
+        const REQUEST_URL = 'nft-item/store';
+        const METHOD = "POST";
+        const DATA = formData
+        // const lazilyMinted = state.is_lazy;
+
+        apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
+          .then((response) => {
+            if (response.status == 400) {
+              var error = response.data.error;
+              toast(error);
+              return;
+            }
+            else if (response.status == 401) {
+              toast('Unauthorized request!');
+              return;
+            }
+            else if (response.status == 201) {
+              toast(response.data.message);
+              setShowModal(true);
+            }
+            else {
+              toast('Something went wrong, please try again!');
+              return;
+            }
+          });
+      } catch (error) {
+        toast('Something went wrong, please try again!');
+        return;
+      }
+
+    }
+  };
+  useEffect(() => {
+    connectedAccount().then((response) => {
+      if (response !== null) {
+        setConnectedAddress(response);
+      }
+    });
+  }, [userCollectionList]);
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper">
@@ -104,6 +281,7 @@ const CreateNewNft = () => {
             <ArrowBack onClick={() => Router.back()} />
             <h1>Create New Item</h1>
           </div>
+          <ToastContainer />
           <div className="create-new-nft-wrapper">
             <form onSubmit={handleSubmit} className="create-new-nft-form">
               <div className="create-new-nft-wrapper-2">
@@ -111,14 +289,12 @@ const CreateNewNft = () => {
                   File/Media
                 </span>
                 <span className="create-new-nft-wrapper-2-label-type">
-                  File types supported: JPG and PNG. Max size: 100 MB
+                  File types supported: JPG, JPEG and PNG. Max size: 20 MB
                 </span>
                 <input
                   type="file"
                   id="file"
-                  onChange={({
-                    currentTarget: { files },
-                  }: React.ChangeEvent<HTMLInputElement>) => setFile(files)}
+                  onChange={(e) => handleImageFieldChange(e)}
                   className="hidden"
                   name="img"
                 />
@@ -134,15 +310,13 @@ const CreateNewNft = () => {
                   </label>
                   <img
                     src={
-                      file
-                        ? //@ts-ignore
-                          URL.createObjectURL([...file][0])
+                      nftCoverImage.length > 0
+                        ? nftCoverImage
                         : ""
                     }
                     alt=""
-                    className={`object-cover h-full w-full ${
-                      !file ? "hidden" : "block"
-                    }`}
+                    className={`object-cover h-full w-full ${!file ? "hidden" : "block"
+                      }`}
                   />
                 </div>
               </div>
@@ -201,20 +375,6 @@ const CreateNewNft = () => {
                 onChange={handleFieldChange}
                 value={nftPayload.itemName}
               />
-              <Input2
-                label="Nft name"
-                name="nftName"
-                placeholder="Enter nft name"
-                onChange={handleFieldChange}
-                value={nftPayload.nftName}
-              />
-              <Input2
-                label="Nft symbol"
-                name="nftSymbol"
-                placeholder="Eg. APE YATCH"
-                onChange={handleFieldChange}
-                value={nftPayload.nftSymbol}
-              />
 
               <div className="create-new-nft-wrapper-2">
                 <span className="create-new-nft-wrapper-2-label">
@@ -241,7 +401,13 @@ const CreateNewNft = () => {
                     Create collection
                   </span>
                 </div>
-                <Select title="Select collection" />
+                {/* <Select title="Select collection" /> */}
+                <select className="w-full bg-transparent  outline-none select"
+                  onChange={(e) => handleFieldChange(e)} name="collection">
+                  <option value="Uncategorized">Uncategorized</option>
+                  <option value="Arts">Arts</option>
+                  <option value="Flyers">Flyers</option>
+                </select>
               </div>
               <Input2
                 label="Supply"
@@ -259,7 +425,7 @@ const CreateNewNft = () => {
                 onChange={handleFieldChange}
                 value={nftPayload.royalties}
               />
-              <div className="create-new-nft-wrapper-2">
+              {/* <div className="create-new-nft-wrapper-2">
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="create-new-nft-wrapper-2-label">
@@ -289,7 +455,7 @@ const CreateNewNft = () => {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
               <Button title="Create" />
             </form>
             <div className="create-new-nft-wrapper-preview max-w-[50%]">
@@ -314,20 +480,26 @@ const CreateNewNft = () => {
                         : "hidden"
                     )}
                   >
-                    <ImgUploadIcon />
-                  </span>
-                  <img
-                    src={
-                      file
-                        ? //@ts-ignore
-                          URL.createObjectURL([...file][0])
-                        : ""
+                    {
+                      nftCoverImage.length > 0
+                        ?
+                        <Image
+                          src={
+                            nftCoverImage
+                              ? nftCoverImage
+                              : ""
+                          }
+                          width="500px"
+                          height="500px"
+                          alt=""
+                          className={`object-cover h-full w-full rounded-t-2xl ${!file ? "hidden" : "block"
+                            }`}
+                        />
+                        :
+                        <ImgUploadIcon />
                     }
-                    alt=""
-                    className={`object-cover h-full w-full rounded-t-2xl ${
-                      !file ? "hidden" : "block"
-                    }`}
-                  />
+                  </span>
+
                 </div>
                 <div className="w-full bg-white rounded-b-2xl p-4 flex flex-col ">
                   <div className="flex justify-between items-center mb-4">
@@ -341,7 +513,7 @@ const CreateNewNft = () => {
                   </div>
                   <span className="text-[1.1rem] text-black ">
                     {/*replace with collection name*/}
-                    {nftPayload.nftName.split(" ")[0] || "Untitled Collection"}
+                    {nftPayload.collection.split(" ")[0] || "Uncategorized"}
                   </span>
                 </div>
               </div>
@@ -362,7 +534,7 @@ const CreateNewNft = () => {
               src={
                 file
                   ? //@ts-ignore
-                    URL.createObjectURL([...file][0])
+                  URL.createObjectURL([...file][0])
                   : ""
               }
               alt=""
@@ -393,13 +565,11 @@ const CreateNewNft = () => {
             onClick={() => {
               setShowModal((prev) => !prev);
               setNftPayload({
-                coinPrice: "",
-                itemName: "",
-                nftName: "",
-                nftSymbol: "",
-                description: "",
-                supply: "",
-                royalties: "",
+                coinPrice: nftPayload.coinPrice,
+                itemName: nftPayload.itemName,
+                description: nftPayload.description,
+                supply: nftPayload.supply,
+                royalties: nftPayload.royalties,
               });
               setFile(null);
             }}
