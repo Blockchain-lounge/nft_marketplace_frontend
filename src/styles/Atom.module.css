@@ -48,7 +48,7 @@
 
 /* heading */
 .hd {
-  @apply text-4xl lg:text-[3.625rem] font-['Sf_Pro'] font-bold block text-white lg:leading-[4.325rem];
+  @apply text-5xl lg:text-[3.625rem] font-['Sf_Pro'] font-bold block text-white lg:leading-[4.325rem];
 }
 
 /* heading */
