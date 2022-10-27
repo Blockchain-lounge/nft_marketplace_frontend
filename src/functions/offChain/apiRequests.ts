@@ -19,6 +19,19 @@ export function apiRequest(REQUEST_URL: string,METHOD: string,DATA:{},HEADER:{})
             "Authorization": `Bearer ${JWTToken}`
         };
     }
+    else if(HEADER == 'authenticated_and_form_data')
+    {
+        const authName = 'auth.session';
+        // JWTToken = checkAuth(authName);
+        if(checkAuth(authName) == null){
+            disconnectWallet();
+        }
+        const JWTToken = JSON.parse(checkAuth(authName));
+        HEADER = { 
+            "Content-Type": 'multipart/form-data',
+            "Authorization": `Bearer ${JWTToken}`
+        };
+    }
     else{
         HEADER = { 
             "Content-Type": "application/json"
