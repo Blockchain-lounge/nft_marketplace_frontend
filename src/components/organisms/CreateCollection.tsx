@@ -21,15 +21,24 @@ const CreateCollection: FC<ICollectionProps> = ({
   closeModal,
   changeModalType,
 }) => {
-  const [userImgBanner, setUserImgBanner] = useState<FileList | null>(null);
+  const [collectionBannerArt, setCollectionBannerArt] = useState("");
+  const [collectionFeaturedArt, setCollectionFeaturedArt] = useState("");
+  const [collectionLogoArt, setCollectionLogoArt] = useState("");
+  {
+    /*featured img*/
+  }
+  const [collectionFeaturedImg, setcollectionFeaturedImage] =
+    useState<FileList | null>(null);
+  {
+    /*logo img*/
+  }
+  const [collectionLogoImg, setCollectionLogoImage] = useState<FileList | null>(
+    null
+  );
+  const [collectionBanner, setCollectionBannerImage] =
+    useState<FileList | null>(null);
 
-  const [featuredImg, setFeaturedImg] = useState<FileList | null>(null);
-
-  const [logoImg, setLogoImg] = useState<FileList | null>(null);
-
-  const [collectionCoverArt, setCollectionCoverArt] = useState("");
   const [validationError, setValidationError] = useState(false);
-  const [collectionCoverImage, setCollectionCoverImage] = useState();
   const [collectionPayload, setCollectionPayload] = useState({
     collection_name: "",
     collection_description: "",
@@ -45,8 +54,9 @@ const CreateCollection: FC<ICollectionProps> = ({
       [name]: value,
     });
   };
+
   //@ts-ignore
-  const handleImageFieldChange = (e) => {
+  const handleImageFieldChange = (e, setImg, setArt) => {
     const { files } = e.target;
     var msg = "";
     if (!files[0] || files[0].size == 0 || files[0].size == null) {
@@ -75,12 +85,60 @@ const CreateCollection: FC<ICollectionProps> = ({
       toast(msg);
       return false;
     }
-    setCollectionCoverImage(files[0]);
-    setCollectionCoverArt(URL.createObjectURL(files[0]));
+    setImg(files[0]);
+    setArt(URL.createObjectURL(files[0]));
   };
+
+  const handleSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    var msg = "";
+    if (
+      !collectionPayload.collection_name ||
+      !collectionPayload.collection_description
+    ) {
+      msg = "Collection name or/and decsription is still empty";
+      toast(msg);
+      return false;
+    }
+    var collectionData = {
+      name: collectionPayload.collection_name,
+      description: collectionPayload.collection_description,
+      cover_image: collectionBanner,
+    };
+    try {
+      const HEADER = "authenticated_and_form_data";
+      const REQUEST_URL = "nft-collection/store";
+      const METHOD = "POST";
+      const DATA = collectionData;
+
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          return;
+        }
+        if (response.status == 401) {
+          toast("Unauthorized request!");
+          return;
+        } else if (response.status == 201) {
+          toast(response.data.message);
+          closeModal((prev) => !prev);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    } catch (error) {
+      toast("Internal server occured!");
+      return;
+    }
+  };
+
   return (
-    <div className="create-new-nft-form max-w-[90%] mx-auto overflow-auto h-[70vh]">
+    <div className="create-new-nft-form max-w-[90%] mx-auto overflow-auto h-[70vh] scrollbar-hide">
       <ToastContainer />
+      {/*Banner Image*/}
       <div className="create-new-nft-wrapper-2">
         <span className="create-new-nft-wrapper-2-label">Banner Image</span>
         <span className="create-new-nft-wrapper-2-label-type">
@@ -90,10 +148,26 @@ const CreateCollection: FC<ICollectionProps> = ({
           <input
             type="file"
             id="userImg"
-            onChange={(e) => handleImageFieldChange(e)}
+            onChange={(e) =>
+              handleImageFieldChange(
+                e,
+                setCollectionBannerImage,
+                setCollectionBannerArt
+              )
+            }
             className="hidden"
             name="img"
           />
+
+          {collectionBannerArt && (
+            <Image
+              src={collectionBannerArt || "/ape.png"}
+              alt="collection-cover-art"
+              layout="fill"
+              objectFit="cover"
+            />
+          )}
+
           <label
             htmlFor="userImg"
             className="absolute inset-0 rounded-lg flex flex-col justify-center items-center bg-[#1c1e3d7f]"
@@ -104,48 +178,46 @@ const CreateCollection: FC<ICollectionProps> = ({
               width="24px"
               height="24px"
             />
-            <span className={clsx(userImgBanner ? "hidden" : "block mt-2")}>
+            <span
+              className={clsx(collectionBannerArt ? "hidden" : "block mt-2")}
+            >
               Click to upload collection banner image
             </span>
           </label>
         </div>
       </div>
+      {/*Featured Image*/}
       <div className="create-new-nft-wrapper-2">
         <span className="create-new-nft-wrapper-2-label">Featured Image</span>
         <span className="create-new-nft-wrapper-2-label-type">
-          File types supported: JPG and PNG. Max size: 100 MB
+          File types supported: JPG and PNG. Max size: 5 MB
         </span>
         <div className="h-72 w-72 rounded-lg relative">
-          <div
-            className={`relative h-full w-full ${
-              !featuredImg ? "hidden" : "block"
-            }`}
-          >
-            <Image
-              src={
-                featuredImg
-                  ? //@ts-ignore
-                    URL.createObjectURL([...featuredImg][0])
-                  : "/ape.png"
-              }
-              alt="user-profile-img-banner"
-              objectFit="cover"
-              layout="fill"
-              className="rounded-lg"
-            />
-          </div>
-
           <input
             type="file"
-            id="featuredImg"
-            onChange={({
-              currentTarget: { files },
-            }: React.ChangeEvent<HTMLInputElement>) => setFeaturedImg(files)}
+            id="featuredCollection"
+            onChange={(e) =>
+              handleImageFieldChange(
+                e,
+                setcollectionFeaturedImage,
+                setCollectionFeaturedArt
+              )
+            }
             className="hidden"
             name="img"
           />
+
+          {collectionFeaturedArt && (
+            <Image
+              src={collectionFeaturedArt || "/ape.png"}
+              alt="collection-cover-art"
+              layout="fill"
+              objectFit="cover"
+            />
+          )}
+
           <label
-            htmlFor="featuredImg"
+            htmlFor="featuredCollection"
             className="absolute inset-0 rounded-lg flex flex-col justify-center items-center bg-[#1c1e3d7f]"
           >
             <Image
@@ -154,49 +226,47 @@ const CreateCollection: FC<ICollectionProps> = ({
               width="24px"
               height="24px"
             />
-            <span className={clsx(featuredImg ? "hidden" : "block mt-2")}>
+            <span
+              className={clsx(collectionFeaturedArt ? "hidden" : "block mt-2")}
+            >
               Click to change image
             </span>
           </label>
         </div>
       </div>
+      {/*Logo Image*/}
       <div className="create-new-nft-wrapper-2">
         <span className="create-new-nft-wrapper-2-label">Logo Image</span>
         <span className="create-new-nft-wrapper-2-label-type">
-          File types supported: JPG and PNG. Max size: 100 MB
+          File types supported: JPG and PNG. Max size: 5 MB
         </span>
         <div className="h-40 w-40 rounded-lg relative mt-2">
-          <div
-            className={`relative h-full w-full ${
-              !logoImg ? "hidden" : "block"
-            }`}
-          >
-            <Image
-              src={
-                logoImg
-                  ? //@ts-ignore
-                    URL.createObjectURL([...logoImg][0])
-                  : "/ape.png"
-              }
-              alt="user-profile-img-banner"
-              objectFit="cover"
-              layout="fill"
-              className="rounded-lg"
-            />
-          </div>
-
           <input
             type="file"
-            id="logo"
-            onChange={({
-              currentTarget: { files },
-            }: React.ChangeEvent<HTMLInputElement>) => setLogoImg(files)}
+            id="logoCollection"
+            onChange={(e) =>
+              handleImageFieldChange(
+                e,
+                setCollectionLogoImage,
+                setCollectionLogoArt
+              )
+            }
             className="hidden"
             name="img"
           />
+
+          {collectionLogoArt && (
+            <Image
+              src={collectionLogoArt || "/ape.png"}
+              alt="collection-cover-art"
+              layout="fill"
+              objectFit="cover"
+            />
+          )}
+
           <label
-            htmlFor="logo"
-            className="absolute inset-0 rounded-lg flex flex-col justify-center items-center bg-[#1c1e3d7f] "
+            htmlFor="logoCollection"
+            className="absolute inset-0 rounded-lg flex flex-col justify-center items-center bg-[#1c1e3d7f]"
           >
             <Image
               src="/gallery-add.svg"
@@ -204,12 +274,17 @@ const CreateCollection: FC<ICollectionProps> = ({
               width="24px"
               height="24px"
             />
-            <span className={clsx(logoImg ? "hidden" : "block text-sm mt-2")}>
-              Click to upload image
+            <span
+              className={clsx(
+                collectionLogoArt ? "hidden" : "block mt-2 text-sm"
+              )}
+            >
+              Click to change image
             </span>
           </label>
         </div>
       </div>
+      {/*Input Fields*/}
       <Input2
         name="collection_name"
         label="Collection name"

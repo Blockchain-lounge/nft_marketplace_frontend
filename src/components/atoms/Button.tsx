@@ -1,27 +1,27 @@
-import React, { ReactNode, ButtonHTMLAttributes } from "react";
+import React, { ReactNode, ButtonHTMLAttributes, FC } from "react";
 import clsx from "clsx";
 
-export interface IButton {
+//@ts-ignore
+export interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
   title: string;
   outline?: boolean;
   outline2?: boolean;
   twClasses?: string;
-  onClick?: () => void;
   prefix?: ReactNode;
   suffix?: ReactNode;
   wt?: string;
 }
 
-const Button = ({
+const Button: FC<IButton> = ({
   title,
   outline,
   outline2,
   twClasses,
-  onClick,
   prefix,
   suffix,
   wt,
-}: IButton) => {
+  ...rest
+}) => {
   return (
     <button
       className={clsx(
@@ -30,7 +30,7 @@ const Button = ({
         wt ? wt : "w-[11.9rem]",
         twClasses
       )}
-      onClick={onClick}
+      {...rest}
     >
       {prefix && <span>{prefix}</span>}
       <span>{title}</span>
