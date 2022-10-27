@@ -10,6 +10,8 @@ import React, {
 import { Button, Input2 } from "../atoms";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { apiRequest } from '../../functions/offChain/apiRequests';
+
 interface ICollectionProps {
   closeModal: Dispatch<SetStateAction<boolean>>;
   changeModalType?: Dispatch<SetStateAction<string>>;
@@ -22,9 +24,11 @@ const CreateCollection: FC<ICollectionProps> = ({
   const [userImgBanner, setUserImgBanner] = useState<FileList | null>(null);
   const [collectionCoverArt, setCollectionCoverArt] = useState("");
   const [validationError, setValidationError] = useState(false);
+  const [collectionCoverImage, setCollectionCoverImage] = useState();
   const [collectionPayload, setCollectionPayload] = useState({
     collection_name: "",
     collection_description: "",
+    collection_cover_image: null,
   });
 
   const handleFieldChange = (
@@ -50,7 +54,7 @@ const CreateCollection: FC<ICollectionProps> = ({
     fullFileName = fullFileName.toLowerCase();
     var fileExt = fullFileName.substring(0, 1) === '.' ? '' : fullFileName.split('.').slice(1).pop() || '';
     var fileExtArr = ['jpg', 'jpeg', 'png'];
-    
+
     if (fileExtArr.indexOf(fileExt) <= -1) {
       msg = 'Only images of type jpg, jpeg, png are allowed'
       toast(msg);
@@ -63,23 +67,56 @@ const CreateCollection: FC<ICollectionProps> = ({
       toast(msg);
       return false;
     }
+    setCollectionCoverImage(files[0]);
     setCollectionCoverArt(URL.createObjectURL(files[0]));
-}
+  }
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
     var msg = '';
     if (
       !collectionPayload.collection_name ||
       !collectionPayload.collection_description
-    ){
+    ) {
       msg = 'Collection name or/and decsription is still empty'
       toast(msg);
       return false;
     }
-    var formData = {
-      trackTitle: state.trackTitle,
+    var collectionData = {
+      name: collectionPayload.collection_name,
+      description: collectionPayload.collection_description,
+      cover_image: collectionCoverImage,
     }
+    try {
+    const HEADER = 'authenticated_and_form_data';
+    const REQUEST_URL = 'nft-collection/store';
+    const METHOD = "POST";
+    const DATA = collectionData
 
+    apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
+      .then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          return;
+        }
+        if (response.status == 401) {
+              toast('Unauthorized request!');
+              return;
+        }
+        else if (response.status == 201) {
+          toast(response.data.message);
+          closeModal((prev) => !prev);
+        }
+        else {
+          toast('Something went wrong, please try again!');
+      return;
+        }
+      });
+    } catch (error) {
+      toast('Internal server occured!');
+      return;
+    }
+    
 
     // toast(res.message);
 
@@ -112,22 +149,22 @@ const CreateCollection: FC<ICollectionProps> = ({
             htmlFor="userImg"
             className="absolute inset-0 rounded-lg flex flex-col justify-center items-center bg-[#1c1e3d7f] mt-2"
           >
-            { collectionCoverArt.length ?
-            <Image
-              src={ collectionCoverArt.length > 0 ? collectionCoverArt : "/ape.png"
-              }
-              alt="user-profile-img-banner"
-              objectFit="cover"
-              layout="fill"
-              className="rounded-lg"
-            />
-            :
-            <Image
-              src="/gallery-add.svg"
-              alt="add-img-svg"
-              width="24px"
-              height="24px"
-            />
+            {collectionCoverArt.length ?
+              <Image
+                src={collectionCoverArt.length > 0 ? collectionCoverArt : "/ape.png"
+                }
+                alt="user-profile-img-banner"
+                objectFit="cover"
+                layout="fill"
+                className="rounded-lg"
+              />
+              :
+              <Image
+                src="/gallery-add.svg"
+                alt="add-img-svg"
+                width="24px"
+                height="24px"
+              />
             }
             <span className={clsx(userImgBanner ? "hidden" : "block")}>
               Click to change image
