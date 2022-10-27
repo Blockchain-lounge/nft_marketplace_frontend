@@ -10,6 +10,8 @@ import {
   NftMiniCard,
   HeroCard,
   NftSlider,
+  NftMediumCard3,
+  CollectionCard,
 } from "@/src/components/molecules";
 
 import DashboardLayout from "@/src/template/DashboardLayout";
@@ -19,9 +21,10 @@ import { Footer, Footer2 } from "@/src/components/organisms";
 import {
   heroCards,
   nftDatas,
-  nft2Datas,
-  nft3Datas,
-  nft4Datas,
+  // nft2Datas,
+  // nft3Datas,
+  // nft4Datas,
+  launchpadDropDatas,
 } from "@/src/store/data";
 
 import { useState } from "react";
@@ -34,6 +37,7 @@ const Home: NextPage = () => {
   const [activeCard, setActiveCard] = useState(heroData[0]);
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const { push } = useRouter();
+  const exploreItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   return (
     <DashboardLayout>
@@ -58,7 +62,7 @@ const Home: NextPage = () => {
                   alt={activeCard.title + "-img"}
                   className="rounded-2xl"
                   placeholder="blur"
-                  blurDataURL={activeCard.img}
+                  blurDataURL="/images/placeholder.png"
                 />
               </div>
               <div className="hero-cards">
@@ -83,10 +87,11 @@ const Home: NextPage = () => {
               </div>
             </div>
           </section>
-          <section className="hero-section-1">
+          <section className="">
             <NftHeaderCard
-              heading="Popular Collections"
-              selectTitle="Last 24 hours"
+              heading="Explore Collections"
+              to="/explore"
+              // selectTitle="Last 24 hours"
             />
             <div className="hero-section-1-collection">
               {nftDatas.map(({ imgUrl, title }, i) => (
@@ -98,23 +103,29 @@ const Home: NextPage = () => {
                 />
               ))}
             </div>
-            <span className="mobile-see-all-btn">See All</span>
+            <span
+              className="mobile-see-all-btn cursor-pointer"
+              onClick={() => push("/explore")}
+            >
+              See All
+            </span>
           </section>
 
           <section>
-            <NftHeaderCard heading="LaunchPad Drops" selectTitle="On Sale" />
-            <NftSlider data={nft2Datas} />
-            <span className="mobile-see-all-btn">See All</span>
+            <NftHeaderCard heading="Featured Collections" to="/explore" />
+            <NftSlider data={launchpadDropDatas} Card={NftMediumCard3} />
+            <span
+              className="mobile-see-all-btn cursor-pointer"
+              onClick={() => push("/explore")}
+            >
+              See All
+            </span>
           </section>
-          <section>
-            <NftHeaderCard heading="In-Demand Collections" selectTitle="All" />
-            <NftSlider data={nft3Datas} />
-            <span className="mobile-see-all-btn">See All</span>
-          </section>
-          <section>
-            <NftHeaderCard heading="Explore Art" />
-            <NftSlider data={nft4Datas} />
-          </section>
+
+          {/* <section>
+            <NftHeaderCard heading="Explore" />
+            <NftSlider data={exploreItems} Card={CollectionCard} />
+          </section> */}
         </div>
         {isLoggedIn ? <Footer2 /> : <Footer />}
       </div>

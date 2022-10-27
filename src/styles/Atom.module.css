@@ -122,7 +122,11 @@ input {
 /*Select*/
 
 .select {
-  @apply py-[0.85rem] lg:py-4 px-2 lg:px-3 rounded-[0.5rem] border-[1px] border-border-1-line flex items-center justify-between gap-x-4;
+  @apply py-[0.85rem] lg:py-4 px-2 lg:px-3 rounded-[0.5rem] border-[1px] border-border-1-line flex items-center justify-between gap-x-4 relative;
+}
+
+.select-lists {
+  @apply absolute rounded-[0.5rem] border-[1px] border-border-1-line flex-col top-[110%] w-full bg-bg-4 p-2;
 }
 
 span {

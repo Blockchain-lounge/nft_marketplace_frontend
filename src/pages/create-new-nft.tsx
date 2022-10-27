@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Router from "next/router";
+
 import { ChangeEvent, FormEvent, useState } from "react";
 import clsx from "clsx";
 import {
@@ -18,11 +19,12 @@ import {
   ProfileLinkIcon,
   TwitterIcon,
 } from "../components/atoms/vectors";
-import { Footer2, Modal } from "../components/organisms";
+import { CreateCollection, Footer2, Modal } from "../components/organisms";
 import DashboardLayout from "../template/DashboardLayout";
 import { Button, Input2, Select } from "../components/atoms";
 import { GetServerSideProps } from "next";
 import { requireAuthentication } from "../utilities/auth/requireAuthentication";
+import { useRouter } from "next/router";
 
 // const IPFSCLIENT = require('ipfs-http-client');
 // const projectId = process.env.REACT_APP_INFURA_IPFS_PROJECT_ID
@@ -40,10 +42,10 @@ import { requireAuthentication } from "../utilities/auth/requireAuthentication";
 // });
 // const REACT_APP_IPFS_URL = APPCONFIG.IPFS_URL;
 
-
 const CreateNewNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [file, setFile] = useState<FileList | null>(null);
+  const [modalType, setModaltype] = useState("success");
   const [nftPayload, setNftPayload] = useState({
     coinPrice: "",
     itemName: "",
@@ -59,6 +61,7 @@ const CreateNewNft = () => {
     { label: "Apetype", value: "Glasses" },
   ]);
   const [priceListType, setPriceListType] = useState("");
+  const { push } = useRouter();
   const priceListingTypes = [
     { type: "Fixed price", icon: <FixedPriceIcon /> },
     { type: "Open for bids", icon: <BidIcon /> },
@@ -92,8 +95,14 @@ const CreateNewNft = () => {
       !nftPayload.supply.trim()
     )
       return;
+    setModaltype("success");
     setShowModal(true);
     console.log({ nftPayload, file, priceListType });
+  };
+
+  const handleModal = () => {
+    setModaltype("wallet");
+    setShowModal((prev) => !prev);
   };
 
   return (
@@ -122,14 +131,14 @@ const CreateNewNft = () => {
                   className="hidden"
                   name="img"
                 />
-                <div className="disp-img h-[20rem] relative">
+                <div className="disp-img w-[25rem] h-[25rem] relative">
                   <label
                     htmlFor="file"
                     className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d7f]"
                   >
                     <ImgUploadIcon />
                     <span className={clsx(file ? "hidden" : "block")}>
-                      Click to add a file or drag file here
+                      Click to add a file
                     </span>
                   </label>
                   <img
@@ -237,7 +246,10 @@ const CreateNewNft = () => {
               <div className="create-new-nft-wrapper-2">
                 <div className="flex justify-between items-center">
                   <span>Collection</span>
-                  <span className="earnings-card-history">
+                  <span
+                    className="earnings-card-history cursor-pointer"
+                    onClick={handleModal}
+                  >
                     Create collection
                   </span>
                 </div>
@@ -299,12 +311,12 @@ const CreateNewNft = () => {
                   This is how your item will be displayed
                 </span>
               </div>
-              <div className="h-[25rem] mt-4">
+              <div className="h-[25rem] w-[25rem] mt-4">
                 <div className="h-[100%] relative">
                   {file && (
                     <div className="nmc-wrapper-likes nmc-wrapper2-likes z-10">
                       <LikeIcon />
-                      <span>298</span>
+                      <span>0</span>
                     </div>
                   )}
                   <span
@@ -353,58 +365,67 @@ const CreateNewNft = () => {
       <Modal
         openModal={showModal}
         closeModal={setShowModal}
-        noTop
-        modalWt="w-[30rem]"
+        noTop={modalType !== "wallet" && true}
+        title={modalType === "wallet" ? "Create Collection" : ""}
+        modalWt={modalType === "wallet" ? "w-[40%]" : "w-[30rem]"}
       >
-        <div className="create-new-nft-success">
-          <div className="mt-4 h-40 w-40 relative">
-            <img
-              src={
-                file
-                  ? //@ts-ignore
-                    URL.createObjectURL([...file][0])
-                  : ""
-              }
-              alt=""
-              className={`object-cover h-full w-full rounded-2xl`}
-            />
-            <span className="absolute right-[0.3rem] bottom-[-0.7rem] bg-positive-color h-8 w-8 grid place-items-center rounded-full border-bg-1 border-[2.5px]">
-              <CheckIcon color="#15152E" />
-            </span>
-          </div>
-          <span className="text-lg">Your item has been created</span>
-          <span className="text-sm font-medium mx-auto max-w-[60%] text-center text-txt-2">
-            {nftPayload.nftName} from {nftPayload.nftName.split(" ")[0]}{" "}
-            Collection has been listed for sale
-          </span>
-          <div className="flex flex-col items-center gap-y-2 my-2">
-            <span className="text-sm text-txt-3">Share to</span>
-            <span className="flex items-center gap-x-6">
-              <ProfileLinkIcon />
-              <FbIcon />
-              <TwitterIcon />
-              <DiscordIcon />
-            </span>
-          </div>
-          <span className="crete-new-nft-icons"></span>
-          <Button
-            title="View listing"
-            outline2
-            onClick={() => {
-              setShowModal((prev) => !prev);
-              setNftPayload({
-                coinPrice: "",
-                itemName: "",
-                nftName: "",
-                nftSymbol: "",
-                description: "",
-                supply: "",
-                royalties: "",
-              });
-              setFile(null);
-            }}
+        {modalType === "wallet" ? (
+          <CreateCollection
+            closeModal={setShowModal}
+            // changeModalType={setModaltype}
           />
-        </div>
+        ) : (
+          <div className="create-new-nft-success">
+            <div className="mt-4 h-40 w-40 relative">
+              <img
+                src={
+                  file
+                    ? //@ts-ignore
+                      URL.createObjectURL([...file][0])
+                    : ""
+                }
+                alt=""
+                className={`object-cover h-full w-full rounded-2xl`}
+              />
+              <span className="absolute right-[0.3rem] bottom-[-0.7rem] bg-positive-color h-8 w-8 grid place-items-center rounded-full border-bg-1 border-[2.5px]">
+                <CheckIcon color="#15152E" />
+              </span>
+            </div>
+            <span className="text-lg">Your item has been created</span>
+            <span className="text-sm font-medium mx-auto max-w-[60%] text-center text-txt-2">
+              {nftPayload.nftName} from {nftPayload.nftName.split(" ")[0]}{" "}
+              Collection has been listed for sale
+            </span>
+            <div className="flex flex-col items-center gap-y-2 my-2">
+              <span className="text-sm text-txt-3">Share to</span>
+              <span className="flex items-center gap-x-6">
+                <ProfileLinkIcon />
+                <FbIcon />
+                <TwitterIcon />
+                <DiscordIcon />
+              </span>
+            </div>
+            <span className="crete-new-nft-icons"></span>
+            <Button
+              title="View listing"
+              outline2
+              onClick={() => {
+                push("/view-nft/cloneX");
+                setNftPayload({
+                  coinPrice: "",
+                  itemName: "",
+                  nftName: "",
+                  nftSymbol: "",
+                  description: "",
+                  supply: "",
+                  royalties: "",
+                });
+                setFile(null);
+                setShowModal((prev) => !prev);
+              }}
+            />
+          </div>
+        )}
       </Modal>
     </DashboardLayout>
   );

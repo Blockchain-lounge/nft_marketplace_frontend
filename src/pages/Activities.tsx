@@ -6,6 +6,7 @@ import DashboardLayout from "../template/DashboardLayout";
 
 const Activities = () => {
   const [currentTab, setCurrentTab] = useState("1 h");
+  const [currentEvent, setCurrentEvent] = useState("All");
 
   const tabs = ["1 h", "6 h", "24 h", "1 w", "1 m", "All"];
 
@@ -103,6 +104,7 @@ const Activities = () => {
       address: "0xb4d...002d",
     },
   ];
+  const events = ["All", "Sales", "listings", "offers", "transfers"];
 
   return (
     <DashboardLayout>
@@ -111,9 +113,14 @@ const Activities = () => {
           <div className="collection-page-top">
             <div className="collection-page-sub-top">
               <Heading2 title="Activities" />
-              <Select title="Event type" />
-              <Select title="Collection" />
-              <Select title="Chains" />
+              <Select
+                title="Event type"
+                placeholder={currentEvent}
+                onClick={setCurrentEvent}
+                lists={events}
+              />
+              {/* <Select title="Collection" />
+              <Select title="Chains" /> */}
             </div>
             <Tab2
               tabs={tabs}
