@@ -1,5 +1,5 @@
 export function signInMessage(username: string,nounce: number,address: string){
-  var msg = `Hello ${ucFirst(username)}, Welcome to Cloudax NFT!\nPlease approve this transaction to securely sign-in to Cloudax NFT.\n\nFeel free to checkout out our Terms of use & Privacy Policy: https://cloudax.xyz/tos\n\nThis is a totally free transaction and will not cost you any gas fees.\n\nYou will automatically be logged out after 24 hours.\n\nSelected wallet address:\n${address}\n\nNonce:\n${nounce}`;
+  var msg = `Please sign this connection to continue on Cloudax Marketplace.\n\nThis is totally free and secure. No gas fee would be charged.\n\nSelected wallet address:\n${address}\n\nNonce:\n${nounce}`;
   return msg;
 }
 
