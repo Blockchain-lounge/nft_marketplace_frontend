@@ -28,8 +28,8 @@ const Collections = () => {
           <div className="collection-page-top">
             <div className="collection-page-sub-top">
               <Heading2 title="Top Collections" />
-              <Select title="All categories" />
-              <Select title="All chains" />
+              {/* <Select title="All categories" />
+              <Select title="All chains" /> */}
             </div>
             <Tab2
               tabs={tabs}

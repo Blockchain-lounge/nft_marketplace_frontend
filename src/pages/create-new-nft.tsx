@@ -180,7 +180,7 @@ const CreateNewNft = () => {
               <div className="create-new-nft-wrapper-2">
                 <span className="create-new-nft-wrapper-2-label">Price</span>
                 <div className="create-new-nft-price">
-                  <Select title="ETH" icon={<CoinIcon />} />
+                  {/* <Select title="ETH" icon={<CoinIcon />} /> */}
                   <Input2
                     name="coinPrice"
                     placeholder="0.00"
@@ -253,7 +253,7 @@ const CreateNewNft = () => {
                     Create collection
                   </span>
                 </div>
-                <Select title="Select collection" />
+                {/* <Select title="Select collection" /> */}
               </div>
               <Input2
                 label="Supply"
