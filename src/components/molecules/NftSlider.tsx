@@ -55,7 +55,7 @@ const NftSlider = ({ data = [], Card }: { data?: any; Card: any }) => {
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 1.2,
           slidesToScroll: 1,
         },
       },
