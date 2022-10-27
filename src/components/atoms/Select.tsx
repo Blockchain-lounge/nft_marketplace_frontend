@@ -29,8 +29,8 @@ const Select = ({
   return (
     <div className={clsx("relative", twClasses)}>
       <div className="select" onClick={handleOpenSubmenu}>
-        <span className="flex space-x-6 items-center">
-          {icon} {title} : {placeholder}
+        <span className="flex space-x-2 items-center">
+          {icon} {title}
         </span>
         <span
           className={clsx("sidebar-toggle-btn", openSubmenu && "sidebar-open")}
@@ -38,7 +38,12 @@ const Select = ({
           <CaretDown />
         </span>
       </div>
-      <div className={clsx("select-lists", !openSubmenu ? "hidden" : "flex")}>
+      <div
+        className={clsx(
+          "select-lists w-full",
+          !openSubmenu ? "hidden" : "flex"
+        )}
+      >
         {lists.map((label, i) => (
           <span
             key={label + i}
