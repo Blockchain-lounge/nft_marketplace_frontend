@@ -129,7 +129,7 @@ const NavBar: FC<INav> = ({
 
   return (
     <nav>
-      <div className="nav-status center">
+      {/* <div className="nav-status center">
         <div></div>
         <div className="flex gap-x-[1rem]">
           {statusArr.map(({ title, value }) => (
@@ -143,7 +143,7 @@ const NavBar: FC<INav> = ({
         <span className="nav-select">
           English <CaretDown />
         </span>
-      </div>
+      </div> */}
       <div className="main-nav center">
         <span className="mobile-menu" onClick={handleMobileModal}>
           <img src="/vectors/mobile-menu.svg" />
@@ -195,9 +195,9 @@ const NavBar: FC<INav> = ({
                 >
                   <WalletIcon />
                 </span>
-                <span className="nav-create-nft cursor-pointer">
+                {/* <span className="nav-create-nft cursor-pointer">
                   <CartIcon />
-                </span>
+                </span> */}
               </div>
               <MiniUserWallet showBal={showBal} onClick={setShowBal} />
               <MiniUserProfile
@@ -235,18 +235,18 @@ const NavBar: FC<INav> = ({
         }
         closeModal={setOpenModal}
       >
-        {modalType === "collection" ? (
-          <CreateCollection
-            closeModal={setOpenModal}
-            changeModalType={setModaltype}
-          />
+        <CreateCollection
+          closeModal={setOpenModal}
+          changeModalType={setModaltype}
+        />
+        {/* {modalType === "collection" ? (
         ) : (
           <ConnectWalletStage1
             stage={stage}
             setStage={setStage}
             closeModal={setOpenModal}
           />
-        )}
+        )} */}
       </Modal>
     </nav>
   );

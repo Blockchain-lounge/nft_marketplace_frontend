@@ -11,9 +11,11 @@
 .footer-icon-copy {
   @apply order-4 lg:-order-1 flex flex-col items-center lg:block mt-8 lg:mt-0;
 }
+
 .footer-icons {
   @apply flex gap-x-[2.3125rem];
 }
+
 .footer-copy {
   @apply text-xl mt-4 text-[#A5AEC1] lg:mt-[3.875rem];
 }
@@ -25,9 +27,11 @@ footer span {
 .about-links {
   @apply flex flex-col mb-8 lg:mb-0 gap-x-[1.125rem];
 }
+
 .footer-link-title {
   @apply font-medium text-2xl text-white leading-[2.21875rem] mb-3 lg:mb-[1.125rem];
 }
+
 .footer-links {
   @apply text-xl text-[#A5AEC1] leading-10 lg:leading-[3.15625rem];
 }
@@ -98,6 +102,7 @@ nav {
 .nav-status-title {
   @apply text-white font-medium text-[0.875rem];
 }
+
 .nav-status-value {
   @apply ml-[0.4rem] text-[#3694FA] text-[0.875rem] font-medium;
 }
@@ -113,6 +118,7 @@ nav {
 .mobile-menu {
   @apply block lg:hidden;
 }
+
 .nav-auth {
   @apply hidden lg:block;
 }
@@ -125,6 +131,7 @@ nav {
 .sub-nav-input {
   @apply hidden lg:block;
 }
+
 .nav-mobile-search {
   @apply relative h-16 rounded-xl border-[#ffffff24] border-[0.0625rem] p-[1rem] flex justify-center items-center lg:hidden;
 }

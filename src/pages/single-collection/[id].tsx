@@ -13,9 +13,8 @@ import Image from "next/image";
 import React, { useState } from "react";
 
 const ViewCollection = () => {
-  const [collectionImg, setCollectionImg] = useState<FileList | null>(null);
-  const [collectionBannerImg, setCollectionBannerImg] =
-    useState<FileList | null>(null);
+  const [collectionImg, setCollectionImg] = useState("");
+  const [collectionBannerImg, setCollectionBannerImg] = useState("");
   const [activeStage, setActiveStage] = useState("items");
   const [filter, setFilter] = useState(false);
   const info =
@@ -34,12 +33,42 @@ const ViewCollection = () => {
     <DashboardLayout>
       <div className="sub-layout-wrapper">
         <div className="center">
-          <BannerImg
-            userImg={collectionImg}
-            userImgBanner={collectionBannerImg}
-            setUserImg={setCollectionImg}
-            setUserImgBanner={setCollectionBannerImg}
-          />
+          <div className="single-collection-banner-img">
+            <div className="h-60 rounded-3xl relative flex">
+              <div className="h-32 w-32 absolute -bottom-14 left-6 rounded-full border-bg-3 border-[4px] z-10">
+                <div className={`h-full w-full rounded-full relative`}>
+                  <Image
+                    priority
+                    src={collectionImg || "/images/avatar.png"}
+                    alt="collection-logo"
+                    objectFit="cover"
+                    layout="fill"
+                    className="rounded-full"
+                  />
+                </div>
+              </div>
+
+              {collectionBannerImg ? (
+                <Image
+                  src={collectionBannerImg}
+                  alt="collection-img-banner"
+                  objectFit="cover"
+                  layout="fill"
+                  className="rounded-3xl"
+                />
+              ) : (
+                <label className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d49]">
+                  <Image
+                    src="/images/banner-placeholder.svg"
+                    alt="banner-img-svg"
+                    width="64px"
+                    height="64px"
+                    objectFit="cover"
+                  />
+                </label>
+              )}
+            </div>
+          </div>
           <div className="single-collection-info">
             <div className="flex flex-col gap-y-3">
               <div className="flex mb-4">
@@ -55,9 +84,9 @@ const ViewCollection = () => {
                 </div>
               </div>
               <p className="max-w-2xl">{info}</p>
-              <span className="flex font-bold">
+              {/* <span className="flex font-bold">
                 See more <CaretDown />
-              </span>
+              </span> */}
               <div className="flex gap-x-6 mt-4 items-center">
                 <span className="border border-border-3-line p-1 rounded-md">
                   <SendIcon />
@@ -108,7 +137,7 @@ const ViewCollection = () => {
           {activeStage === "items" ? (
             <div className="single-collection-items">
               {/*single collections filters*/}
-              <div className="single-collection-filter">
+              {/* <div className="single-collection-filter">
                 <div
                   className={clsx(
                     "flex items-center justify-around font-bold p-4 rounded-xl cursor-pointer",
@@ -137,10 +166,10 @@ const ViewCollection = () => {
                     />
                   </span>
                 </div>
-              </div>
+              </div> */}
               <div className="single-collection-lists">
                 {/* <div>hello</div> */}
-                <div className="flex flex-wrap gap-8">
+                <div className="flex flex-wrap justify-evenly gap-y-12">
                   {singleCollectionsDatas.map((val, i) => (
                     <NftMediumCard2 {...val} key={val.name + i} />
                   ))}

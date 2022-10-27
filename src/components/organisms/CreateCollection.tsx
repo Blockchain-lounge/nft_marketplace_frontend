@@ -19,6 +19,11 @@ const CreateCollection: FC<ICollectionProps> = ({
   changeModalType,
 }) => {
   const [userImgBanner, setUserImgBanner] = useState<FileList | null>(null);
+
+  const [featuredImg, setFeaturedImg] = useState<FileList | null>(null);
+
+  const [logoImg, setLogoImg] = useState<FileList | null>(null);
+
   const [collectionPayload, setCollectionPayload] = useState({
     name: "",
     description: "",
@@ -39,9 +44,9 @@ const CreateCollection: FC<ICollectionProps> = ({
     changeModalType("wallet");
   };
   return (
-    <div className="create-new-nft-form max-w-[90%] mx-auto">
+    <div className="create-new-nft-form max-w-[90%] mx-auto overflow-auto h-[70vh]">
       <div className="create-new-nft-wrapper-2">
-        <span className="create-new-nft-wrapper-2-label">File/Media</span>
+        <span className="create-new-nft-wrapper-2-label">Banner Image</span>
         <span className="create-new-nft-wrapper-2-label-type">
           File types supported: JPG and PNG. Max size: 100 MB
         </span>
@@ -76,7 +81,7 @@ const CreateCollection: FC<ICollectionProps> = ({
           />
           <label
             htmlFor="userImg"
-            className="absolute inset-0 rounded-lg flex flex-col justify-center items-center bg-[#1c1e3d7f] mt-2"
+            className="absolute inset-0 rounded-lg flex flex-col justify-center items-center bg-[#1c1e3d7f]"
           >
             <Image
               src="/gallery-add.svg"
@@ -84,8 +89,108 @@ const CreateCollection: FC<ICollectionProps> = ({
               width="24px"
               height="24px"
             />
-            <span className={clsx(userImgBanner ? "hidden" : "block")}>
+            <span className={clsx(userImgBanner ? "hidden" : "block mt-2")}>
+              Click to upload collection banner image
+            </span>
+          </label>
+        </div>
+      </div>
+      <div className="create-new-nft-wrapper-2">
+        <span className="create-new-nft-wrapper-2-label">Featured Image</span>
+        <span className="create-new-nft-wrapper-2-label-type">
+          File types supported: JPG and PNG. Max size: 100 MB
+        </span>
+        <div className="h-72 w-72 rounded-lg relative">
+          <div
+            className={`relative h-full w-full ${
+              !featuredImg ? "hidden" : "block"
+            }`}
+          >
+            <Image
+              src={
+                featuredImg
+                  ? //@ts-ignore
+                    URL.createObjectURL([...featuredImg][0])
+                  : "/ape.png"
+              }
+              alt="user-profile-img-banner"
+              objectFit="cover"
+              layout="fill"
+              className="rounded-lg"
+            />
+          </div>
+
+          <input
+            type="file"
+            id="featuredImg"
+            onChange={({
+              currentTarget: { files },
+            }: React.ChangeEvent<HTMLInputElement>) => setFeaturedImg(files)}
+            className="hidden"
+            name="img"
+          />
+          <label
+            htmlFor="featuredImg"
+            className="absolute inset-0 rounded-lg flex flex-col justify-center items-center bg-[#1c1e3d7f]"
+          >
+            <Image
+              src="/gallery-add.svg"
+              alt="add-img-svg"
+              width="24px"
+              height="24px"
+            />
+            <span className={clsx(featuredImg ? "hidden" : "block mt-2")}>
               Click to change image
+            </span>
+          </label>
+        </div>
+      </div>
+      <div className="create-new-nft-wrapper-2">
+        <span className="create-new-nft-wrapper-2-label">Logo Image</span>
+        <span className="create-new-nft-wrapper-2-label-type">
+          File types supported: JPG and PNG. Max size: 100 MB
+        </span>
+        <div className="h-40 w-40 rounded-lg relative mt-2">
+          <div
+            className={`relative h-full w-full ${
+              !logoImg ? "hidden" : "block"
+            }`}
+          >
+            <Image
+              src={
+                logoImg
+                  ? //@ts-ignore
+                    URL.createObjectURL([...logoImg][0])
+                  : "/ape.png"
+              }
+              alt="user-profile-img-banner"
+              objectFit="cover"
+              layout="fill"
+              className="rounded-lg"
+            />
+          </div>
+
+          <input
+            type="file"
+            id="logo"
+            onChange={({
+              currentTarget: { files },
+            }: React.ChangeEvent<HTMLInputElement>) => setLogoImg(files)}
+            className="hidden"
+            name="img"
+          />
+          <label
+            htmlFor="logo"
+            className="absolute inset-0 rounded-lg flex flex-col justify-center items-center bg-[#1c1e3d7f] "
+          >
+            <Image
+              src="/gallery-add.svg"
+              alt="add-img-svg"
+              width="24px"
+              height="24px"
+            />
+            <span className={clsx(logoImg ? "hidden" : "block text-sm mt-2")}>
+              Click to upload image
             </span>
           </label>
         </div>

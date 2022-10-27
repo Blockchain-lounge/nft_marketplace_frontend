@@ -28,19 +28,19 @@ const SideBar = () => {
   };
 
   const sidebarLinks = [
+    // {
+    //   label: "Collections",
+    //   icon: <CollectionsIcon />,
+    //   link: "/collections",
+    //   subLinks: [
+    //     { label: "Popular collections", link: "" },
+    //     { label: "Drop calendar", link: "" },
+    //     { label: "Auctions", link: "" },
+    //   ],
+    // },
     {
-      label: "Collections",
+      label: "Explore Collections",
       icon: <CollectionsIcon />,
-      link: "/collections",
-      // subLinks: [
-      //   { label: "Popular collections", link: "" },
-      //   { label: "Drop calendar", link: "" },
-      //   { label: "Auctions", link: "" },
-      // ],
-    },
-    {
-      label: "Explore",
-      icon: <ExploreIcon />,
       link: "/explore",
     },
     {
@@ -60,11 +60,11 @@ const SideBar = () => {
       tag: "coming",
     },
 
-    {
-      label: "Support",
-      icon: <SupportIcon />,
-      link: "/support",
-    },
+    // {
+    //   label: "Support",
+    //   icon: <SupportIcon />,
+    //   link: "/support",
+    // },
   ];
 
   const socialLinks = [
