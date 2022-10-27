@@ -7,6 +7,33 @@ import DashboardLayout from "../template/DashboardLayout";
 const Activities = () => {
   const [currentTab, setCurrentTab] = useState("1 h");
   const [currentEvent, setCurrentEvent] = useState("All");
+  const [collections, setCollections] = useState([
+    {
+      label: "Clonex",
+      isVerified: true,
+      img: "/images/nftsample2.png",
+      checked: false,
+    },
+    {
+      label: "VibeyApe",
+      isVerified: false,
+      img: "/images/ape.png",
+      checked: false,
+    },
+    {
+      label: "Clonex",
+      isVerified: false,
+      img: "/images/nftsample2.png",
+      checked: false,
+    },
+    {
+      label: "Clonex",
+      isVerified: false,
+      img: "/images/nftSample3.png",
+      checked: false,
+    },
+  ]);
+  const [selectedCollection, setSelectedCollection] = useState([]);
 
   const tabs = ["1 h", "6 h", "24 h", "1 w", "1 m", "All"];
 
@@ -105,6 +132,32 @@ const Activities = () => {
     },
   ];
   const events = ["All", "Sales", "listings", "offers", "transfers"];
+  // const collections = [
+  //   {
+  //     label: "Clonex",
+  //     isVerified: true,
+  //     img: "/images/nftsample2.png",
+  //     checked: false,
+  //   },
+  //   {
+  //     label: "VibeyApe",
+  //     isVerified: false,
+  //     img: "/images/ape.png",
+  //     checked: false,
+  //   },
+  //   {
+  //     label: "Clonex",
+  //     isVerified: false,
+  //     img: "/images/nftsample2.png",
+  //     checked: false,
+  //   },
+  //   {
+  //     label: "Clonex",
+  //     isVerified: false,
+  //     img: "/images/nftSample3.png",
+  //     checked: false,
+  //   },
+  // ];
 
   return (
     <DashboardLayout>

@@ -22,7 +22,7 @@ const EarningsCard = ({
     <div
       className={clsx(
         "earnings-card-wrapper",
-        !history
+        label !== "balance" && label !== "transactions"
           ? "bg-[#1a1c389d] drop-shadow-md"
           : "bg-transparent border-border-1-line border"
       )}
