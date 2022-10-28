@@ -3,7 +3,7 @@ import DashboardLayout from "../template/DashboardLayout";
 import { ArrowBack } from "@/src/components/atoms/vectors";
 import { Button, Heading } from "@/src/components/atoms";
 import { Footer2 } from "../components/organisms";
-import { ReactNode } from "react";
+import { Dispatch, ReactNode, SetStateAction } from "react";
 import Router, { useRouter } from "next/router";
 
 const EarningLayout = ({
@@ -15,13 +15,17 @@ const EarningLayout = ({
   title: string;
   cta?: {
     label: string;
-    to: string;
+    to?: string;
+    onClick?: () => void;
   };
 }) => {
-  const { push } = useRouter();
-  const handleNavigateTo = () => {
-    push(cta?.to as string);
-  };
+  // const { push } = useRouter();
+  // const handleNavigateTo = () => {
+  //   if (cta?.to !== undefined) {
+  //     push(cta?.to as string);
+  //   }
+  //   cta?.onClick;
+  // };
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper">
@@ -31,7 +35,7 @@ const EarningLayout = ({
               <ArrowBack onClick={() => Router.back()} />
               <h1>{title}</h1>
             </div>
-            {cta && <Button title={cta.label} onClick={handleNavigateTo} />}
+            {cta && <Button title={cta.label} onClick={cta.onClick} />}
           </div>
           <div className="earnings-children">{children}</div>
         </div>

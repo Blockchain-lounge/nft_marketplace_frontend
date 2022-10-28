@@ -1,5 +1,5 @@
 .home-wrapper {
-  @apply h-screen overflow-auto pb-[9.375rem];
+  @apply h-screen overflow-auto pb-48 lg:pb-[5rem];
 }
 
 .home-wrapper .hero {
@@ -28,9 +28,6 @@
 
 .hero-cards {
   @apply hidden lg:absolute lg:bottom-[-7.6rem] 2xl:bottom-[-7rem] right-[2.47125rem] lg:flex gap-x-[1.25rem];
-}
-
-.hero-section-1 {
 }
 
 .hero-section-1-collection {

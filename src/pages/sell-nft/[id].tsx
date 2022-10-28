@@ -244,7 +244,7 @@ const SellSingleNft = () => {
                   <div className="p-3 bg-bg-5 rounded-[1.25rem] w-full">
                     <span className="text-txt-2 block mb-4">Price</span>
                     <div className="">
-                      <span className="flex items-center text-[1.5rem] -ml-2">
+                      <span className="flex items-center text-[1.5rem] ">
                         <CoinIcon />
                         6.95
                       </span>
@@ -256,7 +256,7 @@ const SellSingleNft = () => {
                       Highest floor bid
                     </span>
                     <div>
-                      <span className="flex items-center -ml-2 text-[1.5rem]">
+                      <span className="flex items-center text-[1.5rem]">
                         <CoinIcon />
                         51k
                       </span>

@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 
 import { CoinIcon } from "@/src/components/atoms/vectors";
+import Image from "next/image";
 
 interface INftminicards {
   title: string;
@@ -10,14 +11,26 @@ interface INftminicards {
 
 const NftMiniCards = ({ title, imgUrl, index }: INftminicards) => {
   const { push } = useRouter();
+  const handleNavigate = () => {
+    push("/explore");
+  };
   return (
     <div
       className="nft-mini-cards-wrapper"
-      onClick={() => push(`/buy-view-nft/${title}`)}
+      onClick={handleNavigate}
+      // onClick={() => push(`/buy-view-nft/${title}`)}
     >
       <span className="nft-mini-cards-index">{index}</span>
       <div className="flex items-center">
-        <img src={imgUrl} alt={title} className="img" />
+        <div className="img relative">
+          <Image
+            src={imgUrl}
+            alt={title}
+            layout="fill"
+            objectFit="cover"
+            className="rounded-[0.75rem]"
+          />
+        </div>
         <div className="">
           <span className="nft-mini-cards-title">{title}</span>
           <div className="nft-mini-cards-wrapper2">

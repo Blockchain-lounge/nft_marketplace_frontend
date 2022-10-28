@@ -6,6 +6,7 @@ import { Heading } from "@/src/components/atoms";
 import { ArrowBack, CoinIcon } from "@/src/components/atoms/vectors";
 import { Footer } from "@/src/components/organisms";
 import DashboardLayout from "@/src/template/DashboardLayout";
+import Image from "next/image";
 
 const NftDetailPage = () => {
   const { push } = useRouter();
@@ -38,7 +39,14 @@ const NftDetailPage = () => {
 
               <span className="nft-detail-price">
                 <span className="nft-detail-price-label">Price:</span>
-                <CoinIcon /> 4.8
+                <span className="relative h-5 w-5">
+                  <Image
+                    src="/icon-svg/coin-case.svg"
+                    alt="coin-svg"
+                    layout="fill"
+                  />
+                </span>{" "}
+                4.8
               </span>
             </div>
             <p className="lg:max-w-xl">{nftData.content}</p>
@@ -56,7 +64,14 @@ const NftDetailPage = () => {
                   <span className="nft-detail-price-tag">MAX 1 TOKEN</span>
                   <div className="nft-detail-price">
                     <span className="nft-detail-price-label">Price:</span>
-                    <CoinIcon /> <span>4.8</span>
+                    <span className="relative h-5 w-5">
+                      <Image
+                        src="/icon-svg/coin-case.svg"
+                        alt="coin-svg"
+                        layout="fill"
+                      />
+                    </span>{" "}
+                    <span>4.8</span>
                   </div>
                 </div>
               </div>
@@ -73,14 +88,27 @@ const NftDetailPage = () => {
                   <span className="nft-detail-price-tag">Unlimited</span>
                   <div className="nft-detail-price">
                     <span className="nft-detail-price-label">Price:</span>
-                    <CoinIcon /> <span>4.8</span>
+                    <span className="relative h-5 w-5">
+                      <Image
+                        src="/icon-svg/coin-case.svg"
+                        alt="coin-svg"
+                        layout="fill"
+                      />
+                    </span>{" "}
+                    <span>4.8</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div className="nft-detail-detail-img">
-            <img src="/images/ape.png" alt={"ape-img"} />
+            <Image
+              src="/images/ape.png"
+              alt={"ape-img"}
+              layout="fill"
+              objectFit="cover"
+              className="rounded-xl"
+            />
           </div>
         </div>
         <Footer />

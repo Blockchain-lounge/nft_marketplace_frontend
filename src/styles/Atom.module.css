@@ -48,7 +48,7 @@
 
 /* heading */
 .hd {
-  @apply text-[3.625rem] font-['Sf_Pro'] font-bold block text-white leading-[4.325rem];
+  @apply text-[2.5rem] lg:text-[3.625rem] font-['Sf_Pro'] font-bold block text-white lg:leading-[4.325rem];
 }
 
 /* heading */
@@ -122,7 +122,11 @@ input {
 /*Select*/
 
 .select {
-  @apply py-[0.85rem] lg:py-4 px-2 lg:px-3 rounded-[0.5rem] border-[1px] border-border-1-line flex items-center justify-between gap-x-4;
+  @apply py-[0.85rem] lg:py-4 px-2 lg:px-3 rounded-[0.5rem] border-[1px] border-border-1-line flex items-center justify-between gap-x-4 relative;
+}
+
+.select-lists {
+  @apply absolute rounded-[0.5rem] border-[1px] border-border-1-line flex-col top-[110%] bg-bg-4 p-2 z-10;
 }
 
 span {

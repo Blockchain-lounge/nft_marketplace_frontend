@@ -14,7 +14,7 @@ const BannerImg = ({
   setUserImgBanner: Dispatch<SetStateAction<FileList | null>>;
 }) => {
   return (
-    <div className="h-56 rounded-3xl relative">
+    <div className="h-60 rounded-3xl relative">
       <div className="h-32 w-32 absolute -bottom-14 left-6 rounded-full border-bg-3 border-[4px] z-10">
         <div className={`h-full w-full rounded-full relative`}>
           <Image

@@ -1,5 +1,5 @@
 .nft-detail-wrapper {
-  @apply h-screen overflow-auto pb-[9.375rem];
+  @apply h-screen overflow-auto pb-[5rem];
 }
 
 .nft-detail-wrapper-content {
@@ -71,6 +71,6 @@
   @apply mr-[0.875rem];
 }
 
-.nft-detail-detail-img img {
-  @apply rounded-xl;
+.nft-detail-detail-img {
+  @apply relative h-[60vh] w-[50vw];
 }

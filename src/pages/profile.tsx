@@ -27,7 +27,7 @@ const Profile = () => {
   const [openTab, setData] = useState(true);
   const [userOwnedProfileData, setUserOwnedProfileData] = useState([]);
   const [userCreatedProfileData, setUserCreatedProfileData] = useState([]);
-
+  const [userBannerImg, setUserBannerImg] = useState("");
   // const [user, setUser] = useState<null | Record<string, string>>(null);
   const [data, isLoading] = UseFetch("/user/my_profile");
 
@@ -113,15 +113,28 @@ const Profile = () => {
       <div className="sub-layout-wrapper scrollbar-hide">
         <div className="center">
           <div className="profile-banner">
-            <Image
-              src="/images/user-profile-banner.png"
-              alt="banner-img"
-              layout="fill"
-              objectFit="cover"
-            />
+            {userBannerImg ? (
+              <Image
+                src={userBannerImg}
+                alt="collection-img-banner"
+                objectFit="cover"
+                layout="fill"
+                className="rounded-3xl"
+              />
+            ) : (
+              <label className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d49]">
+                <Image
+                  src="/images/banner-placeholder.svg"
+                  alt="banner-img-svg"
+                  width="64px"
+                  height="64px"
+                  objectFit="cover"
+                />
+              </label>
+            )}
             <div className="profile-user-img">
               <Image
-                src="/images/avatar.png"
+                src="/images/avatar.svg"
                 alt="user-img"
                 layout="fill"
                 objectFit="cover"
@@ -131,13 +144,13 @@ const Profile = () => {
           <div className="profile-actions">
             <div className="profile-action">
               <div
-                className="rounded-lg border-border-3-line border p-3"
+                className="rounded-lg border-border-3-line border p-3 cursor-pointer"
                 onClick={() => push("/settings")}
               >
                 <EditIcon />
               </div>
 
-              <Button title="Sell NFT" />
+              {/* <Button title="Sell NFT" /> */}
             </div>
             <div className="profile-user-info">
               <span className="profile-user-name">

@@ -49,7 +49,7 @@ export const nftDatas = [
 export const nft2Datas = [
   {
     price: true,
-    imgUrl: "/collection/NFT-Pic-1.png",
+    imgUrl: "/collection/nftsample2.png",
     name: "Dreamy Ape",
     owner: "Bayc",
     status: "On sale",
@@ -81,6 +81,36 @@ export const nft2Datas = [
     name: "Dreamy Apes",
     owner: "Bayc",
     status: "On sale",
+  },
+];
+
+export const launchpadDropDatas = [
+  {
+    imgUrl: "/images/nftsample2.png",
+    collection: "CloneX",
+    name: "Clone Worldzz",
+  },
+  {
+    collection: "CloneX",
+    imgUrl: "/images/nftSample3.png",
+    name: "Vibey Ape",
+    count: "01d 23h 10m",
+  },
+  {
+    imgUrl: "/images/profile-nft.png",
+    name: "Bored Ape",
+    count: "03d 3h 19m",
+    collection: "CloneX",
+  },
+  {
+    collection: "CloneX",
+    imgUrl: "/images/nftSample3.png",
+    name: "Grig",
+  },
+  {
+    collection: "CloneX",
+    imgUrl: "/images/nftsample2.png",
+    name: "Dreamy Apes",
   },
 ];
 

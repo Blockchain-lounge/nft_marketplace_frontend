@@ -6,6 +6,7 @@ import {
   EarningsIcon,
   MetamaskIcon,
 } from "@/src/components/atoms/vectors";
+import Link from "next/link";
 
 interface IMiniuserwallet {
   showBal: boolean;
@@ -16,9 +17,9 @@ interface IMiniuserwallet {
 const MiniUserWallet = ({ showBal, onClick }: IMiniuserwallet) => {
   const userWalletLinks = [
     {
-      link: "Wallets",
+      link: "Wallet",
       icon: <WalletIcon2 />,
-      to: "/",
+      to: "/wallet",
     },
     {
       link: "View earnings",
@@ -27,6 +28,7 @@ const MiniUserWallet = ({ showBal, onClick }: IMiniuserwallet) => {
     },
   ];
   const { push } = useRouter();
+
   return (
     <div
       className={clsx(
@@ -50,7 +52,7 @@ const MiniUserWallet = ({ showBal, onClick }: IMiniuserwallet) => {
       <div className="mini-wallet-info">
         <MetamaskIcon twclx="h-[2.5rem]" />
         <div className="flex flex-col">
-          <span className="mini-wallet-name">Coinbase wallet</span>
+          <span className="mini-wallet-name">0xdE8cF...1C79</span>
           <span className="mini-wallet-address">Default wallet</span>
         </div>
       </div>

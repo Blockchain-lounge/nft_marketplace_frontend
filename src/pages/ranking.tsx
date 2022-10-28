@@ -6,8 +6,11 @@ import DashboardLayout from "../template/DashboardLayout";
 
 const Ranking = () => {
   const [currentTab, setCurrentTab] = useState("1 h");
+  const [currentChain, setCurrentChain] = useState("on chain");
 
   const tabs = ["1 h", "6 h", "24 h", "1 w", "1 m", "All"];
+
+  const chainSelect = ["on chain", "off chain"];
 
   const rankings = [
     { imgUrl: "/images/ape.png", owner: "CloneX", verified: true },
@@ -25,7 +28,12 @@ const Ranking = () => {
           <div className="collection-page-top">
             <div className="collection-page-sub-top">
               <Heading2 title="Ranking" />
-              <Select title="All chains" />
+              <Select
+                title="All chains"
+                lists={chainSelect}
+                onClick={setCurrentChain}
+                placeholder={currentChain}
+              />
             </div>
             <Tab2
               tabs={tabs}

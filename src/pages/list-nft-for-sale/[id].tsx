@@ -66,7 +66,7 @@ const ListNft = () => {
             <div className="space-y-2">
               <span className="create-new-nft-wrapper-2-label ">Price</span>
               <div className="create-new-nft-price">
-                <Select title="ETH" icon={<CoinIcon />} />
+                {/* <Select title="ETH" icon={<CoinIcon />} /> */}
                 <Input2
                   name="coinPrice"
                   placeholder="0.00"
