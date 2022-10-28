@@ -3,24 +3,29 @@ import { useRouter } from "next/router";
 import clsx from "clsx";
 import { CoinIcon, OutlineLikesIcon } from "@/src/components/atoms/vectors";
 
-export interface INftcard {
-  price: string;
-  imgUrl: string;
-  name: string;
-  owner: string;
-  status: string;
-}
+// export interface INftcard {
+//   _id,
+//   item_title,
+//   item_art_url,
+//   item_price,
+//   item_quantity,
+//   time,
+// }
 
-const NftCard = ({ price, imgUrl, name, owner, status }: Partial<INftcard>) => {
+const NftCard = ({ _id,
+  item_title,
+  item_art_url,
+  item_price,
+  item_quantity, status }: Partial<INftcard>) => {
   const { push } = useRouter();
   return (
-    <div className="nmc-wrapper" onClick={() => push(`/buy-view-nft/${name}`)}>
+    <div className="nmc-wrapper" onClick={() => push(`/buy-view-nft/${_id}`)}>
       <div className="nmc-wrapper-img">
         <div className="nmc-wrapper-likes">
           <OutlineLikesIcon />
           <span>295</span>
         </div>
-        <img src={imgUrl} alt={name} />
+        <img src={item_art_url} alt={item_title} />
       </div>
       <div className="nmc-sub-wrapper">
         {status && (
@@ -37,13 +42,13 @@ const NftCard = ({ price, imgUrl, name, owner, status }: Partial<INftcard>) => {
           <img src="/collection/bayc-footer1.png" alt="" />
           <div className="nmc-wrapper-4">
             <div className="flex flex-col">
-              <span className="name">{name}</span>
-              <span className="owner">{owner}</span>
+              <span className="name">{item_title}</span>
+              {/* <span className="owner">{owner}</span> */}
             </div>
-            {price && (
+            {item_price && (
               <div className="price-wrapper">
                 <span className="coin">
-                  <CoinIcon color="#2B2E32" /> 4.83
+                  <CoinIcon color="#2B2E32" /> {item_price}
                 </span>
                 <span className="text-base font-medium text-[#767A7F]">
                   $18,000

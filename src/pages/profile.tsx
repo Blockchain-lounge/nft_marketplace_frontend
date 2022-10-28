@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import DashboardLayout from "@/src/template/DashboardLayout";
 import { Footer2 } from "@/src/components/organisms";
@@ -15,27 +15,27 @@ import {
   ConnectWalletTab,
   NftMediumCard2,
 } from "@/src/components/molecules";
-import {
-  userCreatedProfileDatas,
-  userOwnedProfileDatas,
-} from "@/src/store/data";
 
+import { apiRequest } from '../functions/offChain/apiRequests';
+import { toast } from "react-toastify";
 import UseFetch from "../hooks/useFetch";
 import Image from "next/image";
+import async from '../functions/onChain/authFunction';
 
 const Profile = () => {
   const [profileActiveTab, setProfileActiveTab] = useState(0);
   const [openTab, setData] = useState(true);
+  const [userOwnedProfileData, setUserOwnedProfileData] = useState([]);
+  const [userCreatedProfileData, setUserCreatedProfileData] = useState([]);
   const [userBannerImg, setUserBannerImg] = useState("");
-
   // const [user, setUser] = useState<null | Record<string, string>>(null);
   const [data, isLoading] = UseFetch("/user/my_profile");
 
   const { push } = useRouter();
 
   const profileTab = [
-    { text: "Owned", count: userOwnedProfileDatas.length },
-    { text: "Created", count: userCreatedProfileDatas.length },
+    { text: "Owned", count: userOwnedProfileData.length },
+    { text: "Created", count: userCreatedProfileData.length },
     { text: "Activity" },
   ];
 
@@ -44,6 +44,63 @@ const Profile = () => {
 
   const handleNavigateToHome = () => push("/");
 
+  const fetchTokenOwned = async()=>{
+    const HEADER = 'authenticated';
+      const REQUEST_URL = 'nft/tokens_owned';
+      const METHOD = "GET";
+      const DATA = {}  
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
+        .then((response) => {
+          if (response.status == 400) {
+            var error = response.data.error;
+            toast(error);
+            return;
+          }
+          else if (response.status == 401) {
+            toast('Unauthorized request!');
+            return;
+          }
+          else if (response.status == 200) {
+            setUserOwnedProfileData(response.data.data)
+          }
+          else {
+            toast('Something went wrong, please try again!');
+            return;
+          }
+        });
+  }
+
+  const fetchTokenCreated = async()=>{
+    const HEADER = 'authenticated';
+      const REQUEST_URL = 'nft/tokens_listed';
+      const METHOD = "GET";
+      const DATA = {}  
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
+        .then((response) => {
+          if (response.status == 400) {
+            var error = response.data.error;
+            toast(error);
+            return;
+          }
+          else if (response.status == 401) {
+            toast('Unauthorized request!');
+            return;
+          }
+          else if (response.status == 200) {
+            setUserCreatedProfileData(response.data.data)
+          }
+          else {
+            toast('Something went wrong, please try again!');
+            return;
+          }
+        });
+  }
+  useEffect(() => {
+    // try {
+      fetchTokenOwned();
+      fetchTokenCreated();
+  }, []);
+
   if (isLoading) {
     return (
       <div className="h-screen inset-0 flex justify-center items-center">
@@ -51,7 +108,6 @@ const Profile = () => {
       </div>
     );
   }
-
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper scrollbar-hide">
@@ -117,13 +173,13 @@ const Profile = () => {
               <div>
                 {profileActiveTab === 0 ? (
                   <div className="user-profile-owned-nfts">
-                    {userOwnedProfileDatas.map((val, i) => (
-                      <NftMediumCard2 {...val} key={val.name + i} />
+                    {userOwnedProfileData.map((val, i) => (
+                      <NftMediumCard2 {...val} key={i} />
                     ))}
                   </div>
                 ) : profileActiveTab === 1 ? (
                   <div className="user-profile-owned-nfts">
-                    {userCreatedProfileDatas.map((val, i) => (
+                    {userCreatedProfileData.map((val, i) => (
                       <NftMediumCard2 key={val.name + i} {...val} />
                     ))}
                   </div>

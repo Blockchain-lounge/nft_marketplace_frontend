@@ -66,7 +66,8 @@ const NftSlider = ({ data = [], Card }: { data?: any; Card: any }) => {
     <div className="relative grid grid-cols-1">
       <Slider {...settings}>
         {data.map((value: any) => (
-          <Card key={value["name"]} {...value} />
+          <NftMediumCard key={value["_id"]} {...value} />
+          // <Card key={value["name"]} {...value} />
         ))}
       </Slider>
     </div>

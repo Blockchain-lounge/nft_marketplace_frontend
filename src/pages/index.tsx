@@ -2,7 +2,7 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { FeaturedIcon } from "@/src/components/atoms/vectors";
-
+import { ToastContainer, toast } from "react-toastify";
 import { HeroIndicator, Button, Heading, Tag } from "@/src/components/atoms";
 
 import {
@@ -21,24 +21,61 @@ import { Footer, Footer2 } from "@/src/components/organisms";
 import {
   heroCards,
   nftDatas,
-  // nft2Datas,
-  // nft3Datas,
-  // nft4Datas,
+  nft2Datas,
+  nft3Datas,
+  nft4Datas,
   launchpadDropDatas,
 } from "@/src/store/data";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NextPage } from "next";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
+import { apiRequest } from '../functions/offChain/apiRequests';
 
 const Home: NextPage = () => {
   const [heroData, setHeroData] = useState(heroCards);
   const [activeCard, setActiveCard] = useState(heroData[0]);
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const { push } = useRouter();
+  const [launchPadDrops, setLaunchPadDrops] = useState([]);
+  const [userCreatedProfileData, setUserCreatedProfileData] = useState([]);
   const exploreItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
+  
+  const fetchLaunchPadDrops = async()=>{
+    try {
+      const HEADER = 'authenticated';
+      const REQUEST_URL = 'nft-item/index';
+      const METHOD = "GET";
+      const DATA = {}  
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
+        .then((response) => {
+          if (response.status == 400) {
+            var error = response.data.error;
+            toast(error);
+            return;
+          }
+          else if (response.status == 401) {
+            toast('Unauthorized request!');
+            return;
+          }
+          else if (response.status == 200) {
+            setLaunchPadDrops(response.data.data)
+          }
+          else {
+            toast('Something went wrong, please try again!');
+            return;
+          }
+        });
+    } catch (error) {
+      toast('Something went wrong, please try again!');
+      return;
+    }
+    
+  }
+  useEffect(() => {
+    // fetchLaunchPadDrops();
+  }, []);
   return (
     <DashboardLayout>
       <div className="home-wrapper">
@@ -87,6 +124,7 @@ const Home: NextPage = () => {
               </div>
             </div>
           </section>
+          {/* <section className="hero-section-1">
           <section className="">
             <NftHeaderCard
               heading="Explore Collections"
@@ -103,6 +141,22 @@ const Home: NextPage = () => {
                 />
               ))}
             </div>
+            <span className="mobile-see-all-btn">See All</span>
+          </section> */}
+
+          <section>
+            <NftHeaderCard heading="LaunchPad Drops" selectTitle="On Sale" />
+            <NftSlider data={launchPadDrops} />
+            <span className="mobile-see-all-btn">See All</span>
+          </section>
+          <section>
+            <NftHeaderCard heading="In-Demand Collections" selectTitle="All" />
+            <NftSlider data={nft3Datas} />
+            <span className="mobile-see-all-btn">See All</span>
+          </section>
+          <section>
+            <NftHeaderCard heading="Explore Art" />
+            <NftSlider data={nft4Datas} />
             <span
               className="mobile-see-all-btn cursor-pointer"
               onClick={() => push("/explore")}
