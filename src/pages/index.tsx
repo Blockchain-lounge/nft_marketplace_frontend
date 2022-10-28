@@ -2,7 +2,7 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { FeaturedIcon } from "@/src/components/atoms/vectors";
-
+import { ToastContainer, toast } from "react-toastify";
 import { HeroIndicator, Button, Heading, Tag } from "@/src/components/atoms";
 
 import {
@@ -21,9 +21,9 @@ import { Footer, Footer2 } from "@/src/components/organisms";
 import {
   heroCards,
   nftDatas,
-  // nft2Datas,
-  // nft3Datas,
-  // nft4Datas,
+  nft2Datas,
+  nft3Datas,
+  nft4Datas,
   launchpadDropDatas,
 } from "@/src/store/data";
 
@@ -41,8 +41,10 @@ const Home: NextPage = () => {
   const [launchPadDrops, setLaunchPadDrops] = useState([]);
   const [userCreatedProfileData, setUserCreatedProfileData] = useState([]);
   const exploreItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  
   const fetchLaunchPadDrops = async()=>{
-    const HEADER = 'authenticated';
+    try {
+      const HEADER = 'authenticated';
       const REQUEST_URL = 'nft-item/index';
       const METHOD = "GET";
       const DATA = {}  
@@ -65,9 +67,14 @@ const Home: NextPage = () => {
             return;
           }
         });
+    } catch (error) {
+      toast('Something went wrong, please try again!');
+      return;
+    }
+    
   }
   useEffect(() => {
-    fetchLaunchPadDrops();
+    // fetchLaunchPadDrops();
   }, []);
   return (
     <DashboardLayout>

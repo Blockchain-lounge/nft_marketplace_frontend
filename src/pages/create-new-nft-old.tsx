@@ -38,21 +38,6 @@ import {
 } from "../functions/onChain/authFunction";
 import { useRouter } from "next/router";
 
-// const IPFSCLIENT = require('ipfs-http-client');
-// const projectId = process.env.REACT_APP_INFURA_IPFS_PROJECT_ID
-// const projectSecret = process.env.REACT_APP_INFURA_IPFS_PROJECT_SECRET
-// const projectIdAndSecret = `${projectId}:${projectSecret}`
-// const IPFS = IPFSCLIENT({
-//     host: 'ipfs.infura.io',
-//     port: 5001,
-//     protocol: 'https',
-//     headers: {
-//         authorization: `Basic ${Buffer.from(projectIdAndSecret).toString(
-//             'base64'
-//         )}`,
-//     },
-// });
-// const REACT_APP_IPFS_URL = APPCONFIG.IPFS_URL;
 const CreateNewNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [file, setFile] = useState<FileList | null>(null);
