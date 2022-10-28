@@ -24,17 +24,48 @@ import {
   nft4Datas,
 } from "@/src/store/data";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NextPage } from "next";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
+import { apiRequest } from '../functions/offChain/apiRequests';
 
 const Home: NextPage = () => {
   const [heroData, setHeroData] = useState(heroCards);
   const [activeCard, setActiveCard] = useState(heroData[0]);
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const { push } = useRouter();
+  const [launchPadDrops, setLaunchPadDrops] = useState([]);
+  const [userCreatedProfileData, setUserCreatedProfileData] = useState([]);
 
+  const fetchLaunchPadDrops = async()=>{
+    const HEADER = 'authenticated';
+      const REQUEST_URL = 'nft-item/index';
+      const METHOD = "GET";
+      const DATA = {}  
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
+        .then((response) => {
+          if (response.status == 400) {
+            var error = response.data.error;
+            toast(error);
+            return;
+          }
+          else if (response.status == 401) {
+            toast('Unauthorized request!');
+            return;
+          }
+          else if (response.status == 200) {
+            setLaunchPadDrops(response.data.data)
+          }
+          else {
+            toast('Something went wrong, please try again!');
+            return;
+          }
+        });
+  }
+  useEffect(() => {
+    fetchLaunchPadDrops();
+  }, []);
   return (
     <DashboardLayout>
       <div className="home-wrapper">
@@ -83,7 +114,7 @@ const Home: NextPage = () => {
               </div>
             </div>
           </section>
-          <section className="hero-section-1">
+          {/* <section className="hero-section-1">
             <NftHeaderCard
               heading="Popular Collections"
               selectTitle="Last 24 hours"
@@ -99,11 +130,11 @@ const Home: NextPage = () => {
               ))}
             </div>
             <span className="mobile-see-all-btn">See All</span>
-          </section>
+          </section> */}
 
           <section>
             <NftHeaderCard heading="LaunchPad Drops" selectTitle="On Sale" />
-            <NftSlider data={nft2Datas} />
+            <NftSlider data={launchPadDrops} />
             <span className="mobile-see-all-btn">See All</span>
           </section>
           <section>

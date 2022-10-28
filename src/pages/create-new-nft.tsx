@@ -78,17 +78,6 @@ const CreateNewNft = () => {
     },
   });
 
-  // const IPFS = IPFSCLIENT({
-  //   host: 'ipfs.infura.io',
-  //   port: 5001,
-  //   protocol: 'https',
-  //   headers: {
-  //     authorization: `Basic ${Buffer.from(projectIdAndSecret).toString(
-  //       'base64'
-  //     )}`,
-  //   },
-  // });
-
   const priceListingTypes = [
     { type: "Fixed price", icon: <FixedPriceIcon /> },
     { type: "Open for bids", icon: <BidIcon /> },
@@ -198,7 +187,6 @@ const CreateNewNft = () => {
 
       const transaction = await contract.createItem(connectedAddress, price, nftPayload.supply, parseInt(nftPayload.royalties));
       var tnx = await transaction.wait();
-      console.log(tnx)
       const events = findEvents('ItemCreated', tnx.events, true);
       if (events === true) {
         toast('On-chain transaction completed...');
@@ -212,25 +200,18 @@ const CreateNewNft = () => {
         toast('We were unable to complete the creation of your NFT!');
         return
       }
-      try {
-        // var IPFSItemres = await IPFS.add(nftBufferCoverImage);
-        // const IPFSItemres = await client.add(nftImage);
-        // const itemIPFSURL = IPFS_URL + IPFSItemres.hash;
-        // console.log(itemIPFSURL)
-      } catch (error) {
-        toast('Something went wrong while uploading to IPFS, please try again!');
-        return;
-      }
-
+      const IPFSItemres = await client.add(nftImage);
+      const itemIPFSURL = IPFS_URL + IPFSItemres.path;
+      
       try {
         var formData = {
           item_title: nftPayload.itemName,
           item_description: nftPayload.description,
           item_price: nftPayload.coinPrice,
           item_quantity: nftPayload.supply,
-          item_art_url: 'itemIPFSURL',
+          item_art_url: itemIPFSURL,
           item_base_url: baseURI,
-          collection_id: '6340b5aca06f00a4f5d4b1c7'
+          collection_id: nftPayload.collection == '' || nftPayload.collection == null || nftPayload.collection == undefined ? 'Uncatgorized' : nftPayload.collection
         }
         toast('Finalizing the transaction off-chain...');
         const HEADER = 'authenticated';
@@ -252,7 +233,7 @@ const CreateNewNft = () => {
             }
             else if (response.status == 201) {
               toast(response.data.message);
-              setShowModal(true);
+              // setShowModal(true);
             }
             else {
               toast('Something went wrong, please try again!');
@@ -272,7 +253,37 @@ const CreateNewNft = () => {
         setConnectedAddress(response);
       }
     });
-  }, [userCollectionList]);
+
+    try {
+      const HEADER = 'authenticated';
+      const REQUEST_URL = 'nft-collection/mine';
+      const METHOD = "GET";
+      const DATA = {}  
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
+        .then((response) => {
+          if (response.status == 400) {
+            var error = response.data.error;
+            toast(error);
+            return;
+          }
+          else if (response.status == 401) {
+            toast('Unauthorized request!');
+            return;
+          }
+          else if (response.status == 200) {
+            toast(response.data.data);
+            // setShowModal(true);
+          }
+          else {
+            toast('Something went wrong, please try again!');
+            return;
+          }
+        });
+    } catch (error) {
+      toast('Something went wrong, please try again!');
+      return;
+    }
+  }, [connectedAddress,userCollectionList]);
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper">
@@ -405,8 +416,15 @@ const CreateNewNft = () => {
                 <select className="w-full bg-transparent  outline-none select"
                   onChange={(e) => handleFieldChange(e)} name="collection">
                   <option value="Uncategorized">Uncategorized</option>
-                  <option value="Arts">Arts</option>
-                  <option value="Flyers">Flyers</option>
+                  {
+                    userCollectionList !== [] && userCollectionList.length >0
+                    ?
+                    userCollectionList.map((collection, index) => (
+                      <option value={collection.name} key={index}>{collection.name}</option>
+                    ))
+                    :
+                    ""
+                  }
                 </select>
               </div>
               <Input2
@@ -532,9 +550,8 @@ const CreateNewNft = () => {
           <div className="mt-4 h-40 w-40 relative">
             <img
               src={
-                file
-                  ? //@ts-ignore
-                  URL.createObjectURL([...file][0])
+                nftCoverImage
+                ? nftCoverImage
                   : ""
               }
               alt=""

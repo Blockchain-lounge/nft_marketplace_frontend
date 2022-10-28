@@ -11,23 +11,56 @@ import { Footer2, Modal } from "@/src/components/organisms";
 import DashboardLayout from "@/src/template/DashboardLayout";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { apiRequest } from '../../functions/offChain/apiRequests';
+import { toast } from "react-toastify";
 
 const ViewNft = () => {
   const { query, push } = useRouter();
   const { id } = query;
   const [showModal, setShowModal] = useState(false);
+  const [itemDetail, setItemDetail] = useState(null);
 
+  const fetchItemDetail = async(id)=>{
+    if(id !== undefined){
+      const HEADER = {};
+      const REQUEST_URL = 'nft-item/detail/'+id;
+      const METHOD = "GET";
+      const DATA = {}  
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
+        .then((response) => {
+          if (response.status == 400) {
+            var error = response.data.error;
+            toast(error);
+            push("/")
+            return;
+          }
+          else if (response.status == 200) {
+            setItemDetail(response.data.data)
+          }
+          else {
+            toast('Something went wrong, please try again!');
+            return;
+          }
+        });
+    }
+  }
+  useEffect(() => {
+    fetchItemDetail(id);
+  }, [id]);
   return (
     <DashboardLayout>
+      {
+        itemDetail !==null
+        ?
       <div className="sub-layout-wrapper">
         <div className="center space-y-8">
           <div className="view-wrapper-hero grid-cols-[0.3fr_0.35fr_0.35fr]">
             <div>
               <div className="relative h-[90%]">
                 <Image
-                  src="/images/profile-nft.png"
-                  alt="buy-nft-sample"
+                  src={itemDetail.item_art_url}
+                  alt={itemDetail.item_title}
                   layout="fill"
                   objectFit="cover"
                   className="rounded-xl"
@@ -85,7 +118,7 @@ const ViewNft = () => {
                       className="rounded-full"
                     />
                   </div>
-                  <span className="text-lg mr-1">CloneX</span>
+                  <span className="text-lg mr-1">CloneXx</span>
                   {/*verified-tag*/}
                   <div className="h-5 w-5 relative">
                     <Image
@@ -123,7 +156,7 @@ const ViewNft = () => {
                     <div className="">
                       <span className="flex items-center text-[1.5rem] gap-x-1">
                         <CoinIcon />
-                        6.95
+                        {itemDetail.item_price}
                       </span>
                       <span className="text-lg block mt-2">$5,954,532</span>
                     </div>
@@ -132,7 +165,7 @@ const ViewNft = () => {
 
                 <div className="w-full flex flex-col gap-y-4">
                   <div className="flex gap-x-5">
-                    <Button title="Edit" wt="w-full" outline2 />
+                    {/* <Button title="Edit" wt="w-full" outline2 /> */}
                     <Button
                       title="Sell"
                       onClick={() => push(`/list-nft-for-sale/${id}`)}
@@ -165,19 +198,15 @@ const ViewNft = () => {
             <h2 className="text-2xl font-bold ">Description</h2>
             <div className="flex flex-col">
               <p className="text-txt-2">
-                20,000 next-gen Avatars, by RTFKT and Takashi Murakami 🌸
-              </p>
-              <p className="text-txt-2">
-                If you own a clone without any Murakami trait please read the
-                terms regarding RTFKT - Owned Content...
+              {itemDetail.item_description}
               </p>
             </div>
-            <span className="flex items-center gap-x-2 text-txt-3 font-medium">
+            {/* <span className="flex items-center gap-x-2 text-txt-3 font-medium">
               See more
               <span>
                 <CaretDown color="lightgray" />
               </span>
-            </span>
+            </span> */}
 
             <div className="view-nft-details">
               <h2 className="text-2xl font-bold my-4">Details</h2>
@@ -187,7 +216,7 @@ const ViewNft = () => {
                   <span className="block font-medium ">Ethereum</span>{" "}
                   <span className="text-txt-2">(ERC-721)</span>
                 </div>
-                <div className="flex items-center gap-x-2 cursor-pointer">
+                {/* <div className="flex items-center gap-x-2 cursor-pointer">
                   <StatIcon />{" "}
                   <span className="block font-medium">View on Etherscan</span>
                   <ExternalLinkIcon />
@@ -196,13 +225,16 @@ const ViewNft = () => {
                   <EyeIcon />{" "}
                   <span className="block font-medium">Open original</span>{" "}
                   <ExternalLinkIcon />{" "}
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
         </div>
         <Footer2 />
       </div>
+      :
+      ""
+    }
       <Modal openModal={showModal} closeModal={setShowModal} title="offer">
         <div></div>
       </Modal>

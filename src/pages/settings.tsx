@@ -1,11 +1,11 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import clsx from "clsx";
 
 import { useRouter } from "next/router";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { apiRequest } from '../functions/offChain/apiRequests';
 import DashboardLayout from "../template/DashboardLayout";
 import { BannerImg, Footer2 } from "../components/organisms";
 import Image from "next/image";
@@ -24,9 +24,9 @@ const Settings = () => {
   /*Setting screen are divided into stages*/
   const [settingStage, setSettingStage] = useState("edit-profile");
   const [userImgBanner, setUserImgBanner] = useState<FileList | null>(null);
-  // const [checked, setChecked] = useState(false);
-  // const [notification, setNotification] = useState("");
   const [userImg, setUserImg] = useState<FileList | null>(null);
+  const [connectedAddress, setConnectedAddress] = useState(null);
+  const [myProfile, setMyProfile] = useState(null);
 
   const [userDetailsPayload, setUserDetailsPayload] = useState({
     username: "",
@@ -54,8 +54,6 @@ const Settings = () => {
     { icon: <FbIcon />, label: "Connect facebook account", connected: false },
   ]);
 
-  const [handleRequest] = UseAuth("/user/store");
-
   const handleFieldChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -66,28 +64,115 @@ const Settings = () => {
     });
   };
 
-  const handleSubmit = () => {
-    if (
-      !userDetailsPayload.bio ||
-      !userDetailsPayload.userEmail ||
-      !userDetailsPayload.username
-    )
-      return;
+  // const handleImageFieldChange = (e) => {
+  //   const { files } = e.target;
+  //   var msg = '';
+  //   if (!files[0] || files[0].size == 0 || files[0].size == null) {
+  //     msg = 'Collection cover art is required!';
+  //     toast(msg);
+  //     setValidationError(true);
+  //     return false;
+  //   }
+  //   var fullFileName = (files[0].name);
+  //   fullFileName = fullFileName.toLowerCase();
+  //   var fileExt = fullFileName.substring(0, 1) === '.' ? '' : fullFileName.split('.').slice(1).pop() || '';
+  //   var fileExtArr = ['jpg', 'jpeg', 'png'];
 
-    handleRequest({
-      ...userDetailsPayload,
+  //   if (fileExtArr.indexOf(fileExt) <= -1) {
+  //     msg = 'Only images of type jpg, jpeg, png are allowed'
+  //     toast(msg);
+  //     return false;
+  //   }
+
+  //   if (files[0].name >= 5120) {
+  //     // 5mb * 1024kb = 5120
+  //     msg = 'File is larger than 5mb'
+  //     toast(msg);
+  //     return false;
+  //   }
+  //   setCollectionCoverImage(files[0]);
+  //   setCollectionCoverArt(URL.createObjectURL(files[0]));
+  // }
+
+  const handleSubmit = async (e) => {
+
+   var profileData = {
+      username: userDetailsPayload.username,
       email: userDetailsPayload.userEmail,
-    }).then((res) => {
-      toast(res.message);
-      push("/profile");
-    });
+      bio: userDetailsPayload.bio,
+    }
+    try {
+    const HEADER = 'authenticated';
+    const REQUEST_URL = 'user/store';
+    const METHOD = "POST";
+    const DATA = profileData
+
+    apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
+      .then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          return;
+        }
+        if (response.status == 401) {
+              toast('Unauthorized request!');
+              return;
+        }
+        else if (response.status == 200) {
+          toast('Profile updated');
+        }
+        else {
+          toast('Something went wrong, please try again!');
+      return;
+        }
+      });
+    } catch (error) {
+      toast('Internal server occured!');
+      return;
+    }
+
   };
 
+  useEffect(() => {
+    // try {
+      const HEADER = 'authenticated';
+      const REQUEST_URL = 'user/my_profile';
+      const METHOD = "GET";
+      const DATA = {}  
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
+        .then((response) => {
+          if (response.status == 400) {
+            var error = response.data.error;
+            toast(error);
+            return;
+          }
+          else if (response.status == 401) {
+            toast('Unauthorized request!');
+            return;
+          }
+          else if (response.status == 200) {
+            setUserDetailsPayload({
+              username: response.data.data.username,
+              userEmail: response.data.data.email,
+              bio: response.data.data.bio
+            })
+            // setShowModal(true);
+          }
+          else {
+            toast('Something went wrong, please try again!');
+            return;
+          }
+        });
+    // } catch (error) {
+    //   toast('Something went wrong, please try again!');
+    //   return;
+    // }
+  }, [myProfile]);
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper">
         <div className="center mx-auto max-w-[90%] lg:max-w-[70%]">
-          <div className="settings-tab">
+          {/* <div className="settings-tab">
             {settingStages.map(({ label, stage }) => (
               <div
                 className={clsx(
@@ -108,16 +193,16 @@ const Settings = () => {
                 </span>
               </div>
             ))}
-          </div>
+          </div> */}
           <ToastContainer />
           {settingStage === "edit-profile" ? (
             <div className="setting-edit-profile">
-              <BannerImg
+              {/* <BannerImg
                 userImg={userImg}
                 userImgBanner={userImgBanner}
                 setUserImg={setUserImg}
                 setUserImgBanner={setUserImgBanner}
-              />
+              /> */}
               <div className="setting-edit-profile-form">
                 <Input2
                   name="username"

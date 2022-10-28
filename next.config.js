@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    domains: ['localhost','cloudax.infura-ipfs.io','cloudax-nft-marketplace.io'],
+  },
   reactStrictMode: true,
   swcMinify: true,
   env: {
