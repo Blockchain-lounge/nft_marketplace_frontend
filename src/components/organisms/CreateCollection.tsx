@@ -60,13 +60,8 @@ const CreateCollection: FC<ICollectionProps> = ({
     const { files } = e.target;
     var msg = "";
     if (!files[0] || files[0].size == 0 || files[0].size == null) {
-<<<<<<< HEAD
-      msg = 'Collection cover art is required!';
-      toast(msg);
-=======
       msg = "Collection cover art is required!";
       alert(msg);
->>>>>>> main
       setValidationError(true);
       return false;
     }
@@ -138,10 +133,6 @@ const CreateCollection: FC<ICollectionProps> = ({
       toast("Internal server occured!");
       return;
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> main
   };
 
   return (

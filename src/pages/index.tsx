@@ -118,9 +118,7 @@ const Home: NextPage = () => {
             </div>
           </section>
           {/* <section className="hero-section-1">
-=======
           <section className="">
->>>>>>> main
             <NftHeaderCard
               heading="Explore Collections"
               to="/explore"
@@ -136,7 +134,6 @@ const Home: NextPage = () => {
                 />
               ))}
             </div>
-<<<<<<< HEAD
             <span className="mobile-see-all-btn">See All</span>
           </section> */}
 
