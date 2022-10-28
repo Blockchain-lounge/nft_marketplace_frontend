@@ -4,11 +4,15 @@ import { useRouter } from "next/router";
 import { Heading } from "@/src/components/atoms";
 
 import { ArrowBack, CoinIcon } from "@/src/components/atoms/vectors";
-import { Footer } from "@/src/components/organisms";
+import { Footer, Footer2 } from "@/src/components/organisms";
 import DashboardLayout from "@/src/template/DashboardLayout";
 import Image from "next/image";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import clsx from "clsx";
 
 const NftDetailPage = () => {
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const { push } = useRouter();
   const nftData = {
     content:
@@ -18,7 +22,12 @@ const NftDetailPage = () => {
 
   return (
     <DashboardLayout>
-      <div className="nft-detail-wrapper">
+      <div
+        className={clsx(
+          "nft-detail-wrapper",
+          isLoggedIn ? "pb-[6rem]" : "pb-[5rem]"
+        )}
+      >
         <div className="nft-detail-wrapper-content center">
           <div>
             <div className="hidden lg:block" onClick={() => push("/")}>
@@ -111,7 +120,8 @@ const NftDetailPage = () => {
             />
           </div>
         </div>
-        <Footer />
+
+        {isLoggedIn ? <Footer2 /> : <Footer />}
       </div>
     </DashboardLayout>
   );

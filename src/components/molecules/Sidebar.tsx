@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import { useState } from "react";
+// import { useState } from "react";
+import { connectUserWallet } from "@/src/functions/onChain/authFunction";
+import { useRouter } from "next/router";
 import { SidebarLink, Button } from "@/src/components/atoms";
 import {
   CollectionsIcon,
@@ -20,10 +22,21 @@ import {
 import { useDispatch } from "react-redux";
 
 import { toggleMobileModal } from "@/src/reducers/modalReducer";
+import { useSelector } from "react-redux";
+import { RootState } from "@/src/store/store";
+import Image from "next/image";
 
 const SideBar = () => {
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
+  const { push } = useRouter();
+
   const handleMobileModalToggle = () => {
+    dispatch(toggleMobileModal());
+  };
+
+  const handleNavigatetoProfile = () => {
+    push("/profile");
     dispatch(toggleMobileModal());
   };
 
@@ -84,8 +97,35 @@ const SideBar = () => {
           alt="close-mobile-tab-img"
           onClick={handleMobileModalToggle}
         />
-        <span className="block m-1">
-          <Button title="Connect Wallet" prefix={<WalletIcon />} outline />
+        <div className="m-1">
+          {isLoggedIn ? (
+            <div
+              className="relative h-12 w-12 cursor-pointer"
+              onClick={handleNavigatetoProfile}
+            >
+              <Image
+                src="/images/avatar.png"
+                alt="user-img"
+                layout="fill"
+                className="rounded-full"
+              />
+            </div>
+          ) : (
+            <Button
+              title="Connect Wallet"
+              prefix={<WalletIcon />}
+              outline
+              onClick={connectUserWallet}
+            />
+          )}
+        </div>
+      </div>
+      <div className="mb-4 flex items-center gap-x-2 lg:hidden">
+        <span className="p-3 bg-bg-5 rounded-lg cursor-pointer">
+          Create NFT
+        </span>
+        <span className="p-3 bg-bg-5 rounded-lg cursor-pointer">
+          Create Collection
         </span>
       </div>
       {sidebarLinks.map((item) => (

@@ -62,7 +62,7 @@ const TransactionCard = ({
           ) : transactionType === "purchase" ? (
             <p className="transaction-card-p">
               {user}{" "}
-              <span className="transaction-card-span">purchased for</span>
+              <span className="transaction-card-span"> purchased for</span>
             </p>
           ) : transactionType === "bid" ? (
             <p className="transaction-card-p">

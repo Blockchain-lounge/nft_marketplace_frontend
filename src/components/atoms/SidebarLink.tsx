@@ -3,16 +3,16 @@ import { useState } from "react";
 import Link from "next/link";
 import CaretDown from "./vectors/caret-down";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { toggleMobileModal } from "@/src/reducers/modalReducer";
 
 const SidebarLink = ({ item }: { item: any }) => {
   const [openSubmenu, setOpenSubmenu] = useState(false);
+  const dispatch = useDispatch();
   const handleOpenSubmenu = () => setOpenSubmenu(!openSubmenu);
   const { pathname, push } = useRouter();
 
-  return item.subLinks ? //     <div className="sidebar-title"> //   <div className="sidebar-title-wrapper"> // > //   className={clsx("sidebar-menu", item.link === pathname && "bg-[#212346]")} // <div
-  //       <span className="sidebar-icon">{item.icon}</span>
-  //       <span className="sidebar-label">{item.label}</span>
-  //     </div>
+  return item.subLinks ? //     </div> //       <span className="sidebar-label">{item.label}</span> //       <span className="sidebar-icon">{item.icon}</span> //     <div className="sidebar-title"> //   <div className="sidebar-title-wrapper"> // > //   className={clsx("sidebar-menu", item.link === pathname && "bg-[#212346]")} // <div
   //     <span
   //       className={clsx(
   //         "sidebar-toggle-btn",
@@ -46,7 +46,10 @@ const SidebarLink = ({ item }: { item: any }) => {
     //  href={item.link}
     <div
       className={clsx("sidebar-menu", item.link === pathname && "bg-[#212346]")}
-      onClick={() => push(item.link)}
+      onClick={() => {
+        push(item.link);
+        dispatch(toggleMobileModal());
+      }}
     >
       <div className="sidebar-title-wrapper">
         <div className="sidebar-title">

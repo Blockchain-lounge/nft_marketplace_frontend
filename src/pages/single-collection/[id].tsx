@@ -70,7 +70,7 @@ const ViewCollection = () => {
             </div>
           </div>
           <div className="single-collection-info">
-            <div className="flex flex-col gap-y-3">
+            <div className="flex flex-col lg:gap-y-3">
               <div className="flex mb-4">
                 <span className="text-3xl font-bold mr-1">CloneX</span>
                 <div className="h-8 w-8 relative">
@@ -101,10 +101,10 @@ const ViewCollection = () => {
                 </span>
               </div>
             </div>
-            <div className="max-w-[20%] w-full flex flex-col gap-y-3 border border-border-1-line p-3 rounded-xl">
+            <div className="mt-4 flex-wrap justify-around lg:flex-nowrap lg:mt-0 lg:max-w-[20%] w-full flex lg:flex-col gap-3 lg:gap-y-3 lg:border border-border-1-line lg:p-3 rounded-xl">
               {collectionPriceInfo.map((info) => (
                 <div
-                  className="flex w-full justify-between items-center p-4 bg-bg-5 rounded-md"
+                  className="flex lg:gap-x-12 w-[48%] lg:w-full justify-between items-center p-4 bg-bg-5 rounded-md"
                   key={info.label}
                 >
                   <span className="capitalize font-medium">{info.label}</span>

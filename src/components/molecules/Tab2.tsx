@@ -9,7 +9,7 @@ interface ITab2 {
 
 const Tab2: FC<ITab2> = ({ tabs = [], activeTab, setActiveTab }) => {
   return (
-    <div className="flex items-center gap-x-8">
+    <div className="flex items-center gap-x-2 lg:gap-x-8  w-full lg:w-max overflow-x-auto lg:overflow-hidden mb-6 lg:mb-0 scrollbar-hide">
       {tabs.map((tab) => (
         <div
           key={tab}
@@ -21,7 +21,7 @@ const Tab2: FC<ITab2> = ({ tabs = [], activeTab, setActiveTab }) => {
         >
           <span
             className={clsx(
-              "text-xl font-medium",
+              "text-xl font-medium whitespace-nowrap",
               tab === activeTab ? "earnings-card-history" : "text-white"
             )}
           >

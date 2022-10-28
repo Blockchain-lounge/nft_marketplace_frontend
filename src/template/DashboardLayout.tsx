@@ -3,7 +3,7 @@ import { ReactNode, useCallback, useState } from "react";
 import clsx from "clsx";
 
 import { NavBar } from "@/src/components/organisms";
-import { Sidebar } from "@/src/components/molecules";
+import { MiniUserWallet, Sidebar } from "@/src/components/molecules";
 
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
@@ -56,6 +56,9 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
         >
           <Sidebar />
         </aside>
+        <div className="lg:hidden">
+          <MiniUserWallet showBal={showBal} onClick={setShowBal} />
+        </div>
         <div className="aside-2 text-white" onMouseEnter={handleCloseAllModal}>
           {children}
         </div>

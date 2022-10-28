@@ -160,7 +160,7 @@
 
 /* mini user profile */
 .mini-user-profile-wrapper {
-  @apply bg-bg-3 absolute top-[10%] 2xl:top-[12%] z-10 rounded-[1.125rem] border-[#34364C] border-[0.0625rem] p-[0.8rem] flex-col hover:cursor-pointer w-56;
+  @apply bg-bg-3 absolute top-[13%] sm:top-[13%] lg:top-[9%] 2xl:top-[7.5%] z-10 rounded-[1.125rem] border-[#34364C] border-[0.0625rem] p-[0.8rem] flex-col hover:cursor-pointer w-56;
 }
 
 .mini-user-profile-links {
@@ -414,7 +414,7 @@
 .total-earning-transaction-date-time span,
 .total-earning-transaction-details
   .total-earning-withdrawn-transaction-details {
-  @apply font-medium text-[#A2A3B8];
+  @apply font-medium text-[#A2A3B8] text-xs sm:text-base;
 }
 
 .total-earning-bal {
@@ -422,7 +422,7 @@
 }
 
 .total-earning-coin-sold {
-  @apply flex font-bold text-xl items-center gap-1;
+  @apply flex font-bold sm:text-xl items-center gap-1;
 }
 
 .total-earning-coin-sold-receiver {
@@ -433,9 +433,9 @@
   @apply flex flex-col gap-y-4;
 }
 .transaction-card-p {
-  @apply text-[1.375rem] font-bold;
+  @apply text-sm sm:text-[1.375rem] font-bold;
 }
 
 .transaction-card-span {
-  @apply text-[1.375rem] font-bold text-txt-2;
+  @apply text-sm sm:text-[1.375rem] font-bold text-txt-2;
 }
