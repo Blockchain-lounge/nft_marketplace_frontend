@@ -1,5 +1,5 @@
 .single-collection-info {
-  @apply mt-16 flex justify-between;
+  @apply mt-16 flex flex-col lg:flex-row justify-between;
 }
 
 .single-collection-filter {

@@ -1,7 +1,7 @@
 .collection-page-top {
-  @apply flex items-center justify-between mb-12;
+  @apply flex flex-col sm:flex-row items-center justify-between lg:mb-12;
 }
 
 .collection-page-sub-top {
-  @apply flex gap-x-5 items-center;
+  @apply flex gap-x-5 items-center w-full sm:w-[40%] justify-between sm:justify-start mb-6 lg:mb-0;
 }

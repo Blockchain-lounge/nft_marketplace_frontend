@@ -24,7 +24,7 @@ import {
 
 import Modal from "@/src/components/organisms/Modal";
 
-import { toggleLoggedInUser } from "@/src/reducers/authReducer";
+// import { toggleLoggedInUser } from "@/src/reducers/authReducer";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleMobileModal } from "@/src/reducers/modalReducer";
 import { RootState } from "@/src/store/store";
@@ -39,6 +39,10 @@ import {
   // getWalletBalance,
   account_listener,
 } from "../../functions/onChain/generalFunction";
+import {
+  handleLoggedInUser,
+  toggleLoggedInUser,
+} from "@/src/reducers/authReducer";
 
 interface INav {
   showProfile: boolean;
@@ -63,11 +67,11 @@ const NavBar: FC<INav> = ({
 
   const [modalType, setModaltype] = useState("wallet");
 
-  const [isConnected, setIsConnected] = useState(false);
+  // const [isConnected, setIsConnected] = useState(false);
 
   const [openModal, setOpenModal] = useState(false);
 
-  const [stage, setStage] = useState(0);
+  // const [stage, setStage] = useState(0);
   const [connectedAddress, setConnectedAddress] = useState(null);
 
   account_listener();
@@ -75,7 +79,8 @@ const NavBar: FC<INav> = ({
     connectedAccount().then((response) => {
       if (response !== null) {
         setConnectedAddress(response);
-        setIsConnected(true);
+        // setIsConnected(true);
+        dispatch(handleLoggedInUser({ isLoggedIn: true }));
       }
 
       // if(connectedAddress !== null){
@@ -84,7 +89,8 @@ const NavBar: FC<INav> = ({
       //     });
       // }
     });
-  }, [connectedAddress, isConnected]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connectedAddress, isLoggedIn]);
 
   const statusArr = [
     {
@@ -155,21 +161,25 @@ const NavBar: FC<INav> = ({
           className="w-[11.6875rem] lg:max-w-full cursor-pointer"
           onClick={() => push("/")}
         />
+
         <div className="nav-tab">
-          <div className="sub-nav-input">
+          {/* <div className="sub-nav-input">
             <InputField placeholder="Search Collections" />
-          </div>
+          </div> */}
+
           <span className="nav-mobile-search">
-            <SearchIcon />
+            {/* <SearchIcon /> */}
+
+            <WalletIcon onClick={handleShowBal} />
           </span>
-          {!isConnected == true && (
+          {!isLoggedIn ? (
             <div className="sub-nav-tab">
               <NavTab />
             </div>
-          )}
+          ) : null}
         </div>
         <div className="nav-auth">
-          {isConnected == true ? (
+          {isLoggedIn == true ? (
             <div className="flex items-center gap-x-4">
               <span
                 className="mr-[0.5rem] cursor-pointer"
@@ -223,9 +233,8 @@ const NavBar: FC<INav> = ({
           )}
         </div>
       </div>
-      <div className="mobile-tab center">
-        <NavTab />
-      </div>
+      <div className="mobile-tab center">{!isLoggedIn ? <NavTab /> : null}</div>
+
       <Modal
         openModal={openModal}
         title={
