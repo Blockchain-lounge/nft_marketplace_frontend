@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['localhost','cloudax.infura-ipfs.io','cloudax-nft-marketplace.io'],
+    domains: [
+      "localhost",
+      "cloudax.infura-ipfs.io",
+      "cloudax-nft-marketplace.io",
+    ],
   },
   reactStrictMode: true,
   swcMinify: true,
@@ -13,5 +17,4 @@ const nextConfig = {
     NEXTAUTH_SECRET: "681ec8080db3cc7452d15129dd7a69af",
   },
 };
-
 module.exports = nextConfig;

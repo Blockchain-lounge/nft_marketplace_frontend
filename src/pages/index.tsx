@@ -13,6 +13,7 @@ import {
   NftSlider,
   NftMediumCard3,
   CollectionCard,
+  NftMediumCard2,
 } from "@/src/components/molecules";
 
 import DashboardLayout from "@/src/template/DashboardLayout";
@@ -45,19 +46,20 @@ const Home: NextPage = () => {
 
   const fetchLaunchPadDrops = async () => {
     try {
-      const HEADER = {};
+      const HEADER = "authenticated";
       const REQUEST_URL = "nft-item/index";
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-        if (response?.status == 400) {
+        if (response.status == 400) {
           var error = response.data.error;
           toast(error);
           return;
-        } else if (response?.status == 401) {
+        } else if (response.status == 401) {
           toast("Unauthorized request!");
           return;
-        } else if (response?.status == 200) {
+        } else if (response.status == 200) {
+          // console.log({ resp: response.data });
           setLaunchPadDrops(response.data.data);
         } else {
           toast("Something went wrong, please try again!");
@@ -69,6 +71,7 @@ const Home: NextPage = () => {
       return;
     }
   };
+  console.log({ launchPadDrops });
   useEffect(() => {
     fetchLaunchPadDrops();
   }, []);
@@ -121,40 +124,37 @@ const Home: NextPage = () => {
               </div>
             </div>
           </section>
-          <section className="space-y-[8rem]">
-            <section className="">
+          <section className="hero-section-1">
+            <section className="mb-20">
               <NftHeaderCard
                 heading="Explore Collections"
                 to="/explore"
                 // selectTitle="Last 24 hours"
               />
               <div className="hero-section-1-collection">
-                {launchPadDrops.map(
-                  ({ item_title, item_art_url, item_price }, i) => (
-                    <NftMiniCard
-                      key={`title-${i + 1}`}
-                      index={i + 1}
-                      title={item_title}
-                      imgUrl={item_art_url}
-                      price={item_price}
-                    />
-                  )
-                )}
+                {nftDatas.map(({ imgUrl, title }, i) => (
+                  <NftMiniCard
+                    key={`title-${i + 1}`}
+                    index={i + 1}
+                    title={title}
+                    imgUrl={imgUrl}
+                  />
+                ))}
               </div>
               <span className="mobile-see-all-btn">See All</span>
             </section>
 
-            {/* <section>
-            <NftHeaderCard heading="LaunchPad Drops" selectTitle="On Sale" />
-            <NftSlider data={launchPadDrops} />
-            <span className="mobile-see-all-btn">See All</span>
-           </section> */}
+            <section>
+              <NftHeaderCard heading="Featured Collection" />
+              <NftSlider data={launchPadDrops} />
+              <span className="mobile-see-all-btn">See All</span>
+            </section>
             {/* <section>
               <NftHeaderCard
                 heading="In-Demand Collections"
                 selectTitle="All"
               />
-              <NftSlider data={launchPadDrops} />
+              <NftSlider data={nft3Datas} />
               <span className="mobile-see-all-btn">See All</span>
             </section> */}
             {/* <section>
@@ -166,23 +166,23 @@ const Home: NextPage = () => {
             >
               See All
             </span>
-           </section> */}
+          </section> */}
 
-            <section>
+            {/* <section>
               <NftHeaderCard heading="Featured Collections" to="/explore" />
-              <NftSlider data={launchPadDrops} />
+              <NftSlider data={launchpadDropDatas} Card={NftMediumCard3} />
               <span
                 className="mobile-see-all-btn cursor-pointer"
                 onClick={() => push("/explore")}
               >
                 See All
               </span>
-            </section>
+            </section> */}
 
             {/* <section>
             <NftHeaderCard heading="Explore" />
             <NftSlider data={exploreItems} Card={CollectionCard} />
-            </section> */}
+          </section> */}
           </section>
         </div>
         {isLoggedIn ? <Footer2 /> : <Footer />}

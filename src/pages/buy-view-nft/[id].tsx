@@ -21,8 +21,9 @@ import APPCONFIG from "../../constants/Config";
 import abi from "../../artifacts/abi.json";
 import { findEvents } from "../../functions/onChain/generalFunction";
 import { ethers } from "ethers";
-import { INftcard } from "@/src/components/molecules/NftMediumCard";
 
+import { connectedAccount } from "../../functions/onChain/authFunction";
+import { INftcard } from "@/src/components/molecules/NftMediumCard";
 const ViewNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModaltype] = useState("buy");
@@ -195,8 +196,7 @@ const ViewNft = () => {
     setModaltype("buy");
   };
 
-  //@ts-ignore
-  const fetchItemDetail = async (id) => {
+  const fetchItemDetail = async (id: string) => {
     if (id !== undefined) {
       const HEADER = {};
       const REQUEST_URL = "nft-item/detail/" + id;
@@ -223,8 +223,7 @@ const ViewNft = () => {
         setConnectedAddress(response);
       }
     });
-    fetchItemDetail(id);
-    //@ts-ignore
+    fetchItemDetail(id as string);
   }, [id]);
 
   if (!itemDetail) {
@@ -240,7 +239,7 @@ const ViewNft = () => {
       <div className="sub-layout-wrapper">
         {itemDetail !== null ? (
           <div className="center space-y-8">
-            <div className="view-wrapper-hero grid-cols-[0.5fr_1fr] h-[50vh]">
+            <div className="view-wrapper-hero grid-cols-[0.5fr_1fr]">
               <div className="relative">
                 <Image
                   src={itemDetail.item_art_url}
@@ -253,16 +252,16 @@ const ViewNft = () => {
               <div className="space-y-4">
                 <div>
                   <div className="flex items-center mb-5">
-                    <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
+                    <div className="h-[2.125rem] w-[2.125rem] relative mr-4">
                       <Image
-                        src="/favicon.ico"
+                        src="/images/colx_id.png"
                         alt="colx-img"
                         layout="fill"
                         objectFit="contain"
                         className="rounded-full"
                       />
                     </div>
-                    <span className="text-xl mr-1">CloudaX</span>
+                    <span className="text-lg mr-1">CloneX</span>
                     <div className="h-5 w-5 relative">
                       <Image
                         src="/images/verify.svg"
@@ -273,11 +272,11 @@ const ViewNft = () => {
                       />
                     </div>
                   </div>
-                  <span className="text-5xl font-bold block my-6">
+                  <span className="text-2xl font-bold">
                     {itemDetail.item_title}
                   </span>
                 </div>
-                {/* <div className="view-hero-nft-owner">
+                <div className="view-hero-nft-owner">
                   {nftOwnersInfo.map(({ img, label, value }) => (
                     <div key={value} className="flex items-center gap-x-4">
                       <div className="relative h-14 w-14">
@@ -295,7 +294,7 @@ const ViewNft = () => {
                       </div>
                     </div>
                   ))}
-                </div> */}
+                </div>
                 <div className="view-hero-nft-cta-wrapper">
                   <div className="flex w-full gap-x-6">
                     <div className="p-3 bg-bg-5 rounded-[1.25rem] w-full">
@@ -305,15 +304,15 @@ const ViewNft = () => {
                           <CoinIcon />
                           {itemDetail.item_price}
                         </span>
-                        {/* <span className="text-lg block mt-2">$5,954,532</span> */}
+                        <span className="text-lg block mt-2">$5,954,532</span>
                       </div>
                     </div>
-                    {/* <div className="p-3 bg-bg-5 rounded-[1.25rem] w-full">
+                    <div className="p-3 bg-bg-5 rounded-[1.25rem] w-full">
                       <span className="text-txt-2 block mb-4">
                         Highest floor bid
                       </span>
                       <div>
-                        <span className="flex items-center  text-[1.5rem]">
+                        <span className="flex items-center  text-[1.5rem] gap-x-1">
                           <CoinIcon />
                           51k
                         </span>
@@ -324,11 +323,11 @@ const ViewNft = () => {
                           </span>
                         </span>
                       </div>
-                    </div> */}
+                    </div>
                   </div>
-                  {/* <span className="text-lg font-medium">
+                  <span className="text-lg font-medium">
                     Last sale price 10.8 ETH
-                  </span> */}
+                  </span>
                   <div className="flex flex-col gap-y-4 w-full">
                     <div className="flex gap-x-5 w-full">
                       <Button
@@ -343,19 +342,19 @@ const ViewNft = () => {
                         <CartIcon />
                       </span> */}
                     </div>
-                    {/* <Button
-                    title="Place a bid"
-                    wt="w-full"
-                    outline2
-                    onClick={() => {
-                      setModaltype("bid");
-                      setShowModal((prev) => !prev);
-                    }}
-                  /> */}
+                    <Button
+                      title="Place a bid"
+                      wt="w-full"
+                      outline2
+                      onClick={() => {
+                        setModaltype("bid");
+                        setShowModal((prev) => !prev);
+                      }}
+                    />
                   </div>
                 </div>
               </div>
-              {/* <div className="flex gap-x-6 mt-6 items-center">
+              <div className="flex gap-x-6 mt-6 items-center">
                 <span className="flex gap-x-2 items-center">
                   <LikeIcon /> 298
                 </span>
@@ -391,7 +390,7 @@ const ViewNft = () => {
                     objectFit="cover"
                   />
                 </span>
-              </div> */}
+              </div>
             </div>
             {/*Stages Mode*/}
             <div className="flex gap-x-10 items-center border-b-[0.1px] border-border-2-line">
@@ -419,12 +418,12 @@ const ViewNft = () => {
                         {itemDetail.item_description}
                       </p>
                     </div>
-                    {/* <span className="flex items-center gap-x-2 text-txt-3 font-medium">
+                    <span className="flex items-center gap-x-2 text-txt-3 font-medium">
                       See more
                       <span>
                         <CaretDown color="lightgray" />
                       </span>
-                    </span> */}
+                    </span>
 
                     <div className="view-nft-details">
                       <h2 className="text-2xl font-bold my-4">Details</h2>
@@ -488,52 +487,48 @@ const ViewNft = () => {
                   ))}
                 </div>
               ) : viewNftStage === "bids" ? (
-                // <div className="flex flex-col gap-y-6">
-                //   {nftBids.map(({ bidder, expiresIn, imgUrl, time }) => (
-                //     <div
-                //       key={bidder}
-                //       className="flex items-center justify-between bg-bg-5 py-4 pl-6 pr-8 rounded-xl"
-                //     >
-                //       <div className="flex items-center gap-x-4">
-                //         <div className="h-16 w-16 relative">
-                //           <Image
-                //             src={imgUrl}
-                //             alt={bidder}
-                //             layout="fill"
-                //             objectFit="contain"
-                //             className="rounded-full"
-                //           />
-                //         </div>
-                //         <div>
-                //           <span className="text-xl font-bold">{bidder}</span>
-                //           <div className="flex items-center gap-x-1">
-                //             <span className="font-medium text-txt-2">
-                //               {time} ago
-                //             </span>
-                //             <span className="h-1 w-1 rounded-full bg-txt-2"></span>
-                //             <span className="font-medium text-txt-2">
-                //               Expires in {expiresIn}
-                //             </span>
-                //             <span className="h-1 w-1 rounded-full bg-txt-2"></span>
-                //             <span className="font-medium earnings-card-history">
-                //               Floor bid
-                //             </span>
-                //           </div>
-                //         </div>
-                //       </div>
-                //       <div>
-                //         <span className="flex text-xl font-bold">
-                //           <CoinIcon /> 4.5k
-                //         </span>
-                //         <span className="text-txt-2">$5,954,532</span>
-                //       </div>
-                //     </div>
-                //   ))}
-                // </div>
-                // eslint-disable-next-line react/no-unescaped-entities
-                <span className="block h-[20vh] text-3xl font-bold">
-                  There&apos;s no bid
-                </span>
+                <div className="flex flex-col gap-y-6">
+                  {nftBids.map(({ bidder, expiresIn, imgUrl, time }) => (
+                    <div
+                      key={bidder}
+                      className="flex items-center justify-between bg-bg-5 py-4 pl-6 pr-8 rounded-xl"
+                    >
+                      <div className="flex items-center gap-x-4">
+                        <div className="h-16 w-16 relative">
+                          <Image
+                            src={imgUrl}
+                            alt={bidder}
+                            layout="fill"
+                            objectFit="contain"
+                            className="rounded-full"
+                          />
+                        </div>
+                        <div>
+                          <span className="text-xl font-bold">{bidder}</span>
+                          <div className="flex items-center gap-x-1">
+                            <span className="font-medium text-txt-2">
+                              {time} ago
+                            </span>
+                            <span className="h-1 w-1 rounded-full bg-txt-2"></span>
+                            <span className="font-medium text-txt-2">
+                              Expires in {expiresIn}
+                            </span>
+                            <span className="h-1 w-1 rounded-full bg-txt-2"></span>
+                            <span className="font-medium earnings-card-history">
+                              Floor bid
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <span className="flex text-xl font-bold">
+                          <CoinIcon /> 4.5k
+                        </span>
+                        <span className="text-txt-2">$5,954,532</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               ) : viewNftStage === "history" ? (
                 <div className="flex flex-col gap-y-6">
                   {nftHistory.map(
@@ -690,7 +685,7 @@ const ViewNft = () => {
           <div className="flex flex-col items-center max-w-[60%] mx-auto gap-y-5 text-clip">
             <span className="font-bold flex gap-x-1 text-xl">
               You are about to purchase
-              <span className="text-txt-2 text-xl">
+              <span className="text-txt-2">
                 {itemDetail !== null ? itemDetail.item_title : ""}
               </span>
               {/* from

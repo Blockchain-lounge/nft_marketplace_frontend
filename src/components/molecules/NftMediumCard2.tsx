@@ -16,14 +16,8 @@ const NftCard2 = ({
   item_price,
   item_quantity,
   time,
-}: {
-  _id: string;
-  item_title: string;
-  item_art_url: string;
-  item_price: string;
-  item_quantity: string;
-  status: string;
-  time: string;
+}: Partial<Pick<INftcard, "name" | "imgUrl" | "price">> & {
+  time?: boolean;
 }) => {
   const { push } = useRouter();
   return (
@@ -36,7 +30,8 @@ const NftCard2 = ({
           <LikeIcon />
           {/* <span>298</span> */}
         </div>
-        <img src={item_art_url} alt={item_title} />
+        <Image src={item_art_url as string} alt={item_title} layout="fill" />
+        {/* <img src={item_art_url} alt={item_title} /> */}
       </div>
       <div className="nmc-sub-wrapper flex justify-between">
         <div className="flex flex-col gap-y-[0.3rem] p-2">

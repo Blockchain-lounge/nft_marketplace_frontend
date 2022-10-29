@@ -10,8 +10,8 @@ export interface INftcard {
   item_art_url: string;
   item_price: string;
   item_quantity: string;
-  time: string;
   status: string;
+  time?: string;
 }
 
 const NftCard = ({
@@ -21,18 +21,10 @@ const NftCard = ({
   item_price,
   item_quantity,
   status,
-  key,
-}: {
-  _id: string;
-  item_title: string;
-  item_art_url: string;
-  item_price: string;
-  item_quantity: string;
-  status: string;
-  key: string;
-}) => {
+}: //@ts-ignore
+Partial<INftcard>) => {
   const { push } = useRouter();
-  // console.log(item_title)
+  // console.log({ item_title, item_art_url, item_price, item_quantity, status });
   return (
     <div className="nmc-wrapper" onClick={() => push(`/buy-view-nft/${_id}`)}>
       <div className="nmc-wrapper-img">
@@ -40,18 +32,7 @@ const NftCard = ({
           <OutlineLikesIcon />
           {/* <span>295</span> */}
         </div>
-        <img
-          src={
-            item_art_url !== undefined && item_art_url !== null
-              ? item_art_url
-              : item_art_url
-          }
-          alt={
-            item_title !== undefined && item_title !== null
-              ? item_title
-              : item_title
-          }
-        />
+        <img src={item_art_url} alt={item_title} className="h-full w-full" />
       </div>
       <div className="nmc-sub-wrapper">
         {status && (
