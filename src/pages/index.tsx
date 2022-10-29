@@ -48,6 +48,7 @@ const Home: NextPage = () => {
     try {
       const HEADER = "authenticated";
       const REQUEST_URL = "nft-item/index";
+>>>>>>> 2e006cf (work)
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -71,7 +72,7 @@ const Home: NextPage = () => {
       return;
     }
   };
-  console.log({ launchPadDrops });
+  // console.log({ launchPadDrops });
   useEffect(() => {
     fetchLaunchPadDrops();
   }, []);
