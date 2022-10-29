@@ -40,6 +40,7 @@ import { NextPage } from "next";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
 import { apiRequest } from "../functions/offChain/apiRequests";
+import { INftcard } from "../components/molecules/NftMediumCard";
 
 const Home: NextPage = () => {
   const [heroData, setHeroData] = useState(heroCards);
@@ -47,7 +48,7 @@ const Home: NextPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const { push } = useRouter();
-  const [launchPadDrops, setLaunchPadDrops] = useState([]);
+  const [launchPadDrops, setLaunchPadDrops] = useState<INftcard[]>([]);
   const [userCreatedProfileData, setUserCreatedProfileData] = useState([]);
   const exploreItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -79,18 +80,18 @@ const Home: NextPage = () => {
       return;
     }
   };
-  // console.log({ launchPadDrops });
   useEffect(() => {
     fetchLaunchPadDrops();
   }, []);
 
-  if (isLoading) {
-    return (
-      <div className="h-screen inset-0 flex justify-center items-center">
-        <Loader />
-      </div>
-    );
-  }
+  // if (!launchPadDrops) {
+  //   return (
+  //     <div className="h-screen inset-0 flex justify-center items-center">
+  //       <Loader />
+  //     </div>
+  //   );
+  // }
+  // console.log({ launchPadDrops });
 
   return (
     <DashboardLayout>
