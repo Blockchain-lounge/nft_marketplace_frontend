@@ -61,6 +61,8 @@ const CreateNewNft = () => {
   const [validationError, setValidationError] = useState(false);
   const [connectedAddress, setConnectedAddress] = useState(null);
 
+  const { push } = useRouter();
+
   const projectId = process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_ID;
   const projectSecret = process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_SECRET;
   const projectIdAndSecret = `${projectId}:${projectSecret}`;
@@ -207,13 +209,12 @@ const CreateNewNft = () => {
         parseInt(nftPayload.royalties)
       );
       var tnx = await transaction.wait();
-      var itemId ='';
-      const events = findEvents('ItemCreated', tnx.events, true);
+      var itemId = "";
+      const events = findEvents("ItemCreated", tnx.events, true);
       if (events === true) {
-        toast('On-chain transaction completed...');
-        return
-      }
-      else if (events !== undefined && events.length > 0 && events !== true) {
+        toast("On-chain transaction completed...");
+        return;
+      } else if (events !== undefined && events.length > 0 && events !== true) {
         itemId = events.itemId.toNumber();
         baseURI = baseURI + itemId;
       } else {
@@ -233,11 +234,11 @@ const CreateNewNft = () => {
           item_art_url: itemIPFSURL,
           item_base_url: baseURI,
           collection_id:
-                nftPayload.collection == "" ||
-                nftPayload.collection == null ||
-                nftPayload.collection == undefined
-                  ? "Uncatgorized"
-                  : nftPayload.collection,
+            nftPayload.collection == "" ||
+            nftPayload.collection == null ||
+            nftPayload.collection == undefined
+              ? "Uncatgorized"
+              : nftPayload.collection,
         };
         toast("Finalizing the transaction off-chain...");
         const HEADER = "authenticated";
@@ -256,6 +257,7 @@ const CreateNewNft = () => {
             return;
           } else if (response.status == 201) {
             toast(response.data.message);
+            push("/profile");
             // setShowModal(true);
           } else {
             toast("Something went wrong, please try again!");

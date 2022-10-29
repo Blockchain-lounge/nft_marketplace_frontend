@@ -101,10 +101,7 @@ const Home: NextPage = () => {
               <Tag tag={activeCard?.tag} icon={<FeaturedIcon />} />
               <Heading title={activeCard.title} twClasses="mt-4" />
               <p className="lg:max-w-xl">{activeCard.content}</p>
-              <Button
-                title={activeCard.cta}
-                onClick={() => push("/nft-detail-page")}
-              />
+              <Button title={activeCard.cta} onClick={() => push("/explore")} />
             </div>
             <div className="hero-img-cards">
               <div className="hero-img">
