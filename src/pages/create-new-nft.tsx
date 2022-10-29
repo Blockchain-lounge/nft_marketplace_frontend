@@ -199,13 +199,14 @@ const CreateNewNft = () => {
 
       const transaction = await contract.createItem(connectedAddress, price, nftPayload.supply, parseInt(nftPayload.royalties));
       var tnx = await transaction.wait();
+      var itemId ='';
       const events = findEvents('ItemCreated', tnx.events, true);
       if (events === true) {
         toast('On-chain transaction completed...');
         return
       }
       else if (events !== undefined && events.length > 0 && events !== true) {
-        const itemId = events.itemId.toNumber();
+        itemId = events.itemId.toNumber();
         baseURI = baseURI + itemId;
       }
       else {
@@ -218,6 +219,7 @@ const CreateNewNft = () => {
         const itemIPFSURL = IPFS_URL + IPFSItemres.path;
         var formData = {
           item_title: nftPayload.itemName,
+          token_id: itemId,
           item_description: nftPayload.description,
           item_price: nftPayload.coinPrice,
           item_quantity: nftPayload.supply,

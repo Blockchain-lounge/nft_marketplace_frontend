@@ -1,7 +1,7 @@
 const APPCONFIG = {
     DEFAULT_ITEM_ART: '/assets/images/defaults/song_art.png',
     DEFAULT_USER_AVATAR: '/assets/images/defaults/user_avatar.jpg',
-    SmartContractAddress: "0x38ebf27be1cdd8c03ba6902b93abc9e907cf6e30",
+    SmartContractAddress: "0x22a6084e163edc0a2c902745633f7207044a17cd",
     TOKEN_BASE_URL: process.env.NEXT_PUBLIC_ENV_BASE_URL+'metadata/tokens/',
     ENV_BASE_URL: process.env.NEXT_PUBLIC_ENV_BASE_URL,
     API_BASE_URL: process.env.NEXT_PUBLIC_ENV_BASE_URL+'api/',

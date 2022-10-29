@@ -110,8 +110,9 @@ const ViewNft = () => {
       const contract = new ethers.Contract(APPCONFIG.SmartContractAddress,abi.abi,signer);
       const price = ethers.utils.parseUnits(itemDetail.item_price.toString(), 'ether');
       // itemDetail.itemId,
+      toast('Please approve this transaction!');
       const transaction = await contract.buyItemCopy(
-        17,
+        itemDetail.item_token_id,
         itemDetail.item_base_url,
           {
               value: price,
@@ -119,7 +120,6 @@ const ViewNft = () => {
           },
           );
           var tnx = await transaction.wait();
-          toast('Please approve this transaction!');
       var token_id = itemDetail.token_id;
      
       // var dbTokenId = this.props.track.id;
@@ -127,50 +127,41 @@ const ViewNft = () => {
       var buyer = connectedAddress;
       var trackCopyTokenId = '';
       var trackCopyBaseUrl = '';
+      var soldItemCopyId = '';
 
-      console.log(tnx.events)
-
-      // const events = findEvents('itemCopySold', tnx.events, true);
-      // if (events !== undefined && events.length > 0 && events !== true) {
-      //     trackCopyTokenId = events.soldItemCopyId.toNumber();
-      //     trackCopyBaseUrl = events.soldTrackBaseURI;
-      //     buyer = events.buyer;
-      // }
-      // else {
-      //     toast('We were unable to complete your transaction!');
-      //     return
-      // }
+      const events = findEvents('itemCopySold', tnx.events, true);
+      if (events !== undefined && events.length > 0 && events !== true) {
+          trackCopyTokenId = events.soldItemCopyId.toNumber();
+          trackCopyBaseUrl = events.soldItemBaseURI;
+          soldItemCopyId = events.soldItemCopyId.toNumber();
+          buyer = events.buyer;
+      }
+      else {
+          toast('We were unable to complete your transaction!');
+          return
+      }
       var formData = {
-          token_id: token_id,
-          // dbTokenId: dbTokenId,
-          track_copy_id:trackCopyTokenId,
-          track_copy_base_url:trackCopyBaseUrl,
-          //// transactionHash: transactionHash,
+          item_token_id: token_id,
+          item_id: itemDetail._id,
+          item_copy_id:soldItemCopyId,
+          item_copy_base_url:trackCopyBaseUrl,
           amount: amount,
           buyer: buyer,
       }
       const HEADER = 'authenticated';
-      const REQUEST_URL = 'track/sold';
+      const REQUEST_URL = 'nft-item/buy';
       const METHOD = "POST";
-      // const DATA = formData
-      // this.setState({
-      //     axiosInfo:'Finalizing the transaction...',
-      //     isOpen: true
-      //   });
-      // apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
-      //     .then(function (response) {
-      //          if (response.status == 200 || response.status == 201) {
-      //             // swNot('success', response.data.message);
-      //             const alertTitle = "NFT Purchase";
-      //             const alertDescription = response.data.message;
-      //             const alertIcon = "success";
-      //             const alertBtnText = "Okay";
-      //             const redirectIfOkay = false;
-      //             const redirectIfOkayUrl = '/';
-      //             const withCancel = false;
-                  
-      //         }
-      //     });
+      const DATA = formData
+      toast('Finalizing the transaction...');
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
+          .then(function (response) {
+               if (response.status == 200 || response.status == 201) {
+                  toast(response.data.message)
+              }
+              else{
+                toast(response.data.error)
+              }
+          });
     }
     setShowModal((prev) => !prev);
   };
