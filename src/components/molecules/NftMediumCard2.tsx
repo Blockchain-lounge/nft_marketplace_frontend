@@ -2,7 +2,7 @@
 import { useRouter } from "next/router";
 
 import { LikeIcon } from "@/src/components/atoms/vectors";
-import { INftcard } from "./NftMediumCard";
+import { Nftcard } from "./NftMediumCard";
 import Image from "next/image";
 
 const NftCard2 = ({
@@ -12,8 +12,14 @@ const NftCard2 = ({
   item_price,
   item_quantity,
   time,
-}: Partial<Pick<INftcard, "name" | "imgUrl" | "price">> & {
-  time?: boolean;
+}:{
+  _id: string;
+  item_title: string;
+  item_art_url: string;
+  item_price: string;
+  item_quantity: string;
+  status: string;
+  time: string;
 }) => {
   console.log(_id)
   const { push } = useRouter();
