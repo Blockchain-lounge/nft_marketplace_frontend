@@ -1,4 +1,4 @@
-// @ts-nocheck
+//@ts-nocheck
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import clsx from "clsx";
@@ -16,6 +16,7 @@ import EyeIcon from "@/src/components/atoms/vectors/eye-icon";
 import { apiRequest } from "../../functions/offChain/apiRequests";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+
 import { connectedAccount } from "../../functions/onChain/authFunction";
 import APPCONFIG from "../../constants/Config";
 import abi from "../../artifacts/abi.json";
@@ -24,6 +25,8 @@ import { ethers } from "ethers";
 
 import { connectedAccount } from "../../functions/onChain/authFunction";
 import { INftcard } from "@/src/components/molecules/NftMediumCard";
+import { ethers } from "ethers";
+import APPCONFIG from "@/src/constants/Config";
 const ViewNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModaltype] = useState("buy");
@@ -116,7 +119,6 @@ const ViewNft = () => {
         signer
       );
       const price = ethers.utils.parseUnits(
-        //@ts-ignore
         itemDetail.item_price.toString(),
         "ether"
       );
@@ -132,7 +134,6 @@ const ViewNft = () => {
       );
       var tnx = await transaction.wait();
       toast("Please approve this transaction!");
-      //@ts-ignore
       var token_id = itemDetail.token_id;
 
       // var dbTokenId = this.props.track.id;
