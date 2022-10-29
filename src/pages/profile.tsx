@@ -47,7 +47,6 @@ const Profile = () => {
     bio: string;
   } | null>(null);
   // const [data, isLoading] = UseFetch("/user/my_profile");
-  console.log(userCreatedProfileData);
   const { push } = useRouter();
 
   const profileTab = [
@@ -148,7 +147,6 @@ const Profile = () => {
     );
   }
 
-  console.log(userOwnedProfileData);
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper scrollbar-hide">
