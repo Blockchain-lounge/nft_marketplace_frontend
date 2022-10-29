@@ -16,6 +16,7 @@ const NftCard2 = ({
   item_price,
   item_quantity,
   time,
+  item_id
 }: Partial<Pick<INftcard, "name" | "imgUrl" | "price">> & {
   time?: boolean;
 }) => {
@@ -30,14 +31,43 @@ const NftCard2 = ({
           <LikeIcon />
           {/* <span>298</span> */}
         </div>
-        <Image src={item_art_url as string} alt={item_title} layout="fill" />
+        <Image src={
+          item_art_url === undefined
+          || item_art_url === null
+          || item_art_url === ''
+          && 
+          item_id !== undefined
+          && item_id !== null
+          && item_id !== '' 
+          ? item_id.item_art_url
+          : item_art_url} alt={item_title} layout="fill" />
         {/* <img src={item_art_url} alt={item_title} /> */}
       </div>
       <div className="nmc-sub-wrapper flex justify-between">
         <div className="flex flex-col gap-y-[0.3rem] p-2">
-          <span className="font-bold text-black text-xl">{item_title}</span>
+          <span className="font-bold text-black text-xl">
+            {
+              item_title === undefined
+          || item_title === null
+          || item_title === ''
+          && 
+          item_id !== undefined
+          && item_id !== null
+          && item_id !== '' 
+          ? item_id.item_title
+          : item_title
+        }</span>
           <span className="nmc-sub-wrapper-2-owner">
-            {item_quantity}/{item_quantity}
+            {
+            item_quantity === undefined
+          || item_title === null
+          || item_title === ''
+          && 
+          item_id !== undefined
+          && item_id !== null
+          && item_id !== '' 
+          ? item_id.item_quantity+'/'+item_id.item_quantity
+          : item_quantity+'/'+item_quantity}
           </span>
         </div>
         {time ? (
@@ -56,7 +86,15 @@ const NftCard2 = ({
                     layout="fill"
                   />
                 </span>
-                {item_price}
+                {item_quantity === undefined
+          || item_title === null
+          || item_title === ''
+          && 
+          item_id !== undefined
+          && item_id !== null
+          && item_id !== '' 
+          ? item_id.item_price+'/'+item_id.item_price
+          : item_price+'/'+item_price}
               </div>
             </div>
           </div>
@@ -69,7 +107,17 @@ const NftCard2 = ({
                 layout="fill"
               />
             </span>
-            {item_price}
+            {
+            item_price === undefined
+            || item_title === null
+            || item_title === ''
+            && 
+            item_id !== undefined
+            && item_id !== null
+            && item_id !== '' 
+            ? item_id.item_price+'/'+item_id.item_price
+            : item_price+'/'+item_price
+            }
           </span>
         )}
       </div>
