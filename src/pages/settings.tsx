@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { apiRequest } from '../functions/offChain/apiRequests';
+import { apiRequest } from "../functions/offChain/apiRequests";
 import DashboardLayout from "../template/DashboardLayout";
 import { BannerImg, Footer2 } from "../components/organisms";
 import Image from "next/image";
@@ -16,7 +16,7 @@ import {
   InstagramIcon,
   TwitterIcon,
 } from "../components/atoms/vectors";
-import { Button, CheckBox, Input2 } from "../components/atoms";
+import { Button, CheckBox, Heading2, Input2 } from "../components/atoms";
 // import { apiPost } from "../utilities/requests/apiRequest";
 import UseAuth from "../hooks/useAuth";
 
@@ -95,75 +95,66 @@ const Settings = () => {
   //   setCollectionCoverArt(URL.createObjectURL(files[0]));
   // }
 
-  const handleSubmit = async (e) => {
-
-   var profileData = {
+  const handleSubmit = async () => {
+    var profileData = {
       username: userDetailsPayload.username,
       email: userDetailsPayload.userEmail,
       bio: userDetailsPayload.bio,
-    }
+    };
     try {
-    const HEADER = 'authenticated';
-    const REQUEST_URL = 'user/store';
-    const METHOD = "POST";
-    const DATA = profileData
+      const HEADER = "authenticated";
+      const REQUEST_URL = "user/store";
+      const METHOD = "POST";
+      const DATA = profileData;
 
-    apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
-      .then((response) => {
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
         if (response.status == 400) {
           var error = response.data.error;
           toast(error);
           return;
         }
         if (response.status == 401) {
-              toast('Unauthorized request!');
-              return;
-        }
-        else if (response.status == 200) {
-          toast('Profile updated');
-        }
-        else {
-          toast('Something went wrong, please try again!');
-      return;
+          toast("Unauthorized request!");
+          return;
+        } else if (response.status == 200) {
+          toast("Profile updated");
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
         }
       });
     } catch (error) {
-      toast('Internal server occured!');
+      toast("Internal server occured!");
       return;
     }
-
   };
 
   useEffect(() => {
     // try {
-      const HEADER = 'authenticated';
-      const REQUEST_URL = 'user/my_profile';
-      const METHOD = "GET";
-      const DATA = {}  
-      apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
-        .then((response) => {
-          if (response.status == 400) {
-            var error = response.data.error;
-            toast(error);
-            return;
-          }
-          else if (response.status == 401) {
-            toast('Unauthorized request!');
-            return;
-          }
-          else if (response.status == 200) {
-            setUserDetailsPayload({
-              username: response.data.data.username,
-              userEmail: response.data.data.email,
-              bio: response.data.data.bio
-            })
-            // setShowModal(true);
-          }
-          else {
-            toast('Something went wrong, please try again!');
-            return;
-          }
+    const HEADER = "authenticated";
+    const REQUEST_URL = "user/my_profile";
+    const METHOD = "GET";
+    const DATA = {};
+    apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+      if (response.status == 400) {
+        var error = response.data.error;
+        toast(error);
+        return;
+      } else if (response.status == 401) {
+        toast("Unauthorized request!");
+        return;
+      } else if (response.status == 200) {
+        setUserDetailsPayload({
+          username: response.data.data.username,
+          userEmail: response.data.data.email,
+          bio: response.data.data.bio,
         });
+        // setShowModal(true);
+      } else {
+        toast("Something went wrong, please try again!");
+        return;
+      }
+    });
     // } catch (error) {
     //   toast('Something went wrong, please try again!');
     //   return;
@@ -204,6 +195,7 @@ const Settings = () => {
                 setUserImg={setUserImg}
                 setUserImgBanner={setUserImgBanner}
               /> */}
+              <Heading2 title="Edit your profile" />
               <div className="setting-edit-profile-form">
                 <Input2
                   name="username"

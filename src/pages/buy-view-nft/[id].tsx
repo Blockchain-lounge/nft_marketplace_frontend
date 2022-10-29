@@ -1,8 +1,8 @@
-// @ts-nocheck
+//@ts-nocheck
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import clsx from "clsx";
-import { Button, Input2, Select } from "../../components/atoms";
+import { Button, Input2, Loader, Select } from "../../components/atoms";
 import {
   CaretDown,
   CartIcon,
@@ -13,26 +13,26 @@ import {
 import { Footer2, Modal } from "../../components/organisms";
 import DashboardLayout from "../../template/DashboardLayout";
 import EyeIcon from "@/src/components/atoms/vectors/eye-icon";
-import { apiRequest } from '../../functions/offChain/apiRequests';
+import { apiRequest } from "../../functions/offChain/apiRequests";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import {
-  connectedAccount
-} from "../../functions/onChain/authFunction";
-import APPCONFIG from '../../constants/Config';
-import abi from '../../artifacts/abi.json';
-import { findEvents } from '../../functions/onChain/generalFunction';
-import { ethers } from 'ethers';
 
+import abi from "../../artifacts/abi.json";
+import { findEvents } from "../../functions/onChain/generalFunction";
+
+import { connectedAccount } from "../../functions/onChain/authFunction";
+import { INftcard } from "@/src/components/molecules/NftMediumCard";
+import { ethers } from "ethers";
+import APPCONFIG from "@/src/constants/Config";
 const ViewNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModaltype] = useState("buy");
-  const [itemDetail, setItemDetail] = useState(null);
+  const [itemDetail, setItemDetail] = useState<INftcard | null>(null);
   const { query, push } = useRouter();
   const { id } = query;
   const [viewNftStage, setViewNftStage] = useState("overview");
   const [connectedAddress, setConnectedAddress] = useState(null);
- 
+
   const nftOwnersInfo = [
     {
       label: "Creator",
@@ -41,7 +41,8 @@ const ViewNft = () => {
     },
     { label: "Current Owner", value: "Jakes💸", img: "/images/nftsample3.png" },
   ];
-  const viewNftStages = ["overview", "properties", "bids", "history"];
+  // const viewNftStages = ["overview", "properties", "bids", "history"];
+  const viewNftStages = ["overview", "bids"];
   const nftProperties = [
     { label: "dna", value: "human", trait: 19 },
     { label: "eyewear", value: "cyber bindi", trait: 16 },
@@ -105,13 +106,23 @@ const ViewNft = () => {
   const handleBuy = async () => {
     {
       /*write your payment info here*/
-      const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+      const provider = new ethers.providers.Web3Provider(
+        (window as any).ethereum
+      );
       const signer = provider.getSigner();
-      const contract = new ethers.Contract(APPCONFIG.SmartContractAddress,abi.abi,signer);
-      const price = ethers.utils.parseUnits(itemDetail.item_price.toString(), 'ether');
+      const contract = new ethers.Contract(
+        APPCONFIG.SmartContractAddress,
+        abi.abi,
+        signer
+      );
+      const price = ethers.utils.parseUnits(
+        itemDetail.item_price.toString(),
+        "ether"
+      );
       // itemDetail.itemId,
       toast('Please approve this transaction!');
       const transaction = await contract.buyItemCopy(
+<<<<<<< HEAD
         itemDetail.item_token_id,
         itemDetail.item_base_url,
           {
@@ -120,11 +131,25 @@ const ViewNft = () => {
           },
           );
           var tnx = await transaction.wait();
+=======
+        17,
+        //@ts-ignore
+        itemDetail.item_base_url,
+        {
+          value: price,
+          gasLimit: 5000000,
+        }
+      );
+      var tnx = await transaction.wait();
+      toast("Please approve this transaction!");
+>>>>>>> 14726b921bdd65d87eee9dde2bf44efc96901b48
       var token_id = itemDetail.token_id;
-     
+
       // var dbTokenId = this.props.track.id;
-      var amount = itemDetail.item_price;
+      //@ts-ignore
+      var amount = itemDetail.item_price as string;
       var buyer = connectedAddress;
+<<<<<<< HEAD
       var trackCopyTokenId = '';
       var trackCopyBaseUrl = '';
       var soldItemCopyId = '';
@@ -162,6 +187,54 @@ const ViewNft = () => {
                 toast(response.data.error)
               }
           });
+=======
+      var trackCopyTokenId = "";
+      var trackCopyBaseUrl = "";
+
+      console.log(tnx.events);
+
+      // const events = findEvents('itemCopySold', tnx.events, true);
+      // if (events !== undefined && events.length > 0 && events !== true) {
+      //     trackCopyTokenId = events.soldItemCopyId.toNumber();
+      //     trackCopyBaseUrl = events.soldTrackBaseURI;
+      //     buyer = events.buyer;
+      // }
+      // else {
+      //     toast('We were unable to complete your transaction!');
+      //     return
+      // }
+      var formData = {
+        token_id: token_id,
+        // dbTokenId: dbTokenId,
+        track_copy_id: trackCopyTokenId,
+        track_copy_base_url: trackCopyBaseUrl,
+        //// transactionHash: transactionHash,
+        amount: amount,
+        buyer: buyer,
+      };
+      const HEADER = "authenticated";
+      const REQUEST_URL = "track/sold";
+      const METHOD = "POST";
+      // const DATA = formData
+      // this.setState({
+      //     axiosInfo:'Finalizing the transaction...',
+      //     isOpen: true
+      //   });
+      // apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
+      //     .then(function (response) {
+      //          if (response.status == 200 || response.status == 201) {
+      //             // swNot('success', response.data.message);
+      //             const alertTitle = "NFT Purchase";
+      //             const alertDescription = response.data.message;
+      //             const alertIcon = "success";
+      //             const alertBtnText = "Okay";
+      //             const redirectIfOkay = false;
+      //             const redirectIfOkayUrl = '/';
+      //             const withCancel = false;
+
+      //         }
+      //     });
+>>>>>>> 14726b921bdd65d87eee9dde2bf44efc96901b48
     }
     setShowModal((prev) => !prev);
   };
@@ -173,237 +246,248 @@ const ViewNft = () => {
     setModaltype("buy");
   };
 
-  const fetchItemDetail = async(id)=>{
-    if(id !== undefined){
+  const fetchItemDetail = async (id: string) => {
+    if (id !== undefined) {
       const HEADER = {};
-      const REQUEST_URL = 'nft-item/detail/'+id;
+      const REQUEST_URL = "nft-item/detail/" + id;
       const METHOD = "GET";
-      const DATA = {}  
-      apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
-        .then((response) => {
-          if (response.status == 400) {
-            var error = response.data.error;
-            toast(error);
-            push("/")
-            return;
-          }
-          else if (response.status == 200) {
-            setItemDetail(response.data.data)
-          }
-          else {
-            toast('Something went wrong, please try again!');
-            return;
-          }
-        });
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          push("/");
+          return;
+        } else if (response.status == 200) {
+          setItemDetail(response.data.data);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
     }
-  }
+  };
   useEffect(() => {
     connectedAccount().then((response) => {
       if (response !== null) {
         setConnectedAddress(response);
       }
     });
-    fetchItemDetail(id);
+    fetchItemDetail(id as string);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  if (!itemDetail) {
+    return (
+      <div className="h-screen inset-0 flex justify-center items-center">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper">
-        {
-          itemDetail !== null
-          ?
-<div className="center space-y-8">
-          <div className="view-wrapper-hero grid-cols-[0.5fr_1fr]">
-            <div className="relative">
-            <Image
+        {itemDetail !== null ? (
+          <div className="center space-y-8">
+            <div className="view-wrapper-hero grid-cols-[0.5fr_1fr]">
+              <div className="relative">
+                <Image
                   src={itemDetail.item_art_url}
                   alt={itemDetail.item_title}
                   layout="fill"
                   objectFit="cover"
                   className="rounded-xl"
                 />
-            </div>
-            <div className="space-y-4">
-              <div>
-                <div className="flex items-center mb-5">
-                  <div className="h-[2.125rem] w-[2.125rem] relative mr-4">
-                    <Image
-                      src="/images/colx_id.png"
-                      alt="colx-img"
-                      layout="fill"
-                      objectFit="contain"
-                      className="rounded-full"
-                    />
-                  </div>
-                  <span className="text-lg mr-1">CloneX</span>
-                  <div className="h-5 w-5 relative">
-                    <Image
-                      src="/images/verify.svg"
-                      alt="colx-img"
-                      layout="fill"
-                      objectFit="contain"
-                      className="rounded-full"
-                    />
-                  </div>
-                </div>
-                <span className="text-2xl font-bold">{itemDetail.item_title}</span>
               </div>
-              <div className="view-hero-nft-owner">
-                {nftOwnersInfo.map(({ img, label, value }) => (
-                  <div key={value} className="flex items-center gap-x-4">
-                    <div className="relative h-14 w-14">
+              <div className="space-y-4">
+                <div>
+                  <div className="flex items-center mb-5">
+                    <div className="h-[2.125rem] w-[2.125rem] relative mr-4">
                       <Image
-                        src={img}
-                        alt={label + value}
+                        src="/images/colx_id.png"
+                        alt="colx-img"
                         layout="fill"
-                        objectFit="cover"
+                        objectFit="contain"
                         className="rounded-full"
                       />
                     </div>
-                    <div className="flex flex-col">
-                      <span className="text-txt-2">{label}</span>
-                      <span>{value}</span>
+                    <span className="text-lg mr-1">CloneX</span>
+                    <div className="h-5 w-5 relative">
+                      <Image
+                        src="/images/verify.svg"
+                        alt="colx-img"
+                        layout="fill"
+                        objectFit="contain"
+                        className="rounded-full"
+                      />
                     </div>
                   </div>
-                ))}
-              </div>
-              <div className="view-hero-nft-cta-wrapper">
-                <div className="flex w-full gap-x-6">
-                  <div className="p-3 bg-bg-5 rounded-[1.25rem] w-full">
-                    <span className="text-txt-2 block mb-4">Price</span>
-                    <div className="">
-                      <span className="flex items-center text-[1.5rem] -ml-2">
-                        <CoinIcon />
-                        {itemDetail.item_price}
-                      </span>
-                      <span className="text-lg block mt-2">$5,954,532</span>
-                    </div>
-                  </div>
-                  <div className="p-3 bg-bg-5 rounded-[1.25rem] w-full">
-                    <span className="text-txt-2 block mb-4">
-                      Highest floor bid
-                    </span>
-                    <div>
-                      <span className="flex items-center -ml-2 text-[1.5rem]">
-                        <CoinIcon />
-                        51k
-                      </span>
-                      <span className="text-lg flex items-center mt-2 text-txt-2 gap-x-2">
-                        by
-                        <span className="earnings-card-history">
-                          0x7a20d...9257
-                        </span>
-                      </span>
-                    </div>
-                  </div>
+                  <span className="text-2xl font-bold">
+                    {itemDetail.item_title}
+                  </span>
                 </div>
-                <span className="text-lg font-medium">
-                  Last sale price 10.8 ETH
-                </span>
-                <div className="flex flex-col gap-y-4 w-full">
-                  <div className="flex gap-x-5 w-full">
+                <div className="view-hero-nft-owner">
+                  {nftOwnersInfo.map(({ img, label, value }) => (
+                    <div key={value} className="flex items-center gap-x-4">
+                      <div className="relative h-14 w-14">
+                        <Image
+                          src={img}
+                          alt={label + value}
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded-full"
+                        />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-txt-2">{label}</span>
+                        <span>{value}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="view-hero-nft-cta-wrapper">
+                  <div className="flex w-full gap-x-6">
+                    <div className="p-3 bg-bg-5 rounded-[1.25rem] w-full">
+                      <span className="text-txt-2 block mb-4">Price</span>
+                      <div className="">
+                        <span className="flex items-center text-[1.5rem] gap-x-1">
+                          <CoinIcon />
+                          {itemDetail.item_price}
+                        </span>
+                        <span className="text-lg block mt-2">$5,954,532</span>
+                      </div>
+                    </div>
+                    <div className="p-3 bg-bg-5 rounded-[1.25rem] w-full">
+                      <span className="text-txt-2 block mb-4">
+                        Highest floor bid
+                      </span>
+                      <div>
+                        <span className="flex items-center  text-[1.5rem] gap-x-1">
+                          <CoinIcon />
+                          51k
+                        </span>
+                        <span className="text-lg flex items-center mt-2 text-txt-2 gap-x-2">
+                          by
+                          <span className="earnings-card-history">
+                            0x7a20d...9257
+                          </span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-lg font-medium">
+                    Last sale price 10.8 ETH
+                  </span>
+                  <div className="flex flex-col gap-y-4 w-full">
+                    <div className="flex gap-x-5 w-full">
+                      <Button
+                        title="Buy now"
+                        wt="w-full"
+                        onClick={() => {
+                          setModaltype("buy");
+                          setShowModal((prev) => !prev);
+                        }}
+                      />
+                      {/* <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
+                        <CartIcon />
+                      </span> */}
+                    </div>
                     <Button
-                      title="Buy now"
+                      title="Place a bid"
                       wt="w-full"
+                      outline2
                       onClick={() => {
-                        setModaltype("buy");
+                        setModaltype("bid");
                         setShowModal((prev) => !prev);
                       }}
                     />
-                    <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
-                      <CartIcon />
-                    </span>
                   </div>
-                  {/* <Button
-                    title="Place a bid"
-                    wt="w-full"
-                    outline2
-                    onClick={() => {
-                      setModaltype("bid");
-                      setShowModal((prev) => !prev);
-                    }}
-                  /> */}
                 </div>
               </div>
+              <div className="flex gap-x-6 mt-6 items-center">
+                <span className="flex gap-x-2 items-center">
+                  <LikeIcon /> 298
+                </span>
+                <span className="view-hero-nft-link">
+                  <Image
+                    src="/icon-svg/discord.svg"
+                    alt="view-nft-links"
+                    layout="fill"
+                    objectFit="contain"
+                  />
+                </span>
+                <span className="view-hero-nft-link">
+                  <Image
+                    src="/icon-svg/twitter.svg"
+                    alt="view-nft-links"
+                    layout="fill"
+                    objectFit="contain"
+                  />
+                </span>
+                <span className="view-hero-nft-link">
+                  <Image
+                    src="/icon-svg/telegram.svg"
+                    alt="view-nft-links"
+                    layout="fill"
+                    objectFit="contain"
+                  />
+                </span>
+                <span className="view-hero-nft-link border border-border-1-line p-4 rounded-md">
+                  <Image
+                    src="/icon-svg/options.svg"
+                    alt="view-nft-links"
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                </span>
+              </div>
             </div>
-            <div className="flex gap-x-6 mt-6 items-center">
-              <span className="flex gap-x-2 items-center">
-                <LikeIcon /> 298
-              </span>
-              <span className="view-hero-nft-link">
-                <Image
-                  src="/icon-svg/discord.svg"
-                  alt="view-nft-links"
-                  layout="fill"
-                  objectFit="contain"
-                />
-              </span>
-              <span className="view-hero-nft-link">
-                <Image
-                  src="/icon-svg/twitter.svg"
-                  alt="view-nft-links"
-                  layout="fill"
-                  objectFit="contain"
-                />
-              </span>
-              <span className="view-hero-nft-link">
-                <Image
-                  src="/icon-svg/telegram.svg"
-                  alt="view-nft-links"
-                  layout="fill"
-                  objectFit="contain"
-                />
-              </span>
-              <span className="view-hero-nft-link border border-border-1-line p-4 rounded-md">
-                <Image
-                  src="/icon-svg/options.svg"
-                  alt="view-nft-links"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </span>
+            {/*Stages Mode*/}
+            <div className="flex gap-x-10 items-center border-b-[0.1px] border-border-2-line">
+              {viewNftStages.map((stage) => (
+                <span
+                  key={stage}
+                  onClick={() => setViewNftStage(stage)}
+                  className={clsx(
+                    "view-nft-stage",
+                    stage === viewNftStage && "text-white border-b-[2.5px]"
+                  )}
+                >
+                  {stage}
+                </span>
+              ))}
             </div>
-          </div>
-          {/*Stages Mode*/}
-          <div className="flex gap-x-10 items-center border-b-[0.1px] border-border-2-line">
-            {viewNftStages.map((stage) => (
-              <span
-                key={stage}
-                onClick={() => setViewNftStage(stage)}
-                className={clsx(
-                  "view-nft-stage",
-                  stage === viewNftStage && "text-white border-b-[2.5px]"
-                )}
-              >
-                {stage}
-              </span>
-            ))}
-          </div>
-          <div className="view-nft-stages">
-            {viewNftStage === "overview" ? (
-              <div>
-                <div className="view-nft-description space-y-3">
-                  <h2 className="text-2xl font-bold ">Description</h2>
-                  <div className="flex flex-col">
-                    <p className="text-txt-2">
-                    {itemDetail.item_description}
-                    </p>
-                  </div>
-                  <span className="flex items-center gap-x-2 text-txt-3 font-medium">
-                    See more
-                    <span>
-                      <CaretDown color="lightgray" />
+            <div className="view-nft-stages">
+              {viewNftStage === "overview" ? (
+                <div>
+                  <div className="view-nft-description space-y-3">
+                    <h2 className="text-2xl font-bold ">Description</h2>
+                    <div className="flex flex-col">
+                      <p className="text-txt-2">
+                        {/*@ts-ignore*/}
+                        {itemDetail.item_description}
+                      </p>
+                    </div>
+                    <span className="flex items-center gap-x-2 text-txt-3 font-medium">
+                      See more
+                      <span>
+                        <CaretDown color="lightgray" />
+                      </span>
                     </span>
-                  </span>
 
-                  <div className="view-nft-details">
-                    <h2 className="text-2xl font-bold my-4">Details</h2>
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-x-2">
-                        <CoinIcon />{" "}
-                        <span className="block font-medium ml-2">Ethereum</span>{" "}
-                        <span className="text-txt-2">(ERC-721)</span>
-                      </div>
-                      {/* <div className="flex items-center gap-x-2">
+                    <div className="view-nft-details">
+                      <h2 className="text-2xl font-bold my-4">Details</h2>
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-x-2">
+                          <CoinIcon />{" "}
+                          <span className="block font-medium ml-2">
+                            Ethereum
+                          </span>{" "}
+                          <span className="text-txt-2">(ERC-721)</span>
+                        </div>
+                        {/* <div className="flex items-center gap-x-2">
                         <StatIcon />{" "}
                         <span className="block font-medium">
                           View on Etherscan
@@ -417,131 +501,74 @@ const ViewNft = () => {
                           />
                         </span>
                       </div> */}
-                      <div className="flex items-center gap-x-2">
-                        <EyeIcon />{" "}
-                        <span className="block font-medium">Open original</span>{" "}
-                        <span className="relative h-5 w-5 cursor-pointer">
-                          <Image
-                            src="/vectors/export.svg"
-                            alt="external link"
-                            layout="fill"
-                            objectFit="cover"
-                          />
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ) : viewNftStage === "properties" ? (
-              <div className="flex items-center gap-x-5">
-                {nftProperties.map(({ label, trait, value }) => (
-                  <div
-                    key={value}
-                    className="flex flex-col items-center bg-bg-5 p-4 rounded-lg"
-                  >
-                    <span className="uppercase text-xs font-medium earnings-card-history">
-                      {label}
-                    </span>
-                    <span className="capitalize text-lg font-medium ">
-                      {value}
-                    </span>
-                    <span className=" text-[0.625rem] text-txt-2">
-                      {trait}% have this trait
-                    </span>
-                  </div>
-                ))}
-              </div>
-            ) : viewNftStage === "bids" ? (
-              <div className="flex flex-col gap-y-6">
-                {nftBids.map(({ bidder, expiresIn, imgUrl, time }) => (
-                  <div
-                    key={bidder}
-                    className="flex items-center justify-between bg-bg-5 py-4 pl-6 pr-8 rounded-xl"
-                  >
-                    <div className="flex items-center gap-x-4">
-                      <div className="h-16 w-16 relative">
-                        <Image
-                          src={imgUrl}
-                          alt={bidder}
-                          layout="fill"
-                          objectFit="contain"
-                          className="rounded-full"
-                        />
-                      </div>
-                      <div>
-                        <span className="text-xl font-bold">{bidder}</span>
-                        <div className="flex items-center gap-x-1">
-                          <span className="font-medium text-txt-2">
-                            {time} ago
-                          </span>
-                          <span className="h-1 w-1 rounded-full bg-txt-2"></span>
-                          <span className="font-medium text-txt-2">
-                            Expires in {expiresIn}
-                          </span>
-                          <span className="h-1 w-1 rounded-full bg-txt-2"></span>
-                          <span className="font-medium earnings-card-history">
-                            Floor bid
+                        <div className="flex items-center gap-x-2">
+                          <EyeIcon />{" "}
+                          <span className="block font-medium">
+                            Open original
+                          </span>{" "}
+                          <span className="relative h-5 w-5 cursor-pointer">
+                            <Image
+                              src="/vectors/export.svg"
+                              alt="external link"
+                              layout="fill"
+                              objectFit="cover"
+                            />
                           </span>
                         </div>
                       </div>
                     </div>
-                    <div>
-                      <span className="flex text-xl font-bold">
-                        <CoinIcon /> 4.5k
-                      </span>
-                      <span className="text-txt-2">$5,954,532</span>
-                    </div>
                   </div>
-                ))}
-              </div>
-            ) : viewNftStage === "history" ? (
-              <div className="flex flex-col gap-y-6">
-                {nftHistory.map(
-                  ({ imgUrl, time, date, owner, txn, icon, receiver }) => (
+                </div>
+              ) : viewNftStage === "properties" ? (
+                <div className="flex items-center gap-x-5">
+                  {nftProperties.map(({ label, trait, value }) => (
                     <div
-                      key={owner}
+                      key={value}
+                      className="flex flex-col items-center bg-bg-5 p-4 rounded-lg"
+                    >
+                      <span className="uppercase text-xs font-medium earnings-card-history">
+                        {label}
+                      </span>
+                      <span className="capitalize text-lg font-medium ">
+                        {value}
+                      </span>
+                      <span className=" text-[0.625rem] text-txt-2">
+                        {trait}% have this trait
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : viewNftStage === "bids" ? (
+                <div className="flex flex-col gap-y-6">
+                  {nftBids.map(({ bidder, expiresIn, imgUrl, time }) => (
+                    <div
+                      key={bidder}
                       className="flex items-center justify-between bg-bg-5 py-4 pl-6 pr-8 rounded-xl"
                     >
                       <div className="flex items-center gap-x-4">
                         <div className="h-16 w-16 relative">
                           <Image
                             src={imgUrl}
-                            alt={owner}
+                            alt={bidder}
                             layout="fill"
                             objectFit="contain"
                             className="rounded-full"
                           />
                         </div>
                         <div>
-                          <div className="flex items-center gap-x-2">
-                            <span className="text-xl font-bold">{owner}</span>
-                            <span className="text-xl font-bold text-txt-2">
-                              {txn}
-                            </span>
-                            {receiver && (
-                              <span className="text-xl font-bold">
-                                {receiver}
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-x-2">
+                          <span className="text-xl font-bold">{bidder}</span>
+                          <div className="flex items-center gap-x-1">
                             <span className="font-medium text-txt-2">
-                              {date}
+                              {time} ago
                             </span>
+                            <span className="h-1 w-1 rounded-full bg-txt-2"></span>
                             <span className="font-medium text-txt-2">
-                              {time}
+                              Expires in {expiresIn}
                             </span>
-                            {icon && (
-                              <span className="relative h-5 w-5 cursor-pointer">
-                                <Image
-                                  src={icon}
-                                  alt={txn}
-                                  layout="fill"
-                                  objectFit="cover"
-                                />
-                              </span>
-                            )}
+                            <span className="h-1 w-1 rounded-full bg-txt-2"></span>
+                            <span className="font-medium earnings-card-history">
+                              Floor bid
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -552,16 +579,74 @@ const ViewNft = () => {
                         <span className="text-txt-2">$5,954,532</span>
                       </div>
                     </div>
-                  )
-                )}
-              </div>
-            ) : null}
+                  ))}
+                </div>
+              ) : viewNftStage === "history" ? (
+                <div className="flex flex-col gap-y-6">
+                  {nftHistory.map(
+                    ({ imgUrl, time, date, owner, txn, icon, receiver }) => (
+                      <div
+                        key={owner}
+                        className="flex items-center justify-between bg-bg-5 py-4 pl-6 pr-8 rounded-xl"
+                      >
+                        <div className="flex items-center gap-x-4">
+                          <div className="h-16 w-16 relative">
+                            <Image
+                              src={imgUrl}
+                              alt={owner}
+                              layout="fill"
+                              objectFit="contain"
+                              className="rounded-full"
+                            />
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-x-2">
+                              <span className="text-xl font-bold">{owner}</span>
+                              <span className="text-xl font-bold text-txt-2">
+                                {txn}
+                              </span>
+                              {receiver && (
+                                <span className="text-xl font-bold">
+                                  {receiver}
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-x-2">
+                              <span className="font-medium text-txt-2">
+                                {date}
+                              </span>
+                              <span className="font-medium text-txt-2">
+                                {time}
+                              </span>
+                              {icon && (
+                                <span className="relative h-5 w-5 cursor-pointer">
+                                  <Image
+                                    src={icon}
+                                    alt={txn}
+                                    layout="fill"
+                                    objectFit="cover"
+                                  />
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <span className="flex text-xl font-bold">
+                            <CoinIcon /> 4.5k
+                          </span>
+                          <span className="text-txt-2">$5,954,532</span>
+                        </div>
+                      </div>
+                    )
+                  )}
+                </div>
+              ) : null}
+            </div>
           </div>
-        </div>
-
-          :
+        ) : (
           ""
-        }
+        )}
         <Footer2 />
       </div>
       <Modal
@@ -589,7 +674,9 @@ const ViewNft = () => {
                 </span>
                 <div className="flex flex-col">
                   <span className="text-lg font-medium">Metamask</span>
-                  <span className="text-txt-2 font-medium">{connectedAddress} </span>
+                  <span className="text-txt-2 font-medium">
+                    {connectedAddress}{" "}
+                  </span>
                 </div>
               </div>
               <span className="text-positive-color bg-[#00800022] py-3 px-4 rounded-3xl">
@@ -647,14 +734,16 @@ const ViewNft = () => {
             <Button title="Place bid" onClick={handleBid} twClasses="w-full" />
           </div>
         ) : (
-          <div className="flex flex-col items-center max-w-[85%] mx-auto gap-y-5">
-            <span className="font-bold flex gap-x-1 ">
+          <div className="flex flex-col items-center max-w-[60%] mx-auto gap-y-5 text-clip">
+            <span className="font-bold flex gap-x-1 text-xl">
               You are about to purchase
-              <span className="text-txt-2">{itemDetail !== null ? itemDetail.item_title : ""}</span>
+              <span className="text-txt-2">
+                {itemDetail !== null ? itemDetail.item_title : ""}
+              </span>
               {/* from
               <span className="text-txt-2">Jakes💸</span> */}
             </span>
-            <div className="flex items-center justify-between w-full bg-bg-5 py-4 px-6 rounded-[1.25rem]">
+            {/* <div className="flex items-center justify-between w-full bg-bg-5 py-4 px-6 rounded-[1.25rem]">
               <div className="flex gap-x-3 items-center">
                 <span className="block relative h-14 w-14">
                   <Image
@@ -672,7 +761,7 @@ const ViewNft = () => {
               <span className="text-positive-color bg-[#00800022] py-3 px-4 rounded-3xl">
                 Connected
               </span>
-            </div>
+            </div> */}
             {/* <div className="flex justify-between items-center w-full">
               <span className="text-txt-2">Balance</span>
               <span className="flex">
@@ -688,7 +777,7 @@ const ViewNft = () => {
             </div> */}
             <div className="flex justify-between items-center w-full">
               <span className="text-txt-2">You Will Pay</span>
-              <span className="flex">
+              <span className="flex gap-x-1">
                 <CoinIcon />
                 {itemDetail !== null ? itemDetail.item_price : ""}
               </span>

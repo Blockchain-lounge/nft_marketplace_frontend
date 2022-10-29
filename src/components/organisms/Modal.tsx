@@ -61,7 +61,7 @@ const Modal = ({
                 {active ? (
                   <CloseIcon />
                 ) : (
-                  <img src="/vectors/clodse-icon.svg" alt="close modal" />
+                  <img src="/vectors/close-icon.svg" alt="close modal" />
                 )}
               </span>
             </div>

@@ -140,40 +140,40 @@ const Activities = () => {
 
   return (
     <DashboardLayout>
-      <div className="sub-layout-wrapper scrollbsr-hide">
+      <div className="sub-layout-wrapper scrollbar-hide">
         <div className="center">
           <div className="collection-page-top">
             <div className="collection-page-sub-top">
-              <Heading2 title="Activities" />
+              {/* <Heading2 title="Activities" />
               <Select
                 title="Event type"
                 placeholder={currentEvent}
                 onClick={setCurrentEvent}
                 lists={events}
-              />
-              <SelectCheckBox
+              /> */}
+              {/* <SelectCheckBox
                 lists={collections}
                 //@ts-ignore
                 setLists={setCollections}
                 title="Collection"
                 selectedLists={selectedCollection}
                 newLists={setSelectedCollection}
-              />
+              /> */}
               {/* <Select title="Chains" /> */}
             </div>
-            <Tab2
+            {/* <Tab2
               tabs={tabs}
               activeTab={currentTab}
               setActiveTab={setCurrentTab}
-            />
+            /> */}
           </div>
-          <div className="flex items-center gap-x-4 mb-6">
+          {/* <div className="flex items-center gap-x-4 mb-6">
             {selectedCollection.map((val, i) => (
               <div
                 key={val.label + i}
                 className="p-4 bg-bg-5 rounded-md gap-x-4 flex items-center"
-              >
-                <div className="flex items-center gap-x-3">
+              > */}
+          {/* <div className="flex items-center gap-x-3">
                   {val.img && (
                     <span className="relative h-[2.375rem] w-[2.375rem]">
                       <Image
@@ -196,19 +196,25 @@ const Activities = () => {
                       />
                     </span>
                   )}
-                </div>
-                {/* <span className="font-medium">{val}</span> */}
-                <span className="cursor-pointer">
+                </div> */}
+          {/* <span className="font-medium">{val}</span> */}
+          {/* <span className="cursor-pointer">
                   <CloseIcon />
-                </span>
-              </div>
+                </span> */}
+          {/* </div>
             ))}
-          </div>
-          <div className="total-earnings-history-wrapper">
+          </div> */}
+          {/* <div className="total-earnings-history-wrapper">
             {activitiesData.map((txn, i) => (
               <TransactionCard key={i + 1} {...txn} />
             ))}
-          </div>
+          </div> */}
+        </div>
+        <div className="center h-[80vh] flex flex-col  justify-center items-center ">
+          <Heading2 title="Coming soon!" />
+          <span className="text-2xl text-txt-2">
+            View and analysis deep insight from activities on the marketplace.
+          </span>
         </div>
         <Footer2 />
       </div>

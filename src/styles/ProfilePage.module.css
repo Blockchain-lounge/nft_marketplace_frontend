@@ -16,7 +16,7 @@
 }
 
 .profile-nft-section {
-  @apply mt-12;
+  @apply mt-12 h-[40vh];
 }
 
 .profile-user-info {

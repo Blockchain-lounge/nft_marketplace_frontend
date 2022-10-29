@@ -1,9 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
-// @ts-nocheck
-import Router, { useRouter } from "next/router";
+//@ts-nocheck
+import Router from "next/router";
 import { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Image from "next/image";
+
 import clsx from "clsx";
 import {
   AddIcon,
@@ -21,12 +22,11 @@ import {
   ProfileLinkIcon,
   TwitterIcon,
 } from "../components/atoms/vectors";
-import { Footer2, Modal } from "../components/organisms";
+import { CreateCollection, Footer2, Modal } from "../components/organisms";
 import DashboardLayout from "../template/DashboardLayout";
 import { Button, Input2, Select } from "../components/atoms";
 import { GetServerSideProps } from "next";
 import { requireAuthentication } from "../utilities/auth/requireAuthentication";
-// const IPFSCLIENT = require('ipfs-http-client');
 import { create } from "ipfs-http-client";
 import APPCONFIG from "../constants/Config";
 import abi from "../artifacts/abi.json";
@@ -35,9 +35,12 @@ import { findEvents } from "../functions/onChain/generalFunction";
 import { apiRequest } from "../functions/offChain/apiRequests";
 
 import { connectedAccount } from "../functions/onChain/authFunction";
+import { useRouter } from "next/router";
+
 const CreateNewNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [file, setFile] = useState<FileList | null>(null);
+  const [modalType, setModaltype] = useState("success");
   const [nftPayload, setNftPayload] = useState({
     coinPrice: "",
     itemName: "",
@@ -77,17 +80,7 @@ const CreateNewNft = () => {
     },
   });
 
-  // const IPFS = IPFSCLIENT({
-  //   host: 'ipfs.infura.io',
-  //   port: 5001,
-  //   protocol: 'https',
-  //   headers: {
-  //     authorization: `Basic ${Buffer.from(projectIdAndSecret).toString(
-  //       'base64'
-  //     )}`,
-  //   },
-  // });
-
+  const { push } = useRouter();
   const priceListingTypes = [
     { type: "Fixed price", icon: <FixedPriceIcon /> },
     { type: "Open for bids", icon: <BidIcon /> },
@@ -207,15 +200,6 @@ const CreateNewNft = () => {
         parseInt(nftPayload.royalties)
       );
       var tnx = await transaction.wait();
-      var itemId ='';
-      const events = findEvents('ItemCreated', tnx.events, true);
-      if (events === true) {
-        toast('On-chain transaction completed...');
-        return
-      }
-      else if (events !== undefined && events.length > 0 && events !== true) {
-        itemId = events.itemId.toNumber();
-      // console.log(tnx);
       const events = findEvents("ItemCreated", tnx.events, true);
       if (events === true) {
         toast("On-chain transaction completed...");
@@ -227,19 +211,23 @@ const CreateNewNft = () => {
         toast("We were unable to complete the creation of your NFT!");
         return;
       }
+      const IPFSItemres = await client.add(nftImage);
+      const itemIPFSURL = IPFS_URL + IPFSItemres.path;
 
       try {
-        const IPFSItemres = await client.add(nftImage);
-        const itemIPFSURL = IPFS_URL + IPFSItemres.path;
         var formData = {
           item_title: nftPayload.itemName,
-          token_id: itemId,
           item_description: nftPayload.description,
           item_price: nftPayload.coinPrice,
           item_quantity: nftPayload.supply,
-          item_art_url: "itemIPFSURL",
+          item_art_url: itemIPFSURL,
           item_base_url: baseURI,
-          collection_id: "6340b5aca06f00a4f5d4b1c7",
+          collection_id:
+            nftPayload.collection == "" ||
+            nftPayload.collection == null ||
+            nftPayload.collection == undefined
+              ? "Uncatgorized"
+              : nftPayload.collection,
         };
         toast("Finalizing the transaction off-chain...");
         const HEADER = "authenticated";
@@ -258,7 +246,7 @@ const CreateNewNft = () => {
             return;
           } else if (response.status == 201) {
             toast(response.data.message);
-            setShowModal(true);
+            // setShowModal(true);
           } else {
             toast("Something went wrong, please try again!");
             return;
@@ -269,6 +257,9 @@ const CreateNewNft = () => {
         return;
       }
     }
+    setModaltype("success");
+    setShowModal(true);
+    console.log({ nftPayload, file, priceListType });
   };
   useEffect(() => {
     connectedAccount().then((response) => {
@@ -276,7 +267,37 @@ const CreateNewNft = () => {
         setConnectedAddress(response);
       }
     });
-  }, [userCollectionList]);
+    try {
+      const HEADER = "authenticated";
+      const REQUEST_URL = "nft-collection/mine";
+      const METHOD = "GET";
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          return;
+        } else if (response.status == 401) {
+          toast("Unauthorized request!");
+          return;
+        } else if (response.status == 200) {
+          toast(response.data.data);
+          // setShowModal(true);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    } catch (error) {
+      toast("Something went wrong, please try again!");
+      return;
+    }
+  }, [connectedAddress, userCollectionList]);
+  const handleModal = () => {
+    setModaltype("wallet");
+    setShowModal((prev) => !prev);
+  };
+
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper">
@@ -302,14 +323,14 @@ const CreateNewNft = () => {
                   className="hidden"
                   name="img"
                 />
-                <div className="disp-img h-[20rem] relative">
+                <div className="disp-img w-[25rem] h-[25rem] relative">
                   <label
                     htmlFor="file"
                     className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d7f]"
                   >
                     <ImgUploadIcon />
                     <span className={clsx(file ? "hidden" : "block")}>
-                      Click to add a file or drag file here
+                      Click to add a file
                     </span>
                   </label>
                   <img
@@ -398,20 +419,27 @@ const CreateNewNft = () => {
               <div className="create-new-nft-wrapper-2">
                 <div className="flex justify-between items-center">
                   <span>Collection</span>
-                  <span className="earnings-card-history">
+                  <span
+                    className="earnings-card-history cursor-pointer"
+                    onClick={handleModal}
+                  >
                     Create collection
                   </span>
                 </div>
                 {/* <Select title="Select collection" /> */}
                 <select
                   className="w-full bg-transparent  outline-none select"
-                  //@ts-ignore
                   onChange={(e) => handleFieldChange(e)}
                   name="collection"
                 >
                   <option value="Uncategorized">Uncategorized</option>
-                  <option value="Arts">Arts</option>
-                  <option value="Flyers">Flyers</option>
+                  {userCollectionList.length > 0
+                    ? userCollectionList.map((collection, index) => (
+                        <option value={collection.name} key={index}>
+                          {collection.name}
+                        </option>
+                      ))
+                    : ""}
                 </select>
               </div>
               <Input2
@@ -470,12 +498,12 @@ const CreateNewNft = () => {
                   This is how your item will be displayed
                 </span>
               </div>
-              <div className="h-[25rem] mt-4">
+              <div className="h-[25rem] w-[25rem] mt-4">
                 <div className="h-[100%] relative">
                   {file && (
                     <div className="nmc-wrapper-likes nmc-wrapper2-likes z-10">
                       <LikeIcon />
-                      <span>298</span>
+                      <span>0</span>
                     </div>
                   )}
                   <span
@@ -512,7 +540,7 @@ const CreateNewNft = () => {
                   </div>
                   <span className="text-[1.1rem] text-black ">
                     {/*replace with collection name*/}
-                    {nftPayload.collection || "Uncategorized"}
+                    {nftPayload.collection.split(" ")[0] || "Uncategorized"}
                   </span>
                 </div>
               </div>
@@ -521,16 +549,21 @@ const CreateNewNft = () => {
         </div>
         <Footer2 />
       </div>
-      <Modal
+      {/* <Modal
         openModal={showModal}
         closeModal={setShowModal}
-        noTop
-        modalWt="w-[30rem]"
-      >
+        noTop={modalType !== "wallet" && true}
+        title={modalType === "wallet" ? "Create Collection" : ""}
+        modalWt={modalType === "wallet" ? "w-[40%]" : "w-[30rem]"}
+      > 
         <div className="create-new-nft-success">
           <div className="mt-4 h-40 w-40 relative">
             <img
-              src={nftCoverImage ? nftCoverImage : ""}
+              src={
+                nftCoverImage
+                ? nftCoverImage
+                  : ""
+              }
               alt=""
               className={`object-cover h-full w-full rounded-2xl`}
             />
@@ -540,8 +573,8 @@ const CreateNewNft = () => {
           </div>
           <span className="text-lg">Your item has been created</span>
           <span className="text-sm font-medium mx-auto max-w-[60%] text-center text-txt-2">
-            {nftPayload.itemName} from {nftPayload.collection} Collection has
-            been listed for sale
+            {nftPayload.nftName} from {nftPayload.nftName.split(" ")[0]}{" "}
+            Collection has been listed for sale
           </span>
           <div className="flex flex-col items-center gap-y-2 my-2">
             <span className="text-sm text-txt-3">Share to</span>
@@ -550,7 +583,61 @@ const CreateNewNft = () => {
               <FbIcon />
               <TwitterIcon />
               <DiscordIcon />
+         {modalType === "wallet" ? (
+          <CreateCollection
+            closeModal={setShowModal}
+            // changeModalType={setModaltype}
+          />
+         ) : (
+          <div className="create-new-nft-success">
+            <div className="mt-4 h-40 w-40 relative">
+              <img
+                src={
+                  file
+                    ? //@ts-ignore
+                      URL.createObjectURL([...file][0])
+                    : ""
+                }
+                alt=""
+                className={`object-cover h-full w-full rounded-2xl`}
+              />
+              <span className="absolute right-[0.3rem] bottom-[-0.7rem] bg-positive-color h-8 w-8 grid place-items-center rounded-full border-bg-1 border-[2.5px]">
+                <CheckIcon color="#15152E" />
+              </span>
+            </div>
+            <span className="text-lg">Your item has been created</span>
+            <span className="text-sm font-medium mx-auto max-w-[60%] text-center text-txt-2">
+              {nftPayload.nftName} from {nftPayload.nftName.split(" ")[0]}{" "}
+              Collection has been listed for sale
             </span>
+            <div className="flex flex-col items-center gap-y-2 my-2">
+              <span className="text-sm text-txt-3">Share to</span>
+              <span className="flex items-center gap-x-6">
+                <ProfileLinkIcon />
+                <FbIcon />
+                <TwitterIcon />
+                <DiscordIcon />
+              </span>
+            </div>
+            <span className="crete-new-nft-icons"></span>
+            <Button
+              title="View listing"
+              outline2
+              onClick={() => {
+                push("/view-nft/cloneX");
+                setNftPayload({
+                  coinPrice: "",
+                  itemName: "",
+                  nftName: "",
+                  nftSymbol: "",
+                  description: "",
+                  supply: "",
+                  royalties: "",
+                });
+                setFile(null);
+                setShowModal((prev) => !prev);
+              }}
+            />
           </div>
           <span className="crete-new-nft-icons"></span>
           <Button
@@ -559,7 +646,6 @@ const CreateNewNft = () => {
             onClick={() => {
               setShowModal((prev) => !prev);
               setNftPayload({
-                ...nftPayload,
                 coinPrice: nftPayload.coinPrice,
                 itemName: nftPayload.itemName,
                 description: nftPayload.description,
@@ -570,7 +656,8 @@ const CreateNewNft = () => {
             }}
           />
         </div>
-      </Modal>
+        )}
+      </Modal> */}
     </DashboardLayout>
   );
 };

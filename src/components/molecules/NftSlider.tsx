@@ -7,7 +7,7 @@ import NftMediumCard from "../molecules/NftMediumCard";
 import { NextSliderBtn } from "@/src/components/atoms";
 import { FC, ReactNode } from "react";
 
-const NftSlider = ({ data = [], Card }: { data?: any; Card: any }) => {
+const NftSlider = ({ data = [], Card }: { data?: any; Card?: any }) => {
   const settings = {
     infinite: false,
     speed: 500,
@@ -62,7 +62,7 @@ const NftSlider = ({ data = [], Card }: { data?: any; Card: any }) => {
     ],
   };
   return (
-    <div className="relative grid grid-cols-1">
+    <div className="grid grid-cols-1">
       <Slider {...settings}>
         {
         data.map((value: any, i: any) => (
