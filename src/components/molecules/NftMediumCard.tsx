@@ -21,13 +21,13 @@ const NftCard = ({ _id,
   key
 }
 : {
-  _id: String;
-  item_title: String;
-  item_art_url: String;
-  item_price: Number;
-  item_quantity: Number;
-  status: String;
-  key: String;
+  _id: string;
+  item_title: string;
+  item_art_url: string;
+  item_price: string;
+  item_quantity: string;
+  status: string;
+  key: string;
 }) => {
   const { push } = useRouter();
   // console.log(item_title)
