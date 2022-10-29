@@ -19,7 +19,6 @@ import { useRouter } from "next/router";
 
 import abi from "../../artifacts/abi.json";
 import { findEvents } from "../../functions/onChain/generalFunction";
-import { ethers } from "ethers";
 
 import { connectedAccount } from "../../functions/onChain/authFunction";
 import { INftcard } from "@/src/components/molecules/NftMediumCard";
