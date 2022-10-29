@@ -171,9 +171,9 @@ const ViewCollection = () => {
               <div className="single-collection-lists">
                 {/* <div>hello</div> */}
                 <div className="flex flex-wrap justify-evenly gap-y-12">
-                  {singleCollectionsDatas.map((val, i) => (
+                  {/* {singleCollectionsDatas.map((val, i) => (
                     // <NftMediumCard2 {...val} key={val.name + i} />
-                  ))}
+                  ))} */}
                 </div>
               </div>
             </div>
