@@ -220,17 +220,6 @@ const CreateNewNft = () => {
         toast("We were unable to complete the creation of your NFT!");
         return;
       }
-      try {
-        // var IPFSItemres = await IPFS.add(nftBufferCoverImage);
-        // const IPFSItemres = await client.add(nftImage);
-        // const itemIPFSURL = IPFS_URL + IPFSItemres.hash;
-        // console.log(itemIPFSURL)
-      } catch (error) {
-        toast(
-          "Something went wrong while uploading to IPFS, please try again!"
-        );
-        return;
-      }
 
       try {
         const IPFSItemres = await client.add(nftImage);
@@ -241,9 +230,14 @@ const CreateNewNft = () => {
           item_description: nftPayload.description,
           item_price: nftPayload.coinPrice,
           item_quantity: nftPayload.supply,
-          item_art_url: "itemIPFSURL",
+          item_art_url: itemIPFSURL,
           item_base_url: baseURI,
-          collection_id: "6340b5aca06f00a4f5d4b1c7",
+          collection_id:
+                nftPayload.collection == "" ||
+                nftPayload.collection == null ||
+                nftPayload.collection == undefined
+                  ? "Uncatgorized"
+                  : nftPayload.collection,
         };
         toast("Finalizing the transaction off-chain...");
         const HEADER = "authenticated";
@@ -262,7 +256,7 @@ const CreateNewNft = () => {
             return;
           } else if (response.status == 201) {
             toast(response.data.message);
-            setShowModal(true);
+            // setShowModal(true);
           } else {
             toast("Something went wrong, please try again!");
             return;
