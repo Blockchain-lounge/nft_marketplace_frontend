@@ -198,7 +198,6 @@ const CreateNewNft = () => {
 
       const transaction = await contract.createItem(connectedAddress, price, nftPayload.supply, parseInt(nftPayload.royalties));
       var tnx = await transaction.wait();
-      console.log(tnx)
       const events = findEvents('ItemCreated', tnx.events, true);
       if (events === true) {
         toast('On-chain transaction completed...');
@@ -212,23 +211,16 @@ const CreateNewNft = () => {
         toast('We were unable to complete the creation of your NFT!');
         return
       }
-      try {
-        // var IPFSItemres = await IPFS.add(nftBufferCoverImage);
-        // const IPFSItemres = await client.add(nftImage);
-        // const itemIPFSURL = IPFS_URL + IPFSItemres.hash;
-        // console.log(itemIPFSURL)
-      } catch (error) {
-        toast('Something went wrong while uploading to IPFS, please try again!');
-        return;
-      }
 
       try {
+        const IPFSItemres = await client.add(nftImage);
+        const itemIPFSURL = IPFS_URL + IPFSItemres.path;
         var formData = {
           item_title: nftPayload.itemName,
           item_description: nftPayload.description,
           item_price: nftPayload.coinPrice,
           item_quantity: nftPayload.supply,
-          item_art_url: 'itemIPFSURL',
+          item_art_url: itemIPFSURL,
           item_base_url: baseURI,
           collection_id: '6340b5aca06f00a4f5d4b1c7'
         }
@@ -252,7 +244,7 @@ const CreateNewNft = () => {
             }
             else if (response.status == 201) {
               toast(response.data.message);
-              setShowModal(true);
+              // setShowModal(true);
             }
             else {
               toast('Something went wrong, please try again!');

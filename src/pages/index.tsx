@@ -44,7 +44,7 @@ const Home: NextPage = () => {
   
   const fetchLaunchPadDrops = async()=>{
     try {
-      const HEADER = 'authenticated';
+      const HEADER = {};
       const REQUEST_URL = 'nft-item/index';
       const METHOD = "GET";
       const DATA = {}  
@@ -74,7 +74,7 @@ const Home: NextPage = () => {
     
   }
   useEffect(() => {
-    // fetchLaunchPadDrops();
+    fetchLaunchPadDrops();
   }, []);
   return (
     <DashboardLayout>
