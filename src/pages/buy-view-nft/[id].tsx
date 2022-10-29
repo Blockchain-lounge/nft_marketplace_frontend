@@ -172,6 +172,7 @@ const ViewNft = () => {
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
         if (response.status == 200 || response.status == 201) {
           toast(response.data.message);
+          push("/profile");
         } else {
           toast(response.data.error);
         }
@@ -201,7 +202,6 @@ const ViewNft = () => {
           return;
         } else if (response.status == 200) {
           setItemDetail(response.data.data);
-          push("/profile");
         } else {
           toast("Something went wrong, please try again!");
           return;
