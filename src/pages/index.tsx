@@ -4,7 +4,13 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { FeaturedIcon } from "@/src/components/atoms/vectors";
 // import { ToastContainer, toast } from "react-toastify";
-import { HeroIndicator, Button, Heading, Tag } from "@/src/components/atoms";
+import {
+  HeroIndicator,
+  Button,
+  Heading,
+  Tag,
+  Loader,
+} from "@/src/components/atoms";
 
 import {
   NftHeaderCard,
@@ -38,6 +44,7 @@ import { apiRequest } from "../functions/offChain/apiRequests";
 const Home: NextPage = () => {
   const [heroData, setHeroData] = useState(heroCards);
   const [activeCard, setActiveCard] = useState(heroData[0]);
+  const [isLoading, setIsLoading] = useState(true);
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const { push } = useRouter();
   const [launchPadDrops, setLaunchPadDrops] = useState([]);
@@ -60,8 +67,8 @@ const Home: NextPage = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
-          // console.log({ resp: response.data });
           setLaunchPadDrops(response.data.data);
+          setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
           return;
@@ -76,6 +83,14 @@ const Home: NextPage = () => {
   useEffect(() => {
     fetchLaunchPadDrops();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="h-screen inset-0 flex justify-center items-center">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -125,7 +140,7 @@ const Home: NextPage = () => {
               </div>
             </div>
           </section>
-          <section className="hero-section-1">
+          <div className="hero-section-1">
             <section className="mb-20">
               <NftHeaderCard
                 heading="Explore Collections"
@@ -133,14 +148,17 @@ const Home: NextPage = () => {
                 // selectTitle="Last 24 hours"
               />
               <div className="hero-section-1-collection">
-                {nftDatas.map(({ imgUrl, title }, i) => (
-                  <NftMiniCard
-                    key={`title-${i + 1}`}
-                    index={i + 1}
-                    title={title}
-                    imgUrl={imgUrl}
-                  />
-                ))}
+                {launchPadDrops.map(
+                  ({ item_title, item_art_url, item_price }, i) => (
+                    <NftMiniCard
+                      key={`title-${i + 1}`}
+                      index={i + 1}
+                      title={item_title}
+                      imgUrl={item_art_url}
+                      price={item_price}
+                    />
+                  )
+                )}
               </div>
               <span className="mobile-see-all-btn">See All</span>
             </section>
@@ -184,7 +202,7 @@ const Home: NextPage = () => {
             <NftHeaderCard heading="Explore" />
             <NftSlider data={exploreItems} Card={CollectionCard} />
           </section> */}
-          </section>
+          </div>
         </div>
         {isLoggedIn ? <Footer2 /> : <Footer />}
       </div>

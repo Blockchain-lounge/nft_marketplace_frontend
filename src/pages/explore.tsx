@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { Heading2 } from "../components/atoms";
+import { Heading2, Loader } from "../components/atoms";
 import { CollectionCard, NftMediumCard, Tab } from "../components/molecules";
 import { INftcard } from "../components/molecules/NftMediumCard";
 import { Footer2 } from "../components/organisms";
@@ -10,6 +10,7 @@ import DashboardLayout from "../template/DashboardLayout";
 const Explore = () => {
   // const [activeTab, setActiveTab] = useState("trending");
   const [launchPadDrops, setLaunchPadDrops] = useState<INftcard[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Recently Added");
   const exploreTabs = ["Recently Added"];
   // const exploreTabs = [
@@ -42,6 +43,7 @@ const Explore = () => {
           return;
         } else if (response?.status == 200) {
           setLaunchPadDrops(response.data.data);
+          setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
           return;
@@ -56,7 +58,13 @@ const Explore = () => {
     fetchLaunchPadDrops();
   }, []);
 
-  console.log(launchPadDrops);
+  if (isLoading) {
+    return (
+      <div className="h-screen inset-0 flex justify-center items-center">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <DashboardLayout>
