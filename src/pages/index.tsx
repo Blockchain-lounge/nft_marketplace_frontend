@@ -167,7 +167,7 @@ const Home: NextPage = () => {
 
           <section>
             <NftHeaderCard heading="Featured Collections" to="/explore" />
-            <NftSlider data={launchpadDropDatas} Card={NftMediumCard3} />
+            <NftSlider data={launchPadDrops} Card={NftMediumCard3} />
             <span
               className="mobile-see-all-btn cursor-pointer"
               onClick={() => push("/explore")}
