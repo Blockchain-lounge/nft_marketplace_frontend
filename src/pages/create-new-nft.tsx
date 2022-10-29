@@ -215,16 +215,20 @@ const CreateNewNft = () => {
       }
       else if (events !== undefined && events.length > 0 && events !== true) {
         itemId = events.itemId.toNumber();
-      // console.log(tnx);
-      const events = findEvents("ItemCreated", tnx.events, true);
-      if (events === true) {
-        toast("On-chain transaction completed...");
-        return;
-      } else if (events !== undefined && events.length > 0 && events !== true) {
-        const itemId = events.itemId.toNumber();
         baseURI = baseURI + itemId;
       } else {
         toast("We were unable to complete the creation of your NFT!");
+        return;
+      }
+      try {
+        // var IPFSItemres = await IPFS.add(nftBufferCoverImage);
+        // const IPFSItemres = await client.add(nftImage);
+        // const itemIPFSURL = IPFS_URL + IPFSItemres.hash;
+        // console.log(itemIPFSURL)
+      } catch (error) {
+        toast(
+          "Something went wrong while uploading to IPFS, please try again!"
+        );
         return;
       }
 

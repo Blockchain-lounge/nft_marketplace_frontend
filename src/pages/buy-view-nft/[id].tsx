@@ -122,7 +122,6 @@ const ViewNft = () => {
       // itemDetail.itemId,
       toast('Please approve this transaction!');
       const transaction = await contract.buyItemCopy(
-<<<<<<< HEAD
         itemDetail.item_token_id,
         itemDetail.item_base_url,
           {
@@ -131,25 +130,12 @@ const ViewNft = () => {
           },
           );
           var tnx = await transaction.wait();
-=======
-        17,
-        //@ts-ignore
-        itemDetail.item_base_url,
-        {
-          value: price,
-          gasLimit: 5000000,
-        }
-      );
-      var tnx = await transaction.wait();
       toast("Please approve this transaction!");
->>>>>>> 14726b921bdd65d87eee9dde2bf44efc96901b48
-      var token_id = itemDetail.token_id;
 
-      // var dbTokenId = this.props.track.id;
+      var token_id = itemDetail.token_id;
       //@ts-ignore
       var amount = itemDetail.item_price as string;
       var buyer = connectedAddress;
-<<<<<<< HEAD
       var trackCopyTokenId = '';
       var trackCopyBaseUrl = '';
       var soldItemCopyId = '';
@@ -187,54 +173,7 @@ const ViewNft = () => {
                 toast(response.data.error)
               }
           });
-=======
-      var trackCopyTokenId = "";
-      var trackCopyBaseUrl = "";
 
-      console.log(tnx.events);
-
-      // const events = findEvents('itemCopySold', tnx.events, true);
-      // if (events !== undefined && events.length > 0 && events !== true) {
-      //     trackCopyTokenId = events.soldItemCopyId.toNumber();
-      //     trackCopyBaseUrl = events.soldTrackBaseURI;
-      //     buyer = events.buyer;
-      // }
-      // else {
-      //     toast('We were unable to complete your transaction!');
-      //     return
-      // }
-      var formData = {
-        token_id: token_id,
-        // dbTokenId: dbTokenId,
-        track_copy_id: trackCopyTokenId,
-        track_copy_base_url: trackCopyBaseUrl,
-        //// transactionHash: transactionHash,
-        amount: amount,
-        buyer: buyer,
-      };
-      const HEADER = "authenticated";
-      const REQUEST_URL = "track/sold";
-      const METHOD = "POST";
-      // const DATA = formData
-      // this.setState({
-      //     axiosInfo:'Finalizing the transaction...',
-      //     isOpen: true
-      //   });
-      // apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
-      //     .then(function (response) {
-      //          if (response.status == 200 || response.status == 201) {
-      //             // swNot('success', response.data.message);
-      //             const alertTitle = "NFT Purchase";
-      //             const alertDescription = response.data.message;
-      //             const alertIcon = "success";
-      //             const alertBtnText = "Okay";
-      //             const redirectIfOkay = false;
-      //             const redirectIfOkayUrl = '/';
-      //             const withCancel = false;
-
-      //         }
-      //     });
->>>>>>> 14726b921bdd65d87eee9dde2bf44efc96901b48
     }
     setShowModal((prev) => !prev);
   };
