@@ -10,7 +10,12 @@ import {
   EditIcon,
   ProfileLinkIcon,
 } from "@/src/components/atoms/vectors";
-import { Button, GradientButton, Loader } from "@/src/components/atoms";
+import {
+  Button,
+  GradientButton,
+  Heading2,
+  Loader,
+} from "@/src/components/atoms";
 import {
   ActivityCard,
   ConnectWalletTab,
@@ -25,11 +30,7 @@ import { INftcard } from "../components/molecules/NftMediumCard";
 
 const Profile = () => {
   const [profileActiveTab, setProfileActiveTab] = useState(1);
-  const [myProfile, setMyProfile] = useState<{
-    username: string;
-    userEmail: string;
-    bio: string;
-  } | null>(null);
+
   const [openTab, setData] = useState(true);
   const [userOwnedProfileData, setUserOwnedProfileData] = useState<
     Array<INftcard>
@@ -260,9 +261,10 @@ const Profile = () => {
                     </div>
                   )
                 ) : profileActiveTab === 2 ? (
-                  <div>
-                    <div className="profile-activity-headers-tab">
-                      {/*Activities Heading-*/}
+                  <div className="flex justify-center items-center">
+                    <Heading2 title="You have no activity" />
+                    {/*Activities Heading-*/}
+                    {/* <div className="profile-activity-headers-tab">
                       {profileActivityHeaders.map((header, i) => (
                         <span
                           key={header + i}
@@ -271,13 +273,13 @@ const Profile = () => {
                           {header}
                         </span>
                       ))}
-                    </div>
+                    </div> */}
                     {/*list of activities*/}
-                    <div className="profile-activities-wrappe">
+                    {/* <div className="profile-activities-wrappe">
                       {profileActivityList.map((activity) => (
                         <ActivityCard key={activity} />
                       ))}
-                    </div>
+                    </div> */}
                   </div>
                 ) : null}
               </div>

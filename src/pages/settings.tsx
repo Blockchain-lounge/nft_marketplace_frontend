@@ -16,7 +16,7 @@ import {
   InstagramIcon,
   TwitterIcon,
 } from "../components/atoms/vectors";
-import { Button, CheckBox, Input2 } from "../components/atoms";
+import { Button, CheckBox, Heading2, Input2 } from "../components/atoms";
 // import { apiPost } from "../utilities/requests/apiRequest";
 import UseAuth from "../hooks/useAuth";
 
@@ -195,6 +195,7 @@ const Settings = () => {
                 setUserImg={setUserImg}
                 setUserImgBanner={setUserImgBanner}
               /> */}
+              <Heading2 title="Edit your profile" />
               <div className="setting-edit-profile-form">
                 <Input2
                   name="username"
