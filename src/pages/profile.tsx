@@ -47,7 +47,7 @@ const Profile = () => {
     bio: string;
   } | null>(null);
   // const [data, isLoading] = UseFetch("/user/my_profile");
-
+  console.log(userCreatedProfileData);
   const { push } = useRouter();
 
   const profileTab = [
@@ -147,6 +147,8 @@ const Profile = () => {
       </div>
     );
   }
+
+  console.log(userCreatedProfileData);
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper scrollbar-hide">
@@ -209,7 +211,7 @@ const Profile = () => {
             {openTab ? (
               <div>
                 {profileActiveTab === 0 ? (
-                  userOwnedProfileData.length > 1 ? (
+                  userOwnedProfileData.length > 0 ? (
                     <div className="user-profile-owned-nfts">
                       {userOwnedProfileData.map((val, i) => (
                         <NftMediumCard2 {...val} key={i} />
@@ -235,7 +237,7 @@ const Profile = () => {
                     </div>
                   )
                 ) : profileActiveTab === 1 ? (
-                  userCreatedProfileData.length > 1 ? (
+                  userCreatedProfileData.length > 0 ? (
                     <div className="user-profile-owned-nfts">
                       {userCreatedProfileData.map((val, i) => (
                         <NftMediumCard2 key={val._id} {...val} />
