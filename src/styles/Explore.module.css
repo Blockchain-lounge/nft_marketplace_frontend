@@ -2,5 +2,5 @@
 }
 
 .explore-items-wrapper {
-  @apply flex flex-wrap justify-center lg:justify-evenly gap-7;
+  @apply grid justify-center lg:grid-cols-4 lg:justify-between gap-7;
 }
