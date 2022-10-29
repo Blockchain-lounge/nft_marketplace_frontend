@@ -4,7 +4,7 @@ import Router from "next/router";
 import { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Image from "next/image";
-import { ChangeEvent, FormEvent, useState } from "react";
+
 import clsx from "clsx";
 import {
   AddIcon,

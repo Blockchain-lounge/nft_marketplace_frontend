@@ -17,8 +17,6 @@ import { apiRequest } from "../../functions/offChain/apiRequests";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
-import { connectedAccount } from "../../functions/onChain/authFunction";
-import APPCONFIG from "../../constants/Config";
 import abi from "../../artifacts/abi.json";
 import { findEvents } from "../../functions/onChain/generalFunction";
 import { ethers } from "ethers";
@@ -225,6 +223,8 @@ const ViewNft = () => {
       }
     });
     fetchItemDetail(id as string);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   if (!itemDetail) {
