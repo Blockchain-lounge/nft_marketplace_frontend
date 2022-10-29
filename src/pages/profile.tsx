@@ -148,7 +148,7 @@ const Profile = () => {
     );
   }
 
-  console.log(userCreatedProfileData);
+  console.log(userOwnedProfileData);
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper scrollbar-hide">
@@ -214,7 +214,7 @@ const Profile = () => {
                   userOwnedProfileData.length > 0 ? (
                     <div className="user-profile-owned-nfts">
                       {userOwnedProfileData.map((val, i) => (
-                        <NftMediumCard2 {...val} key={i} />
+                        <NftMediumCard2 {...val} key={val._id} />
                       ))}
                     </div>
                   ) : (
