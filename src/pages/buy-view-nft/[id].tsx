@@ -18,6 +18,11 @@ import { useRouter } from "next/router";
 import {
   connectedAccount
 } from "../../functions/onChain/authFunction";
+import APPCONFIG from '../../constants/Config';
+import abi from '../../artifacts/abi.json';
+import { findEvents } from '../../functions/onChain/generalFunction';
+import { ethers } from 'ethers';
+
 const ViewNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModaltype] = useState("buy");
@@ -26,6 +31,7 @@ const ViewNft = () => {
   const { id } = query;
   const [viewNftStage, setViewNftStage] = useState("overview");
   const [connectedAddress, setConnectedAddress] = useState(null);
+ 
   const nftOwnersInfo = [
     {
       label: "Creator",
@@ -95,9 +101,75 @@ const ViewNft = () => {
     },
   ];
 
-  const handleBuy = () => {
+  const handleBuy = async () => {
     {
       /*write your payment info here*/
+      const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(APPCONFIG.SmartContractAddress,abi.abi,signer);
+      const price = ethers.utils.parseUnits(itemDetail.item_price.toString(), 'ether');
+      // itemDetail.itemId,
+      const transaction = await contract.buyItemCopy(
+        17,
+        itemDetail.item_base_url,
+          {
+              value: price,
+              gasLimit: 5000000
+          },
+          );
+          var tnx = await transaction.wait();
+          toast('Please approve this transaction!');
+      var token_id = itemDetail.token_id;
+     
+      // var dbTokenId = this.props.track.id;
+      var amount = itemDetail.item_price;
+      var buyer = connectedAddress;
+      var trackCopyTokenId = '';
+      var trackCopyBaseUrl = '';
+
+      console.log(tnx.events)
+
+      // const events = findEvents('itemCopySold', tnx.events, true);
+      // if (events !== undefined && events.length > 0 && events !== true) {
+      //     trackCopyTokenId = events.soldItemCopyId.toNumber();
+      //     trackCopyBaseUrl = events.soldTrackBaseURI;
+      //     buyer = events.buyer;
+      // }
+      // else {
+      //     toast('We were unable to complete your transaction!');
+      //     return
+      // }
+      var formData = {
+          token_id: token_id,
+          // dbTokenId: dbTokenId,
+          track_copy_id:trackCopyTokenId,
+          track_copy_base_url:trackCopyBaseUrl,
+          //// transactionHash: transactionHash,
+          amount: amount,
+          buyer: buyer,
+      }
+      const HEADER = 'authenticated';
+      const REQUEST_URL = 'track/sold';
+      const METHOD = "POST";
+      // const DATA = formData
+      // this.setState({
+      //     axiosInfo:'Finalizing the transaction...',
+      //     isOpen: true
+      //   });
+      // apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
+      //     .then(function (response) {
+      //          if (response.status == 200 || response.status == 201) {
+      //             // swNot('success', response.data.message);
+      //             const alertTitle = "NFT Purchase";
+      //             const alertDescription = response.data.message;
+      //             const alertIcon = "success";
+      //             const alertBtnText = "Okay";
+      //             const redirectIfOkay = false;
+      //             const redirectIfOkayUrl = '/';
+      //             const withCancel = false;
+                  
+      //         }
+      //     });
     }
     setShowModal((prev) => !prev);
   };
@@ -249,7 +321,7 @@ const ViewNft = () => {
                       <CartIcon />
                     </span>
                   </div>
-                  <Button
+                  {/* <Button
                     title="Place a bid"
                     wt="w-full"
                     outline2
@@ -257,7 +329,7 @@ const ViewNft = () => {
                       setModaltype("bid");
                       setShowModal((prev) => !prev);
                     }}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
@@ -524,8 +596,8 @@ const ViewNft = () => {
                   />
                 </span>
                 <div className="flex flex-col">
-                  <span className="text-lg font-medium">Coinbase</span>
-                  <span className="text-txt-2 font-medium">0xb4d...002d </span>
+                  <span className="text-lg font-medium">Metamask</span>
+                  <span className="text-txt-2 font-medium">{connectedAddress} </span>
                 </div>
               </div>
               <span className="text-positive-color bg-[#00800022] py-3 px-4 rounded-3xl">
