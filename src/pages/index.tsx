@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+// @ts-nocheck
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { FeaturedIcon } from "@/src/components/atoms/vectors";

@@ -1,8 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
+// @ts-nocheck
 import { useRouter } from "next/router";
 
 import { LikeIcon } from "@/src/components/atoms/vectors";
-import { Nftcard } from "./NftMediumCard";
+// import { Nftcard } from "./NftMediumCard";
 import Image from "next/image";
 
 const NftCard2 = ({
@@ -21,7 +22,6 @@ const NftCard2 = ({
   status: string;
   time: string;
 }) => {
-  console.log(_id)
   const { push } = useRouter();
   return (
     <div

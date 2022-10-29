@@ -1,4 +1,5 @@
 import Image from "next/image";
+// @ts-nocheck
 import React from "react";
 import { useRouter } from "next/router";
 

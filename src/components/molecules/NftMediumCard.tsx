@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+// @ts-nocheck
 import { useRouter } from "next/router";
 import clsx from "clsx";
 import { CoinIcon, OutlineLikesIcon } from "@/src/components/atoms/vectors";
