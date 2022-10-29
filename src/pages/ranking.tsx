@@ -23,8 +23,8 @@ const Ranking = () => {
   const listHeadings = ["collection", "volume", "floor price"];
   return (
     <DashboardLayout>
-      <div className="sub-layout-wrapper scrollbsr-hide">
-        <div className="center">
+      <div className="sub-layout-wrapper scrollbar-hide">
+        {/* <div className="center">
           <div className="collection-page-top">
             <div className="collection-page-sub-top">
               <Heading2 title="Ranking" />
@@ -48,6 +48,12 @@ const Ranking = () => {
               url="/single-collection"
             />
           </div>
+        </div> */}
+        <div className="center h-[80vh] flex flex-col  justify-center items-center ">
+          <Heading2 title="Coming soon!" />
+          <span className="text-2xl text-txt-2">
+            Best Rank Nft on the marketplace.
+          </span>
         </div>
         <Footer2 />
       </div>

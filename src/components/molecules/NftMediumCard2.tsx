@@ -6,6 +6,9 @@ import { LikeIcon } from "@/src/components/atoms/vectors";
 // import { Nftcard } from "./NftMediumCard";
 import Image from "next/image";
 
+// Partial<Pick<INftcard, "name" | "imgUrl" | "price">> & {
+//   time?: boolean;
+
 const NftCard2 = ({
   _id,
   item_title,
@@ -13,7 +16,7 @@ const NftCard2 = ({
   item_price,
   item_quantity,
   time,
-}:{
+}: {
   _id: string;
   item_title: string;
   item_art_url: string;
@@ -31,14 +34,16 @@ const NftCard2 = ({
       <div className="nmc-wrapper2-img">
         <div className="nmc-wrapper-likes nmc-wrapper2-likes">
           <LikeIcon />
-          <span>298</span>
+          {/* <span>298</span> */}
         </div>
         <img src={item_art_url} alt={item_title} />
       </div>
       <div className="nmc-sub-wrapper flex justify-between">
         <div className="flex flex-col gap-y-[0.3rem] p-2">
           <span className="font-bold text-black text-xl">{item_title}</span>
-          <span className="nmc-sub-wrapper-2-owner">{item_quantity}/{item_quantity}</span>
+          <span className="nmc-sub-wrapper-2-owner">
+            {item_quantity}/{item_quantity}
+          </span>
         </div>
         {time ? (
           <div className="flex flex-col justify-between bg-[#F9F9FA] p-2 rounded-xl">
@@ -48,7 +53,7 @@ const NftCard2 = ({
             </div>
             <div className="flex gap-x-[0.1rem] items-center justify-between">
               <span className="text-txt-4 font-medium">Min bid:</span>
-              <span className="text-black flex items-center text-lg ">
+              <div className="text-black flex items-center text-lg gap-x-4">
                 <span className="h-6 w-6 relative">
                   <Image
                     src="/icon-svg/eth-dark-icon.svg"
@@ -57,7 +62,7 @@ const NftCard2 = ({
                   />
                 </span>
                 {item_price}
-              </span>
+              </div>
             </div>
           </div>
         ) : (

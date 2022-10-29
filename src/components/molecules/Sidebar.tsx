@@ -60,11 +60,13 @@ const SideBar = () => {
       label: "Ranking",
       icon: <TrendingIcon />,
       link: "/ranking",
+      tag: "coming",
     },
     {
       label: "Activities",
       icon: <ActivityIcon />,
       link: "/activities",
+      tag: "coming",
     },
     {
       label: "Cloudax Games",

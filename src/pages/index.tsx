@@ -3,7 +3,7 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { FeaturedIcon } from "@/src/components/atoms/vectors";
-import { ToastContainer, toast } from "react-toastify";
+// import { ToastContainer, toast } from "react-toastify";
 import { HeroIndicator, Button, Heading, Tag } from "@/src/components/atoms";
 
 import {
@@ -32,7 +32,7 @@ import { useState, useEffect } from "react";
 import { NextPage } from "next";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
-import { apiRequest } from '../functions/offChain/apiRequests';
+import { apiRequest } from "../functions/offChain/apiRequests";
 
 const Home: NextPage = () => {
   const [heroData, setHeroData] = useState(heroCards);
@@ -42,41 +42,37 @@ const Home: NextPage = () => {
   const [launchPadDrops, setLaunchPadDrops] = useState([]);
   const [userCreatedProfileData, setUserCreatedProfileData] = useState([]);
   const exploreItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  
-  const fetchLaunchPadDrops = async()=>{
+
+  const fetchLaunchPadDrops = async () => {
     try {
       const HEADER = {};
-      const REQUEST_URL = 'nft-item/index';
+      const REQUEST_URL = "nft-item/index";
       const METHOD = "GET";
-      const DATA = {}  
-      apiRequest(REQUEST_URL, METHOD, DATA, HEADER)
-        .then((response) => {
-          if (response.status == 400) {
-            var error = response.data.error;
-            toast(error);
-            return;
-          }
-          else if (response.status == 401) {
-            toast('Unauthorized request!');
-            return;
-          }
-          else if (response.status == 200) {
-            setLaunchPadDrops(response.data.data)
-          }
-          else {
-            toast('Something went wrong, please try again!');
-            return;
-          }
-        });
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response?.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          return;
+        } else if (response?.status == 401) {
+          toast("Unauthorized request!");
+          return;
+        } else if (response?.status == 200) {
+          setLaunchPadDrops(response.data.data);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
     } catch (error) {
-      toast('Something went wrong, please try again!');
+      toast("Something went wrong, please try again!");
       return;
     }
-    
-  }
+  };
   useEffect(() => {
     fetchLaunchPadDrops();
   }, []);
+
   return (
     <DashboardLayout>
       <div className="home-wrapper">
@@ -125,62 +121,69 @@ const Home: NextPage = () => {
               </div>
             </div>
           </section>
-          {/* <section className="hero-section-1">
-          <section className="">
-            <NftHeaderCard
-              heading="Explore Collections"
-              to="/explore"
-              // selectTitle="Last 24 hours"
-            />
-            <div className="hero-section-1-collection">
-              {nftDatas.map(({ imgUrl, title }, i) => (
-                <NftMiniCard
-                  key={`title-${i + 1}`}
-                  index={i + 1}
-                  title={title}
-                  imgUrl={imgUrl}
-                />
-              ))}
-            </div>
-            <span className="mobile-see-all-btn">See All</span>
-          </section> */}
+          <section className="space-y-[8rem]">
+            <section className="">
+              <NftHeaderCard
+                heading="Explore Collections"
+                to="/explore"
+                // selectTitle="Last 24 hours"
+              />
+              <div className="hero-section-1-collection">
+                {launchPadDrops.map(
+                  ({ item_title, item_art_url, item_price }, i) => (
+                    <NftMiniCard
+                      key={`title-${i + 1}`}
+                      index={i + 1}
+                      title={item_title}
+                      imgUrl={item_art_url}
+                      price={item_price}
+                    />
+                  )
+                )}
+              </div>
+              <span className="mobile-see-all-btn">See All</span>
+            </section>
 
-          <section>
+            {/* <section>
             <NftHeaderCard heading="LaunchPad Drops" selectTitle="On Sale" />
             <NftSlider data={launchPadDrops} />
             <span className="mobile-see-all-btn">See All</span>
-          </section>
-          <section>
-            <NftHeaderCard heading="In-Demand Collections" selectTitle="All" />
-            <NftSlider data={nft3Datas} />
-            <span className="mobile-see-all-btn">See All</span>
-          </section>
-          <section>
+           </section> */}
+            {/* <section>
+              <NftHeaderCard
+                heading="In-Demand Collections"
+                selectTitle="All"
+              />
+              <NftSlider data={launchPadDrops} />
+              <span className="mobile-see-all-btn">See All</span>
+            </section> */}
+            {/* <section>
             <NftHeaderCard heading="Explore Art" />
-            <NftSlider data={nft4Datas} />
+            <NftSlider data={launchPadDrops} />
             <span
               className="mobile-see-all-btn cursor-pointer"
               onClick={() => push("/explore")}
             >
               See All
             </span>
-          </section>
+           </section> */}
 
-          <section>
-            <NftHeaderCard heading="Featured Collections" to="/explore" />
-            <NftSlider data={launchPadDrops} Card={NftMediumCard3} />
-            <span
-              className="mobile-see-all-btn cursor-pointer"
-              onClick={() => push("/explore")}
-            >
-              See All
-            </span>
-          </section>
+            <section>
+              <NftHeaderCard heading="Featured Collections" to="/explore" />
+              <NftSlider data={launchPadDrops} />
+              <span
+                className="mobile-see-all-btn cursor-pointer"
+                onClick={() => push("/explore")}
+              >
+                See All
+              </span>
+            </section>
 
-          {/* <section>
+            {/* <section>
             <NftHeaderCard heading="Explore" />
             <NftSlider data={exploreItems} Card={CollectionCard} />
-          </section> */}
+            </section> */}
+          </section>
         </div>
         {isLoggedIn ? <Footer2 /> : <Footer />}
       </div>
