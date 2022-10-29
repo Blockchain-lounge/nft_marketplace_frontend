@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Input, Select } from "@/src/components/atoms";
 import {
   CaretDown,
