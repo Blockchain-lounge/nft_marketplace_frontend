@@ -71,6 +71,8 @@ const Wallet = () => {
             remainingAmount="383,154.42"
             history="/transactions"
           />
+          <EarningsCard label="Balance" coinsAmount={0} remainingAmount="0" />
+          <EarningsCard label="Earnings" coinsAmount={0} remainingAmount="0" />
         </div>
       </div>
     </EarningLayout>

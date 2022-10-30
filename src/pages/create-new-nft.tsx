@@ -302,21 +302,21 @@ const CreateNewNft = () => {
                   className="hidden"
                   name="img"
                 />
-                <div className="disp-img h-[20rem] relative">
+                <div className="disp-img w-[25rem] h-[27rem] relative">
                   <label
                     htmlFor="file"
                     className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d7f]"
                   >
                     <ImgUploadIcon />
-                    <span className={clsx(file ? "hidden" : "block")}>
+                    <span className={clsx(nftCoverImage ? "hidden" : "block")}>
                       Click to add a file or drag file here
                     </span>
                   </label>
                   <img
-                    src={nftCoverImage.length > 0 ? nftCoverImage : ""}
+                    src={nftCoverImage ? nftCoverImage : ""}
                     alt=""
                     className={`object-cover h-full w-full ${
-                      !file ? "hidden" : "block"
+                      !nftCoverImage ? "hidden" : "block"
                     }`}
                   />
                 </div>
@@ -470,7 +470,7 @@ const CreateNewNft = () => {
                   This is how your item will be displayed
                 </span>
               </div>
-              <div className="h-[25rem] mt-4">
+              <div className="w-[25rem] h-[27rem] mt-4">
                 <div className="h-[100%] relative">
                   {file && (
                     <div className="nmc-wrapper-likes nmc-wrapper2-likes z-10">
@@ -488,11 +488,11 @@ const CreateNewNft = () => {
                     {nftCoverImage.length > 0 ? (
                       <Image
                         src={nftCoverImage ? nftCoverImage : ""}
-                        width="500px"
-                        height="500px"
-                        alt=""
-                        className={`object-cover h-full w-full rounded-t-2xl ${
-                          !file ? "hidden" : "block"
+                        layout="fill"
+                        alt={nftPayload.itemName}
+                        objectFit="cover"
+                        className={`rounded-t-2xl ${
+                          !nftCoverImage ? "hidden" : "block"
                         }`}
                       />
                     ) : (
@@ -505,7 +505,7 @@ const CreateNewNft = () => {
                     <span className="text-black text-[1.3rem]">
                       {nftPayload.itemName || "Untitled"}
                     </span>
-                    <span className="flex text-black text-[1.3rem]">
+                    <span className="flex text-black text-[1.3rem] gap-x-1">
                       <CoinIcon color="black" />
                       {nftPayload.coinPrice || "-"}
                     </span>

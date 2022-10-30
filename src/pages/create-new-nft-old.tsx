@@ -259,7 +259,7 @@ const CreateNewNft = () => {
     }
     setModaltype("success");
     setShowModal(true);
-    console.log({ nftPayload, file, priceListType });
+    // console.log({ nftPayload, file, priceListType });
   };
   useEffect(() => {
     connectedAccount().then((response) => {
