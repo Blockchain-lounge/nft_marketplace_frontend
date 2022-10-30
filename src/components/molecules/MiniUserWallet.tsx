@@ -14,18 +14,18 @@ interface IMiniuserwallet {
   onClick: (val: boolean) => void;
 }
 
-const MiniUserWallet = ({ showBal, onClick }: IMiniuserwallet) => {
+const MiniUserWallet = ({ account, showBal, onClick }: IMiniuserwallet) => {
   const userWalletLinks = [
     {
       link: "Wallet",
       icon: <WalletIcon2 />,
       to: "/wallet",
     },
-    {
-      link: "View earnings",
-      icon: <EarningsIcon />,
-      to: "/earnings",
-    },
+    // {
+    //   link: "View earnings",
+    //   icon: <EarningsIcon />,
+    //   to: "/earnings",
+    // },
   ];
   const { push } = useRouter();
 
@@ -52,7 +52,25 @@ const MiniUserWallet = ({ showBal, onClick }: IMiniuserwallet) => {
       <div className="mini-wallet-info">
         <MetamaskIcon twclx="h-[2.5rem]" />
         <div className="flex flex-col">
-          <span className="mini-wallet-name">0xdE8cF...1C79</span>
+          <span className="mini-wallet-name">
+          {
+            account !== undefined
+            && account !== null
+            ?
+              account.substring(0, 5)
+              :
+              ""
+          }
+          ...
+          {
+            account !== undefined
+            && account !== null
+            ?
+              account.substring(37, 42)
+              :
+              ""
+          }
+          </span>
           <span className="mini-wallet-address">Default wallet</span>
         </div>
       </div>

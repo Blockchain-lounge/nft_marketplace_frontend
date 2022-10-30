@@ -209,7 +209,7 @@ const NavBar: FC<INav> = ({
                   <CartIcon />
                 </span> */}
               </div>
-              <MiniUserWallet showBal={showBal} onClick={setShowBal} />
+              <MiniUserWallet showBal={showBal} onClick={setShowBal} account={connectedAddress} />
               <MiniUserProfile
                 showProfile={showProfile}
                 onClick={setShowProfile}

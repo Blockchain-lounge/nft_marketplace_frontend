@@ -1,9 +1,32 @@
+// @ts-nocheck
 import Image from "next/image";
-import React from "react";
+import React,{useState, useEffect} from "react";
 import { EarningsCard } from "../components/molecules";
 import EarningLayout from "../template/EarningLayout";
-
+import {
+  getWalletBalance
+} from "../functions/onChain/generalFunction";
+import {
+  connectedAccount
+} from "../functions/onChain/authFunction";
 const Wallet = () => {
+  const [balanceInEth, setBalanceInEth] = useState("wallet");
+  const [connectedAddress, setConnectedAddress] = useState(null);
+
+  useEffect(() => {
+    connectedAccount().then((response) => {
+      if (response !== null) {
+        setConnectedAddress(response);
+      }
+
+      if(connectedAddress !== null){
+          getWalletBalance(connectedAddress).then((response) => {
+            setBalanceInEth(response);
+          });
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connectedAddress,balanceInEth]);
   return (
     <EarningLayout title="Wallet">
       <div className="h-[55vh] space-y-12">
@@ -16,17 +39,35 @@ const Wallet = () => {
               objectFit="contain"
             />
           </div>
-          <span className="text-[1.75rem] font-bold">0xdE8cF...1C79</span>
+          <span className="text-[1.75rem] font-bold">
+          {
+            connectedAddress !== undefined
+            && connectedAddress !== null
+            ?
+              connectedAddress.substring(0, 5)
+              :
+              ""
+          }
+          ...
+          {
+            connectedAddress !== undefined
+            && connectedAddress !== null
+            ?
+              connectedAddress.substring(37, 42)
+              :
+              ""
+          }
+          </span>
         </div>
         <div className="earnings-cards">
           <EarningsCard
             label="Balance"
-            coinsAmount={158.3}
+            coinsAmount={balanceInEth}
             remainingAmount="383,154.42"
           />
           <EarningsCard
             label="Transactions"
-            coinsAmount={405}
+            coinsAmount={0}
             remainingAmount="383,154.42"
             history="/transactions"
           />

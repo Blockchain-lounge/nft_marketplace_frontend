@@ -503,7 +503,7 @@ const CreateNewNft = () => {
                 <div className="w-full bg-white rounded-b-2xl p-4 flex flex-col ">
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-black text-[1.3rem]">
-                      {nftPayload.nftName || "Untitled"}
+                      {nftPayload.itemName || "Untitled"}
                     </span>
                     <span className="flex text-black text-[1.3rem]">
                       <CoinIcon color="black" />
