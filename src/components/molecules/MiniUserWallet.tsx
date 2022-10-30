@@ -21,11 +21,11 @@ const MiniUserWallet = ({ showBal, onClick }: IMiniuserwallet) => {
       icon: <WalletIcon2 />,
       to: "/wallet",
     },
-    {
-      link: "View earnings",
-      icon: <EarningsIcon />,
-      to: "/earnings",
-    },
+    // {
+    //   link: "View earnings",
+    //   icon: <EarningsIcon />,
+    //   to: "/earnings",
+    // },
   ];
   const { push } = useRouter();
 

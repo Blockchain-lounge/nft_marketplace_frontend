@@ -20,7 +20,7 @@ const ConnectWalletTabHeader = ({
     <div
       onClick={onClick}
       className={clsx(
-        "connect-header-wrapper",
+        "connect-header-wrapper cursor-pointer",
         isActive &&
           "after:bg-gradient-to-r after:from-[#2F79F9] after:to-[#3DAEFA]"
       )}

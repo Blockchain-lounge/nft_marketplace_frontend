@@ -294,14 +294,15 @@ const CreateCollection: FC<ICollectionProps> = ({
         required
       />
       <div>
-        <span className="create-new-nft-wrapper-2-label">Bio</span>
+        <span className="create-new-nft-wrapper-2-label">Description</span>
         <textarea
           name="collection_description"
-          className="w-full bg-transparent  outline-none select"
+          className="w-full bg-transparent text-white outline-none select"
           placeholder="Enter collection description..."
           rows={5}
           maxLength={250}
           onChange={handleFieldChange}
+
           // value={userDetailsPayload.bio}
         ></textarea>
       </div>

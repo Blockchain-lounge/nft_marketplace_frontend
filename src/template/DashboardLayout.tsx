@@ -9,8 +9,19 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { useDispatch } from "react-redux";
 import { toggleMobileModal } from "../reducers/modalReducer";
+import Loader2 from "../components/atoms/Loader2";
 
-const DashboardLayout = ({ children }: { children: ReactNode }) => {
+const DashboardLayout = ({
+  children,
+  isLoading,
+}: {
+  children: ReactNode;
+  isLoading?: boolean;
+}) => {
+  const [showProfile, setShowProfile] = useState(false);
+  const [showBal, setShowBal] = useState(false);
+  const [showCreateNft, setShowCreateNft] = useState(false);
+
   const isMobileModal = useSelector(
     (state: RootState) => state.modal.isMobileModalOpen
   );
@@ -19,9 +30,6 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const handleMobileModalToggle = () => {
     dispatch(toggleMobileModal());
   };
-  const [showProfile, setShowProfile] = useState(false);
-  const [showBal, setShowBal] = useState(false);
-  const [showCreateNft, setShowCreateNft] = useState(false);
 
   const handleCloseAllModal = useCallback(() => {
     setShowBal(false);
@@ -60,7 +68,13 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
           <MiniUserWallet showBal={showBal} onClick={setShowBal} />
         </div>
         <div className="aside-2 text-white" onMouseEnter={handleCloseAllModal}>
-          {children}
+          {isLoading ? (
+            <div className="h-[80vh] inset-0 flex justify-center items-center">
+              <Loader2 />
+            </div>
+          ) : (
+            children
+          )}
         </div>
       </div>
     </div>

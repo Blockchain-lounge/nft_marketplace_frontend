@@ -60,6 +60,34 @@ const Profile = () => {
 
   const handleNavigateToHome = () => push("/");
 
+  const fetchUser = async () => {
+    const HEADER = "authenticated";
+    const REQUEST_URL = "user/my_profile";
+    const METHOD = "GET";
+    const DATA = {};
+    apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+      if (response.status == 400) {
+        var error = response.data.error;
+        toast(error);
+        return;
+      } else if (response.status == 401) {
+        toast("Unauthorized request!");
+        return;
+      } else if (response.status == 200) {
+        setMyProfile({
+          username: response.data.data.username,
+          userEmail: response.data.data.email,
+          bio: response.data.data.bio,
+        });
+        setIsLoading(false);
+        // setShowModal(true);
+      } else {
+        toast("Something went wrong, please try again!");
+        return;
+      }
+    });
+  };
+
   const fetchTokenOwned = async () => {
     const HEADER = "authenticated";
     const REQUEST_URL = "nft/tokens_owned";
@@ -104,33 +132,6 @@ const Profile = () => {
     });
   };
 
-  const fetchUser = async () => {
-    const HEADER = "authenticated";
-    const REQUEST_URL = "user/my_profile";
-    const METHOD = "GET";
-    const DATA = {};
-    apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-      if (response.status == 400) {
-        var error = response.data.error;
-        toast(error);
-        return;
-      } else if (response.status == 401) {
-        toast("Unauthorized request!");
-        return;
-      } else if (response.status == 200) {
-        setMyProfile({
-          username: response.data.data.username,
-          userEmail: response.data.data.email,
-          bio: response.data.data.bio,
-        });
-        setIsLoading(false);
-        // setShowModal(true);
-      } else {
-        toast("Something went wrong, please try again!");
-        return;
-      }
-    });
-  };
   useEffect(() => {
     // try {
     fetchUser();
@@ -139,16 +140,16 @@ const Profile = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (isLoading) {
-    return (
-      <div className="h-screen inset-0 flex justify-center items-center">
-        <Loader />
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="h-screen inset-0 flex justify-center items-center">
+  //       <Loader />
+  //     </div>
+  //   );
+  // }
 
   return (
-    <DashboardLayout>
+    <DashboardLayout isLoading={isLoading}>
       <div className="sub-layout-wrapper scrollbar-hide">
         <div className="center">
           <div className="profile-banner">
@@ -237,11 +238,9 @@ const Profile = () => {
                 ) : profileActiveTab === 1 ? (
                   userCreatedProfileData.length > 0 ? (
                     <div className="user-profile-owned-nfts">
-                      {
-                      userCreatedProfileData.map((val, i) => (
+                      {userCreatedProfileData.map((val, i) => (
                         <NftMediumCard2 key={val._id} {...val} />
-                      ))
-                      }
+                      ))}
                     </div>
                   ) : (
                     <div className="profile-user-nfts">
@@ -264,7 +263,23 @@ const Profile = () => {
                   )
                 ) : profileActiveTab === 2 ? (
                   <div className="flex justify-center items-center">
-                    <Heading2 title="You have no activity" />
+                    <div className="profile-user-nfts">
+                      <img
+                        src="/images/404-illustration.png"
+                        alt="empty-nfts"
+                      />
+                      <span className="profile-empty-nft-title">
+                        You do not have any activity.
+                      </span>
+                      {/* <p className="profile-empty-nft-description">
+                        There&apos;s lots of other NFTs to explore
+                      </p>
+
+                      <GradientButton
+                        title="Explore NFTs"
+                        onClick={handleNavigateToHome}
+                      /> */}
+                    </div>
                     {/*Activities Heading-*/}
                     {/* <div className="profile-activity-headers-tab">
                       {profileActivityHeaders.map((header, i) => (

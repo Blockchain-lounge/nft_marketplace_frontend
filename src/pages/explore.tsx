@@ -58,16 +58,16 @@ const Explore = () => {
     fetchLaunchPadDrops();
   }, []);
 
-  if (isLoading) {
-    return (
-      <div className="h-screen inset-0 flex justify-center items-center">
-        <Loader />
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="h-screen inset-0 flex justify-center items-center">
+  //       <Loader />
+  //     </div>
+  //   );
+  // }
 
   return (
-    <DashboardLayout>
+    <DashboardLayout isLoading={isLoading}>
       <div className="sub-layout-wrapper scrollbar-hide">
         <div className="center explore-wrapper">
           <Heading2 title="Explore Collections" />
