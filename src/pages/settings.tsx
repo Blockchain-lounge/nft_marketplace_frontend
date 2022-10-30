@@ -17,6 +17,7 @@ import {
   TwitterIcon,
 } from "../components/atoms/vectors";
 import { Button, CheckBox, Heading2, Input2 } from "../components/atoms";
+import APPCONFIG from "../constants/Config";
 // import { apiPost } from "../utilities/requests/apiRequest";
 import UseAuth from "../hooks/useAuth";
 
@@ -35,8 +36,8 @@ const Settings = () => {
     username: "",
     userEmail: "",
     bio: "",
-    userProfileImg: "",
     userBannerImg: "",
+    userBannerImg:""
   });
   const settingStages = [
     { label: "Edit profile", stage: "edit-profile" },
@@ -127,8 +128,8 @@ const Settings = () => {
       username: userDetailsPayload.username,
       email: userDetailsPayload.userEmail,
       bio: userDetailsPayload.bio,
-      userProfileImg: userDetailsPayload.userProfileImg,
-      userBannerImg: userDetailsPayload.userBannerImg
+      userProfileImg: userImg,
+      userBannerImg: userBannerImg
     };
     try {
       const HEADER = "authenticated_and_form_data";
@@ -178,6 +179,8 @@ const Settings = () => {
           userEmail: response.data.data.email,
           bio: response.data.data.bio,
         });
+        setUserBannerImgPreview(APPCONFIG.ENV_BASE_URL+'images/'+response.data.data.userBannerImg);
+        setUserImgPreview(APPCONFIG.ENV_BASE_URL+'images/'+response.data.data.userProfileImg);
         // setShowModal(true);
       } else {
         toast("Something went wrong, please try again!");
