@@ -27,6 +27,7 @@ import { toast } from "react-toastify";
 import UseFetch from "../hooks/useFetch";
 import Image from "next/image";
 import { INftcard } from "../components/molecules/NftMediumCard";
+import APPCONFIG from "../constants/Config";
 
 const Profile = () => {
   const [profileActiveTab, setProfileActiveTab] = useState(1);
@@ -38,7 +39,6 @@ const Profile = () => {
   const [userCreatedProfileData, setUserCreatedProfileData] = useState<
     Array<INftcard>
   >([]);
-  const [userBannerImg, setUserBannerImg] = useState("");
   // const [user, setUser] = useState<null | Record<string, string>>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [myProfile, setMyProfile] = useState<{
@@ -48,6 +48,8 @@ const Profile = () => {
   } | null>(null);
   // const [data, isLoading] = UseFetch("/user/my_profile");
   const { push } = useRouter();
+  const [userProfileImg, setUserProfileImg] = useState("");
+  const [userBannerImg, setUserBannerImg] = useState("");
 
   const profileTab = [
     { text: "Owned", count: userOwnedProfileData.length },
@@ -79,6 +81,8 @@ const Profile = () => {
           userEmail: response.data.data.email,
           bio: response.data.data.bio,
         });
+        setUserBannerImg(response.data.data.userBannerImg && response.data.data.userBannerImg !== undefined ? APPCONFIG.ENV_BASE_URL+'images/'+response.data.data.userBannerImg : "");
+        setUserProfileImg(response.data.data.userProfileImg && response.data.data.userProfileImg !== undefined ? APPCONFIG.ENV_BASE_URL+'images/'+response.data.data.userProfileImg : "");
         setIsLoading(false);
         // setShowModal(true);
       } else {
@@ -125,6 +129,13 @@ const Profile = () => {
         return;
       } else if (response.status == 200) {
         setUserCreatedProfileData(response.data.data);
+        setMyProfile({
+          username: response.data.data.username,
+          userEmail: response.data.data.email,
+          bio: response.data.data.bio,
+        });
+       setIsLoading(false);
+        // setShowModal(true);
       } else {
         toast("Something went wrong, please try again!");
         return;
@@ -174,7 +185,7 @@ const Profile = () => {
             )}
             <div className="profile-user-img">
               <Image
-                src="/images/avatar.svg"
+                src={userProfileImg ? userProfileImg : "/images/avatar.svg"}
                 alt="user-img"
                 layout="fill"
                 objectFit="cover"
