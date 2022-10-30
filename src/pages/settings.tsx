@@ -118,6 +118,7 @@ const Settings = () => {
           return;
         } else if (response.status == 200) {
           toast("Profile updated");
+          push("/profile");
         } else {
           toast("Something went wrong, please try again!");
           return;

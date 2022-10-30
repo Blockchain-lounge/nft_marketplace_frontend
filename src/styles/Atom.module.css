@@ -113,6 +113,23 @@ input {
   @apply absolute top-[10px] left-[10px] right-[10px] bottom-[10px] bg-[#080A1D] rounded-[50%];
 }
 
+/*Loader 2*/
+
+@keyframes donut-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.donut {
+  @apply inline-block border-[0.25rem] border-[#000000e2] border-b-[#2f79f9de] rounded-full w-[4rem] h-[4rem];
+
+  animation: donut-spin 1.2s linear infinite;
+}
+
 /*Nft slider*/
 
 .next-slider {

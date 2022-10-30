@@ -40,6 +40,7 @@ import { NextPage } from "next";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
 import { apiRequest } from "../functions/offChain/apiRequests";
+import Loader2 from "../components/atoms/Loader2";
 
 const Home: NextPage = () => {
   const [heroData, setHeroData] = useState(heroCards);
@@ -84,16 +85,8 @@ const Home: NextPage = () => {
     fetchLaunchPadDrops();
   }, []);
 
-  if (isLoading) {
-    return (
-      <div className="h-screen inset-0 flex justify-center items-center">
-        <Loader />
-      </div>
-    );
-  }
-
   return (
-    <DashboardLayout>
+    <DashboardLayout isLoading={isLoading}>
       <div className="home-wrapper">
         <div className="space-y-[9rem] center mb-[10.125rem]">
           <section className="hero">

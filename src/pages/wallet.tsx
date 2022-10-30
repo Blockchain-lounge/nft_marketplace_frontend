@@ -19,17 +19,8 @@ const Wallet = () => {
           <span className="text-[1.75rem] font-bold">0xdE8cF...1C79</span>
         </div>
         <div className="earnings-cards">
-          <EarningsCard
-            label="Balance"
-            coinsAmount={158.3}
-            remainingAmount="383,154.42"
-          />
-          <EarningsCard
-            label="Transactions"
-            coinsAmount={405}
-            remainingAmount="383,154.42"
-            history="/transactions"
-          />
+          <EarningsCard label="Balance" coinsAmount={0} remainingAmount="0" />
+          <EarningsCard label="Earnings" coinsAmount={0} remainingAmount="0" />
         </div>
       </div>
     </EarningLayout>

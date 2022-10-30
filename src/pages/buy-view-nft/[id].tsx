@@ -220,21 +220,13 @@ const ViewNft = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  if (!itemDetail) {
-    return (
-      <div className="h-screen inset-0 flex justify-center items-center">
-        <Loader />
-      </div>
-    );
-  }
-
   return (
-    <DashboardLayout>
+    <DashboardLayout isLoading={!itemDetail}>
       <div className="sub-layout-wrapper">
         {itemDetail !== null ? (
           <div className="center space-y-8">
             <div className="view-wrapper-hero grid-cols-[0.5fr_1fr]">
-              <div className="relative">
+              <div className="relative h-[50vh]">
                 <Image
                   src={itemDetail.item_art_url}
                   alt={itemDetail.item_title}
@@ -243,9 +235,9 @@ const ViewNft = () => {
                   className="rounded-xl"
                 />
               </div>
-              <div className="space-y-4">
+              <div className="space-y-4 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center mb-5">
+                  <div className="flex items-center mb-9">
                     <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
                       <Image
                         src="/favicon.ico"
@@ -255,8 +247,8 @@ const ViewNft = () => {
                         className="rounded-full"
                       />
                     </div>
-                    <span className="text-2xl mr-1">Cloudax</span>
-                    <div className="h-5 w-5 relative">
+                    <span className="text-3xl mr-1">Cloudax</span>
+                    <div className="h-6 w-6 relative">
                       <Image
                         src="/images/verify.svg"
                         alt="colx-img"
@@ -292,7 +284,9 @@ const ViewNft = () => {
                 <div className="view-hero-nft-cta-wrapper">
                   <div className="flex w-full gap-x-6">
                     <div className="p-3 bg-bg-5 rounded-[1.25rem] w-full">
-                      <span className="text-txt-2 block mb-4">Price</span>
+                      <span className="text-txt-2 text-xl block mb-4">
+                        Price
+                      </span>
                       <div className="">
                         <span className="flex items-center text-[1.5rem] gap-x-1">
                           <CoinIcon />
