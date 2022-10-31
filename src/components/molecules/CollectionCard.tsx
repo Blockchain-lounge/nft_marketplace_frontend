@@ -28,8 +28,9 @@ const CollectionCard: NextPage<Partial<ICollectionCard>> = ({
       >
         <Image
           src={
-            cover_image_id ?
-            APPCONFIG.ENV_BASE_URL+'images/'+cover_image_id : ""
+            cover_image_id
+              ? APPCONFIG.ENV_BASE_URL + "images/" + cover_image_id
+              : ""
           }
           alt={name}
           layout="fill"
@@ -42,9 +43,9 @@ const CollectionCard: NextPage<Partial<ICollectionCard>> = ({
           <Image
             src={
               collectionLogoImage
-              ?
-              APPCONFIG.ENV_BASE_URL+'images/'+collectionLogoImage
-            : ""}
+                ? APPCONFIG.ENV_BASE_URL + "images/" + collectionLogoImage
+                : ""
+            }
             alt={name}
             layout="fill"
             objectFit="cover"

@@ -105,11 +105,11 @@ const Explore = () => {
             setStage={setActiveTab}
             stages={exploreTabs}
           />
-            <div className="explore-items-wrapper">
-              {collections.map((item) => (
-                <CollectionCard key={item._id} {...item}/>
-              ))}
-            </div>
+          <div className="explore-items-wrapper">
+            {collections.map((item) => (
+              <CollectionCard key={item._id} {...item} />
+            ))}
+          </div>
           {/*tab-type: render by tab type*/}
           {/* {activeTab === "trending" ? (
             <div className="explore-items-wrapper">

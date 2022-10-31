@@ -81,8 +81,22 @@ const Profile = () => {
           userEmail: response.data.data.email,
           bio: response.data.data.bio,
         });
-        setUserBannerImg(response.data.data.userBannerImg && response.data.data.userBannerImg !== undefined ? APPCONFIG.ENV_BASE_URL+'images/'+response.data.data.userBannerImg : "");
-        setUserProfileImg(response.data.data.userProfileImg && response.data.data.userProfileImg !== undefined ? APPCONFIG.ENV_BASE_URL+'images/'+response.data.data.userProfileImg : "");
+        setUserBannerImg(
+          response.data.data.userBannerImg &&
+            response.data.data.userBannerImg !== undefined
+            ? APPCONFIG.ENV_BASE_URL +
+                "images/" +
+                response.data.data.userBannerImg
+            : ""
+        );
+        setUserProfileImg(
+          response.data.data.userProfileImg &&
+            response.data.data.userProfileImg !== undefined
+            ? APPCONFIG.ENV_BASE_URL +
+                "images/" +
+                response.data.data.userProfileImg
+            : ""
+        );
         setIsLoading(false);
         // setShowModal(true);
       } else {
@@ -134,7 +148,7 @@ const Profile = () => {
           userEmail: response.data.data.email,
           bio: response.data.data.bio,
         });
-       setIsLoading(false);
+        setIsLoading(false);
         // setShowModal(true);
       } else {
         toast("Something went wrong, please try again!");
@@ -170,7 +184,6 @@ const Profile = () => {
                 alt="collection-img-banner"
                 objectFit="cover"
                 layout="fill"
-                className="rounded-3xl"
               />
             ) : (
               <label className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d49]">
@@ -189,6 +202,7 @@ const Profile = () => {
                 alt="user-img"
                 layout="fill"
                 objectFit="cover"
+                className="rounded-full"
               />
             </div>
           </div>

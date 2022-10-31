@@ -5,6 +5,7 @@ const nextConfig = {
       "localhost",
       "cloudax.infura-ipfs.io",
       "cloudax-nft-marketplace.io",
+      "cloudax-api.herokuapp.com",
     ],
   },
   reactStrictMode: true,
