@@ -1,3 +1,4 @@
+ // @ts-nocheck
 import clsx from "clsx";
 import Image from "next/image";
 import React, {
@@ -21,28 +22,19 @@ const CreateCollection: FC<ICollectionProps> = ({
   closeModal,
   changeModalType,
 }) => {
-  const [collectionBannerArt, setCollectionBannerArt] = useState("");
+  const [collectionBannerPreview, setCollectionBannerPreview] = useState('')
+  const [collectionBanner, setCollectionBanner] = useState('');
+  
   const [collectionFeaturedArt, setCollectionFeaturedArt] = useState("");
-  const [collectionLogoArt, setCollectionLogoArt] = useState("");
-  {
-    /*featured img*/
-  }
-  const [collectionFeaturedImg, setcollectionFeaturedImage] =
-    useState<FileList | null>(null);
-  {
-    /*logo img*/
-  }
-  const [collectionLogoImg, setCollectionLogoImage] = useState<FileList | null>(
-    null
-  );
-  const [collectionBanner, setCollectionBannerImage] =
-    useState<FileList | null>(null);
+  const [collectionFeaturedArtPreview, setCollectionFeaturedArtPreview] = useState('')
 
-  const [validationError, setValidationError] = useState(false);
+  const [collectionLogo, setCollectionLogo] = useState("");
+  const [collectionLogoPreview, setCollectionLogoPreview] = useState('')
+
+  // const [validationError, setValidationError] = useState(false);
   const [collectionPayload, setCollectionPayload] = useState({
     collection_name: "",
-    collection_description: "",
-    collection_cover_image: null,
+    collection_description: ""
   });
 
   const handleFieldChange = (
@@ -55,12 +47,10 @@ const CreateCollection: FC<ICollectionProps> = ({
     });
   };
 
-  //@ts-ignore
-  const handleImageFieldChange = (e, setImg, setArt) => {
-    const { files } = e.target;
+  const validateFileInput = (files, fieldName) =>{
     var msg = "";
     if (!files[0] || files[0].size == 0 || files[0].size == null) {
-      msg = "Collection cover art is required!";
+      msg = fieldName+" is required!";
       alert(msg);
       setValidationError(true);
       return false;
@@ -85,8 +75,31 @@ const CreateCollection: FC<ICollectionProps> = ({
       toast(msg);
       return false;
     }
-    setImg(files[0]);
-    setArt(URL.createObjectURL(files[0]));
+  }
+  const handleImageFieldChange = (e) => {
+    const { files, name } = e.target;
+    var fieldName = '';
+    if(name === 'collectionBannerImage'){
+      fieldName = 'Collection banner image';
+      validateFileInput(files,fieldName);
+      setCollectionBanner(files[0]);
+      setCollectionBannerPreview(URL.createObjectURL(files[0]));
+    }
+   if(name === 'collectionFeaturedImage'){
+      fieldName = 'Collection featured image';
+      validateFileInput(files,fieldName);
+      setCollectionFeaturedArt(files[0]);
+      setCollectionFeaturedArtPreview(URL.createObjectURL(files[0]));
+    }
+   if(name === 'collectionLogoImage'){
+      fieldName = 'Collection logo image';
+      validateFileInput(files,fieldName);
+      setCollectionLogo(files[0]);
+      setCollectionLogoPreview(URL.createObjectURL(files[0]));
+    }
+    else{
+      return
+    }
   };
 
   const handleSubmit = async (
@@ -101,10 +114,21 @@ const CreateCollection: FC<ICollectionProps> = ({
       toast(msg);
       return false;
     }
+    else if (
+      !collectionBanner ||
+      !collectionFeaturedArt ||
+      !collectionLogo
+    ) {
+      msg = "Some the required images are still not added";
+      toast(msg);
+      return false;
+    }
     var collectionData = {
       name: collectionPayload.collection_name,
       description: collectionPayload.collection_description,
       cover_image: collectionBanner,
+      collectionFeaturedImage: collectionFeaturedArt,
+      collectionLogoImage: collectionLogo,
     };
     try {
       const HEADER = "authenticated_and_form_data";
@@ -149,19 +173,15 @@ const CreateCollection: FC<ICollectionProps> = ({
             type="file"
             id="userImg"
             onChange={(e) =>
-              handleImageFieldChange(
-                e,
-                setCollectionBannerImage,
-                setCollectionBannerArt
-              )
+              handleImageFieldChange(e)
             }
             className="hidden"
-            name="img"
+            name="collectionBannerImage"
           />
 
-          {collectionBannerArt && (
+          {collectionBannerPreview && (
             <Image
-              src={collectionBannerArt || "/ape.png"}
+              src={collectionBannerPreview || "/ape.png"}
               alt="collection-cover-art"
               layout="fill"
               objectFit="cover"
@@ -179,7 +199,7 @@ const CreateCollection: FC<ICollectionProps> = ({
               height="24px"
             />
             <span
-              className={clsx(collectionBannerArt ? "hidden" : "block mt-2")}
+              className={clsx(collectionBannerPreview ? "hidden" : "block mt-2")}
             >
               Click to upload collection banner image
             </span>
@@ -197,19 +217,15 @@ const CreateCollection: FC<ICollectionProps> = ({
             type="file"
             id="featuredCollection"
             onChange={(e) =>
-              handleImageFieldChange(
-                e,
-                setcollectionFeaturedImage,
-                setCollectionFeaturedArt
-              )
+              handleImageFieldChange(e)
             }
             className="hidden"
-            name="img"
+            name="collectionFeaturedImage"
           />
 
-          {collectionFeaturedArt && (
+          {collectionFeaturedArtPreview && (
             <Image
-              src={collectionFeaturedArt || "/ape.png"}
+              src={collectionFeaturedArtPreview || "/ape.png"}
               alt="collection-cover-art"
               layout="fill"
               objectFit="cover"
@@ -227,7 +243,7 @@ const CreateCollection: FC<ICollectionProps> = ({
               height="24px"
             />
             <span
-              className={clsx(collectionFeaturedArt ? "hidden" : "block mt-2")}
+              className={clsx(collectionFeaturedArtPreview ? "hidden" : "block mt-2")}
             >
               Click to change image
             </span>
@@ -245,19 +261,15 @@ const CreateCollection: FC<ICollectionProps> = ({
             type="file"
             id="logoCollection"
             onChange={(e) =>
-              handleImageFieldChange(
-                e,
-                setCollectionLogoImage,
-                setCollectionLogoArt
-              )
+              handleImageFieldChange(e)
             }
             className="hidden"
-            name="img"
+            name="collectionLogoImage"
           />
 
-          {collectionLogoArt && (
+          {collectionLogoPreview && (
             <Image
-              src={collectionLogoArt || "/ape.png"}
+              src={collectionLogoPreview || "/ape.png"}
               alt="collection-cover-art"
               layout="fill"
               objectFit="cover"
@@ -276,7 +288,7 @@ const CreateCollection: FC<ICollectionProps> = ({
             />
             <span
               className={clsx(
-                collectionLogoArt ? "hidden" : "block mt-2 text-sm"
+                collectionLogoPreview ? "hidden" : "block mt-2 text-sm"
               )}
             >
               Click to change image

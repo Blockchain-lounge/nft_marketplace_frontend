@@ -24,7 +24,7 @@ const NftCard2 = ({
   return (
     <div
       className="nmc-wrapper cursor-pointer"
-      onClick={() => push(`/view-nft/${_id}`)}
+      onClick={() => push(`/buy-view-nft/${_id}`)}
     >
       <div className="nmc-wrapper2-img">
         <div className="nmc-wrapper-likes nmc-wrapper2-likes">
@@ -93,8 +93,8 @@ const NftCard2 = ({
           item_id !== undefined
           && item_id !== null
           && item_id !== '' 
-          ? item_id.item_price+'/'+item_id.item_price
-          : item_price+'/'+item_price}
+          ? item_id.item_price
+          : item_price}
               </div>
             </div>
           </div>
@@ -115,8 +115,8 @@ const NftCard2 = ({
             item_id !== undefined
             && item_id !== null
             && item_id !== '' 
-            ? item_id.item_price+'/'+item_id.item_price
-            : item_price+'/'+item_price
+            ? item_id.item_price
+            : item_price
             }
           </span>
         )}

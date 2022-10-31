@@ -1,30 +1,37 @@
 import { useRouter } from "next/router";
 import { NextPage } from "next";
 import Image from "next/image";
+import APPCONFIG from "../../constants/Config";
 
 interface ICollectionCard {
-  bannerImgUrl: string;
-  imgUrl: string;
+  _id: string;
   name: string;
-  url: string;
+  description: string;
+  cover_image_id: string;
+  collectionFeaturedImage: string;
+  collectionLogoImage: string;
+  user_id: {};
 }
 
 const CollectionCard: NextPage<Partial<ICollectionCard>> = ({
-  bannerImgUrl = "/images/collection-banner.png",
-  imgUrl = "/images/collection-avatar.png",
-  name = "otherdeed for otherside",
-  url = "/single-collection",
+  _id,
+  name,
+  cover_image_id,
+  collectionLogoImage,
 }) => {
   const { push } = useRouter();
   return (
     <div className="max-w-[27rem] w-full h-[25rem] cursor-pointer">
       <div
         className="relative h-[80%] w-full"
-        onClick={() => push(`${url}/${name}`)}
+        onClick={() => push(`/single-collection/${_id}`)}
       >
         <Image
-          src={bannerImgUrl}
-          alt={name + bannerImgUrl}
+          src={
+            cover_image_id ?
+            APPCONFIG.ENV_BASE_URL+'images/'+cover_image_id : ""
+          }
+          alt={name}
           layout="fill"
           objectFit="cover"
           className="rounded-t-lg"
@@ -33,8 +40,12 @@ const CollectionCard: NextPage<Partial<ICollectionCard>> = ({
       <div className="bg-white h-[20%] rounded-b-lg flex justify-center gap-x-4 items-center">
         <div className="relative h-14 w-14">
           <Image
-            src={imgUrl}
-            alt={name + imgUrl}
+            src={
+              collectionLogoImage
+              ?
+              APPCONFIG.ENV_BASE_URL+'images/'+collectionLogoImage
+            : ""}
+            alt={name}
             layout="fill"
             objectFit="cover"
             className="rounded-full"

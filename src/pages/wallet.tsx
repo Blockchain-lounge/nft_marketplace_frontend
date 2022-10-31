@@ -63,12 +63,12 @@ const Wallet = () => {
           <EarningsCard
             label="Balance"
             coinsAmount={balanceInEth}
-            remainingAmount="383,154.42"
+            remainingAmount="0"
           />
           <EarningsCard
             label="Transactions"
             coinsAmount={0}
-            remainingAmount="383,154.42"
+            remainingAmount="0"
             history="/transactions"
           />
           <EarningsCard label="Balance" coinsAmount={0} remainingAmount="0" />

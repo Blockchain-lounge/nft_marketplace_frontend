@@ -7,11 +7,14 @@ import {
 } from "@/src/components/atoms/vectors";
 import { ActivityCard, NftMediumCard2, Tab } from "@/src/components/molecules";
 import { BannerImg, Footer2 } from "@/src/components/organisms";
-import { singleCollectionsDatas } from "@/src/store/data";
+// import { singleCollectionsDatas } from "@/src/store/data";
 import DashboardLayout from "@/src/template/DashboardLayout";
 import clsx from "clsx";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import { apiRequest } from "../../functions/offChain/apiRequests";
+import APPCONFIG from "../../constants/Config";
 
 const ViewCollection = () => {
   const [collectionImg, setCollectionImg] = useState("");
@@ -26,10 +29,40 @@ const ViewCollection = () => {
     { label: "items", price: "18.3", type: "quantity" },
     { label: "owners", price: 897, type: "quantity" },
   ];
+  const { query, push } = useRouter();
+  const { id } = query;
   const collectionStages = ["items", "activity"];
   const activityList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const activityHeaders = ["Item", "Price", "From", "To"];
+  const [singleCollectionsData, setSingleCollectionsData] = useState("");
+  const [singleCollectionDetail, setSingleCollectionDetail] = useState([]);
 
+  const fetchCollectionItems = async (id: string) => {
+    if (id !== undefined) {
+      const HEADER = {};
+      const REQUEST_URL = "nft-item/collection/" + id;
+      const METHOD = "GET";
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          push("/");
+          return;
+        } else if (response.status == 200) {
+          setSingleCollectionsData(response.data.data.items);
+          setSingleCollectionDetail(response.data.data.collection);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    }
+  };
+  useEffect(() => {
+    fetchCollectionItems(id as string);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper">
@@ -40,7 +73,15 @@ const ViewCollection = () => {
                 <div className={`h-full w-full rounded-full relative`}>
                   <Image
                     priority
-                    src={collectionImg || "/images/avatar.png"}
+                    src={
+                      singleCollectionDetail
+                      && singleCollectionDetail.collectionLogoImage !== undefined
+                      && singleCollectionDetail.collectionLogoImage !== ""
+                      && singleCollectionDetail.collectionLogoImage !== null
+                       ?
+                      APPCONFIG.ENV_BASE_URL+'images/'+singleCollectionDetail.collectionLogoImage
+                      : "/images/avatar.png"
+                    }
                     alt="collection-logo"
                     objectFit="cover"
                     layout="fill"
@@ -49,15 +90,20 @@ const ViewCollection = () => {
                 </div>
               </div>
 
-              {collectionBannerImg ? (
+              {
+              singleCollectionDetail
+              && singleCollectionDetail.cover_image_id !== undefined
+              && singleCollectionDetail.cover_image_id !== ""
+              && singleCollectionDetail.cover_image_id !== null
+              ?
                 <Image
-                  src={collectionBannerImg}
+                  src={APPCONFIG.ENV_BASE_URL+'images/'+singleCollectionDetail.cover_image_id}
                   alt="collection-img-banner"
                   objectFit="cover"
                   layout="fill"
                   className="rounded-3xl"
                 />
-              ) : (
+              :
                 <label className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d49]">
                   <Image
                     src="/images/banner-placeholder.svg"
@@ -67,13 +113,15 @@ const ViewCollection = () => {
                     objectFit="cover"
                   />
                 </label>
-              )}
+              }
             </div>
           </div>
           <div className="single-collection-info">
             <div className="flex flex-col lg:gap-y-3">
               <div className="flex mb-4">
-                <span className="text-3xl font-bold mr-1">CloneX</span>
+                <span className="text-3xl font-bold mr-1">{
+                singleCollectionDetail.name
+                }</span>
                 <div className="h-8 w-8 relative">
                   <Image
                     src="/images/verify.svg"
@@ -84,7 +132,10 @@ const ViewCollection = () => {
                   />
                 </div>
               </div>
-              <p className="max-w-2xl">{info}</p>
+              <p className="max-w-2xl">
+                {
+                singleCollectionDetail.description
+              }</p>
               {/* <span className="flex font-bold">
                 See more <CaretDown />
               </span> */}
@@ -171,9 +222,13 @@ const ViewCollection = () => {
               <div className="single-collection-lists">
                 {/* <div>hello</div> */}
                 <div className="flex flex-wrap justify-evenly gap-y-12">
-                  {/* {singleCollectionsDatas.map((val, i) => (
-                    // <NftMediumCard2 {...val} key={val.name + i} />
-                  ))} */}
+                  {
+                  singleCollectionsData ?
+                  singleCollectionsData.map((val, i) => (
+                    <NftMediumCard2 {...val} key={val.name + i} />
+                  ))
+                  :""
+                }
                 </div>
               </div>
             </div>

@@ -48,11 +48,12 @@ const Home: NextPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const { push } = useRouter();
-  const [launchPadDrops, setLaunchPadDrops] = useState([]);
+  const [homePageData, setHomePageData] = useState([]);
+  const [collections, setCollections] = useState([]);
   const [userCreatedProfileData, setUserCreatedProfileData] = useState([]);
   const exploreItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-  const fetchLaunchPadDrops = async () => {
+  const fetchHomePageData = async () => {
     try {
       const HEADER = {};
       const REQUEST_URL = "nft-item/index";
@@ -68,7 +69,7 @@ const Home: NextPage = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
-          setLaunchPadDrops(response.data.data);
+          setCollections(response.data.data);
           setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
@@ -82,7 +83,7 @@ const Home: NextPage = () => {
   };
   // console.log({ launchPadDrops });
   useEffect(() => {
-    fetchLaunchPadDrops();
+    fetchHomePageData();
   }, []);
 
   return (
@@ -138,7 +139,7 @@ const Home: NextPage = () => {
                 // selectTitle="Last 24 hours"
               />
               <div className="hero-section-1-collection">
-                {launchPadDrops.map(
+                {collections.map(
                   ({ item_title, item_art_url, item_price }, i) => (
                     <NftMiniCard
                       key={`title-${i + 1}`}
@@ -154,8 +155,8 @@ const Home: NextPage = () => {
             </section>
 
             <section>
-              <NftHeaderCard heading="Featured Collection" />
-              <NftSlider data={launchPadDrops} />
+              <NftHeaderCard heading="Featured Collections" />
+              <NftSlider data={collections} />
               <span className="mobile-see-all-btn">See All</span>
             </section>
             {/* <section>

@@ -9,7 +9,7 @@ import DashboardLayout from "../template/DashboardLayout";
 
 const Explore = () => {
   // const [activeTab, setActiveTab] = useState("trending");
-  const [launchPadDrops, setLaunchPadDrops] = useState<INftcard[]>([]);
+  const [collections, setCollections] = useState<INftcard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Recently Added");
   const exploreTabs = ["Recently Added"];
@@ -27,10 +27,37 @@ const Explore = () => {
   // ];
   const exploreItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-  const fetchLaunchPadDrops = async () => {
+  // const fetchLaunchPadDrops = async () => {
+  //   try {
+  //     const HEADER = {};
+  //     const REQUEST_URL = "nft-item/index";
+  //     const METHOD = "GET";
+  //     const DATA = {};
+  //     apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+  //       if (response?.status == 400) {
+  //         var error = response.data.error;
+  //         toast(error);
+  //         return;
+  //       } else if (response?.status == 401) {
+  //         toast("Unauthorized request!");
+  //         return;
+  //       } else if (response?.status == 200) {
+  //         setLaunchPadDrops(response.data.data);
+  //         setIsLoading(false);
+  //       } else {
+  //         toast("Something went wrong, please try again!");
+  //         return;
+  //       }
+  //     });
+  //   } catch (error) {
+  //     toast("Something went wrong, please try again!");
+  //     return;
+  //   }
+  // };
+  const fetchCollections = async () => {
     try {
       const HEADER = {};
-      const REQUEST_URL = "nft-item/index";
+      const REQUEST_URL = "nft-collection/index";
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -42,7 +69,7 @@ const Explore = () => {
           toast("Unauthorized request!");
           return;
         } else if (response?.status == 200) {
-          setLaunchPadDrops(response.data.data);
+          setCollections(response.data.data);
           setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
@@ -55,7 +82,8 @@ const Explore = () => {
     }
   };
   useEffect(() => {
-    fetchLaunchPadDrops();
+    fetchCollections();
+    // fetchLaunchPadDrops();
   }, []);
 
   // if (isLoading) {
@@ -77,7 +105,11 @@ const Explore = () => {
             setStage={setActiveTab}
             stages={exploreTabs}
           />
-
+            <div className="explore-items-wrapper">
+              {collections.map((item) => (
+                <CollectionCard key={item._id} {...item}/>
+              ))}
+            </div>
           {/*tab-type: render by tab type*/}
           {/* {activeTab === "trending" ? (
             <div className="explore-items-wrapper">
@@ -140,11 +172,11 @@ const Explore = () => {
               ))}
             </div>
           ) : null} */}
-          <div className="explore-items-wrapper">
-            {launchPadDrops.map((item) => (
+          {/* <div className="explore-items-wrapper">
+            {setCollections.map((item) => (
               <NftMediumCard key={item._id} {...item} />
             ))}
-          </div>
+          </div> */}
         </div>
         <Footer2 />
       </div>
