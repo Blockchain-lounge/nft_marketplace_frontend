@@ -28,7 +28,9 @@ import UseFetch from "../hooks/useFetch";
 import Image from "next/image";
 import { INftcard } from "../components/molecules/NftMediumCard";
 import APPCONFIG from "../constants/Config";
-
+import {
+  connectedAccount
+} from "../functions/onChain/authFunction";
 const Profile = () => {
   const [profileActiveTab, setProfileActiveTab] = useState(1);
 
@@ -92,9 +94,9 @@ const Profile = () => {
     });
   };
 
-  const fetchTokenOwned = async () => {
+  const fetchTokenOwned = async (address) => {
     const HEADER = "authenticated";
-    const REQUEST_URL = "nft/tokens_owned";
+    const REQUEST_URL = "nft/tokens_owned/"+address;
     const METHOD = "GET";
     const DATA = {};
     apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -142,12 +144,16 @@ const Profile = () => {
       }
     });
   };
-
   useEffect(() => {
     // try {
     fetchUser();
-    fetchTokenOwned();
+    connectedAccount().then((response) => {
+      if (response !== null) {
+        fetchTokenOwned(response);
+      }
+    });
     fetchTokenCreated();
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -48,15 +48,16 @@ const Home: NextPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const { push } = useRouter();
-  const [homePageData, setHomePageData] = useState([]);
+  const [items, setItems] = useState([]);
   const [collections, setCollections] = useState([]);
+  const [featuredCollections, setFeaturedCollections] = useState([]);
   const [userCreatedProfileData, setUserCreatedProfileData] = useState([]);
   const exploreItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   const fetchHomePageData = async () => {
     try {
       const HEADER = {};
-      const REQUEST_URL = "nft-item/index";
+      const REQUEST_URL = "nft-item/home_data";
 
       const METHOD = "GET";
       const DATA = {};
@@ -69,7 +70,9 @@ const Home: NextPage = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
-          setCollections(response.data.data);
+          setCollections(response.data.data.collections);
+          setFeaturedCollections(response.data.data.featured_collections);
+          setItems(response.data.data.items);
           setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
@@ -110,17 +113,21 @@ const Home: NextPage = () => {
                 />
               </div>
               <div className="hero-cards">
-                {heroData
-                  .filter((d) => d.title !== activeCard.title)
-                  .map((data) => (
-                    <HeroCard
-                      key={data.title}
-                      {...data}
+              {
+                  featuredCollections?
+                    featuredCollections.map((val, i) => (
+                      <HeroCard
+                      key={val._id}
+                      {...val}
                       onClick={() => {
-                        setActiveCard(data);
+                        setActiveCard(val);
                       }}
                     />
-                  ))}
+                      )
+                    )
+                    :
+                    ""
+                }
               </div>
               <div className="flex w-full mb-4 lg:mb-0 items-center justify-center lg:block">
                 <HeroIndicator
@@ -139,24 +146,24 @@ const Home: NextPage = () => {
                 // selectTitle="Last 24 hours"
               />
               <div className="hero-section-1-collection">
-                {collections.map(
-                  ({ item_title, item_art_url, item_price }, i) => (
-                    <NftMiniCard
-                      key={`title-${i + 1}`}
-                      index={i + 1}
-                      title={item_title}
-                      imgUrl={item_art_url}
-                      price={item_price}
-                    />
-                  )
-                )}
+                {
+                  collections?
+                    collections.map((val, i) => (
+                        <NftMiniCard
+                        {...val} key={i}
+                        />
+                      )
+                    )
+                    :
+                    ""
+                }
               </div>
               <span className="mobile-see-all-btn">See All</span>
             </section>
-
+            
             <section>
-              <NftHeaderCard heading="Featured Collections" />
-              <NftSlider data={collections} />
+              <NftHeaderCard heading="Featured Drops" />
+                <NftSlider data={items} />
               <span className="mobile-see-all-btn">See All</span>
             </section>
             {/* <section>
