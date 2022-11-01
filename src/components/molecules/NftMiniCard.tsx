@@ -16,29 +16,27 @@ interface INftminicards {
   key: string;
 }
 
-const NftMiniCards = ({  _id,
+const NftMiniCards = ({
+  _id,
   name,
   cover_image_id,
   collectionLogoImage,
-  key
- }: INftminicards) => {
+  key,
+}: INftminicards) => {
   const { push } = useRouter();
   const handleNavigate = () => {
-    push("/explore");
+    push(`/single-collection/${_id}`);
   };
   return (
-    <div
-      className="nft-mini-cards-wrapper"
-      onClick={handleNavigate}
-      onClick={() => push(`/single-collection/${_id}`)}
-    >
+    <div className="nft-mini-cards-wrapper" onClick={handleNavigate}>
       {/* <span className="nft-mini-cards-index">{key}</span> */}
       <div className="flex items-center">
         <div className="img relative">
           <Image
             src={
-              cover_image_id ?
-              APPCONFIG.ENV_BASE_URL+'images/'+cover_image_id : ""
+              cover_image_id
+                ? APPCONFIG.ENV_BASE_URL + "images/" + cover_image_id
+                : ""
             }
             alt={name}
             layout="fill"
