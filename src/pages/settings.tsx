@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 // @ts-nocheck
 import { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import clsx from "clsx";
@@ -20,6 +21,7 @@ import { Button, CheckBox, Heading2, Input2 } from "../components/atoms";
 import APPCONFIG from "../constants/Config";
 // import { apiPost } from "../utilities/requests/apiRequest";
 import UseAuth from "../hooks/useAuth";
+import axios from "axios";
 
 const Settings = () => {
   const { push } = useRouter();
@@ -71,7 +73,31 @@ const Settings = () => {
     });
   };
 
-  const handleImageFieldChange = (e) => {
+  const uploadFile = async (file) => {
+    let { data } = await axios.post("/api/s3/uploadFile", {
+      name: file.name,
+      type: file.type,
+    });
+    //fetching out an URL
+    const url = data.url;
+    console.log({ url });
+
+    if (url) {
+      toast("Please wait, while your image load");
+    }
+    //uploading file
+    let res = await axios.put(url, file, {
+      headers: {
+        "Content-type": file.type,
+      },
+    });
+
+    const imgUrl = url.split("?")[0];
+
+    return { imgUrl };
+  };
+
+  const handleImageFieldChange = async (e) => {
     const { files, name } = e.target;
     var msg = "";
     if (name === "userProfileImg") {
@@ -97,7 +123,10 @@ const Settings = () => {
           return false;
         }
         setUserImg(files[0]);
-        setUserImgPreview(URL.createObjectURL(files[0]));
+        const { imgUrl } = await uploadFile(files[0]);
+        setUserImgPreview(imgUrl);
+        console.log("profile img:", imgUrl);
+        // setUserImgPreview(URL.createObjectURL(files[0]));
       }
     } else if (name === "userBannerImg") {
       if (files[0] && files[0].size > 0 && files[0].size !== null) {
@@ -122,18 +151,28 @@ const Settings = () => {
           return false;
         }
         setUserBannerImg(files[0]);
-        setUserBannerImgPreview(URL.createObjectURL(files[0]));
+        const { imgUrl } = await uploadFile(files[0]);
+        setUserBannerImgPreview(imgUrl);
+        console.log("banner img:", imgUrl);
+        // setUserBannerImgPreview(URL.createObjectURL(files[0]));
       }
     }
+
+    // if (userBannerImg !== null && userImg !== null) {
+    // }
   };
+
+  // console.log({ userBannerImg, userImg });
+
+  // const bucket_url_img = "https://cloudaxnftmarketplace.s3.amazonaws.com/";
 
   const handleSubmit = async () => {
     var profileData = {
       username: userDetailsPayload.username,
       email: userDetailsPayload.userEmail,
       bio: userDetailsPayload.bio,
-      userProfileImg: userImg,
-      userBannerImg: userBannerImg,
+      userProfileImg: userImgPreview,
+      userBannerImg: userBannerImgPreview,
     };
     try {
       const HEADER = "authenticated_and_form_data";
@@ -184,12 +223,12 @@ const Settings = () => {
           userEmail: response.data.data.email,
           bio: response.data.data.bio,
         });
-        setUserBannerImgPreview(
-          APPCONFIG.ENV_BASE_URL + "images/" + response.data.data.userBannerImg
-        );
-        setUserImgPreview(
-          APPCONFIG.ENV_BASE_URL + "images/" + response.data.data.userProfileImg
-        );
+        // setUserBannerImgPreview(
+        //   APPCONFIG.ENV_BASE_URL + "images/" + response.data.data.userBannerImg
+        // );
+        // setUserImgPreview(
+        //   APPCONFIG.ENV_BASE_URL + "images/" + response.data.data.userProfileImg
+        // );
         // setShowModal(true);
       } else {
         toast("Something went wrong, please try again!");
@@ -201,6 +240,8 @@ const Settings = () => {
     //   return;
     // }
   }, [myProfile]);
+
+  console.log({ userImgPreview });
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper">
@@ -253,6 +294,8 @@ const Settings = () => {
                       layout="fill"
                       className="rounded-full"
                     />
+
+                    {/* <img src={userImgPreview} alt="user-img-preview" /> */}
                   </div>
 
                   <input
@@ -275,7 +318,7 @@ const Settings = () => {
                   </label>
                 </div>
                 <div
-                  className={`h-full w-full ${
+                  className={`h-full w-full relative ${
                     !userBannerImgPreview ? "hidden" : "block"
                   }`}
                 >
@@ -284,12 +327,12 @@ const Settings = () => {
                       userBannerImgPreview
                         ? //@ts-ignore
                           userBannerImgPreview
-                        : "/avatar.png"
+                        : "/images/ape.png"
                     }
                     alt="userBannerImg"
                     objectFit="cover"
                     layout="fill"
-                    className="rounded-3xl"
+                    // className="rounded-3xl"
                   />
                 </div>
 
@@ -302,7 +345,7 @@ const Settings = () => {
                 />
                 <label
                   htmlFor="userBannerImg"
-                  className="absolute inset-0 rounded-3xl flex flex-col justify-center items-center bg-[#1c1e3d7f]"
+                  className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d7f]"
                 >
                   <Image
                     src="/gallery-add.svg"

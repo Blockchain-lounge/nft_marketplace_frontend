@@ -21,7 +21,6 @@ const NftMiniCards = ({
   name,
   cover_image_id,
   collectionLogoImage,
-  key,
 }: INftminicards) => {
   const { push } = useRouter();
   const handleNavigate = () => {

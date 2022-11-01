@@ -143,11 +143,11 @@ const Profile = () => {
         return;
       } else if (response.status == 200) {
         setUserCreatedProfileData(response.data.data);
-        setMyProfile({
-          username: response.data.data.username,
-          userEmail: response.data.data.email,
-          bio: response.data.data.bio,
-        });
+        // setMyProfile({
+        //   username: response.data.data.username,
+        //   userEmail: response.data.data.email,
+        //   bio: response.data.data.bio,
+        // });
         setIsLoading(false);
         // setShowModal(true);
       } else {
@@ -158,20 +158,16 @@ const Profile = () => {
   };
   useEffect(() => {
     // try {
-    fetchUser();
     connectedAccount().then((response) => {
       if (response !== null) {
         fetchTokenOwned(response);
       }
     });
     fetchTokenCreated();
+    fetchUser();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log(myProfile);
-
-
 
   return (
     <DashboardLayout isLoading={isLoading}>

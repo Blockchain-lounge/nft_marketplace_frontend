@@ -106,6 +106,19 @@ const Home: NextPage = () => {
                 />
               </div>
               <div className="hero-cards">
+                {heroData
+                  .filter((d, i) => d.title !== activeCard.title)
+                  .map((data, i) => (
+                    <HeroCard
+                      key={data.title}
+                      {...data}
+                      onClick={() => {
+                        setActiveCard(data);
+                      }}
+                    />
+                  ))}
+              </div>
+              {/* <div className="hero-cards">
                 {featuredCollections
                   ? featuredCollections.map((val, i) => (
                       <HeroCard
@@ -117,7 +130,7 @@ const Home: NextPage = () => {
                       />
                     ))
                   : ""}
-              </div>
+              </div> */}
               <div className="flex w-full mb-4 lg:mb-0 items-center justify-center lg:block">
                 <HeroIndicator
                   arr={heroData}

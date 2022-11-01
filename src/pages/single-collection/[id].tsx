@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { Input, Select } from "@/src/components/atoms";
+import { Heading2, Input, Select } from "@/src/components/atoms";
 import {
   CaretDown,
   FilterIcon,
@@ -68,19 +68,21 @@ const ViewCollection = () => {
       <div className="sub-layout-wrapper">
         <div className="center">
           <div className="single-collection-banner-img">
-            <div className="h-60 rounded-3xl relative flex">
+            <div className="h-[20rem] relative flex">
               <div className="h-32 w-32 absolute -bottom-14 left-6 rounded-full border-bg-3 border-[4px] z-10">
                 <div className={`h-full w-full rounded-full relative`}>
                   <Image
                     priority
                     src={
-                      singleCollectionDetail
-                      && singleCollectionDetail.collectionLogoImage !== undefined
-                      && singleCollectionDetail.collectionLogoImage !== ""
-                      && singleCollectionDetail.collectionLogoImage !== null
-                       ?
-                      APPCONFIG.ENV_BASE_URL+'images/'+singleCollectionDetail.collectionLogoImage
-                      : "/images/avatar.png"
+                      singleCollectionDetail &&
+                      singleCollectionDetail.collectionLogoImage !==
+                        undefined &&
+                      singleCollectionDetail.collectionLogoImage !== "" &&
+                      singleCollectionDetail.collectionLogoImage !== null
+                        ? APPCONFIG.ENV_BASE_URL +
+                          "images/" +
+                          singleCollectionDetail.collectionLogoImage
+                        : "/images/avatar.png"
                     }
                     alt="collection-logo"
                     objectFit="cover"
@@ -90,20 +92,22 @@ const ViewCollection = () => {
                 </div>
               </div>
 
-              {
-              singleCollectionDetail
-              && singleCollectionDetail.cover_image_id !== undefined
-              && singleCollectionDetail.cover_image_id !== ""
-              && singleCollectionDetail.cover_image_id !== null
-              ?
+              {singleCollectionDetail &&
+              singleCollectionDetail.cover_image_id !== undefined &&
+              singleCollectionDetail.cover_image_id !== "" &&
+              singleCollectionDetail.cover_image_id !== null ? (
                 <Image
-                  src={APPCONFIG.ENV_BASE_URL+'images/'+singleCollectionDetail.cover_image_id}
+                  src={
+                    APPCONFIG.ENV_BASE_URL +
+                    "images/" +
+                    singleCollectionDetail.cover_image_id
+                  }
                   alt="collection-img-banner"
                   objectFit="cover"
                   layout="fill"
-                  className="rounded-3xl"
+                  // className="rounded-3xl"
                 />
-              :
+              ) : (
                 <label className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d49]">
                   <Image
                     src="/images/banner-placeholder.svg"
@@ -113,15 +117,15 @@ const ViewCollection = () => {
                     objectFit="cover"
                   />
                 </label>
-              }
+              )}
             </div>
           </div>
           <div className="single-collection-info">
             <div className="flex flex-col lg:gap-y-3">
               <div className="flex mb-4">
-                <span className="text-3xl font-bold mr-1">{
-                singleCollectionDetail.name
-                }</span>
+                <span className="text-3xl font-bold mr-1">
+                  {singleCollectionDetail.name}
+                </span>
                 <div className="h-8 w-8 relative">
                   <Image
                     src="/images/verify.svg"
@@ -132,10 +136,7 @@ const ViewCollection = () => {
                   />
                 </div>
               </div>
-              <p className="max-w-2xl">
-                {
-                singleCollectionDetail.description
-              }</p>
+              <p className="max-w-2xl">{singleCollectionDetail.description}</p>
               {/* <span className="flex font-bold">
                 See more <CaretDown />
               </span> */}
@@ -222,20 +223,19 @@ const ViewCollection = () => {
               <div className="single-collection-lists">
                 {/* <div>hello</div> */}
                 <div className="flex flex-wrap justify-evenly gap-y-12">
-                  {
-                  singleCollectionsData ?
-                  singleCollectionsData.map((val, i) => (
-                    <NftMediumCard2 {...val} key={val.name + i} />
-                  ))
-                  :""
-                }
+                  {singleCollectionsData
+                    ? singleCollectionsData.map((val, i) => (
+                        <NftMediumCard2 {...val} key={val.name + i} />
+                      ))
+                    : ""}
                 </div>
               </div>
             </div>
           ) : activeStage === "activity" ? (
             <>
-              <div className="profile-activity-headers-tab mt-8">
-                {/*Activities Heading-*/}
+              {/*Activities Heading-*/}
+              <Heading2 title="You have not perform any activity." />
+              {/* <div className="profile-activity-headers-tab mt-8">
                 {activityHeaders.map((header, i) => (
                   <span key={header + i} className="profile-activity-header">
                     {header}
@@ -246,7 +246,7 @@ const ViewCollection = () => {
                 {activityList.map((activity) => (
                   <ActivityCard key={activity} />
                 ))}
-              </div>
+              </div> */}
             </>
           ) : null}
         </div>
