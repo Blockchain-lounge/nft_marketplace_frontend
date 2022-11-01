@@ -84,7 +84,6 @@ const Home: NextPage = () => {
       return;
     }
   };
-  // console.log({ launchPadDrops });
   useEffect(() => {
     fetchHomePageData();
   }, []);

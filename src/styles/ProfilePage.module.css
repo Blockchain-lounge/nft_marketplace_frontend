@@ -1,5 +1,5 @@
 .profile-banner {
-  @apply h-[13.4375rem] rounded-[1.125rem] bg-cover relative;
+  @apply h-[20rem] rounded-[1.125rem] bg-cover relative;
 }
 
 .profile-user-img {
@@ -36,7 +36,7 @@
 }
 
 .user-profile-owned-nfts {
-  @apply grid justify-center lg:grid-cols-3 sm:grid-cols-4 gap-[2.06rem];
+  @apply grid mx-auto max-w-[80%] sm:max-w-none sm:mx-0 sm:justify-start sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 gap-[2.06rem];
 }
 
 .profile-tab {

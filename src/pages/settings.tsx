@@ -29,7 +29,8 @@ const Settings = () => {
   const [userImg, setUserImg] = useState<FileList | null>(null);
   const [userImgPreview, setUserImgPreview] = useState<FileList | null>(null);
   const [userBannerImg, setUserBannerImg] = useState<FileList | null>(null);
-  const [userBannerImgPreview, setUserBannerImgPreview] = useState<FileList | null>(null);
+  const [userBannerImgPreview, setUserBannerImgPreview] =
+    useState<FileList | null>(null);
   const [myProfile, setMyProfile] = useState(null);
 
   const [userDetailsPayload, setUserDetailsPayload] = useState({
@@ -37,7 +38,7 @@ const Settings = () => {
     userEmail: "",
     bio: "",
     userBannerImg: "",
-    userBannerImg:""
+    userBannerImg: "",
   });
   const settingStages = [
     { label: "Edit profile", stage: "edit-profile" },
@@ -72,64 +73,67 @@ const Settings = () => {
 
   const handleImageFieldChange = (e) => {
     const { files, name } = e.target;
-    var msg = '';
-    if(name === 'userProfileImg'){
+    var msg = "";
+    if (name === "userProfileImg") {
       if (files[0] && files[0].size > 0 && files[0].size !== null) {
-        
-        var fullFileName = (files[0].name);
+        var fullFileName = files[0].name;
         fullFileName = fullFileName.toLowerCase();
-        var fileExt = fullFileName.substring(0, 1) === '.' ? '' : fullFileName.split('.').slice(1).pop() || '';
-        var fileExtArr = ['jpg', 'jpeg', 'png'];
-    
+        var fileExt =
+          fullFileName.substring(0, 1) === "."
+            ? ""
+            : fullFileName.split(".").slice(1).pop() || "";
+        var fileExtArr = ["jpg", "jpeg", "png"];
+
         if (fileExtArr.indexOf(fileExt) <= -1) {
-          msg = 'Only images of type jpg, jpeg, png are allowed'
+          msg = "Only images of type jpg, jpeg, png are allowed";
           toast(msg);
           return false;
         }
-    
+
         if (files[0].name >= 5120) {
           // 5mb * 1024kb = 5120
-          msg = 'File is larger than 5mb'
+          msg = "File is larger than 5mb";
           toast(msg);
           return false;
         }
         setUserImg(files[0]);
         setUserImgPreview(URL.createObjectURL(files[0]));
       }
+    } else if (name === "userBannerImg") {
+      if (files[0] && files[0].size > 0 && files[0].size !== null) {
+        var fullFileName = files[0].name;
+        fullFileName = fullFileName.toLowerCase();
+        var fileExt =
+          fullFileName.substring(0, 1) === "."
+            ? ""
+            : fullFileName.split(".").slice(1).pop() || "";
+        var fileExtArr = ["jpg", "jpeg", "png"];
+
+        if (fileExtArr.indexOf(fileExt) <= -1) {
+          msg = "Only images of type jpg, jpeg, png are allowed";
+          toast(msg);
+          return false;
+        }
+
+        if (files[0].name >= 5120) {
+          // 5mb * 1024kb = 5120
+          msg = "File is larger than 5mb";
+          toast(msg);
+          return false;
+        }
+        setUserBannerImg(files[0]);
+        setUserBannerImgPreview(URL.createObjectURL(files[0]));
       }
-      else if(name === 'userBannerImg'){
-        if (files[0] && files[0].size > 0 && files[0].size !== null) {
-          
-          var fullFileName = (files[0].name);
-          fullFileName = fullFileName.toLowerCase();
-          var fileExt = fullFileName.substring(0, 1) === '.' ? '' : fullFileName.split('.').slice(1).pop() || '';
-          var fileExtArr = ['jpg', 'jpeg', 'png'];
-      
-          if (fileExtArr.indexOf(fileExt) <= -1) {
-            msg = 'Only images of type jpg, jpeg, png are allowed'
-            toast(msg);
-            return false;
-          }
-      
-          if (files[0].name >= 5120) {
-            // 5mb * 1024kb = 5120
-            msg = 'File is larger than 5mb'
-            toast(msg);
-            return false;
-          }
-          setUserBannerImg(files[0]);
-          setUserBannerImgPreview(URL.createObjectURL(files[0]));
-        }
-        }
     }
-  
+  };
+
   const handleSubmit = async () => {
     var profileData = {
       username: userDetailsPayload.username,
       email: userDetailsPayload.userEmail,
       bio: userDetailsPayload.bio,
       userProfileImg: userImg,
-      userBannerImg: userBannerImg
+      userBannerImg: userBannerImg,
     };
     try {
       const HEADER = "authenticated_and_form_data";
@@ -180,8 +184,12 @@ const Settings = () => {
           userEmail: response.data.data.email,
           bio: response.data.data.bio,
         });
-        setUserBannerImgPreview(APPCONFIG.ENV_BASE_URL+'images/'+response.data.data.userBannerImg);
-        setUserImgPreview(APPCONFIG.ENV_BASE_URL+'images/'+response.data.data.userProfileImg);
+        setUserBannerImgPreview(
+          APPCONFIG.ENV_BASE_URL + "images/" + response.data.data.userBannerImg
+        );
+        setUserImgPreview(
+          APPCONFIG.ENV_BASE_URL + "images/" + response.data.data.userProfileImg
+        );
         // setShowModal(true);
       } else {
         toast("Something went wrong, please try again!");
@@ -197,7 +205,7 @@ const Settings = () => {
     <DashboardLayout>
       <div className="sub-layout-wrapper">
         <div className="center mx-auto max-w-[90%] lg:max-w-[70%]">
-          <div className="settings-tab">
+          {/* <div className="settings-tab">
             {settingStages.map(({ label, stage }) => (
               <div
                 className={clsx(
@@ -218,7 +226,7 @@ const Settings = () => {
                 </span>
               </div>
             ))}
-          </div>
+          </div> */}
           <ToastContainer />
           {settingStage === "edit-profile" ? (
             <div className="setting-edit-profile">
@@ -228,110 +236,116 @@ const Settings = () => {
                 setUserImg={setUserImg}
                 setUserImgBanner={setUserImgBanner}
               /> */}
-              <div className="h-60 rounded-3xl relative">
-      <div className="h-32 w-32 absolute -bottom-14 left-6 rounded-full border-bg-3 border-[4px] z-10">
-        <div className={`h-full w-full rounded-full relative`}>
-          <Image
-            priority
-            src={
-              userImgPreview
-                ? //@ts-ignore
-                userImgPreview
-                : "/images/avatar.png"
-            }
-            alt="user-profile-img"
-            objectFit="cover"
-            layout="fill"
-            className="rounded-full"
-          />
-        </div>
+              <Heading2 title="Profile Settings" />
+              <div className="h-[20rem] relative mt-6">
+                <div className="h-32 w-32 absolute -bottom-14 left-6 rounded-full border-bg-3 border-[4px] z-10">
+                  <div className={`h-full w-full rounded-full relative`}>
+                    <Image
+                      priority
+                      src={
+                        userImgPreview
+                          ? //@ts-ignore
+                            userImgPreview
+                          : "/images/avatar.png"
+                      }
+                      alt="user-profile-img"
+                      objectFit="cover"
+                      layout="fill"
+                      className="rounded-full"
+                    />
+                  </div>
 
-        <input
-          type="file"
-          id="userProfileImg"
-          onChange={(e) => handleImageFieldChange(e)}
-          className="hidden"
-          name="userProfileImg"
-        />
-        <label
-          htmlFor="userProfileImg"
-          className="absolute inset-0 rounded-full flex flex-col justify-center items-center bg-[#1c1e3d49]"
-        >
-          <Image
-            src="/gallery-add.svg"
-            alt="add-img-svg"
-            width="24px"
-            height="24px"
-          />
-        </label>
-      </div>
-      <div className={`h-full w-full ${!userBannerImgPreview ? "hidden" : "block"}`}>
-        <Image
-          src={
-            userBannerImgPreview
-              ? //@ts-ignore
-              userBannerImgPreview
-              : "/avatar.png"
-          }
-          alt="userBannerImg"
-          objectFit="cover"
-          layout="fill"
-          className="rounded-3xl"
-        />
-      </div>
+                  <input
+                    type="file"
+                    id="userProfileImg"
+                    onChange={(e) => handleImageFieldChange(e)}
+                    className="hidden"
+                    name="userProfileImg"
+                  />
+                  <label
+                    htmlFor="userProfileImg"
+                    className="absolute inset-0 rounded-full flex flex-col justify-center items-center bg-[#1c1e3d49]"
+                  >
+                    <Image
+                      src="/gallery-add.svg"
+                      alt="add-img-svg"
+                      width="24px"
+                      height="24px"
+                    />
+                  </label>
+                </div>
+                <div
+                  className={`h-full w-full ${
+                    !userBannerImgPreview ? "hidden" : "block"
+                  }`}
+                >
+                  <Image
+                    src={
+                      userBannerImgPreview
+                        ? //@ts-ignore
+                          userBannerImgPreview
+                        : "/avatar.png"
+                    }
+                    alt="userBannerImg"
+                    objectFit="cover"
+                    layout="fill"
+                    className="rounded-3xl"
+                  />
+                </div>
 
-      <input
-        type="file"
-        id="userBannerImg"
-        onChange={(e) => handleImageFieldChange(e)}
-        className="hidden"
-        name="userBannerImg"
-      />
-      <label
-        htmlFor="userBannerImg"
-        className="absolute inset-0 rounded-3xl flex flex-col justify-center items-center bg-[#1c1e3d7f]"
-      >
-        <Image
-          src="/gallery-add.svg"
-          alt="add-img-svg"
-          width="24px"
-          height="24px"
-        />
-        <span className={clsx(userImgBanner ? "hidden" : "block")}>
-          Click to change image
-        </span>
-      </label>
-    </div>
-              <Heading2 title="Edit your profile" />
+                <input
+                  type="file"
+                  id="userBannerImg"
+                  onChange={(e) => handleImageFieldChange(e)}
+                  className="hidden"
+                  name="userBannerImg"
+                />
+                <label
+                  htmlFor="userBannerImg"
+                  className="absolute inset-0 rounded-3xl flex flex-col justify-center items-center bg-[#1c1e3d7f]"
+                >
+                  <Image
+                    src="/gallery-add.svg"
+                    alt="add-img-svg"
+                    width="24px"
+                    height="24px"
+                  />
+                  <span className={clsx(userImgBanner ? "hidden" : "block")}>
+                    Click to change image
+                  </span>
+                </label>
+              </div>
+
               <div className="setting-edit-profile-form">
                 <Input2
                   name="username"
                   label="Username"
-                  placeholder="0xb89ae3009882e61db918fe19f75d0aea20d79e2e"
+                  placeholder="Please enter your username"
                   onChange={handleFieldChange}
                   value={userDetailsPayload.username}
                 />
-                <Input2
+                {/* <Input2
                   name="name"
                   label="Name"
                   placeholder="Peter Doe"
                   onChange={handleFieldChange}
                   value={userDetailsPayload.name}
-                />
+                /> */}
                 <Input2
                   name="userEmail"
                   label="Email"
-                  type="email"
-                  placeholder="peterdoe@gmail.com"
+                  placeholder="Please enter your email"
                   onChange={handleFieldChange}
                   value={userDetailsPayload.userEmail}
                 />
                 <div>
-                  <span className="create-new-nft-wrapper-2-label">Bio</span>
+                  <span className="create-new-nft-wrapper-2-label">
+                    Description
+                  </span>
                   <textarea
                     name="bio"
                     className="w-full bg-transparent  outline-none select"
-                    placeholder="Enter your bio..."
+                    placeholder="Enter your description..."
                     rows={5}
                     maxLength={250}
                     onChange={handleFieldChange}

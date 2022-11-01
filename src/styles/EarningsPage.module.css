@@ -1,5 +1,5 @@
 .earnings-cards {
-  @apply grid grid-cols-2 gap-10 shadow;
+  @apply grid lg:grid-cols-2 gap-10 shadow;
 }
 
 .total-earnings-history-wrapper {
