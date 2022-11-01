@@ -3,14 +3,8 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { FeaturedIcon } from "@/src/components/atoms/vectors";
-// import { ToastContainer, toast } from "react-toastify";
-import {
-  HeroIndicator,
-  Button,
-  Heading,
-  Tag,
-  Loader,
-} from "@/src/components/atoms";
+import { ToastContainer, toast } from "react-toastify";
+import { HeroIndicator, Button, Heading, Tag } from "@/src/components/atoms";
 
 import {
   NftHeaderCard,
@@ -112,21 +106,17 @@ const Home: NextPage = () => {
                 />
               </div>
               <div className="hero-cards">
-              {
-                  featuredCollections?
-                    featuredCollections.map((val, i) => (
+                {featuredCollections
+                  ? featuredCollections.map((val, i) => (
                       <HeroCard
-                      key={val._id}
-                      {...val}
-                      onClick={() => {
-                        setActiveCard(val);
-                      }}
-                    />
-                      )
-                    )
-                    :
-                    ""
-                }
+                        key={val._id}
+                        {...val}
+                        onClick={() => {
+                          setActiveCard(val);
+                        }}
+                      />
+                    ))
+                  : ""}
               </div>
               <div className="flex w-full mb-4 lg:mb-0 items-center justify-center lg:block">
                 <HeroIndicator
@@ -145,24 +135,18 @@ const Home: NextPage = () => {
                 // selectTitle="Last 24 hours"
               />
               <div className="hero-section-1-collection">
-                {
-                  collections?
-                    collections.map((val, i) => (
-                        <NftMiniCard
-                        {...val} key={i}
-                        />
-                      )
-                    )
-                    :
-                    ""
-                }
+                {collections
+                  ? collections.map((val, i) => (
+                      <NftMiniCard {...val} key={i} />
+                    ))
+                  : ""}
               </div>
               <span className="mobile-see-all-btn">See All</span>
             </section>
-            
+
             <section>
               <NftHeaderCard heading="Featured Drops" />
-                <NftSlider data={items} />
+              <NftSlider data={items} />
               <span className="mobile-see-all-btn">See All</span>
             </section>
             {/* <section>
