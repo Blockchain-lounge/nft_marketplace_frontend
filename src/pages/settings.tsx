@@ -35,7 +35,7 @@ const Settings = () => {
   const [userBannerImgPreview, setUserBannerImgPreview] =
     useState<FileList | null>(null);
   const [myProfile, setMyProfile] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(true);
   const [userDetailsPayload, setUserDetailsPayload] = useState({
     username: "",
     userEmail: "",
@@ -220,6 +220,7 @@ const Settings = () => {
           bannerImg: response.data.data.userBannerImg,
           profileImg: response.data.data.userProfileImg,
         });
+        setIsLoading(false);
         // setUserBannerImgPreview(
         //   APPCONFIG.ENV_BASE_URL + "images/" + response.data.data.userBannerImg
         // );
@@ -239,7 +240,7 @@ const Settings = () => {
   }, [myProfile]);
 
   return (
-    <DashboardLayout isLoading={!userDetailsPayload.bannerImg}>
+    <DashboardLayout isLoading={isLoading || !userDetailsPayload.bannerImg}>
       <div className="sub-layout-wrapper">
         <div className="center mx-auto max-w-[90%] lg:max-w-[70%]">
           {/* <div className="settings-tab">
