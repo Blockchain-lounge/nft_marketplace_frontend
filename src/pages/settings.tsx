@@ -175,15 +175,15 @@ const Settings = () => {
       const DATA = profileData;
 
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-        if (response.status == 400) {
+        if (response.status === 400 || response.status === 404) {
           var error = response.data.error;
           toast(error);
           return;
         }
-        if (response.status == 401) {
+        if (response.status === 401) {
           toast("Unauthorized request!");
           return;
-        } else if (response.status == 200) {
+        } else if (response.status === 200) {
           toast("Profile updated");
           push("/profile");
         } else {
