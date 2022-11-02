@@ -97,7 +97,7 @@ const Explore = () => {
   return (
     <DashboardLayout isLoading={isLoading}>
       <div className="sub-layout-wrapper scrollbar-hide">
-        <div className="center explore-wrapper">
+        <div className="center">
           <Heading2 title="Explore Collections" />
           {/* <Heading2 title="Recently Collections" /> */}
           <Tab

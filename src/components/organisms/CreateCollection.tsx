@@ -35,6 +35,8 @@ const CreateCollection: FC<ICollectionProps> = ({
   const [collectionLogo, setCollectionLogo] = useState("");
   const [collectionLogoPreview, setCollectionLogoPreview] = useState("");
 
+  const [isTransloading, setIsTransLoading] = useState(false);
+
   // const [validationError, setValidationError] = useState(false);
   const [collectionPayload, setCollectionPayload] = useState({
     collection_name: "",
@@ -134,6 +136,7 @@ const CreateCollection: FC<ICollectionProps> = ({
       collectionFeaturedImage: collectionFeaturedArt,
       collectionLogoImage: collectionLogo,
     };
+    setIsTransLoading(true);
     try {
       const HEADER = "authenticated_and_form_data";
       const REQUEST_URL = "nft-collection/store";
@@ -151,6 +154,7 @@ const CreateCollection: FC<ICollectionProps> = ({
           return;
         } else if (response.status == 201) {
           toast(response.data.message);
+          setIsTransLoading(false);
           closeModal((prev) => !prev);
           setCollectionPayload({
             ...collectionPayload,
@@ -332,6 +336,7 @@ const CreateCollection: FC<ICollectionProps> = ({
         title="Create collection"
         twClasses="w-full"
         onClick={handleSubmit}
+        isDisabled={isTransloading}
       />
     </div>
   );

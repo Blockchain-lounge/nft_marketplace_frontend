@@ -235,12 +235,12 @@ const ViewNft = () => {
                   className="rounded-xl"
                 />
               </div>
-              <div className="space-y-4 flex flex-col justify-between">
+              <div className="space-y-12 flex flex-col ">
                 <div>
-                  <div className="flex items-center mb-9">
+                  <div className="flex items-center mb-4">
                     <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
                       <Image
-                        src="/favicon.ico"
+                        src="/images/favicon.ico"
                         alt="colx-img"
                         layout="fill"
                         objectFit="contain"
@@ -283,7 +283,7 @@ const ViewNft = () => {
                 </div> */}
                 <div className="view-hero-nft-cta-wrapper">
                   <div className="flex w-full gap-x-6">
-                    <div className="p-3 bg-bg-5 rounded-[1.25rem] w-full">
+                    <div className="p-3 bg-bg-5 rounded-md w-full">
                       <span className="text-txt-2 text-xl block mb-4">
                         Price
                       </span>
@@ -330,7 +330,7 @@ const ViewNft = () => {
                         <CartIcon />
                       </span> */}
                     </div>
-                    <Button
+                    {/* <Button
                       title="Place a bid"
                       wt="w-full"
                       outline2
@@ -338,7 +338,7 @@ const ViewNft = () => {
                         setModaltype("bid");
                         setShowModal((prev) => !prev);
                       }}
-                    />
+                    /> */}
                   </div>
                 </div>
               </div>
@@ -672,9 +672,9 @@ const ViewNft = () => {
           </div>
         ) : (
           <div className="flex flex-col items-center max-w-[60%] mx-auto gap-y-5 text-clip">
-            <span className="font-bold flex gap-x-1 text-xl">
+            <span className="font-bold flex gap-x-1 text-xl items-center">
               You are about to purchase
-              <span className="text-txt-2">
+              <span className="text-txt-2 font-bold  text-xl">
                 {itemDetail !== null ? itemDetail.item_title : ""}
               </span>
               {/* from
