@@ -240,7 +240,7 @@ const Settings = () => {
   }, [myProfile]);
 
   return (
-    <DashboardLayout isLoading={isLoading || !userDetailsPayload.bannerImg}>
+    <DashboardLayout isLoading={isLoading}>
       <div className="sub-layout-wrapper">
         <div className="center mx-auto max-w-[90%] lg:max-w-[70%]">
           {/* <div className="settings-tab">
