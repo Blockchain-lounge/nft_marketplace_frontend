@@ -137,7 +137,7 @@ const CreateCollection: FC<ICollectionProps> = ({
       const DATA = collectionData;
 
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-        if (response.status == 400) {
+        if (response.status == 400 || response.status == 404) {
           var error = response.data.error;
           toast(error);
           return;

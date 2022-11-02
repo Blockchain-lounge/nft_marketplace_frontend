@@ -28,8 +28,9 @@ const HeroCard = ({
       <div className="h-[80%] w-[100%] relative mb-2">
         <Image
           src={
-            cover_image_id ?
-            APPCONFIG.ENV_BASE_URL+'images/'+cover_image_id : ""
+            // cover_image_id ?
+            // cover_image_id : 
+            ""
           }
           alt={name}
           layout="fill"
