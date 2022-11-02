@@ -157,7 +157,7 @@ const Home: NextPage = () => {
             </section>
 
             <section>
-              <NftHeaderCard heading="Featured Drops" />
+              <NftHeaderCard heading="Featured Drops" to="/explore" />
               <NftSlider data={items} />
               <span className="mobile-see-all-btn">See All</span>
             </section>

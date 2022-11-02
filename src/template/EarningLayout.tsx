@@ -14,7 +14,7 @@ const EarningLayout = ({
 }: {
   children: ReactNode;
   title: string;
-  isLoading: boolean;
+  isLoading?: boolean;
   cta?: {
     label: string;
     to?: string;

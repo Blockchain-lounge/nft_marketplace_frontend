@@ -1,6 +1,9 @@
- // @ts-nocheck
+// @ts-nocheck
 import clsx from "clsx";
 import Image from "next/image";
+
+import { uploadFile } from "../../functions/offChain/apiRequests";
+
 import React, {
   ChangeEvent,
   Dispatch,
@@ -22,19 +25,20 @@ const CreateCollection: FC<ICollectionProps> = ({
   closeModal,
   changeModalType,
 }) => {
-  const [collectionBannerPreview, setCollectionBannerPreview] = useState('')
-  const [collectionBanner, setCollectionBanner] = useState('');
-  
+  const [collectionBannerPreview, setCollectionBannerPreview] = useState("");
+  const [collectionBanner, setCollectionBanner] = useState("");
+
   const [collectionFeaturedArt, setCollectionFeaturedArt] = useState("");
-  const [collectionFeaturedArtPreview, setCollectionFeaturedArtPreview] = useState('')
+  const [collectionFeaturedArtPreview, setCollectionFeaturedArtPreview] =
+    useState("");
 
   const [collectionLogo, setCollectionLogo] = useState("");
-  const [collectionLogoPreview, setCollectionLogoPreview] = useState('')
+  const [collectionLogoPreview, setCollectionLogoPreview] = useState("");
 
   // const [validationError, setValidationError] = useState(false);
   const [collectionPayload, setCollectionPayload] = useState({
     collection_name: "",
-    collection_description: ""
+    collection_description: "",
   });
 
   const handleFieldChange = (
@@ -47,10 +51,10 @@ const CreateCollection: FC<ICollectionProps> = ({
     });
   };
 
-  const validateFileInput = (files, fieldName) =>{
+  const validateFileInput = (files, fieldName) => {
     var msg = "";
     if (!files[0] || files[0].size == 0 || files[0].size == null) {
-      msg = fieldName+" is required!";
+      msg = fieldName + " is required!";
       alert(msg);
       setValidationError(true);
       return false;
@@ -75,30 +79,35 @@ const CreateCollection: FC<ICollectionProps> = ({
       toast(msg);
       return false;
     }
-  }
-  const handleImageFieldChange = (e) => {
+  };
+  const handleImageFieldChange = async (e) => {
     const { files, name } = e.target;
-    var fieldName = '';
-    if(name === 'collectionBannerImage'){
-      fieldName = 'Collection banner image';
-      validateFileInput(files,fieldName);
-      setCollectionBanner(files[0]);
+    var fieldName = "";
+    if (name === "collectionBannerImage") {
+      fieldName = "Collection banner image";
+      validateFileInput(files, fieldName);
+      // setCollectionBanner(files[0]);
+      const { imgUrl } = await uploadFile(files[0], toast);
+      setCollectionBanner(imgUrl);
       setCollectionBannerPreview(URL.createObjectURL(files[0]));
     }
-   if(name === 'collectionFeaturedImage'){
-      fieldName = 'Collection featured image';
-      validateFileInput(files,fieldName);
-      setCollectionFeaturedArt(files[0]);
+    if (name === "collectionFeaturedImage") {
+      fieldName = "Collection featured image";
+      validateFileInput(files, fieldName);
+      // setCollectionFeaturedArt(files[0]);
+      const { imgUrl } = await uploadFile(files[0], toast);
+      setCollectionFeaturedArt(imgUrl);
       setCollectionFeaturedArtPreview(URL.createObjectURL(files[0]));
     }
-   if(name === 'collectionLogoImage'){
-      fieldName = 'Collection logo image';
-      validateFileInput(files,fieldName);
-      setCollectionLogo(files[0]);
+    if (name === "collectionLogoImage") {
+      fieldName = "Collection logo image";
+      validateFileInput(files, fieldName);
+      // setCollectionLogo(files[0]);
+      const { imgUrl } = await uploadFile(files[0], toast);
+      setCollectionLogo(imgUrl);
       setCollectionLogoPreview(URL.createObjectURL(files[0]));
-    }
-    else{
-      return
+    } else {
+      return;
     }
   };
 
@@ -113,12 +122,7 @@ const CreateCollection: FC<ICollectionProps> = ({
       msg = "Collection name or/and decsription is still empty";
       toast(msg);
       return false;
-    }
-    else if (
-      !collectionBanner ||
-      !collectionFeaturedArt ||
-      !collectionLogo
-    ) {
+    } else if (!collectionBanner || !collectionFeaturedArt || !collectionLogo) {
       msg = "Some the required images are still not added";
       toast(msg);
       return false;
@@ -148,6 +152,14 @@ const CreateCollection: FC<ICollectionProps> = ({
         } else if (response.status == 201) {
           toast(response.data.message);
           closeModal((prev) => !prev);
+          setCollectionPayload({
+            ...collectionPayload,
+            collection_name: "",
+            collection_description: "",
+          });
+          setCollectionBanner(null);
+          setCollectionFeaturedArt(null);
+          setCollectionLogo(null);
         } else {
           toast("Something went wrong, please try again!");
           return;
@@ -172,9 +184,7 @@ const CreateCollection: FC<ICollectionProps> = ({
           <input
             type="file"
             id="userImg"
-            onChange={(e) =>
-              handleImageFieldChange(e)
-            }
+            onChange={(e) => handleImageFieldChange(e)}
             className="hidden"
             name="collectionBannerImage"
           />
@@ -199,7 +209,9 @@ const CreateCollection: FC<ICollectionProps> = ({
               height="24px"
             />
             <span
-              className={clsx(collectionBannerPreview ? "hidden" : "block mt-2")}
+              className={clsx(
+                collectionBannerPreview ? "hidden" : "block mt-2"
+              )}
             >
               Click to upload collection banner image
             </span>
@@ -216,9 +228,7 @@ const CreateCollection: FC<ICollectionProps> = ({
           <input
             type="file"
             id="featuredCollection"
-            onChange={(e) =>
-              handleImageFieldChange(e)
-            }
+            onChange={(e) => handleImageFieldChange(e)}
             className="hidden"
             name="collectionFeaturedImage"
           />
@@ -243,7 +253,9 @@ const CreateCollection: FC<ICollectionProps> = ({
               height="24px"
             />
             <span
-              className={clsx(collectionFeaturedArtPreview ? "hidden" : "block mt-2")}
+              className={clsx(
+                collectionFeaturedArtPreview ? "hidden" : "block mt-2"
+              )}
             >
               Click to change image
             </span>
@@ -260,9 +272,7 @@ const CreateCollection: FC<ICollectionProps> = ({
           <input
             type="file"
             id="logoCollection"
-            onChange={(e) =>
-              handleImageFieldChange(e)
-            }
+            onChange={(e) => handleImageFieldChange(e)}
             className="hidden"
             name="collectionLogoImage"
           />

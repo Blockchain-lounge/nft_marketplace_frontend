@@ -15,6 +15,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { apiRequest } from "../../functions/offChain/apiRequests";
 import APPCONFIG from "../../constants/Config";
+import { ToastContainer, toast } from "react-toastify";
 
 const ViewCollection = () => {
   const [collectionImg, setCollectionImg] = useState("");
@@ -36,6 +37,7 @@ const ViewCollection = () => {
   const activityHeaders = ["Item", "Price", "From", "To"];
   const [singleCollectionsData, setSingleCollectionsData] = useState("");
   const [singleCollectionDetail, setSingleCollectionDetail] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchCollectionItems = async (id: string) => {
     if (id !== undefined) {
@@ -52,6 +54,7 @@ const ViewCollection = () => {
         } else if (response.status == 200) {
           setSingleCollectionsData(response.data.data.items);
           setSingleCollectionDetail(response.data.data.collection);
+          setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
           return;
@@ -63,8 +66,10 @@ const ViewCollection = () => {
     fetchCollectionItems(id as string);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
   return (
-    <DashboardLayout>
+    <DashboardLayout isLoading={isLoading}>
+      <ToastContainer />
       <div className="sub-layout-wrapper">
         <div className="center">
           <div className="single-collection-banner-img">
@@ -79,9 +84,7 @@ const ViewCollection = () => {
                         undefined &&
                       singleCollectionDetail.collectionLogoImage !== "" &&
                       singleCollectionDetail.collectionLogoImage !== null
-                        ? APPCONFIG.ENV_BASE_URL +
-                          "images/" +
-                          singleCollectionDetail.collectionLogoImage
+                        ? singleCollectionDetail.collectionLogoImage
                         : "/images/avatar.png"
                     }
                     alt="collection-logo"
@@ -97,11 +100,7 @@ const ViewCollection = () => {
               singleCollectionDetail.cover_image_id !== "" &&
               singleCollectionDetail.cover_image_id !== null ? (
                 <Image
-                  src={
-                    APPCONFIG.ENV_BASE_URL +
-                    "images/" +
-                    singleCollectionDetail.cover_image_id
-                  }
+                  src={singleCollectionDetail.cover_image_id}
                   alt="collection-img-banner"
                   objectFit="cover"
                   layout="fill"
@@ -189,6 +188,7 @@ const ViewCollection = () => {
 
           {activeStage === "items" ? (
             <div className="single-collection-items">
+              <Heading2 title="You have no items in this collection." />
               {/*single collections filters*/}
               {/* <div className="single-collection-filter">
                 <div

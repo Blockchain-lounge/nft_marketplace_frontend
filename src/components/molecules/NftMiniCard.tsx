@@ -20,6 +20,7 @@ const NftMiniCards = ({
   _id,
   name,
   cover_image_id,
+  collectionFeaturedImage,
   collectionLogoImage,
 }: INftminicards) => {
   const { push } = useRouter();
@@ -32,11 +33,7 @@ const NftMiniCards = ({
       <div className="flex items-center">
         <div className="img relative">
           <Image
-            src={
-              cover_image_id
-                ? APPCONFIG.ENV_BASE_URL + "images/" + cover_image_id
-                : ""
-            }
+            src={collectionLogoImage ? collectionLogoImage : ""}
             alt={name}
             layout="fill"
             objectFit="cover"
@@ -51,12 +48,13 @@ const NftMiniCards = ({
           </div>
         </div>
       </div>
+
       <div>
         <span className="nft-mini-cards-val2">+5.67</span>
-        <div className="flex w-full justify-between">
+        {/* <div className="flex w-full justify-between">
           <CoinIcon color="#BDBFC7" />
-          {/* <span className="nft-mini-cards-val3">{price}</span> */}
-        </div>
+          <span className="nft-mini-cards-val3">{price}</span>
+        </div> */}
       </div>
     </div>
   );

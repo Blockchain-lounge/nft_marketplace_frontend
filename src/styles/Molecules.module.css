@@ -347,7 +347,10 @@
 /*Nft Mini Cards*/
 
 .nft-mini-cards-wrapper {
-  @apply bg-[#222237] py-6 px-[1.875rem] rounded-[1rem] grid grid-cols-[0.2fr_1fr_0.2fr] items-center h-[7.375rem];
+  @apply bg-[#222237] py-6 px-[1.875rem] rounded-[1rem] grid 
+  grid-cols-[0.8fr_0.2fr]
+  /* grid-cols-[0.2fr_1fr_0.2fr]  */
+  items-center h-[7.375rem];
 }
 
 .nft-mini-cards-index {

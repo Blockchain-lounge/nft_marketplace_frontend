@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { apiRequest } from "../functions/offChain/apiRequests";
 import DashboardLayout from "../template/DashboardLayout";
 import { BannerImg, Footer2 } from "../components/organisms";
+import { uploadFile } from "../functions/offChain/apiRequests";
 import Image from "next/image";
 import {
   CheckIcon,
@@ -73,28 +74,28 @@ const Settings = () => {
     });
   };
 
-  const uploadFile = async (file) => {
-    let { data } = await axios.post("/api/s3/uploadFile", {
-      name: file.name,
-      type: file.type,
-    });
-    //fetching out an URL
-    const url = data.url;
+  // export const uploadFile = async (file) => {
+  //   let { data } = await axios.post("/api/s3/uploadFile", {
+  //     name: file.name,
+  //     type: file.type,
+  //   });
+  //   //fetching out an URL
+  //   const url = data.url;
 
-    if (url) {
-      toast("Please wait, while your image load");
-    }
-    //uploading file
-    let res = await axios.put(url, file, {
-      headers: {
-        "Content-type": file.type,
-      },
-    });
+  //   if (url) {
+  //     toast("Please wait, while your image load");
+  //   }
+  //   //uploading file
+  //   let res = await axios.put(url, file, {
+  //     headers: {
+  //       "Content-type": file.type,
+  //     },
+  //   });
 
-    const imgUrl = url.split("?")[0];
+  //   const imgUrl = url.split("?")[0];
 
-    return { imgUrl };
-  };
+  //   return { imgUrl };
+  // };
 
   const handleImageFieldChange = async (e) => {
     const { files, name } = e.target;
@@ -122,7 +123,7 @@ const Settings = () => {
           return false;
         }
         setUserImg(files[0]);
-        const { imgUrl } = await uploadFile(files[0]);
+        const { imgUrl } = await uploadFile(files[0], toast);
         setUserImgPreview(imgUrl);
 
         // setUserImgPreview(URL.createObjectURL(files[0]));
@@ -150,7 +151,7 @@ const Settings = () => {
           return false;
         }
         setUserBannerImg(files[0]);
-        const { imgUrl } = await uploadFile(files[0]);
+        const { imgUrl } = await uploadFile(files[0], toast);
         setUserBannerImgPreview(imgUrl);
         // setUserBannerImgPreview(URL.createObjectURL(files[0]));
       }

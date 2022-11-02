@@ -17,6 +17,7 @@ const CollectionCard: NextPage<Partial<ICollectionCard>> = ({
   _id,
   name,
   cover_image_id,
+  collectionFeaturedImage,
   collectionLogoImage,
 }) => {
   const { push } = useRouter();
@@ -27,11 +28,7 @@ const CollectionCard: NextPage<Partial<ICollectionCard>> = ({
         onClick={() => push(`/single-collection/${_id}`)}
       >
         <Image
-          src={
-            cover_image_id
-              ? APPCONFIG.ENV_BASE_URL + "images/" + cover_image_id
-              : ""
-          }
+          src={collectionFeaturedImage ? collectionFeaturedImage : ""}
           alt={name}
           layout="fill"
           objectFit="cover"
@@ -41,11 +38,7 @@ const CollectionCard: NextPage<Partial<ICollectionCard>> = ({
       <div className="bg-white h-[20%] rounded-b-lg flex justify-center gap-x-4 items-center">
         <div className="relative h-14 w-14">
           <Image
-            src={
-              collectionLogoImage
-                ? APPCONFIG.ENV_BASE_URL + "images/" + collectionLogoImage
-                : ""
-            }
+            src={collectionLogoImage ? collectionLogoImage : ""}
             alt={name}
             layout="fill"
             objectFit="cover"

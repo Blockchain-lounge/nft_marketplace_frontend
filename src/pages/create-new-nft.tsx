@@ -44,10 +44,13 @@ const CreateNewNft = () => {
     nftName: "",
     nftSymbol: "",
     description: "",
-    supply: "",
+    supply: "1",
     royalties: "",
     collection: "",
   });
+  const [nftPayloadselect, setNftPayloadSelect] = useState(
+    "Select a collection"
+  );
   const [properties, setProperties] = useState([
     { label: "clothe", value: "Hoodie" },
     { label: "Ape", value: "Glasses" },
@@ -55,6 +58,7 @@ const CreateNewNft = () => {
   ]);
   const [priceListType, setPriceListType] = useState("");
   const [userCollectionList, setUserCollectionList] = useState([]);
+  const [collections, setCollections] = useState([]);
   const [nftImage, setNftImage] = useState([]);
   const [nftCoverImage, setNftCoverImage] = useState("");
   const [nftBufferCoverImage, setNftBufferCoverImage] = useState("");
@@ -79,26 +83,42 @@ const CreateNewNft = () => {
     },
   });
 
-  // const IPFS = IPFSCLIENT({
-  //   host: 'ipfs.infura.io',
-  //   port: 5001,
-  //   protocol: 'https',
-  //   headers: {
-  //     authorization: `Basic ${Buffer.from(projectIdAndSecret).toString(
-  //       'base64'
-  //     )}`,
-  //   },
-  // });
-
   const priceListingTypes = [
     { type: "Fixed price", icon: <FixedPriceIcon /> },
     { type: "Open for bids", icon: <BidIcon /> },
     { type: "Auction", icon: <AuctionIcon /> },
   ];
   const fees = [
-    { label: "Service fee", value: "1%" },
+    { label: "Service fee", value: "2%" },
     { label: "You will receive", value: "-" },
   ];
+
+  const fetchCollections = async () => {
+    try {
+      const HEADER = {};
+      const REQUEST_URL = "nft-collection/index";
+      const METHOD = "GET";
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          return;
+        } else if (response.status == 401) {
+          toast("Unauthorized request!");
+          return;
+        } else if (response.status == 200) {
+          setCollections(response.data.data);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    } catch (error) {
+      toast("Something went wrong, please try again!");
+      return;
+    }
+  };
 
   const handleFieldChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -234,11 +254,11 @@ const CreateNewNft = () => {
           item_art_url: itemIPFSURL,
           item_base_url: baseURI,
           collection_id:
-            nftPayload.collection == "" ||
-            nftPayload.collection == null ||
-            nftPayload.collection == undefined
+            nftPayloadselect == "" ||
+            nftPayloadselect == null ||
+            nftPayloadselect == undefined
               ? "Uncatgorized"
-              : nftPayload.collection,
+              : nftPayloadselect,
         };
         toast("Finalizing the transaction off-chain...");
         const HEADER = "authenticated";
@@ -274,9 +294,12 @@ const CreateNewNft = () => {
     connectedAccount().then((response) => {
       if (response !== null) {
         setConnectedAddress(response);
+        fetchCollections();
       }
     });
   }, [userCollectionList]);
+
+  // console.log(collections);
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper">
@@ -402,8 +425,12 @@ const CreateNewNft = () => {
                     Create collection
                   </span>
                 </div>
-                {/* <Select title="Select collection" /> */}
-                <select
+                <Select
+                  title={nftPayloadselect}
+                  lists={collections}
+                  onClick={setNftPayloadSelect}
+                />
+                {/* <select
                   className="w-full bg-transparent  outline-none select"
                   //@ts-ignore
                   onChange={(e) => handleFieldChange(e)}
@@ -412,7 +439,7 @@ const CreateNewNft = () => {
                   <option value="Uncategorized">Uncategorized</option>
                   <option value="Arts">Arts</option>
                   <option value="Flyers">Flyers</option>
-                </select>
+                </select> */}
               </div>
               <Input2
                 label="Supply"
@@ -512,7 +539,7 @@ const CreateNewNft = () => {
                   </div>
                   <span className="text-[1.1rem] text-black ">
                     {/*replace with collection name*/}
-                    {nftPayload.collection || "Uncategorized"}
+                    {nftPayloadselect || "Uncategorized"}
                   </span>
                 </div>
               </div>
