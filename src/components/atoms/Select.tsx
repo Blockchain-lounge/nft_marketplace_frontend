@@ -18,7 +18,7 @@ const Select = ({
   placeholder: string;
   lists: Array<any>;
   onClick: Dispatch<SetStateAction<string>>;
-  onClick2: (val: { label: string; id: string }) => void;
+  onClick2?: (val: { label: string; id: string }) => void;
 }) => {
   const [openSubmenu, setOpenSubmenu] = useState(false);
   const handleOpenSubmenu = () => {
@@ -29,7 +29,7 @@ const Select = ({
     setOpenSubmenu((prev) => !prev);
   };
   const handleSelect2 = (file: { label: string; id: string }) => {
-    onClick2(file);
+    (onClick2 as (file: { label: string; id: string }) => void)(file);
     setOpenSubmenu((prev) => !prev);
   };
 
