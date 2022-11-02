@@ -10,6 +10,7 @@ export interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
   prefix?: ReactNode;
   suffix?: ReactNode;
   wt?: string;
+  isDisabled?: boolean;
 }
 
 const Button: FC<IButton> = ({
@@ -20,6 +21,7 @@ const Button: FC<IButton> = ({
   prefix,
   suffix,
   wt,
+  isDisabled,
   ...rest
 }) => {
   return (
@@ -30,10 +32,20 @@ const Button: FC<IButton> = ({
         wt ? wt : "w-[11.9rem]",
         twClasses
       )}
+      disabled={isDisabled}
       {...rest}
     >
       {prefix && <span>{prefix}</span>}
-      <span>{title}</span>
+      {isDisabled ? (
+        <span
+          className={clsx(
+            "btn-loader",
+            outline || outline2 ? "btn-loader-outline" : "btn-loader-primary"
+          )}
+        ></span>
+      ) : (
+        <span>{title}</span>
+      )}
       {suffix && <span>{suffix}</span>}
     </button>
   );

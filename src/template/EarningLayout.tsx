@@ -10,9 +10,11 @@ const EarningLayout = ({
   children,
   title,
   cta,
+  isLoading,
 }: {
   children: ReactNode;
   title: string;
+  isLoading: boolean;
   cta?: {
     label: string;
     to?: string;
@@ -27,7 +29,7 @@ const EarningLayout = ({
   //   cta?.onClick;
   // };
   return (
-    <DashboardLayout>
+    <DashboardLayout isLoading={isLoading}>
       <div className="sub-layout-wrapper">
         <div className="center">
           <div className="earnings-actions">

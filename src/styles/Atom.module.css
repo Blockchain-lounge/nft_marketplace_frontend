@@ -26,6 +26,28 @@
   @apply bg-gradient-to-r from-[#2F79F9] to-[#3DAEFA] rounded-[0.625rem];
 }
 
+.btn-primary:disabled,
+.btn-outline:disabled,
+.btn-outline-2:disabled {
+  cursor: not-allowed;
+}
+
+/*Donut*/
+
+.btn-loader {
+  @apply inline-block border-[0.25rem] rounded-full w-8 h-8;
+
+  animation: donut-spin 1.2s linear infinite;
+}
+
+.btn-loader-primary {
+  @apply border-border-1-line border-b-[#121212];
+}
+
+.btn-loader-outline {
+  @apply border-[#121212] border-b-[#2f79f9de];
+}
+
 /*Check Box*/
 
 .checkbox {
@@ -123,6 +145,8 @@ input {
     transform: rotate(360deg);
   }
 }
+
+/*Donut*/
 
 .donut {
   @apply inline-block border-[0.25rem] border-[#000000e2] border-b-[#2f79f9de] rounded-full w-[4rem] h-[4rem];

@@ -1,4 +1,5 @@
 .explore-wrapper {
+  @apply h-[70vh];
 }
 
 .explore-items-wrapper {

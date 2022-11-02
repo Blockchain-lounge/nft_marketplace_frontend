@@ -6,7 +6,9 @@ const nextConfig = {
       "cloudax.infura-ipfs.io",
       "cloudax-nft-marketplace.io",
       "market-api-staging.cloudax.finance",
-      "cloudax-api.herokuapp.com"
+      "cloudax-api.herokuapp.com",
+      "cloudaxnftmarketplace.s3.amazonaws.com",
+      "cloudaxnftmarketplace.s3.us-east-2.amazonaws.com",
     ],
   },
   reactStrictMode: true,

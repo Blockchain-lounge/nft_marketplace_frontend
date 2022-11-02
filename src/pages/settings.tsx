@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 // @ts-nocheck
 import { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import clsx from "clsx";
@@ -20,6 +21,7 @@ import { Button, CheckBox, Heading2, Input2 } from "../components/atoms";
 import APPCONFIG from "../constants/Config";
 // import { apiPost } from "../utilities/requests/apiRequest";
 import UseAuth from "../hooks/useAuth";
+import axios from "axios";
 
 const Settings = () => {
   const { push } = useRouter();
@@ -37,8 +39,8 @@ const Settings = () => {
     username: "",
     userEmail: "",
     bio: "",
-    userBannerImg: "",
-    userBannerImg: "",
+    bannerImg: "",
+    profileImg: "",
   });
   const settingStages = [
     { label: "Edit profile", stage: "edit-profile" },
@@ -71,7 +73,30 @@ const Settings = () => {
     });
   };
 
-  const handleImageFieldChange = (e) => {
+  const uploadFile = async (file) => {
+    let { data } = await axios.post("/api/s3/uploadFile", {
+      name: file.name,
+      type: file.type,
+    });
+    //fetching out an URL
+    const url = data.url;
+
+    if (url) {
+      toast("Please wait, while your image load");
+    }
+    //uploading file
+    let res = await axios.put(url, file, {
+      headers: {
+        "Content-type": file.type,
+      },
+    });
+
+    const imgUrl = url.split("?")[0];
+
+    return { imgUrl };
+  };
+
+  const handleImageFieldChange = async (e) => {
     const { files, name } = e.target;
     var msg = "";
     if (name === "userProfileImg") {
@@ -97,7 +122,10 @@ const Settings = () => {
           return false;
         }
         setUserImg(files[0]);
-        setUserImgPreview(URL.createObjectURL(files[0]));
+        const { imgUrl } = await uploadFile(files[0]);
+        setUserImgPreview(imgUrl);
+
+        // setUserImgPreview(URL.createObjectURL(files[0]));
       }
     } else if (name === "userBannerImg") {
       if (files[0] && files[0].size > 0 && files[0].size !== null) {
@@ -122,9 +150,14 @@ const Settings = () => {
           return false;
         }
         setUserBannerImg(files[0]);
-        setUserBannerImgPreview(URL.createObjectURL(files[0]));
+        const { imgUrl } = await uploadFile(files[0]);
+        setUserBannerImgPreview(imgUrl);
+        // setUserBannerImgPreview(URL.createObjectURL(files[0]));
       }
     }
+
+    // if (userBannerImg !== null && userImg !== null) {
+    // }
   };
 
   const handleSubmit = async () => {
@@ -132,8 +165,8 @@ const Settings = () => {
       username: userDetailsPayload.username,
       email: userDetailsPayload.userEmail,
       bio: userDetailsPayload.bio,
-      userProfileImg: userImg,
-      userBannerImg: userBannerImg,
+      userProfileImg: userImgPreview,
+      userBannerImg: userBannerImgPreview,
     };
     try {
       const HEADER = "authenticated_and_form_data";
@@ -183,13 +216,15 @@ const Settings = () => {
           username: response.data.data.username,
           userEmail: response.data.data.email,
           bio: response.data.data.bio,
+          bannerImg: response.data.data.userBannerImg,
+          profileImg: response.data.data.userProfileImg,
         });
-        setUserBannerImgPreview(
-          APPCONFIG.ENV_BASE_URL + "images/" + response.data.data.userBannerImg
-        );
-        setUserImgPreview(
-          APPCONFIG.ENV_BASE_URL + "images/" + response.data.data.userProfileImg
-        );
+        // setUserBannerImgPreview(
+        //   APPCONFIG.ENV_BASE_URL + "images/" + response.data.data.userBannerImg
+        // );
+        // setUserImgPreview(
+        //   APPCONFIG.ENV_BASE_URL + "images/" + response.data.data.userProfileImg
+        // );
         // setShowModal(true);
       } else {
         toast("Something went wrong, please try again!");
@@ -201,8 +236,9 @@ const Settings = () => {
     //   return;
     // }
   }, [myProfile]);
+
   return (
-    <DashboardLayout>
+    <DashboardLayout isLoading={!userDetailsPayload.bannerImg}>
       <div className="sub-layout-wrapper">
         <div className="center mx-auto max-w-[90%] lg:max-w-[70%]">
           {/* <div className="settings-tab">
@@ -246,13 +282,16 @@ const Settings = () => {
                         userImgPreview
                           ? //@ts-ignore
                             userImgPreview
-                          : "/images/avatar.png"
+                          : userDetailsPayload.profileImg ||
+                            "/images/avatar.png"
                       }
                       alt="user-profile-img"
                       objectFit="cover"
                       layout="fill"
                       className="rounded-full"
                     />
+
+                    {/* <img src={userImgPreview} alt="user-img-preview" /> */}
                   </div>
 
                   <input
@@ -275,21 +314,27 @@ const Settings = () => {
                   </label>
                 </div>
                 <div
-                  className={`h-full w-full ${
-                    !userBannerImgPreview ? "hidden" : "block"
-                  }`}
+                  className={`h-full w-full relative 
+                  ${
+                    userBannerImgPreview || userDetailsPayload.bannerImg
+                      ? "block"
+                      : "hidden"
+                  }
+                  `}
                 >
                   <Image
+                    priority
                     src={
                       userBannerImgPreview
                         ? //@ts-ignore
                           userBannerImgPreview
-                        : "/avatar.png"
+                        : userDetailsPayload.bannerImg ||
+                          "/images/banner-placeholder.svg"
                     }
                     alt="userBannerImg"
                     objectFit="cover"
                     layout="fill"
-                    className="rounded-3xl"
+                    // className="rounded-3xl"
                   />
                 </div>
 
@@ -302,7 +347,7 @@ const Settings = () => {
                 />
                 <label
                   htmlFor="userBannerImg"
-                  className="absolute inset-0 rounded-3xl flex flex-col justify-center items-center bg-[#1c1e3d7f]"
+                  className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d7f]"
                 >
                   <Image
                     src="/gallery-add.svg"
@@ -310,7 +355,13 @@ const Settings = () => {
                     width="24px"
                     height="24px"
                   />
-                  <span className={clsx(userImgBanner ? "hidden" : "block")}>
+                  <span
+                    className={clsx(
+                      userImgBanner || userDetailsPayload.bannerImg
+                        ? "hidden"
+                        : "block"
+                    )}
+                  >
                     Click to change image
                   </span>
                 </label>

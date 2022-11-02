@@ -6,7 +6,8 @@ import EarningLayout from "../template/EarningLayout";
 import { getWalletBalance } from "../functions/onChain/generalFunction";
 import { connectedAccount } from "../functions/onChain/authFunction";
 const Wallet = () => {
-  const [balanceInEth, setBalanceInEth] = useState("wallet");
+  const [balanceInEth, setBalanceInEth] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const [connectedAddress, setConnectedAddress] = useState(null);
 
   useEffect(() => {
@@ -18,13 +19,14 @@ const Wallet = () => {
       if (connectedAddress !== null) {
         getWalletBalance(connectedAddress).then((response) => {
           setBalanceInEth(response);
+          setIsLoading(false);
         });
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectedAddress, balanceInEth]);
   return (
-    <EarningLayout title="Wallet">
+    <EarningLayout title="Wallet" isLoading={isLoading}>
       <div className="h-[80vh]  sm:h-[65vh] space-y-12 scrollbar-hide">
         <div className="flex items-center gap-x-6 mt-8">
           <div className="relative h-20 w-20">
