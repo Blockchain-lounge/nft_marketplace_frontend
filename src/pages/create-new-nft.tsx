@@ -63,6 +63,7 @@ const CreateNewNft = () => {
   const [nftCoverImage, setNftCoverImage] = useState("");
   const [nftBufferCoverImage, setNftBufferCoverImage] = useState("");
   const [validationError, setValidationError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [connectedAddress, setConnectedAddress] = useState(null);
 
   const { push } = useRouter();
@@ -109,6 +110,7 @@ const CreateNewNft = () => {
           return;
         } else if (response.status == 200) {
           setCollections(response.data.data);
+          setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
           return;
@@ -301,7 +303,7 @@ const CreateNewNft = () => {
 
   // console.log(collections);
   return (
-    <DashboardLayout>
+    <DashboardLayout isLoading={isLoading}>
       <div className="sub-layout-wrapper">
         <div className="center">
           <div className="earnings-title-btn">
