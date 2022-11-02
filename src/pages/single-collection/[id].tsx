@@ -36,7 +36,7 @@ const ViewCollection = () => {
   const activityList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const activityHeaders = ["Item", "Price", "From", "To"];
   const [singleCollectionsData, setSingleCollectionsData] = useState("");
-  const [singleCollectionDetail, setSingleCollectionDetail] = useState([]);
+  const [singleCollectionDetail, setSingleCollectionDetail] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchCollectionItems = async (id: string) => {
@@ -67,6 +67,8 @@ const ViewCollection = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  // console.log({ singleCollectionsData });
+
   return (
     <DashboardLayout isLoading={isLoading}>
       <ToastContainer />
@@ -77,7 +79,6 @@ const ViewCollection = () => {
               <div className="h-32 w-32 absolute -bottom-14 left-6 rounded-full border-bg-3 border-[4px] z-10">
                 <div className={`h-full w-full rounded-full relative`}>
                   <Image
-                    priority
                     src={
                       singleCollectionDetail &&
                       singleCollectionDetail.collectionLogoImage !==
@@ -100,6 +101,7 @@ const ViewCollection = () => {
               singleCollectionDetail.cover_image_id !== "" &&
               singleCollectionDetail.cover_image_id !== null ? (
                 <Image
+                  priority
                   src={singleCollectionDetail.cover_image_id}
                   alt="collection-img-banner"
                   objectFit="cover"
@@ -188,7 +190,6 @@ const ViewCollection = () => {
 
           {activeStage === "items" ? (
             <div className="single-collection-items">
-              <Heading2 title="You have no items in this collection." />
               {/*single collections filters*/}
               {/* <div className="single-collection-filter">
                 <div
@@ -222,12 +223,14 @@ const ViewCollection = () => {
               </div> */}
               <div className="single-collection-lists">
                 {/* <div>hello</div> */}
-                <div className="flex flex-wrap justify-evenly gap-y-12">
-                  {singleCollectionsData
-                    ? singleCollectionsData.map((val, i) => (
-                        <NftMediumCard2 {...val} key={val.name + i} />
-                      ))
-                    : ""}
+                <div className="grid lg:grid-cols-3 2xl:grid-cols-4 gap-8">
+                  {singleCollectionsData ? (
+                    singleCollectionsData.map((val, i) => (
+                      <NftMediumCard2 {...val} key={val.name + i} />
+                    ))
+                  ) : (
+                    <Heading2 title="You have no items in this collection." />
+                  )}
                 </div>
               </div>
             </div>

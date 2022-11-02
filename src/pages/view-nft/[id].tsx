@@ -47,14 +47,15 @@ const ViewNft = () => {
     fetchItemDetail(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+  console.log({ itemDetail });
   return (
     <DashboardLayout>
       {itemDetail !== null ? (
         <div className="sub-layout-wrapper">
-          <div className="center space-y-8">
+          <div className="center space-y-8 h-[70vh] 2xl:h-[80vh]">
             <div className="view-wrapper-hero grid-cols-[0.3fr_0.35fr_0.35fr]">
               <div>
-                <div className="relative h-[90%]">
+                <div className="relative h-[100%]">
                   <Image
                     src={itemDetail.item_art_url}
                     alt={itemDetail.item_title}
@@ -64,7 +65,7 @@ const ViewNft = () => {
                   />
                 </div>
 
-                <div className="flex gap-x-6 mt-4 items-center">
+                {/* <div className="flex gap-x-6 mt-4 items-center">
                   <span className="flex gap-x-2 items-center">
                     <LikeIcon /> 298
                   </span>
@@ -100,13 +101,13 @@ const ViewNft = () => {
                       objectFit="cover"
                     />
                   </span>
-                </div>
+                </div> */}
               </div>
-              <div className="space-y-4">
+              <div className="space-y-8 py-4">
                 <div>
                   <div className="flex items-center mb-5">
                     {/*collection-logo*/}
-                    <div className="h-[2.125rem] w-[2.125rem] relative mr-4">
+                    {/* <div className="h-[2.125rem] w-[2.125rem] relative mr-4">
                       <Image
                         src="/images/colx_id.png"
                         alt="colx-img"
@@ -114,10 +115,10 @@ const ViewNft = () => {
                         objectFit="cover"
                         className="rounded-full"
                       />
-                    </div>
-                    <span className="text-lg mr-1">CloneXx</span>
+                    </div> */}
+                    {/* <span className="text-lg mr-1">CloneXx</span> */}
                     {/*verified-tag*/}
-                    <div className="h-5 w-5 relative">
+                    {/* <div className="h-5 w-5 relative">
                       <Image
                         src="/images/verify.svg"
                         alt="colx-img"
@@ -125,15 +126,17 @@ const ViewNft = () => {
                         objectFit="contain"
                         className="rounded-full"
                       />
-                    </div>
+                    </div> */}
                   </div>
-                  <span className="text-2xl font-bold">CloneX #3119</span>
+                  <span className="text-4xl font-bold capitalize">
+                    {itemDetail.item_title}
+                  </span>
                 </div>
                 <div className="view-hero-nft-owner">
                   <div className="flex items-center gap-x-4">
                     <div className="relative h-14 w-14">
                       <Image
-                        src="/images/nftsample3.png"
+                        src="/images/avatar.png"
                         alt="nft-img"
                         layout="fill"
                         objectFit="cover"
@@ -146,30 +149,34 @@ const ViewNft = () => {
                     </div>
                   </div>
                 </div>
-                <div className="view-hero-nft-cta-wrapper ">
+                <div className="view-hero-nft-cta-wrapper">
                   <div className="flex w-full gap-x-6">
-                    <div className="p-3 bg-bg-5 rounded-[1.25rem] w-full">
-                      <span className="text-txt-2 block mb-4">Price</span>
+                    <div className="p-4 bg-bg-5 rounded-md w-full">
+                      <span className="text-txt-2 block mb-4 text-xl">
+                        Price
+                      </span>
                       <div className="">
                         <span className="flex items-center text-[1.5rem] gap-x-1">
                           <CoinIcon />
                           {itemDetail.item_price}
                         </span>
-                        <span className="text-lg block mt-2">$5,954,532</span>
+                        <span className="text-xl block mt-2">
+                          Item quantity: {itemDetail.item_quantity}
+                        </span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="w-full flex flex-col gap-y-4">
+                  {/* <Button title="Edit" wt="w-full" outline2 /> */}
+                  {/* <div className="w-full flex flex-col gap-y-4">
                     <div className="flex gap-x-5">
-                      {/* <Button title="Edit" wt="w-full" outline2 /> */}
                       <Button
                         title="Sell"
                         onClick={() => push(`/list-nft-for-sale/${id}`)}
                         wt="w-full"
                       />
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="create-new-nft-wrapper-2 border border-border-1-line p-4 rounded-[1.25rem]">
@@ -179,6 +186,7 @@ const ViewNft = () => {
                 <div className="flex flex-col justify-center items-center h-[90%] gap-y-4">
                   <div className="relative h-[50%] w-[70%] ">
                     <Image
+                      priority
                       src="/images/no-offer.svg"
                       alt="buy-nft-sample"
                       layout="fill"
@@ -191,7 +199,7 @@ const ViewNft = () => {
                 </div>
               </div>
             </div>
-            <div className="view-nft-description space-y-3">
+            <div className=" space-y-3">
               <h2 className="text-2xl font-bold ">Description</h2>
               <div className="flex flex-col">
                 <p className="text-txt-2">{itemDetail.item_description}</p>

@@ -10,6 +10,7 @@ const Select = ({
   placeholder,
   lists,
   onClick,
+  onClick2,
 }: {
   title: string;
   twClasses?: string;
@@ -17,6 +18,7 @@ const Select = ({
   placeholder: string;
   lists: Array<any>;
   onClick: Dispatch<SetStateAction<string>>;
+  onClick2: (val: { label: string; id: string }) => void;
 }) => {
   const [openSubmenu, setOpenSubmenu] = useState(false);
   const handleOpenSubmenu = () => {
@@ -24,6 +26,10 @@ const Select = ({
   };
   const handleSelect = (params: string) => {
     onClick(params);
+    setOpenSubmenu((prev) => !prev);
+  };
+  const handleSelect2 = (file: { label: string; id: string }) => {
+    onClick2(file);
     setOpenSubmenu((prev) => !prev);
   };
 
@@ -59,7 +65,9 @@ const Select = ({
               <div
                 key={label._id}
                 className="py-[0.85rem] lg:py-4 px-2 lg:px-3 cursor-pointer hover:bg-bg-3 rounded-md flex items-center gap-x-4"
-                onClick={() => handleSelect(label.name)}
+                onClick={() =>
+                  handleSelect2({ label: label.name, id: label._id })
+                }
               >
                 <div className="relative h-12 w-12">
                   <Image

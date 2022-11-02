@@ -1,7 +1,7 @@
-.explore-wrapper {
+/* .explore-wrapper {
   @apply h-[70vh];
-}
+} */
 
 .explore-items-wrapper {
-  @apply grid justify-center lg:grid-cols-4 lg:justify-between gap-7;
+  @apply grid justify-center lg:grid-cols-4 lg:justify-between gap-7 h-[90vh];
 }

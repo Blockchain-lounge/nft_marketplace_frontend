@@ -38,6 +38,7 @@ import { connectedAccount } from "../functions/onChain/authFunction";
 const CreateNewNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [file, setFile] = useState<FileList | null>(null);
+
   const [nftPayload, setNftPayload] = useState({
     coinPrice: "",
     itemName: "",
@@ -48,9 +49,10 @@ const CreateNewNft = () => {
     royalties: "",
     collection: "",
   });
-  const [nftPayloadselect, setNftPayloadSelect] = useState(
-    "Select a collection"
-  );
+  const [nftPayloadselect, setNftPayloadSelect] = useState({
+    label: "Select a collection",
+    id: "",
+  });
   const [properties, setProperties] = useState([
     { label: "clothe", value: "Hoodie" },
     { label: "Ape", value: "Glasses" },
@@ -64,6 +66,7 @@ const CreateNewNft = () => {
   const [nftBufferCoverImage, setNftBufferCoverImage] = useState("");
   const [validationError, setValidationError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isTransloading, setIsTransLoading] = useState(false);
   const [connectedAddress, setConnectedAddress] = useState(null);
 
   const { push } = useRouter();
@@ -96,8 +99,8 @@ const CreateNewNft = () => {
 
   const fetchCollections = async () => {
     try {
-      const HEADER = {};
-      const REQUEST_URL = "nft-collection/index";
+      const HEADER = "authenticated";
+      const REQUEST_URL = "nft-collection/mine";
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -222,6 +225,7 @@ const CreateNewNft = () => {
         nftPayload.coinPrice.toString(),
         "ether"
       );
+      setIsTransLoading(true);
       toast("Please approve this transaction...");
 
       const transaction = await contract.createItem(
@@ -260,8 +264,9 @@ const CreateNewNft = () => {
             nftPayloadselect == null ||
             nftPayloadselect == undefined
               ? "Uncatgorized"
-              : nftPayloadselect,
+              : nftPayloadselect.id,
         };
+
         toast("Finalizing the transaction off-chain...");
         const HEADER = "authenticated";
         const REQUEST_URL = "nft-item/store";
@@ -278,6 +283,7 @@ const CreateNewNft = () => {
             toast("Unauthorized request!");
             return;
           } else if (response.status == 201) {
+            setIsTransLoading(false);
             toast(response.data.message);
             push("/profile");
             // setShowModal(true);
@@ -292,6 +298,7 @@ const CreateNewNft = () => {
       }
     }
   };
+
   useEffect(() => {
     connectedAccount().then((response) => {
       if (response !== null) {
@@ -301,7 +308,11 @@ const CreateNewNft = () => {
     });
   }, [userCollectionList]);
 
-  // console.log(collections);
+  const handleSelect = (file) => {
+    setNftPayloadSelect({ ...nftPayloadselect, ...file });
+  };
+
+  // console.log(nftPayloadselect);
   return (
     <DashboardLayout isLoading={isLoading}>
       <div className="sub-layout-wrapper">
@@ -428,9 +439,9 @@ const CreateNewNft = () => {
                   </span>
                 </div>
                 <Select
-                  title={nftPayloadselect}
+                  title={nftPayloadselect.label}
                   lists={collections}
-                  onClick={setNftPayloadSelect}
+                  onClick2={handleSelect}
                 />
                 {/* <select
                   className="w-full bg-transparent  outline-none select"
@@ -490,7 +501,7 @@ const CreateNewNft = () => {
                   ))}
                 </div>
               </div> */}
-              <Button title="Create" />
+              <Button title="Create" isDisabled={isTransloading} />
             </form>
             <div className="create-new-nft-wrapper-preview max-w-[50%]">
               <div className="create-new-nft-wrapper-2">
@@ -541,7 +552,7 @@ const CreateNewNft = () => {
                   </div>
                   <span className="text-[1.1rem] text-black ">
                     {/*replace with collection name*/}
-                    {nftPayloadselect || "Uncategorized"}
+                    {nftPayloadselect.label || "Uncategorized"}
                   </span>
                 </div>
               </div>
