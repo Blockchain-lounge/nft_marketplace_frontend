@@ -39,8 +39,8 @@ const Settings = () => {
     username: "",
     userEmail: "",
     bio: "",
-    userBannerImg: "",
-    userBannerImg: "",
+    bannerImg: "",
+    profileImg: "",
   });
   const settingStages = [
     { label: "Edit profile", stage: "edit-profile" },
@@ -80,7 +80,6 @@ const Settings = () => {
     });
     //fetching out an URL
     const url = data.url;
-    console.log({ url });
 
     if (url) {
       toast("Please wait, while your image load");
@@ -125,7 +124,7 @@ const Settings = () => {
         setUserImg(files[0]);
         const { imgUrl } = await uploadFile(files[0]);
         setUserImgPreview(imgUrl);
-        console.log("profile img:", imgUrl);
+
         // setUserImgPreview(URL.createObjectURL(files[0]));
       }
     } else if (name === "userBannerImg") {
@@ -153,7 +152,6 @@ const Settings = () => {
         setUserBannerImg(files[0]);
         const { imgUrl } = await uploadFile(files[0]);
         setUserBannerImgPreview(imgUrl);
-        console.log("banner img:", imgUrl);
         // setUserBannerImgPreview(URL.createObjectURL(files[0]));
       }
     }
@@ -161,10 +159,6 @@ const Settings = () => {
     // if (userBannerImg !== null && userImg !== null) {
     // }
   };
-
-  // console.log({ userBannerImg, userImg });
-
-  // const bucket_url_img = "https://cloudaxnftmarketplace.s3.amazonaws.com/";
 
   const handleSubmit = async () => {
     var profileData = {
@@ -222,6 +216,8 @@ const Settings = () => {
           username: response.data.data.username,
           userEmail: response.data.data.email,
           bio: response.data.data.bio,
+          bannerImg: response.data.data.userBannerImg,
+          profileImg: response.data.data.userProfileImg,
         });
         // setUserBannerImgPreview(
         //   APPCONFIG.ENV_BASE_URL + "images/" + response.data.data.userBannerImg
@@ -241,9 +237,8 @@ const Settings = () => {
     // }
   }, [myProfile]);
 
-  console.log({ userImgPreview });
   return (
-    <DashboardLayout>
+    <DashboardLayout isLoading={!userDetailsPayload.bannerImg}>
       <div className="sub-layout-wrapper">
         <div className="center mx-auto max-w-[90%] lg:max-w-[70%]">
           {/* <div className="settings-tab">
@@ -287,7 +282,8 @@ const Settings = () => {
                         userImgPreview
                           ? //@ts-ignore
                             userImgPreview
-                          : "/images/avatar.png"
+                          : userDetailsPayload.profileImg ||
+                            "/images/avatar.png"
                       }
                       alt="user-profile-img"
                       objectFit="cover"
@@ -318,16 +314,22 @@ const Settings = () => {
                   </label>
                 </div>
                 <div
-                  className={`h-full w-full relative ${
-                    !userBannerImgPreview ? "hidden" : "block"
-                  }`}
+                  className={`h-full w-full relative 
+                  ${
+                    userBannerImgPreview || userDetailsPayload.bannerImg
+                      ? "block"
+                      : "hidden"
+                  }
+                  `}
                 >
                   <Image
+                    priority
                     src={
                       userBannerImgPreview
                         ? //@ts-ignore
                           userBannerImgPreview
-                        : "/images/ape.png"
+                        : userDetailsPayload.bannerImg ||
+                          "/images/banner-placeholder.svg"
                     }
                     alt="userBannerImg"
                     objectFit="cover"
@@ -353,7 +355,13 @@ const Settings = () => {
                     width="24px"
                     height="24px"
                   />
-                  <span className={clsx(userImgBanner ? "hidden" : "block")}>
+                  <span
+                    className={clsx(
+                      userImgBanner || userDetailsPayload.bannerImg
+                        ? "hidden"
+                        : "block"
+                    )}
+                  >
                     Click to change image
                   </span>
                 </label>

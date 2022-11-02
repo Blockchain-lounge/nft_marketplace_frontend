@@ -52,7 +52,6 @@ const Home: NextPage = () => {
     try {
       const HEADER = {};
       const REQUEST_URL = "nft-item/home_data";
-
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {

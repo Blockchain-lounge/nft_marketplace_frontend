@@ -45,6 +45,8 @@ const Profile = () => {
     username: string;
     userEmail: string;
     bio: string;
+    bannerImg: string;
+    profileImg: string;
   } | null>(null);
   // const [data, isLoading] = UseFetch("/user/my_profile");
   const { push } = useRouter();
@@ -80,6 +82,8 @@ const Profile = () => {
           username: response.data.data.username,
           userEmail: response.data.data.email,
           bio: response.data.data.bio,
+          bannerImg: response.data.data.userBannerImg,
+          profileImg: response.data.data.userProfileImg,
         });
         setUserBannerImg(
           response.data.data.userBannerImg &&
@@ -176,7 +180,7 @@ const Profile = () => {
           <div className="profile-banner">
             {userBannerImg ? (
               <Image
-                src={userBannerImg}
+                src={myProfile?.bannerImg}
                 alt="collection-img-banner"
                 objectFit="cover"
                 layout="fill"
@@ -194,7 +198,7 @@ const Profile = () => {
             )}
             <div className="profile-user-img">
               <Image
-                src={userProfileImg ? userProfileImg : "/images/avatar.svg"}
+                src={myProfile?.profileImg || "/images/avatar.svg"}
                 alt="user-img"
                 layout="fill"
                 objectFit="cover"

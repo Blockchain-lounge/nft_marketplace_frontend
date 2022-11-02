@@ -10,7 +10,7 @@ export interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
   prefix?: ReactNode;
   suffix?: ReactNode;
   wt?: string;
-  isLoading?: boolean;
+  isDisabled?: boolean;
 }
 
 const Button: FC<IButton> = ({
@@ -21,7 +21,7 @@ const Button: FC<IButton> = ({
   prefix,
   suffix,
   wt,
-  isLoading,
+  isDisabled,
   ...rest
 }) => {
   return (
@@ -32,11 +32,11 @@ const Button: FC<IButton> = ({
         wt ? wt : "w-[11.9rem]",
         twClasses
       )}
-      disabled={isLoading}
+      disabled={isDisabled}
       {...rest}
     >
       {prefix && <span>{prefix}</span>}
-      {isLoading ? (
+      {isDisabled ? (
         <span
           className={clsx(
             "btn-loader",
