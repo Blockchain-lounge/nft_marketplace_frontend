@@ -38,6 +38,8 @@ const NftMiniCards = ({
             layout="fill"
             objectFit="cover"
             className="rounded-[0.75rem]"
+            placeholder="blur"
+            blurDataURL="/images/placeholder.png"
           />
         </div>
         <div className="">

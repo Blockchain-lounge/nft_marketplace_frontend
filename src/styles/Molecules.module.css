@@ -285,10 +285,7 @@
   @apply inline-block h-[2.0625rem] leading-[1.139375rem] rounded-[0.375rem] text-white font-medium text-[0.875rem] py-[0.46875rem] px-[0.875rem];
 }
 .nmc-wrapper-3 {
-  @apply flex items-center mt-3;
-}
-.nmc-wrapper-3 img {
-  @apply h-10 w-10 rounded-[50%] mr-[0.875rem];
+  @apply grid grid-cols-[0.25fr_0.7fr_0.1fr] items-center pl-2 py-1;
 }
 
 .nmc-wrapper-4 {

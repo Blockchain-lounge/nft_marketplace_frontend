@@ -21,7 +21,7 @@ import {
   ProfileLinkIcon,
   TwitterIcon,
 } from "../components/atoms/vectors";
-import { Footer2, Modal } from "../components/organisms";
+import { CreateCollection, Footer2, Modal } from "../components/organisms";
 import DashboardLayout from "../template/DashboardLayout";
 import { Button, Input2, Select } from "../components/atoms";
 import { GetServerSideProps } from "next";
@@ -40,7 +40,6 @@ const CreateNewNft = () => {
   const [file, setFile] = useState<FileList | null>(null);
 
   const [nftPayload, setNftPayload] = useState({
-    coinPrice: "",
     itemName: "",
     nftName: "",
     nftSymbol: "",
@@ -49,16 +48,18 @@ const CreateNewNft = () => {
     royalties: "",
     collection: "",
   });
+
   const [nftPayloadselect, setNftPayloadSelect] = useState({
     label: "Select a collection",
     id: "",
   });
-  const [properties, setProperties] = useState([
-    { label: "clothe", value: "Hoodie" },
-    { label: "Ape", value: "Glasses" },
-    { label: "Apetype", value: "Glasses" },
-  ]);
-  const [priceListType, setPriceListType] = useState("");
+
+  // const [properties, setProperties] = useState([
+  //   { label: "clothe", value: "Hoodie" },
+  //   { label: "Ape", value: "Glasses" },
+  //   { label: "Apetype", value: "Glasses" },
+  // ]);
+  // const [priceListType, setPriceListType] = useState("");
   const [userCollectionList, setUserCollectionList] = useState([]);
   const [collections, setCollections] = useState([]);
   const [nftImage, setNftImage] = useState([]);
@@ -87,15 +88,15 @@ const CreateNewNft = () => {
     },
   });
 
-  const priceListingTypes = [
-    { type: "Fixed price", icon: <FixedPriceIcon /> },
-    { type: "Open for bids", icon: <BidIcon /> },
-    { type: "Auction", icon: <AuctionIcon /> },
-  ];
-  const fees = [
-    { label: "Service fee", value: "2%" },
-    { label: "You will receive", value: "-" },
-  ];
+  // const priceListingTypes = [
+  //   { type: "Fixed price", icon: <FixedPriceIcon /> },
+  //   { type: "Open for bids", icon: <BidIcon /> },
+  //   { type: "Auction", icon: <AuctionIcon /> },
+  // ];
+  // const fees = [
+  //   { label: "Service fee", value: "2%" },
+  //   { label: "You will receive", value: "-" },
+  // ];
 
   const fetchCollections = async () => {
     try {
@@ -179,11 +180,12 @@ const CreateNewNft = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     var msg = "";
-    if (!nftPayload.coinPrice.trim()) {
-      msg = "Item price is still empty";
-      toast(msg);
-      return;
-    } else if (!nftPayload.description.trim()) {
+    // if (!nftPayload.coinPrice.trim()) {
+    //   msg = "Item price is still empty";
+    //   toast(msg);
+    //   return;
+    // } else
+    if (!nftPayload.description.trim()) {
       msg = "Item description is still empty";
       toast(msg);
       return;
@@ -255,7 +257,7 @@ const CreateNewNft = () => {
           item_title: nftPayload.itemName,
           token_id: itemId,
           item_description: nftPayload.description,
-          item_price: nftPayload.coinPrice,
+          // item_price: nftPayload.coinPrice,
           item_quantity: nftPayload.supply,
           item_art_url: itemIPFSURL,
           item_base_url: baseURI,
@@ -310,6 +312,10 @@ const CreateNewNft = () => {
 
   const handleSelect = (file) => {
     setNftPayloadSelect({ ...nftPayloadselect, ...file });
+  };
+
+  const handleNavigateToCollection = () => {
+    push("/create-collection");
   };
 
   // console.log(nftPayloadselect);
@@ -379,10 +385,9 @@ const CreateNewNft = () => {
                   ))}
                 </div>
               </div> */}
-              <div className="create-new-nft-wrapper-2">
+              {/* <div className="create-new-nft-wrapper-2">
                 <span className="create-new-nft-wrapper-2-label">Price</span>
                 <div className="create-new-nft-price">
-                  {/* <Select title="ETH" icon={<CoinIcon />} /> */}
                   <Input2
                     name="coinPrice"
                     placeholder="0.00"
@@ -390,8 +395,8 @@ const CreateNewNft = () => {
                     value={nftPayload.coinPrice}
                   />
                 </div>
-              </div>
-              <div className="create-new-nft-gas-fee-wrapper">
+              </div> */}
+              {/* <div className="create-new-nft-gas-fee-wrapper">
                 <span>Fees</span>
                 <div className="create-new-nft-gas-fee">
                   {fees.map(({ label, value }) => (
@@ -404,7 +409,7 @@ const CreateNewNft = () => {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
               <Input2
                 label="Item name"
                 name="itemName"
@@ -434,7 +439,10 @@ const CreateNewNft = () => {
               <div className="create-new-nft-wrapper-2">
                 <div className="flex justify-between items-center">
                   <span>Collection</span>
-                  <span className="earnings-card-history">
+                  <span
+                    className="earnings-card-history cursor-pointer"
+                    onClick={handleNavigateToCollection}
+                  >
                     Create collection
                   </span>
                 </div>
@@ -561,13 +569,8 @@ const CreateNewNft = () => {
         </div>
         <Footer2 />
       </div>
-      <Modal
-        openModal={showModal}
-        closeModal={setShowModal}
-        noTop
-        modalWt="w-[30rem]"
-      >
-        <div className="create-new-nft-success">
+      <Modal openModal={showModal} closeModal={setShowModal}>
+        {/* <div className="create-new-nft-success">
           <div className="mt-4 h-40 w-40 relative">
             <img
               src={nftCoverImage ? nftCoverImage : ""}
@@ -600,7 +603,6 @@ const CreateNewNft = () => {
               setShowModal((prev) => !prev);
               setNftPayload({
                 ...nftPayload,
-                coinPrice: nftPayload.coinPrice,
                 itemName: nftPayload.itemName,
                 description: nftPayload.description,
                 supply: nftPayload.supply,
@@ -609,7 +611,7 @@ const CreateNewNft = () => {
               setFile(null);
             }}
           />
-        </div>
+        </div> */}
       </Modal>
     </DashboardLayout>
   );

@@ -46,6 +46,8 @@ const NftCard2 = ({
           }
           alt={item_title}
           layout="fill"
+          placeholder="blur"
+          blurDataURL="/images/placeholder.png"
         />
         {/* <img src={item_art_url} alt={item_title} /> */}
       </div>

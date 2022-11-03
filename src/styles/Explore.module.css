@@ -3,5 +3,5 @@
 } */
 
 .explore-items-wrapper {
-  @apply grid justify-center lg:grid-cols-4 lg:justify-between gap-7 h-[90vh];
+  @apply grid justify-center lg:grid-cols-4 lg:justify-between gap-7 overflow-auto;
 }

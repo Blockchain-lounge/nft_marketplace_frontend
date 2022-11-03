@@ -40,7 +40,10 @@ const Select = ({
           {icon} {placeholder || title}
         </span>
         <span
-          className={clsx("sidebar-toggle-btn", openSubmenu && "sidebar-open")}
+          className={clsx(
+            "sidebar-toggle-btn cursor-pointer",
+            openSubmenu && "sidebar-open"
+          )}
         >
           <CaretDown />
         </span>

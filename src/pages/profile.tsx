@@ -29,16 +29,15 @@ import Image from "next/image";
 import { INftcard } from "../components/molecules/NftMediumCard";
 import APPCONFIG from "../constants/Config";
 import { connectedAccount } from "../functions/onChain/authFunction";
+import { NftCardSkeleton } from "../components/lazy-loaders";
 const Profile = () => {
   const [profileActiveTab, setProfileActiveTab] = useState(1);
 
   const [openTab, setData] = useState(true);
-  const [userOwnedProfileData, setUserOwnedProfileData] = useState<
-    Array<INftcard>
-  >([]);
-  const [userCreatedProfileData, setUserCreatedProfileData] = useState<
-    Array<INftcard>
-  >([]);
+  const [userOwnedProfileData, setUserOwnedProfileData] =
+    useState<Array<INftcard> | null>([]);
+  const [userCreatedProfileData, setUserCreatedProfileData] =
+    useState<Array<INftcard> | null>([]);
   // const [user, setUser] = useState<null | Record<string, string>>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [myProfile, setMyProfile] = useState<{
@@ -184,6 +183,8 @@ const Profile = () => {
                 alt="collection-img-banner"
                 objectFit="cover"
                 layout="fill"
+                placeholder="blur"
+                blurDataURL="/images/placeholder.png"
               />
             ) : (
               <label className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d49]">
@@ -203,6 +204,8 @@ const Profile = () => {
                 layout="fill"
                 objectFit="cover"
                 className="rounded-full"
+                placeholder="blur"
+                blurDataURL="/images/placeholder.png"
               />
             </div>
           </div>
@@ -261,30 +264,42 @@ const Profile = () => {
                     </div>
                   )
                 ) : profileActiveTab === 1 ? (
-                  userCreatedProfileData.length > 0 ? (
-                    <div className="user-profile-owned-nfts">
-                      {userCreatedProfileData.map((val, i) => (
-                        <NftMediumCard2 key={val._id} {...val} to="view-nft" />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="profile-user-nfts">
-                      <img
-                        src="/images/404-illustration.png"
-                        alt="empty-nfts"
-                      />
-                      <span className="profile-empty-nft-title">
-                        You do not own any NFT
-                      </span>
-                      <p className="profile-empty-nft-description">
-                        There&apos;s lots of other NFTs to explore
-                      </p>
+                  userCreatedProfileData ? (
+                    userCreatedProfileData.length > 0 ? (
+                      <div className="user-profile-owned-nfts">
+                        {userCreatedProfileData.map((val, i) => (
+                          <NftMediumCard2
+                            key={val._id}
+                            {...val}
+                            to="view-nft"
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="profile-user-nfts">
+                        <img
+                          src="/images/404-illustration.png"
+                          alt="empty-nfts"
+                        />
+                        <span className="profile-empty-nft-title">
+                          You do not own any NFT
+                        </span>
+                        <p className="profile-empty-nft-description">
+                          There&apos;s lots of other NFTs to explore
+                        </p>
 
-                      <GradientButton
-                        title="Explore NFTs"
-                        onClick={handleNavigateToHome}
-                      />
-                    </div>
+                        <GradientButton
+                          title="Explore NFTs"
+                          onClick={handleNavigateToHome}
+                        />
+                      </div>
+                    )
+                  ) : (
+                    Array(12)
+                      .fill(0)
+                      .map((_, i) => (
+                        <NftCardSkeleton key={i + "explore-skeleton-card"} />
+                      ))
                   )
                 ) : profileActiveTab === 2 ? (
                   <div className="flex justify-center items-center">

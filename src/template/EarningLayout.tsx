@@ -13,7 +13,7 @@ const EarningLayout = ({
   isLoading,
 }: {
   children: ReactNode;
-  title: string;
+  title?: string;
   isLoading?: boolean;
   cta?: {
     label: string;
@@ -35,7 +35,7 @@ const EarningLayout = ({
           <div className="earnings-actions">
             <div className="earnings-title-btn">
               <ArrowBack onClick={() => Router.back()} />
-              <h1>{title}</h1>
+              <h1>{title as string}</h1>
             </div>
             {cta && <Button title={cta.label} onClick={cta.onClick} />}
           </div>

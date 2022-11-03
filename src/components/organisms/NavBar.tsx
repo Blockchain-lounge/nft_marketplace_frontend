@@ -16,7 +16,6 @@ import {
 } from "@/src/components/atoms/vectors";
 
 import {
-  ConnectWalletStage1,
   CreateNftNavOptions,
   MiniUserProfile,
   MiniUserWallet,
@@ -30,7 +29,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { toggleMobileModal } from "@/src/reducers/modalReducer";
 import { RootState } from "@/src/store/store";
 import Image from "next/image";
-import CreateCollection from "./CreateCollection";
+
 import {
   connectUserWallet,
   connectedAccount,
@@ -44,6 +43,7 @@ import {
   handleLoggedInUser,
   toggleLoggedInUser,
 } from "@/src/reducers/authReducer";
+import { apiRequest } from "@/src/functions/offChain/apiRequests";
 
 interface INav {
   showProfile: boolean;
@@ -67,6 +67,9 @@ const NavBar: FC<INav> = ({
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   const [modalType, setModaltype] = useState("wallet");
+  const [myProfile, setMyProfile] = useState<null | Record<string, string>>(
+    null
+  );
 
   // const [isConnected, setIsConnected] = useState(false);
 
@@ -76,6 +79,33 @@ const NavBar: FC<INav> = ({
   const [connectedAddress, setConnectedAddress] = useState(null);
 
   account_listener();
+  const fetchUser = async () => {
+    const HEADER = "authenticated";
+    const REQUEST_URL = "user/my_profile";
+    const METHOD = "GET";
+    const DATA = {};
+    apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+      if (response.status == 400) {
+        var error = response.data.error;
+        toast(error);
+        return;
+      } else if (response.status == 401) {
+        toast("Unauthorized request!");
+        return;
+      } else if (response.status == 200) {
+        setMyProfile({
+          username: response.data.data.username,
+          userEmail: response.data.data.email,
+          bio: response.data.data.bio,
+          bannerImg: response.data.data.userBannerImg,
+          profileImg: response.data.data.userProfileImg,
+        });
+      } else {
+        toast("Something went wrong, please try again!");
+        return;
+      }
+    });
+  };
   useEffect(() => {
     connectedAccount().then((response) => {
       if (response !== null) {
@@ -83,13 +113,8 @@ const NavBar: FC<INav> = ({
         // setIsConnected(true);
         dispatch(handleLoggedInUser({ isLoggedIn: true }));
       }
-
-      // if(connectedAddress !== null){
-      //     getWalletBalance(connectedAddress).then((response) => {
-      //         setState({ balanceInEth: response });
-      //     });
-      // }
     });
+    fetchUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectedAddress, isLoggedIn]);
 
@@ -133,7 +158,6 @@ const NavBar: FC<INav> = ({
     setShowCreateNft((prev) => !prev);
   };
   const { push } = useRouter();
-
   return (
     <nav>
       {/* <div className="nav-status center">
@@ -189,13 +213,15 @@ const NavBar: FC<INav> = ({
                 Create
               </span>
               <div
-                className="relative h-12 w-12 cursor-pointer"
+                className="relative h-12 w-12 cursor-pointer rounded-full"
                 onClick={handleShowProfile}
               >
                 <Image
-                  src="/images/avatar.png"
+                  src={myProfile ? myProfile.profileImg : "/images/avatar.png"}
                   alt="user-img"
                   layout="fill"
+                  placeholder="blur"
+                  blurDataURL="/images/avatar.png"
                   className="rounded-full"
                 />
               </div>
@@ -210,7 +236,11 @@ const NavBar: FC<INav> = ({
                   <CartIcon />
                 </span> */}
               </div>
-              <MiniUserWallet showBal={showBal} onClick={setShowBal} account={connectedAddress} />
+              <MiniUserWallet
+                showBal={showBal}
+                onClick={setShowBal}
+                account={connectedAddress}
+              />
               <MiniUserProfile
                 showProfile={showProfile}
                 onClick={setShowProfile}
@@ -245,10 +275,6 @@ const NavBar: FC<INav> = ({
         }
         closeModal={setOpenModal}
       >
-        <CreateCollection
-          closeModal={setOpenModal}
-          changeModalType={setModaltype}
-        />
         {/* {modalType === "collection" ? (
         ) : (
           <ConnectWalletStage1
