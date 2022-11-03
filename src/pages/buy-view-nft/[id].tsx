@@ -220,6 +220,8 @@ const ViewNft = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  // console.log({ itemDetail });
+
   return (
     <DashboardLayout isLoading={!itemDetail}>
       <div className="sub-layout-wrapper">
@@ -242,7 +244,11 @@ const ViewNft = () => {
                   <div className="flex items-center mb-4">
                     <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
                       <Image
-                        src="/images/placeholder.png"
+                        src={
+                          itemDetail.collection_id
+                            ? itemDetail.collection_id.collectionLogoImage
+                            : "/images/placeholder.png"
+                        }
                         alt="colx-img"
                         layout="fill"
                         objectFit="cover"
@@ -251,7 +257,9 @@ const ViewNft = () => {
                         blurDataURL="/images/placeholder.png"
                       />
                     </div>
-                    <span className="text-3xl mr-1">Cloudax</span>
+                    <span className="text-3xl mr-1">
+                      {itemDetail.collection_id.name}
+                    </span>
                     <div className="h-6 w-6 relative">
                       <Image
                         src="/images/verify.svg"
