@@ -78,7 +78,6 @@ const NavBar: FC<INav> = ({
   // const [stage, setStage] = useState(0);
   const [connectedAddress, setConnectedAddress] = useState(null);
 
-  account_listener();
   const fetchUser = async () => {
     const HEADER = "authenticated";
     const REQUEST_URL = "user/my_profile";
@@ -107,6 +106,7 @@ const NavBar: FC<INav> = ({
     });
   };
   useEffect(() => {
+    account_listener();
     connectedAccount().then((response) => {
       if (response !== null) {
         setConnectedAddress(response);
@@ -114,6 +114,7 @@ const NavBar: FC<INav> = ({
         dispatch(handleLoggedInUser({ isLoggedIn: true }));
       }
     });
+
     fetchUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectedAddress, isLoggedIn]);
