@@ -223,10 +223,7 @@ const CreateNewNft = () => {
         abi.abi,
         signer
       );
-      const price = ethers.utils.parseUnits(
-        nftPayload.coinPrice.toString(),
-        "ether"
-      );
+      const price = ethers.utils.parseUnits("0.005", "ether");
       setIsTransLoading(true);
       toast("Please approve this transaction...");
 
