@@ -78,33 +78,33 @@ const NavBar: FC<INav> = ({
   // const [stage, setStage] = useState(0);
   const [connectedAddress, setConnectedAddress] = useState(null);
 
-  const fetchUser = async () => {
-    const HEADER = "authenticated";
-    const REQUEST_URL = "user/my_profile";
-    const METHOD = "GET";
-    const DATA = {};
-    apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-      if (response.status == 400) {
-        var error = response.data.error;
-        toast(error);
-        return;
-      } else if (response.status == 401) {
-        toast("Unauthorized request!");
-        return;
-      } else if (response.status == 200) {
-        setMyProfile({
-          username: response.data.data.username,
-          userEmail: response.data.data.email,
-          bio: response.data.data.bio,
-          bannerImg: response.data.data.userBannerImg,
-          profileImg: response.data.data.userProfileImg,
-        });
-      } else {
-        toast("Something went wrong, please try again!");
-        return;
-      }
-    });
-  };
+  // const fetchUser = async () => {
+  //   const HEADER = "authenticated";
+  //   const REQUEST_URL = "user/my_profile";
+  //   const METHOD = "GET";
+  //   const DATA = {};
+  //   apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+  //     if (response.status == 400) {
+  //       var error = response.data.error;
+  //       toast(error);
+  //       return;
+  //     } else if (response.status == 401) {
+  //       toast("Unauthorized request!");
+  //       return;
+  //     } else if (response.status == 200) {
+  //       setMyProfile({
+  //         username: response.data.data.username,
+  //         userEmail: response.data.data.email,
+  //         bio: response.data.data.bio,
+  //         bannerImg: response.data.data.userBannerImg,
+  //         profileImg: response.data.data.userProfileImg,
+  //       });
+  //     } else {
+  //       toast("Something went wrong, please try again!");
+  //       return;
+  //     }
+  //   });
+  // };
   useEffect(() => {
     account_listener();
     connectedAccount().then((response) => {
@@ -115,7 +115,7 @@ const NavBar: FC<INav> = ({
       }
     });
 
-    fetchUser();
+    // fetchUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectedAddress, isLoggedIn]);
 
