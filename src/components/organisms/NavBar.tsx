@@ -217,7 +217,11 @@ const NavBar: FC<INav> = ({
                 onClick={handleShowProfile}
               >
                 <Image
-                  src={myProfile ? myProfile.profileImg : "/images/avatar.png"}
+                  src={
+                    myProfile !== null && myProfile.profileImg
+                      ? myProfile.profileImg
+                      : "/images/avatar.png"
+                  }
                   alt="user-img"
                   layout="fill"
                   placeholder="blur"
