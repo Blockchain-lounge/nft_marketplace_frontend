@@ -3,6 +3,7 @@
 import { useRouter } from "next/router";
 import clsx from "clsx";
 import { CoinIcon, OutlineLikesIcon } from "@/src/components/atoms/vectors";
+import Image from "next/image";
 
 export interface INftcard {
   _id: string;
@@ -32,7 +33,15 @@ Partial<INftcard>) => {
           <OutlineLikesIcon />
           {/* <span>295</span> */}
         </div>
-        <img src={item_art_url} alt={item_title} className="h-full w-full" />
+        <div className="h-full w-full"></div>
+        <Image
+          src={item_art_url}
+          alt={item_title}
+          objectFit="cover"
+          layout="fill"
+          placeholder="blur"
+          blurDataURL="/images/placeholder.png"
+        />
       </div>
       <div className="nmc-sub-wrapper">
         {status && (
@@ -46,23 +55,35 @@ Partial<INftcard>) => {
           </span>
         )}
         <div className="nmc-wrapper-3">
-          <img src="/collection/bayc-footer1.png" alt="" />
-          <div className="nmc-wrapper-4">
-            <div className="flex flex-col">
-              <span className="name">{item_title}</span>
-              {/* <span className="owner">{owner}</span> */}
-            </div>
-            {item_price && (
+          <div className="h-14 w-14 relative">
+            <Image
+              src={item_art_url}
+              alt={item_title}
+              layout="fill"
+              placeholder="blur"
+              blurDataURL="/images/placeholder.png"
+              className="rounded-full"
+            />
+          </div>
+          {/* <div className="nmc-wrapper-4"> */}
+          <div className="flex flex-col">
+            <span className="text-2xl font-bold text-black">{item_title}</span>
+            {/* <span className="owner">{owner}</span> */}
+          </div>
+          <span className="flex items-center gap-x-1 text-black">
+            <CoinIcon color="#2B2E32" /> {item_price}
+          </span>
+          {/* {item_price && (
               <div className="price-wrapper">
                 <span className="flex items-center space-x-2 text-black">
                   <CoinIcon color="#2B2E32" /> {item_price}
                 </span>
-                {/* <span className="text-base font-medium text-[#767A7F]">
+                <span className="text-base font-medium text-[#767A7F]">
                   $18,000
-                </span> */}
+                </span>
               </div>
-            )}
-          </div>
+            )} */}
+          {/* </div> */}
         </div>
       </div>
     </div>

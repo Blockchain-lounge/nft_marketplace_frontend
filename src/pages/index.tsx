@@ -11,42 +11,33 @@ import {
   NftMiniCard,
   HeroCard,
   NftSlider,
-  NftMediumCard3,
-  CollectionCard,
-  NftMediumCard2,
 } from "@/src/components/molecules";
 
 import DashboardLayout from "@/src/template/DashboardLayout";
 
 import { Footer, Footer2 } from "@/src/components/organisms";
 
-import {
-  heroCards,
-  nftDatas,
-  nft2Datas,
-  nft3Datas,
-  nft4Datas,
-  launchpadDropDatas,
-} from "@/src/store/data";
+import { heroCards } from "@/src/store/data";
 
 import { useState, useEffect } from "react";
 import { NextPage } from "next";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
 import { apiRequest } from "../functions/offChain/apiRequests";
-import Loader2 from "../components/atoms/Loader2";
+import {
+  NftCardSkeleton,
+  NftMiniCardSkeleton,
+} from "../components/lazy-loaders";
+import Skeleton from "react-loading-skeleton";
 
 const Home: NextPage = () => {
   const [heroData, setHeroData] = useState(heroCards);
   const [activeCard, setActiveCard] = useState(heroData[0]);
-  const [isLoading, setIsLoading] = useState(true);
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const { push } = useRouter();
-  const [items, setItems] = useState([]);
-  const [collections, setCollections] = useState([]);
+  const [items, setItems] = useState(null);
+  const [collections, setCollections] = useState(null);
   const [featuredCollections, setFeaturedCollections] = useState([]);
-  const [userCreatedProfileData, setUserCreatedProfileData] = useState([]);
-  const exploreItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   const fetchHomePageData = async () => {
     try {
@@ -66,7 +57,6 @@ const Home: NextPage = () => {
           setCollections(response.data.data.collections);
           setFeaturedCollections(response.data.data.featured_collections);
           setItems(response.data.data.items);
-          setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
           return;
@@ -82,12 +72,12 @@ const Home: NextPage = () => {
   }, []);
 
   return (
-    <DashboardLayout isLoading={isLoading}>
+    <DashboardLayout>
       <div className="home-wrapper">
         <div className="space-y-[9rem] center mb-[10.125rem]">
           <section className="hero">
             <div>
-              <Tag tag={activeCard?.tag} icon={<FeaturedIcon />} />
+              {<Tag tag={activeCard?.tag} icon={<FeaturedIcon />} />}
               <Heading title={activeCard.title} twClasses="mt-4" />
               <p className="lg:max-w-xl">{activeCard.content}</p>
               <Button title={activeCard.cta} onClick={() => push("/explore")} />
@@ -146,19 +136,31 @@ const Home: NextPage = () => {
                 to="/explore"
                 // selectTitle="Last 24 hours"
               />
+
               <div className="hero-section-1-collection">
-                {collections
-                  ? collections.map((val, i) => (
-                      <NftMiniCard {...val} key={i} />
-                    ))
-                  : ""}
+                {collections ? (
+                  collections.map((val, i) => <NftMiniCard {...val} key={i} />)
+                ) : (
+                  <NftMiniCardSkeleton no={12} />
+                )}
               </div>
               <span className="mobile-see-all-btn">See All</span>
             </section>
 
             <section>
               <NftHeaderCard heading="Featured Drops" to="/explore" />
-              <NftSlider data={items} />
+              {items ? (
+                <NftSlider data={items} />
+              ) : (
+                <div className="grid gap-y-8 lg:grid-cols-3 2xl:grid-cols-4">
+                  {Array(12)
+                    .fill(0)
+                    .map((_, i) => (
+                      <NftCardSkeleton key={i + "explore-skeleton-card"} />
+                    ))}
+                </div>
+              )}
+
               <span className="mobile-see-all-btn">See All</span>
             </section>
             {/* <section>

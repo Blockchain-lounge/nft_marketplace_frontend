@@ -92,6 +92,8 @@ const ViewCollection = () => {
                     objectFit="cover"
                     layout="fill"
                     className="rounded-full"
+                    placeholder="blur"
+                    blurDataURL="/images/placeholder.png"
                   />
                 </div>
               </div>
@@ -106,7 +108,8 @@ const ViewCollection = () => {
                   alt="collection-img-banner"
                   objectFit="cover"
                   layout="fill"
-                  // className="rounded-3xl"
+                  placeholder="blur"
+                  blurDataURL="/images/placeholder.png"
                 />
               ) : (
                 <label className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d49]">

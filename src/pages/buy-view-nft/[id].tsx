@@ -233,6 +233,8 @@ const ViewNft = () => {
                   layout="fill"
                   objectFit="cover"
                   className="rounded-xl"
+                  placeholder="blur"
+                  blurDataURL="/images/placeholder.png"
                 />
               </div>
               <div className="space-y-12 flex flex-col ">
@@ -240,11 +242,13 @@ const ViewNft = () => {
                   <div className="flex items-center mb-4">
                     <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
                       <Image
-                        src="/images/favicon.ico"
+                        src="/images/placeholder.png"
                         alt="colx-img"
                         layout="fill"
-                        objectFit="contain"
+                        objectFit="cover"
                         className="rounded-full"
+                        placeholder="blur"
+                        blurDataURL="/images/placeholder.png"
                       />
                     </div>
                     <span className="text-3xl mr-1">Cloudax</span>

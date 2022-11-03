@@ -1,4 +1,3 @@
-export { default as CreateCollection } from "../organisms/CreateCollection";
 export { default as BannerImg } from "./bannerImg";
 export { default as Footer } from "./Footer";
 export { default as Footer2 } from "./Footer2";

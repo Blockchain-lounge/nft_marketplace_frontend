@@ -29,7 +29,7 @@ const CreateNftNavOptions = ({
     {
       link: "Create Collection",
       icon: <CreateCollectionIcon />,
-      action: "collection",
+      to: "/create-collection",
     },
   ];
   const { push } = useRouter();
@@ -41,19 +41,12 @@ const CreateNftNavOptions = ({
       )}
       onMouseLeave={() => onClick(false)}
     >
-      {createNftLinks.map(({ icon, link, to, action }) => (
+      {createNftLinks.map(({ icon, link, to }) => (
         <div
           key={link}
           className="mini-user-profile-links"
           onClick={() => {
-            if (to) {
-              push(to);
-            }
-
-            if (action) {
-              showModal(true);
-              modalType("collection");
-            }
+            push(to);
           }}
         >
           {icon} <span className="mini-user-profile-link">{link}</span>

@@ -33,6 +33,8 @@ const CollectionCard: NextPage<Partial<ICollectionCard>> = ({
           layout="fill"
           objectFit="cover"
           className="rounded-t-lg"
+          placeholder="blur"
+          blurDataURL="/images/placeholder.png"
         />
       </div>
       <div className="bg-white h-[20%] rounded-b-lg flex justify-center gap-x-4 items-center">
@@ -43,6 +45,8 @@ const CollectionCard: NextPage<Partial<ICollectionCard>> = ({
             layout="fill"
             objectFit="cover"
             className="rounded-full"
+            placeholder="blur"
+            blurDataURL="/images/placeholder.png"
           />
         </div>
         <div className="flex items-center gap-x-1">
@@ -56,6 +60,8 @@ const CollectionCard: NextPage<Partial<ICollectionCard>> = ({
               layout="fill"
               objectFit="cover"
               className="rounded-full"
+              placeholder="blur"
+              blurDataURL="/images/placeholder.png"
             />
           </div>
         </div>
