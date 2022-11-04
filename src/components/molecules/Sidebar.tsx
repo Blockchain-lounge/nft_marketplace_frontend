@@ -162,9 +162,9 @@ const SideBar = () => {
       ))}
       <div className="social-links">
         {socialLinks.map(({ icon, label, to }) => (
-          <Link key={label} href={to}>
-            <a className="social-link">{icon}</a>
-          </Link>
+          <a key={label} href={to} target="_blank" rel="noreferrer">
+            <span className="social-link">{icon}</span>
+          </a>
         ))}
       </div>
     </div>

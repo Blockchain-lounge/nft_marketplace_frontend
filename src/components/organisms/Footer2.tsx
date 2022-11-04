@@ -12,8 +12,8 @@ const Footer2 = () => {
   return (
     <footer className="footer-2">
       {footer2links.map((link, i, arr) => (
-        <Link key={link.label} href={link.to}>
-          <a className="footer-2-link-wrapper">
+        <a key={link.label} href={link.to} target="_blank" rel="noreferrer">
+          <div className="footer-2-link-wrapper">
             <span className="footer-2-link">{link.label}</span>
             <span
               className={clsx(
@@ -21,8 +21,8 @@ const Footer2 = () => {
                 i === footer2links.length - 1 && "bg-transparent"
               )}
             ></span>
-          </a>
-        </Link>
+          </div>
+        </a>
       ))}
     </footer>
   );
