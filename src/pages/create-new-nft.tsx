@@ -280,9 +280,11 @@ const CreateNewNft = () => {
           if (response.status == 400) {
             var error = response.data.error;
             toast(error);
+            setIsTransLoading(false);
             return;
           } else if (response.status == 401) {
             toast("Unauthorized request!");
+            setIsTransLoading(false);
             return;
           } else if (response.status == 201) {
             setIsTransLoading(false);
@@ -291,6 +293,7 @@ const CreateNewNft = () => {
             // setShowModal(true);
           } else {
             toast("Something went wrong, please try again!");
+            setIsTransLoading(false);
             return;
           }
         });
