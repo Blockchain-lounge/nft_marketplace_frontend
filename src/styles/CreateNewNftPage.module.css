@@ -1,5 +1,5 @@
 .create-new-nft-wrapper {
-  @apply grid grid-cols-2;
+  @apply grid lg:grid-cols-2;
 }
 
 .create-new-nft-form {

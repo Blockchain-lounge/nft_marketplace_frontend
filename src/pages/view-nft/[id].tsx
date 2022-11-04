@@ -47,15 +47,15 @@ const ViewNft = () => {
     fetchItemDetail(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
-  console.log({ itemDetail });
+  // console.log({ itemDetail });
   return (
     <DashboardLayout>
       {itemDetail !== null ? (
         <div className="sub-layout-wrapper">
-          <div className="center space-y-8 h-[70vh] 2xl:h-[80vh]">
-            <div className="view-wrapper-hero grid-cols-[0.3fr_0.35fr_0.35fr]">
+          <div className="center space-y-8 h-screen lg:h-[70vh] 2xl:h-[80vh]">
+            <div className="view-wrapper-hero lg:grid-cols-[0.3fr_0.35fr_0.35fr]">
               <div>
-                <div className="relative h-[100%]">
+                <div className="relative h-[25rem] lg:h-[100%]">
                   <Image
                     src={itemDetail.item_art_url}
                     alt={itemDetail.item_title}
@@ -179,7 +179,7 @@ const ViewNft = () => {
                   </div> */}
                 </div>
               </div>
-              <div className="create-new-nft-wrapper-2 border border-border-1-line p-4 rounded-[1.25rem]">
+              <div className="create-new-nft-wrapper-2 border border-border-1-line p-4 rounded-[1.25rem] hidden lg:block">
                 <span className="create-new-nft-wrapper-2-label  pb-2 border-b border-border-1-line">
                   Offers
                 </span>
