@@ -38,6 +38,7 @@ const ViewNft = () => {
   const { id } = query;
   const [viewNftStage, setViewNftStage] = useState("overview");
   const [connectedAddress, setConnectedAddress] = useState(null);
+  const [isTransloading, setIsTransLoading] = useState(false);
 
   const nftOwnersInfo = [
     {
@@ -172,9 +173,11 @@ const ViewNft = () => {
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
         if (response.status == 200 || response.status == 201) {
           toast(response.data.message);
+          setIsTransLoading(false);
           push("/profile");
         } else {
           toast(response.data.error);
+          setIsTransLoading(false);
         }
       });
     }
@@ -731,7 +734,11 @@ const ViewNft = () => {
                 {itemDetail !== null ? itemDetail.item_price : ""}
               </span>
             </div>
-            <Button title="Pay" onClick={handleBuy} />
+            <Button
+              title="Pay"
+              onClick={handleBuy}
+              isDisabled={isTransloading}
+            />
           </div>
         )}
       </Modal>
