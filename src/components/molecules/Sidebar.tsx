@@ -17,6 +17,8 @@ import {
   TwitterIcon,
   InstagramIcon,
   WalletIcon,
+  TelegramIcon,
+  MediumIcon,
 } from "@/src/components/atoms/vectors";
 
 import { useDispatch } from "react-redux";
@@ -25,6 +27,7 @@ import { toggleMobileModal } from "@/src/reducers/modalReducer";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import Image from "next/image";
+import Link from "next/link";
 
 const SideBar = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
@@ -56,16 +59,16 @@ const SideBar = () => {
       icon: <CollectionsIcon />,
       link: "/explore",
     },
-    {
-      label: "Ranking",
-      icon: <TrendingIcon />,
-      link: "/ranking",
-    },
-    {
-      label: "Activities",
-      icon: <ActivityIcon />,
-      link: "/activities",
-    },
+    // {
+    //   label: "Ranking",
+    //   icon: <TrendingIcon />,
+    //   link: "/ranking",
+    // },
+    // {
+    //   label: "Activities",
+    //   icon: <ActivityIcon />,
+    //   link: "/activities",
+    // },
     {
       label: "Cloudax Games",
       icon: <GamesIcon />,
@@ -81,12 +84,26 @@ const SideBar = () => {
   ];
 
   const socialLinks = [
-    { icon: <TwitterIcon />, label: "Twitter" },
-    { icon: <DiscordIcon />, label: "Discord" },
-    { icon: <InstagramIcon />, label: "Instagram" },
-    { icon: <YoutubeIcon />, label: "Youtube" },
-    { icon: <SnapchatIcon />, label: "SnapChat" },
-    { icon: <TiktokIcon />, label: "TikTok" },
+    {
+      icon: <TwitterIcon />,
+      label: "Twitter",
+      to: "https://twitter.com/CloudaxHQ",
+    },
+    {
+      icon: <TelegramIcon />,
+      label: "Telegram",
+      to: "https://t.me/cloudaxofficial",
+    },
+    {
+      icon: <MediumIcon />,
+      label: "Medium",
+      to: "http://cloudax.medium.com/",
+    },
+    // { icon: <DiscordIcon />, label: "Discord" },
+    // { icon: <InstagramIcon />, label: "Instagram" },
+    // { icon: <YoutubeIcon />, label: "Youtube" },
+    // { icon: <SnapchatIcon />, label: "SnapChat" },
+    // { icon: <TiktokIcon />, label: "TikTok" },
   ];
 
   return (
@@ -121,10 +138,22 @@ const SideBar = () => {
         </div>
       </div>
       <div className="mb-4 flex items-center gap-x-2 lg:hidden">
-        <span className="p-3 bg-bg-5 rounded-lg cursor-pointer">
+        <span
+          className="p-3 bg-bg-5 rounded-lg cursor-pointer"
+          onClick={() => {
+            push("/create-new-nft");
+            dispatch(toggleMobileModal());
+          }}
+        >
           Create NFT
         </span>
-        <span className="p-3 bg-bg-5 rounded-lg cursor-pointer">
+        <span
+          className="p-3 bg-bg-5 rounded-lg cursor-pointer"
+          onClick={() => {
+            push("/create-collection");
+            dispatch(toggleMobileModal());
+          }}
+        >
           Create Collection
         </span>
       </div>
@@ -132,10 +161,10 @@ const SideBar = () => {
         <SidebarLink key={item.label} item={item} />
       ))}
       <div className="social-links">
-        {socialLinks.map(({ icon, label }) => (
-          <span key={label} className="social-link">
-            {icon}
-          </span>
+        {socialLinks.map(({ icon, label, to }) => (
+          <Link key={label} href={to}>
+            <a className="social-link">{icon}</a>
+          </Link>
         ))}
       </div>
     </div>

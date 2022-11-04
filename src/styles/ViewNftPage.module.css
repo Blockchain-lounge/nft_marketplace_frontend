@@ -1,5 +1,5 @@
 .view-wrapper-hero {
-  @apply grid gap-x-8 h-[70%];
+  @apply grid lg:gap-x-8 h-[85%] lg:h-[70%];
 }
 
 .view-hero-nft-owner {

@@ -227,8 +227,8 @@ const ViewNft = () => {
       <div className="sub-layout-wrapper">
         {itemDetail !== null ? (
           <div className="center space-y-8">
-            <div className="view-wrapper-hero grid-cols-[0.5fr_1fr]">
-              <div className="relative h-[50vh]">
+            <div className="view-wrapper-hero lg:grid-cols-[0.5fr_1fr]">
+              <div className="relative h-[50vh] mb-6 lg:mb-0">
                 <Image
                   src={itemDetail.item_art_url}
                   alt={itemDetail.item_title}
@@ -239,7 +239,7 @@ const ViewNft = () => {
                   blurDataURL="/images/placeholder.png"
                 />
               </div>
-              <div className="space-y-12 flex flex-col ">
+              <div className=" space-y-6 lg:space-y-12 flex flex-col ">
                 <div>
                   <div className="flex items-center mb-4">
                     <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
@@ -257,7 +257,7 @@ const ViewNft = () => {
                         blurDataURL="/images/placeholder.png"
                       />
                     </div>
-                    <span className="text-3xl mr-1">
+                    <span className="text-xl  lg:text-3xl lg:mr-1">
                       {itemDetail.collection_id.name}
                     </span>
                     <div className="h-6 w-6 relative">
@@ -270,7 +270,7 @@ const ViewNft = () => {
                       />
                     </div>
                   </div>
-                  <span className="text-5xl font-bold">
+                  <span className="text-4xl lg:text-5xl font-bold">
                     {itemDetail.item_title}
                   </span>
                 </div>
