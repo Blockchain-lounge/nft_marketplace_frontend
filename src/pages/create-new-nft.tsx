@@ -40,6 +40,7 @@ const CreateNewNft = () => {
   const [file, setFile] = useState<FileList | null>(null);
 
   const [nftPayload, setNftPayload] = useState({
+    coinPrice: "",
     itemName: "",
     nftName: "",
     nftSymbol: "",
@@ -93,10 +94,10 @@ const CreateNewNft = () => {
   //   { type: "Open for bids", icon: <BidIcon /> },
   //   { type: "Auction", icon: <AuctionIcon /> },
   // ];
-  // const fees = [
-  //   { label: "Service fee", value: "2%" },
-  //   { label: "You will receive", value: "-" },
-  // ];
+  const fees = [
+    { label: "Service fee", value: "2%" },
+    { label: "You will receive", value: "-" },
+  ];
 
   const fetchCollections = async () => {
     try {
@@ -180,12 +181,11 @@ const CreateNewNft = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     var msg = "";
-    // if (!nftPayload.coinPrice.trim()) {
-    //   msg = "Item price is still empty";
-    //   toast(msg);
-    //   return;
-    // } else
-    if (!nftPayload.description.trim()) {
+    if (!nftPayload.coinPrice.trim()) {
+      msg = "Item price is still empty";
+      toast(msg);
+      return;
+    } else if (!nftPayload.description.trim()) {
       msg = "Item description is still empty";
       toast(msg);
       return;
@@ -223,7 +223,10 @@ const CreateNewNft = () => {
         abi.abi,
         signer
       );
-      const price = ethers.utils.parseUnits("0.005", "ether");
+      const price = ethers.utils.parseUnits(
+        nftPayload.coinPrice.toString(),
+        "ether"
+      );
       setIsTransLoading(true);
       toast("Please approve this transaction...");
 
@@ -254,7 +257,7 @@ const CreateNewNft = () => {
           item_title: nftPayload.itemName,
           token_id: itemId,
           item_description: nftPayload.description,
-          // item_price: nftPayload.coinPrice,
+          item_price: nftPayload.coinPrice,
           item_quantity: nftPayload.supply,
           item_art_url: itemIPFSURL,
           item_base_url: baseURI,
@@ -382,7 +385,7 @@ const CreateNewNft = () => {
                   ))}
                 </div>
               </div> */}
-              {/* <div className="create-new-nft-wrapper-2">
+              <div className="create-new-nft-wrapper-2">
                 <span className="create-new-nft-wrapper-2-label">Price</span>
                 <div className="create-new-nft-price">
                   <Input2
@@ -392,8 +395,8 @@ const CreateNewNft = () => {
                     value={nftPayload.coinPrice}
                   />
                 </div>
-              </div> */}
-              {/* <div className="create-new-nft-gas-fee-wrapper">
+              </div>
+              <div className="create-new-nft-gas-fee-wrapper">
                 <span>Fees</span>
                 <div className="create-new-nft-gas-fee">
                   {fees.map(({ label, value }) => (
@@ -406,7 +409,7 @@ const CreateNewNft = () => {
                     </div>
                   ))}
                 </div>
-              </div> */}
+              </div>
               <Input2
                 label="Item name"
                 name="itemName"
