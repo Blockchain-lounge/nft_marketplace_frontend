@@ -197,14 +197,13 @@ const NavBar: FC<INav> = ({
 
             <WalletIcon onClick={handleShowBal} />
           </span>
-          {!isLoggedIn ? (
-            <div className="sub-nav-tab">
-              <NavTab />
-            </div>
-          ) : null}
+
+          <div className="sub-nav-tab">
+            <NavTab />
+          </div>
         </div>
         <div className="nav-auth">
-          {isLoggedIn == true ? (
+          {isLoggedIn === true ? (
             <div className="flex items-center gap-x-4">
               <span
                 className="mr-[0.5rem] cursor-pointer"

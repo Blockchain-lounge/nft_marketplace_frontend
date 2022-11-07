@@ -124,7 +124,7 @@ nav {
 }
 
 .nav-tab {
-  @apply lg:w-3/5 lg:grid lg:grid-cols-[0.5fr_0.5fr] items-center lg:gap-x-[2.5rem];
+  @apply lg:w-3/5 lg:grid lg:grid-cols-[0.6fr_0.4fr] items-center lg:gap-x-[2.5rem];
 }
 
 .sub-nav-tab,

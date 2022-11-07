@@ -40,7 +40,7 @@ const CreateNewNft = () => {
   const [file, setFile] = useState<FileList | null>(null);
 
   const [nftPayload, setNftPayload] = useState({
-    coinPrice: "",
+    // coinPrice: "",
     itemName: "",
     nftName: "",
     nftSymbol: "",
@@ -152,10 +152,11 @@ const CreateNewNft = () => {
       fullFileName.substring(0, 1) === "."
         ? ""
         : fullFileName.split(".").slice(1).pop() || "";
-    var fileExtArr = ["jpg", "jpeg", "png"];
+    var fileExtArr = ["jpg", "jpeg", "png", "svg", "gif", "webp", "avif"];
 
     if (fileExtArr.indexOf(fileExt) <= -1) {
-      msg = "Only images of type jpg, jpeg, png are allowed";
+      msg =
+        "Only images of type jpg, jpeg, png, svg, gif, webp, avif are allowed";
       toast(msg);
       return false;
     }
@@ -181,11 +182,12 @@ const CreateNewNft = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     var msg = "";
-    if (!nftPayload.coinPrice.trim()) {
-      msg = "Item price is still empty";
-      toast(msg);
-      return;
-    } else if (!nftPayload.description.trim()) {
+    // if (!nftPayload.coinPrice.trim()) {
+    //   msg = "Item price is still empty";
+    //   toast(msg);
+    //   return;
+    // } else
+    if (!nftPayload.description.trim()) {
       msg = "Item description is still empty";
       toast(msg);
       return;
@@ -223,10 +225,11 @@ const CreateNewNft = () => {
         abi.abi,
         signer
       );
-      const price = ethers.utils.parseUnits(
-        nftPayload.coinPrice.toString(),
-        "ether"
-      );
+      // const price = ethers.utils.parseUnits(
+      //   nftPayload.coinPrice.toString(),
+      //   "ether"
+      // );
+      const price = 0;
       setIsTransLoading(true);
       toast("Please approve this transaction...");
 
@@ -257,7 +260,7 @@ const CreateNewNft = () => {
           item_title: nftPayload.itemName,
           token_id: itemId,
           item_description: nftPayload.description,
-          item_price: nftPayload.coinPrice,
+          // item_price: nftPayload.coinPrice,
           item_quantity: nftPayload.supply,
           item_art_url: itemIPFSURL,
           item_base_url: baseURI,
@@ -338,7 +341,8 @@ const CreateNewNft = () => {
                   File/Media
                 </span>
                 <span className="create-new-nft-wrapper-2-label-type">
-                  File types supported: JPG, JPEG and PNG. Max size: 20 MB
+                  File types supported: JPG, JPEG, PNG, SVG, WEBP and GIF. Max
+                  size: 20 MB
                 </span>
                 <input
                   type="file"
@@ -388,7 +392,7 @@ const CreateNewNft = () => {
                   ))}
                 </div>
               </div> */}
-              <div className="create-new-nft-wrapper-2">
+              {/* <div className="create-new-nft-wrapper-2">
                 <span className="create-new-nft-wrapper-2-label">Price</span>
                 <div className="create-new-nft-price">
                   <Input2
@@ -398,8 +402,8 @@ const CreateNewNft = () => {
                     value={nftPayload.coinPrice}
                   />
                 </div>
-              </div>
-              <div className="create-new-nft-gas-fee-wrapper">
+              </div> */}
+              {/* <div className="create-new-nft-gas-fee-wrapper">
                 <span>Fees</span>
                 <div className="create-new-nft-gas-fee">
                   {fees.map(({ label, value }) => (
@@ -412,7 +416,7 @@ const CreateNewNft = () => {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
               <Input2
                 label="Item name"
                 name="itemName"
@@ -476,7 +480,8 @@ const CreateNewNft = () => {
                 label="Royalties"
                 name="royalties"
                 placeholder="10"
-                belowDesc="Suggested: 0%, 10%, 20%, 30%. Maximum is 50%"
+                maxlength="2"
+                belowDesc="Suggested: 0%, 10%, 20%, 30%."
                 suffix="%"
                 onChange={handleFieldChange}
                 value={nftPayload.royalties}
@@ -556,10 +561,10 @@ const CreateNewNft = () => {
                     <span className="text-black text-[1.3rem]">
                       {nftPayload.itemName || "Untitled"}
                     </span>
-                    <span className="flex text-black text-[1.3rem] gap-x-1">
+                    {/* <span className="flex text-black text-[1.3rem] gap-x-1">
                       <CoinIcon color="black" />
                       {nftPayload.coinPrice || "-"}
-                    </span>
+                    </span> */}
                   </div>
                   <span className="text-[1.1rem] text-black ">
                     {/*replace with collection name*/}

@@ -211,7 +211,7 @@
 /*Nav Tab*/
 
 .nav-tab-wrapper {
-  @apply h-[3.625rem] px-[1.5625rem] flex items-center justify-between bg-[#1D1F3E] rounded-[0.625rem];
+  @apply h-[3.625rem] px-[1.5625rem] flex items-center justify-between bg-[#1D1F3E] rounded-[0.625rem] gap-x-4;
 }
 
 .tab {

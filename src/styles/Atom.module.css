@@ -93,6 +93,16 @@ input {
   @apply text-[1.125rem] focus:outline-0 bg-transparent lg:w-full;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 /* loader */
 
 .loader-body {

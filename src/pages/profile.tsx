@@ -241,7 +241,11 @@ const Profile = () => {
                   userOwnedProfileData.length > 0 ? (
                     <div className="user-profile-owned-nfts">
                       {userOwnedProfileData.map((val, i) => (
-                        <NftMediumCard2 key={val._id} {...val} to="view-nft" />
+                        <NftMediumCard2
+                          key={val._id}
+                          {...val}
+                          to="view-user-nft"
+                        />
                       ))}
                     </div>
                   ) : (
@@ -271,7 +275,7 @@ const Profile = () => {
                           <NftMediumCard2
                             key={val._id}
                             {...val}
-                            to="view-nft"
+                            to="view-user-nft"
                           />
                         ))}
                       </div>
