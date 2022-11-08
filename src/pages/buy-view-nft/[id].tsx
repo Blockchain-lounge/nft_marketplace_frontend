@@ -452,7 +452,7 @@ const ViewNft = () => {
                           />
                         </span>
                       </div> */}
-                        <div className="flex items-center gap-x-2">
+                        {/* <div className="flex items-center gap-x-2">
                           <EyeIcon />{" "}
                           <span className="block font-medium">
                             Open original
@@ -465,7 +465,7 @@ const ViewNft = () => {
                               objectFit="cover"
                             />
                           </span>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>

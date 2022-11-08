@@ -374,7 +374,7 @@ const SellSingleNft = () => {
                           />
                         </span>
                       </div>
-                      <div className="flex items-center gap-x-2">
+                      {/* <div className="flex items-center gap-x-2">
                         <EyeIcon />{" "}
                         <span className="block font-medium">Open original</span>{" "}
                         <span className="relative h-5 w-5 cursor-pointer">
@@ -385,7 +385,7 @@ const SellSingleNft = () => {
                             objectFit="cover"
                           />
                         </span>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
