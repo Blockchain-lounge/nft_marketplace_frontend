@@ -6,7 +6,7 @@ export interface INftProps {
   item_base_url: string;
   item_price: string;
   item_art_url: string;
-  item_quantity: string;
+  item_supply: string;
   user_id: string;
   collection_id: CollectionID;
   createdAt: Date;

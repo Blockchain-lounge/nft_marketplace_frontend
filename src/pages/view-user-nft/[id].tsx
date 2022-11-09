@@ -8,7 +8,7 @@ import {
   StatIcon,
 } from "@/src/components/atoms/vectors";
 import EyeIcon from "@/src/components/atoms/vectors/eye-icon";
-import { Footer2, Modal } from "@/src/components/organisms";
+import { Footer, Modal } from "@/src/components/organisms";
 import DashboardLayout from "@/src/template/DashboardLayout";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -16,7 +16,7 @@ import { useState, useEffect } from "react";
 import { apiRequest } from "../../functions/offChain/apiRequests";
 import { toast } from "react-toastify";
 
-const ViewNft = () => {
+const ViewUserNft = () => {
   const { query, push } = useRouter();
   const { id } = query;
   const [owner, setOwner] = useState(null);
@@ -26,27 +26,10 @@ const ViewNft = () => {
     push(`/list-nft-for-sale/${id}`);
   };
 
-  const fetchItemDetail = async (id) => {
-    if (id !== undefined) {
-      const HEADER = {};
-      const REQUEST_URL = "nft-item/detail/" + id;
-      const METHOD = "GET";
-      const DATA = {};
-      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-        if (response.status == 400) {
-          var error = response.data.error;
-          toast(error);
-          push("/");
-          return;
-        } else if (response.status == 200) {
-          setItemDetail(response.data.data);
-        } else {
-          toast("Something went wrong, please try again!");
-          return;
-        }
-      });
-    }
+  const handleEditNft = () => {
+    push(`/update-nft/${id}`);
   };
+
   const fetchUser = async () => {
     const HEADER = "authenticated";
     const REQUEST_URL = "user/my_profile";
@@ -68,13 +51,36 @@ const ViewNft = () => {
       }
     });
   };
+  const fetchItemDetail = async () => {
+    if (id !== undefined) {
+      const HEADER = {};
+      const REQUEST_URL = "nft-item/detail/" + id;
+      const METHOD = "GET";
+      const DATA = {};
+
+      await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          push("/");
+          return;
+        } else if (response.status == 200) {
+          setItemDetail(response.data.data);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    }
+  };
+
   useEffect(() => {
+    fetchItemDetail();
     fetchUser();
-    fetchItemDetail(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   return (
-    <DashboardLayout isLoading={!itemDetail}>
+    <DashboardLayout>
       {itemDetail !== null ? (
         <div className="sub-layout-wrapper">
           <div className="center space-y-8 h-screen lg:h-[80vh]">
@@ -196,15 +202,20 @@ const ViewNft = () => {
                       <div className="">
                         <span className="flex items-center text-[1.5rem] gap-x-1">
                           <CoinIcon />
-                          {itemDetail.item_price}
+                          {itemDetail.item_price || 0}
                         </span>
                         <span className="text-xl block mt-2">
-                          Item quantity: {itemDetail.item_quantity}
+                          Item quantity: {itemDetail.item_supply}
                         </span>
                       </div>
                     </div>
                     <div className="flex items-center justify-between gap-x-4 mt-4">
-                      <Button title="Edit" outline2 wt="w-full" />
+                      <Button
+                        title="Edit"
+                        outline2
+                        wt="w-full"
+                        onClick={handleEditNft}
+                      />
                       <Button
                         title="Sell"
                         wt="w-full"
@@ -279,7 +290,7 @@ const ViewNft = () => {
               </div>
             </div>
           </div>
-          <Footer2 />
+          <Footer />
         </div>
       ) : (
         ""
@@ -291,4 +302,4 @@ const ViewNft = () => {
   );
 };
 
-export default ViewNft;
+export default ViewUserNft;

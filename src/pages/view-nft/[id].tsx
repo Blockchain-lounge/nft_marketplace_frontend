@@ -8,7 +8,7 @@ import {
   StatIcon,
 } from "@/src/components/atoms/vectors";
 import EyeIcon from "@/src/components/atoms/vectors/eye-icon";
-import { Footer2, Modal } from "@/src/components/organisms";
+import { Footer, Modal } from "@/src/components/organisms";
 import DashboardLayout from "@/src/template/DashboardLayout";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -233,7 +233,7 @@ const ViewNft = () => {
               </div>
             </div>
           </div>
-          <Footer2 />
+          <Footer />
         </div>
       ) : (
         ""

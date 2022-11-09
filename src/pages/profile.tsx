@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import DashboardLayout from "@/src/template/DashboardLayout";
-import { Footer2 } from "@/src/components/organisms";
+import { Footer } from "@/src/components/organisms";
 import {
   CoinIcon,
   CopyIcon,
@@ -171,6 +171,7 @@ const Profile = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // console.log({ userCreatedProfileData });
 
   return (
     <DashboardLayout isLoading={isLoading}>
@@ -362,7 +363,7 @@ const Profile = () => {
             )}
           </div>
         </div>
-        <Footer2 />
+        <Footer />
       </div>
     </DashboardLayout>
   );

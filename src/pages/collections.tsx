@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Heading2, Select } from "../components/atoms";
 import { CoinIcon, StarVerify } from "../components/atoms/vectors";
 import { NftList, Tab2 } from "../components/molecules";
-import { Footer2 } from "../components/organisms";
+import { Footer } from "../components/organisms";
 import DashboardLayout from "../template/DashboardLayout";
 
 const Collections = () => {
@@ -45,7 +45,7 @@ const Collections = () => {
             />
           </div>
         </div>
-        <Footer2 />
+        <Footer />
       </div>
     </DashboardLayout>
   );

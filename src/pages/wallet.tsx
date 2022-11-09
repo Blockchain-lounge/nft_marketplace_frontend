@@ -39,12 +39,15 @@ const Wallet = () => {
           </div>
           <span className="text-[1.75rem] font-bold">
             {connectedAddress !== undefined && connectedAddress !== null
+              ? connectedAddress
+              : ""}
+            {/* {connectedAddress !== undefined && connectedAddress !== null
               ? connectedAddress.substring(0, 5)
               : ""}
             ...
             {connectedAddress !== undefined && connectedAddress !== null
               ? connectedAddress.substring(37, 42)
-              : ""}
+              : ""} */}
           </span>
         </div>
         <div className="earnings-cards">

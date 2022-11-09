@@ -14,7 +14,7 @@ import {
 } from "@/src/components/atoms/vectors";
 import { Modal } from "@/src/components/organisms";
 import EarningLayout from "@/src/template/EarningLayout";
-import clsx from "clsx";
+
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { apiRequest } from "@/src/functions/offChain/apiRequests";
@@ -23,7 +23,8 @@ import { INftProps } from "@/src/utilities/types";
 
 const ListNft = () => {
   const [showModal, setShowModal] = useState(false);
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState("0");
+  const [royalty, setRoyalty] = useState("0");
   const [itemDetail, setItemDetail] = useState<INftProps | null>(null);
   const {
     push,
@@ -57,57 +58,40 @@ const ListNft = () => {
     fetchItemDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
-  console.log({ itemDetail });
 
   const priceListingTypes = [
     { type: "Fixed price", icon: <FixedPriceIcon /> },
     { type: "Open for bids", icon: <BidIcon /> },
     { type: "Auction", icon: <AuctionIcon /> },
   ];
+
   const fees = [
     { label: "Service fee", value: "2%" },
     // { label: "Creator fee", value: "0%" },
   ];
+
   return (
     <EarningLayout title="List item for sale" isLoading={itemDetail === null}>
       <div className="create-new-nft-wrapper lg:h-[70vh]">
         <div className="space-y-8">
-          {/*Price Type*/}
-          <div className="create-new-nft-wrapper-2">
-            <span className="create-new-nft-wrapper-2-label">Type</span>
-            <span className="create-new-nft-wrapper-2-label-type">
-              Select the price type this listing
-            </span>
-
-            {/* <div className="create-new-nft-listing-type">
-              {priceListingTypes.map(({ type, icon }) => (
-                <div
-                  key={type}
-                  className={clsx(
-                    "flex flex-col justify-center items-center gap-y-2 w-full border-border-1-line border-[0.1rem] py-4 rounded-xl",
-                    type === priceListType &&
-                      "border-[#2f79f9] bg-gradient-to-r from-[#2f79f91d] to-[#3daefa21]"
-                  )}
-                  onClick={() => setPriceListType(type)}
-                >
-                  {icon}
-                  {type}
-                </div>
-              ))}
-            </div> */}
-          </div>
-          {/*Price*/}
           <div className="space-y-8">
             <div className="space-y-2">
-              <span className="create-new-nft-wrapper-2-label ">Price</span>
-              <div className="w-full">
+              <div className="w-[80%] space-y-8">
                 {/* <Select title="ETH" icon={<CoinIcon />} /> */}
                 <Input2
-                  name="coinPrice"
+                  label="Price"
+                  name="price"
                   placeholder="0.00"
                   onChange={(e) => setPrice(e.currentTarget.value)}
+                  value={price}
+                />
 
-                  // value={nftPayload.coinPrice}
+                <Input2
+                  label="Royalty"
+                  name="royalty"
+                  placeholder="0%"
+                  onChange={(e) => setRoyalty(e.currentTarget.value)}
+                  value={royalty}
                 />
               </div>
             </div>
@@ -140,7 +124,7 @@ const ListNft = () => {
               </span>
             </div>
 
-            <div className="h-[24rem] mt-2">
+            <div className="w-[25rem] h-[27rem] mt-4">
               <div className="h-[100%] relative">
                 {/* <div className="nmc-wrapper-likes nmc-wrapper2-likes z-10">
                 <LikeIcon />

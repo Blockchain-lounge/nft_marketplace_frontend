@@ -1,10 +1,10 @@
 import DashboardLayout from "../template/DashboardLayout";
 
 import { ArrowBack } from "@/src/components/atoms/vectors";
-import { Button, Heading } from "@/src/components/atoms";
-import { Footer2 } from "../components/organisms";
-import { Dispatch, ReactNode, SetStateAction } from "react";
-import Router, { useRouter } from "next/router";
+import { Button } from "@/src/components/atoms";
+import { Footer } from "../components/organisms";
+import { ReactNode } from "react";
+import Router from "next/router";
 
 const EarningLayout = ({
   children,
@@ -41,7 +41,7 @@ const EarningLayout = ({
           </div>
           <div className="earnings-children">{children}</div>
         </div>
-        <Footer2 />
+        <Footer />
       </div>
     </DashboardLayout>
   );

@@ -16,7 +16,7 @@ import {
   LikeIcon,
   StatIcon,
 } from "../../components/atoms/vectors";
-import { Footer2, Modal } from "../../components/organisms";
+import { Footer, Modal } from "../../components/organisms";
 import DashboardLayout from "../../template/DashboardLayout";
 import EyeIcon from "@/src/components/atoms/vectors/eye-icon";
 import { apiRequest } from "../../functions/offChain/apiRequests";
@@ -599,7 +599,7 @@ const ViewNft = () => {
         ) : (
           ""
         )}
-        <Footer2 />
+        <Footer />
       </div>
       <Modal
         title={modalType === "buy" ? "Checkout" : "Place a bid"}

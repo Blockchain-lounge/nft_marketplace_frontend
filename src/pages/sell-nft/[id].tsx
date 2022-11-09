@@ -8,7 +8,7 @@ import {
   LikeIcon,
   StatIcon,
 } from "../../components/atoms/vectors";
-import { Footer2, Modal } from "../../components/organisms";
+import { Footer, Modal } from "../../components/organisms";
 import DashboardLayout from "../../template/DashboardLayout";
 import EyeIcon from "@/src/components/atoms/vectors/eye-icon";
 import { Button } from "@/src/components/atoms";
@@ -515,7 +515,7 @@ const SellSingleNft = () => {
             ) : null}
           </div>
         </div>
-        <Footer2 />
+        <Footer />
         <Modal
           title="Offer"
           openModal={showModal}

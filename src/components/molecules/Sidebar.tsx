@@ -19,6 +19,7 @@ import {
   WalletIcon,
   TelegramIcon,
   MediumIcon,
+  BlogIcon,
 } from "@/src/components/atoms/vectors";
 
 import { useDispatch } from "react-redux";
@@ -28,6 +29,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import Image from "next/image";
 import Link from "next/link";
+import clsx from "clsx";
 
 const SideBar = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
@@ -76,11 +78,16 @@ const SideBar = () => {
       tag: "coming",
     },
 
-    // {
-    //   label: "Support",
-    //   icon: <SupportIcon />,
-    //   link: "/support",
-    // },
+    {
+      label: "Blog",
+      icon: <BlogIcon />,
+      to: "https://spotlight.cloudax.io/topics/nft/",
+    },
+    {
+      label: "Support",
+      icon: <SupportIcon />,
+      link: "/support",
+    },
   ];
 
   const socialLinks = [
@@ -157,9 +164,22 @@ const SideBar = () => {
           Create Collection
         </span>
       </div>
-      {sidebarLinks.map((item) => (
-        <SidebarLink key={item.label} item={item} />
-      ))}
+      {sidebarLinks.map((item) =>
+        item.label === "Blog" || item.label === "Support" ? (
+          <a className="sidebar-menu" href={item.to} key={item.label}>
+            <div className="sidebar-title-wrapper">
+              <div className="sidebar-title">
+                <span className="sidebar-icon">{item.icon}</span>
+                <span className="sidebar-label">{item.label}</span>
+              </div>
+              <span className={clsx("sidebar-toggle-btn")}></span>
+              {item.tag && <span className="sidebar-tag">{item.tag}</span>}
+            </div>
+          </a>
+        ) : (
+          <SidebarLink key={item.label} item={item} />
+        )
+      )}
       <div className="social-links">
         {socialLinks.map(({ icon, label, to }) => (
           <a key={label} href={to} target="_blank" rel="noreferrer">

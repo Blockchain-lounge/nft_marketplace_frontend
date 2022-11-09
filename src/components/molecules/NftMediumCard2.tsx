@@ -14,7 +14,7 @@ const NftCard2 = ({
   item_title,
   item_art_url,
   item_price,
-  item_quantity,
+  item_supply,
   time,
   item_id,
   to = "buy-view-nft",
@@ -23,6 +23,7 @@ const NftCard2 = ({
   to?: string;
 }) => {
   const { push } = useRouter();
+
   return (
     <div
       className="nmc-wrapper cursor-pointer"
@@ -64,14 +65,14 @@ const NftCard2 = ({
               : item_title}
           </span>
           <span className="nmc-sub-wrapper-2-owner">
-            {item_quantity === undefined ||
+            {item_supply === undefined ||
             item_title === null ||
             (item_title === "" &&
               item_id !== undefined &&
               item_id !== null &&
               item_id !== "")
-              ? item_id.item_quantity + "/" + item_id.item_quantity
-              : item_quantity + "/" + item_quantity}
+              ? item_id.item_supply + "/" + item_id.item_supply
+              : item_supply + "/" + item_supply}
           </span>
         </div>
         {time ? (
@@ -90,14 +91,8 @@ const NftCard2 = ({
                     layout="fill"
                   />
                 </span>
-                {item_quantity === undefined ||
-                item_title === null ||
-                (item_title === "" &&
-                  item_id !== undefined &&
-                  item_id !== null &&
-                  item_id !== "")
-                  ? item_id.item_price
-                  : item_price}
+
+                {item_price !== undefined || item_price !== "" ? item_price : 0}
               </div>
             </div>
           </div>
@@ -110,14 +105,7 @@ const NftCard2 = ({
                 layout="fill"
               />
             </span>
-            {item_price === undefined ||
-            item_title === null ||
-            (item_title === "" &&
-              item_id !== undefined &&
-              item_id !== null &&
-              item_id !== "")
-              ? item_id.item_price
-              : item_price}
+            {item_price !== undefined ? item_price : 0}
           </span>
         )}
       </div>
