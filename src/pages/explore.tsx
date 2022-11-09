@@ -4,7 +4,7 @@ import { Heading2, Loader } from "../components/atoms";
 import { NftCardSkeleton } from "../components/lazy-loaders";
 import { CollectionCard, NftMediumCard, Tab } from "../components/molecules";
 import { INftcard } from "../components/molecules/NftMediumCard";
-import { Footer2 } from "../components/organisms";
+import { Footer } from "../components/organisms";
 import { apiRequest } from "../functions/offChain/apiRequests";
 import DashboardLayout from "../template/DashboardLayout";
 
@@ -97,7 +97,7 @@ const Explore = () => {
                   ))}
           </div>
         </div>
-        <Footer2 />
+        <Footer />
       </div>
     </DashboardLayout>
   );
