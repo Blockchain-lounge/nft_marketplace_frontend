@@ -34,9 +34,9 @@ const EarningsCard = ({
           <span className="earnings-card-coin-amt">{coinsAmount}</span>
         </div>
         <div className="earnings-card-amount-bal">
-          <span className="earnings-card-remainig-amt-bal">
+          {/* <span className="earnings-card-remainig-amt-bal">
             ${remainingAmount}
-          </span>
+          </span> */}
           {history && (
             <div
               className="earnings-card-view-history"

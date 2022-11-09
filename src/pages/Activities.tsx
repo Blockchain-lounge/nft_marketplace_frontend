@@ -4,7 +4,7 @@ import { Heading2, Select, SelectCheckBox } from "../components/atoms";
 import { ISelectCheckProps } from "../components/atoms/SelectCheckbox";
 import { CloseIcon } from "../components/atoms/vectors";
 import { Tab2, TransactionCard } from "../components/molecules";
-import { Footer2 } from "../components/organisms";
+import { Footer } from "../components/organisms";
 import DashboardLayout from "../template/DashboardLayout";
 
 const Activities = () => {
@@ -209,7 +209,7 @@ const Activities = () => {
             ))}
           </div>
         </div>
-        <Footer2 />
+        <Footer />
       </div>
     </DashboardLayout>
   );

@@ -79,6 +79,7 @@ const NavBar: FC<INav> = ({
   const [connectedAddress, setConnectedAddress] = useState(null);
 
   account_listener();
+
   const fetchUser = async () => {
     const HEADER = "authenticated";
     const REQUEST_URL = "user/my_profile";
@@ -106,6 +107,7 @@ const NavBar: FC<INav> = ({
       }
     });
   };
+
   useEffect(() => {
     connectedAccount().then((response) => {
       if (response !== null) {
@@ -148,7 +150,6 @@ const NavBar: FC<INav> = ({
 
   const handleShowBal = () => {
     setShowBal((prev) => !prev);
-    console.log("show my profile");
   };
   const handleShowProfile = () => {
     setShowProfile((prev) => !prev);
@@ -158,6 +159,7 @@ const NavBar: FC<INav> = ({
     setShowCreateNft((prev) => !prev);
   };
   const { push } = useRouter();
+
   return (
     <nav>
       {/* <div className="nav-status center">
@@ -197,14 +199,13 @@ const NavBar: FC<INav> = ({
 
             <WalletIcon onClick={handleShowBal} />
           </span>
-          {!isLoggedIn ? (
-            <div className="sub-nav-tab">
-              <NavTab />
-            </div>
-          ) : null}
+
+          <div className="sub-nav-tab">
+            <NavTab />
+          </div>
         </div>
         <div className="nav-auth">
-          {isLoggedIn == true ? (
+          {isLoggedIn === true ? (
             <div className="flex items-center gap-x-4">
               <span
                 className="mr-[0.5rem] cursor-pointer"
@@ -218,7 +219,7 @@ const NavBar: FC<INav> = ({
               >
                 <Image
                   src={
-                    myProfile !== null && myProfile.profileImg !== ""
+                    myProfile !== null && myProfile.profileImg !== undefined
                       ? myProfile.profileImg
                       : "/images/avatar.png"
                   }

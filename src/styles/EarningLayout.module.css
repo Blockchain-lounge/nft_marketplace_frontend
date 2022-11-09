@@ -1,5 +1,5 @@
 .sub-layout-wrapper {
-  @apply h-[90vh] lg:h-screen overflow-auto pt-4 pb-8 lg:pb-28;
+  @apply h-[90vh] lg:h-screen overflow-auto pt-4 lg:pb-28;
 }
 
 .earnings-actions {

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { Heading } from "@/src/components/atoms";
 
 import { ArrowBack, CoinIcon } from "@/src/components/atoms/vectors";
-import { Footer, Footer2 } from "@/src/components/organisms";
+import { Footer2 } from "@/src/components/organisms";
 import DashboardLayout from "@/src/template/DashboardLayout";
 import Image from "next/image";
 import { useSelector } from "react-redux";
@@ -121,7 +121,7 @@ const NftDetailPage = () => {
           </div>
         </div>
 
-        {isLoggedIn ? <Footer2 /> : <Footer />}
+        <Footer2 />
       </div>
     </DashboardLayout>
   );

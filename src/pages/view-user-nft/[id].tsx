@@ -16,19 +16,49 @@ import { useState, useEffect } from "react";
 import { apiRequest } from "../../functions/offChain/apiRequests";
 import { toast } from "react-toastify";
 
-const ViewNft = () => {
+const ViewUserNft = () => {
   const { query, push } = useRouter();
   const { id } = query;
+  const [owner, setOwner] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [itemDetail, setItemDetail] = useState(null);
+  const handleSellNft = () => {
+    push(`/list-nft-for-sale/${id}`);
+  };
 
-  const fetchItemDetail = async (id) => {
+  const handleEditNft = () => {
+    push(`/update-nft/${id}`);
+  };
+
+  const fetchUser = async () => {
+    const HEADER = "authenticated";
+    const REQUEST_URL = "user/my_profile";
+    const METHOD = "GET";
+    const DATA = {};
+    apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+      if (response.status == 400) {
+        var error = response.data.error;
+        toast(error);
+        return;
+      } else if (response.status == 401) {
+        toast("Unauthorized request!");
+        return;
+      } else if (response.status == 200) {
+        setOwner(response.data.data.userProfileImg);
+      } else {
+        toast("Something went wrong, please try again!");
+        return;
+      }
+    });
+  };
+  const fetchItemDetail = async () => {
     if (id !== undefined) {
       const HEADER = {};
       const REQUEST_URL = "nft-item/detail/" + id;
       const METHOD = "GET";
       const DATA = {};
-      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+
+      await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
         if (response.status == 400) {
           var error = response.data.error;
           toast(error);
@@ -43,25 +73,28 @@ const ViewNft = () => {
       });
     }
   };
+
   useEffect(() => {
-    fetchItemDetail(id);
+    fetchItemDetail();
+    fetchUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
-  // console.log({ itemDetail });
   return (
     <DashboardLayout>
       {itemDetail !== null ? (
         <div className="sub-layout-wrapper">
-          <div className="center space-y-8 h-screen lg:h-[70vh] 2xl:h-[80vh]">
-            <div className="view-wrapper-hero lg:grid-cols-[0.3fr_0.35fr_0.35fr]">
+          <div className="center space-y-8 h-screen lg:h-[80vh]">
+            <div className="grid lg:gap-x-8 lg:grid-cols-[0.3fr_0.35fr_0.35fr]">
               <div>
-                <div className="relative h-[25rem] lg:h-[100%]">
+                <div className="relative h-[23rem] lg:h-[100%]">
                   <Image
                     src={itemDetail.item_art_url}
                     alt={itemDetail.item_title}
                     layout="fill"
                     objectFit="cover"
                     className="rounded-xl"
+                    placeholder="blur"
+                    blurDataURL="/images/placeholder.png"
                   />
                 </div>
 
@@ -107,26 +140,35 @@ const ViewNft = () => {
                 <div>
                   <div className="flex items-center mb-5">
                     {/*collection-logo*/}
-                    {/* <div className="h-[2.125rem] w-[2.125rem] relative mr-4">
-                      <Image
-                        src="/images/colx_id.png"
-                        alt="colx-img"
-                        layout="fill"
-                        objectFit="cover"
-                        className="rounded-full"
-                      />
-                    </div> */}
-                    {/* <span className="text-lg mr-1">CloneXx</span> */}
-                    {/*verified-tag*/}
-                    {/* <div className="h-5 w-5 relative">
-                      <Image
-                        src="/images/verify.svg"
-                        alt="colx-img"
-                        layout="fill"
-                        objectFit="contain"
-                        className="rounded-full"
-                      />
-                    </div> */}
+                    <div className="flex items-center mb-4">
+                      <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
+                        <Image
+                          src={
+                            itemDetail.collection_id
+                              ? itemDetail.collection_id.collectionLogoImage
+                              : "/images/placeholder.png"
+                          }
+                          alt="colx-img"
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded-full"
+                          placeholder="blur"
+                          blurDataURL="/images/placeholder.png"
+                        />
+                      </div>
+                      <span className="text-xl lg:mr-1">
+                        {itemDetail.collection_id.name}
+                      </span>
+                      <div className="h-6 w-6 relative">
+                        <Image
+                          src="/images/verify.svg"
+                          alt="colx-img"
+                          layout="fill"
+                          objectFit="contain"
+                          className="rounded-full"
+                        />
+                      </div>
+                    </div>
                   </div>
                   <span className="text-4xl font-bold capitalize">
                     {itemDetail.item_title}
@@ -136,11 +178,13 @@ const ViewNft = () => {
                   <div className="flex items-center gap-x-4">
                     <div className="relative h-14 w-14">
                       <Image
-                        src="/images/avatar.png"
+                        src={owner || "/images/avatar.png"}
                         alt="nft-img"
                         layout="fill"
                         objectFit="cover"
                         className="rounded-full"
+                        placeholder="blur"
+                        blurDataURL="/images/placeholder.png"
                       />
                     </div>
                     <div className="flex flex-col">
@@ -150,7 +194,7 @@ const ViewNft = () => {
                   </div>
                 </div>
                 <div className="view-hero-nft-cta-wrapper">
-                  <div className="flex w-full gap-x-6">
+                  <div className="flex flex-col w-full gap-x-6">
                     <div className="p-4 bg-bg-5 rounded-md w-full">
                       <span className="text-txt-2 block mb-4 text-xl">
                         Price
@@ -158,12 +202,25 @@ const ViewNft = () => {
                       <div className="">
                         <span className="flex items-center text-[1.5rem] gap-x-1">
                           <CoinIcon />
-                          {itemDetail.item_price}
+                          {itemDetail.item_price || 0}
                         </span>
                         <span className="text-xl block mt-2">
-                          Item quantity: {itemDetail.item_quantity}
+                          Item quantity: {itemDetail.item_supply}
                         </span>
                       </div>
+                    </div>
+                    <div className="flex items-center justify-between gap-x-4 mt-4">
+                      <Button
+                        title="Edit"
+                        outline2
+                        wt="w-full"
+                        onClick={handleEditNft}
+                      />
+                      <Button
+                        title="Sell"
+                        wt="w-full"
+                        onClick={handleSellNft}
+                      />
                     </div>
                   </div>
 
@@ -245,4 +302,4 @@ const ViewNft = () => {
   );
 };
 
-export default ViewNft;
+export default ViewUserNft;

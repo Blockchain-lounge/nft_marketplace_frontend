@@ -5,7 +5,7 @@
 
 /*Footer*/
 .footer {
-  @apply bg-[#1A1A30]  w-full py-[3rem] pb-[5rem] lg:py-[3.6562rem]  lg:pl-[2.5625rem] lg:pr-[10.125rem] flex flex-col lg:flex-row justify-around lg:items-start;
+  @apply bg-[#1A1A30]  w-full py-8 pb-20 lg:py-[3.6562rem]  lg:pl-[2.5625rem] lg:pr-[10.125rem] flex flex-col lg:flex-row justify-around lg:items-start mt-16;
 }
 
 .footer-icon-copy {
@@ -17,7 +17,7 @@
 }
 
 .footer-copy {
-  @apply text-xl mt-4 text-[#A5AEC1] lg:mt-[3.875rem];
+  @apply hidden text-xl mt-4 text-[#A5AEC1] lg:mt-0 lg:block;
 }
 
 footer span {
@@ -29,11 +29,11 @@ footer span {
 }
 
 .footer-link-title {
-  @apply font-medium text-2xl text-white leading-[2.21875rem] mb-3 lg:mb-[1.125rem];
+  @apply font-medium text-2xl text-white leading-[2.21875rem] mb-3 lg:mb-3;
 }
 
 .footer-links {
-  @apply text-xl text-[#A5AEC1] leading-10 lg:leading-[3.15625rem];
+  @apply text-xl text-[#A5AEC1] leading-10 cursor-pointer;
 }
 
 /*Footer2*/
@@ -124,7 +124,7 @@ nav {
 }
 
 .nav-tab {
-  @apply lg:w-3/5 lg:grid lg:grid-cols-[0.5fr_0.5fr] items-center lg:gap-x-[2.5rem];
+  @apply lg:w-3/5 lg:grid lg:grid-cols-[0.6fr_0.4fr] items-center lg:gap-x-[2.5rem];
 }
 
 .sub-nav-tab,

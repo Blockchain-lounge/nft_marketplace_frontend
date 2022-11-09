@@ -16,7 +16,7 @@ import {
   LikeIcon,
   StatIcon,
 } from "../../components/atoms/vectors";
-import { Footer2, Modal } from "../../components/organisms";
+import { Footer, Modal } from "../../components/organisms";
 import DashboardLayout from "../../template/DashboardLayout";
 import EyeIcon from "@/src/components/atoms/vectors/eye-icon";
 import { apiRequest } from "../../functions/offChain/apiRequests";
@@ -452,7 +452,7 @@ const ViewNft = () => {
                           />
                         </span>
                       </div> */}
-                        <div className="flex items-center gap-x-2">
+                        {/* <div className="flex items-center gap-x-2">
                           <EyeIcon />{" "}
                           <span className="block font-medium">
                             Open original
@@ -465,7 +465,7 @@ const ViewNft = () => {
                               objectFit="cover"
                             />
                           </span>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>
@@ -599,7 +599,7 @@ const ViewNft = () => {
         ) : (
           ""
         )}
-        <Footer2 />
+        <Footer />
       </div>
       <Modal
         title={modalType === "buy" ? "Checkout" : "Place a bid"}

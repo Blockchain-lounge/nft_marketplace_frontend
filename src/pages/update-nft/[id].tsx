@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 // @ts-nocheck
-import Router, { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Router, { useRouter } from "next/router";
 import Image from "next/image";
 import clsx from "clsx";
 import {
@@ -21,33 +21,31 @@ import {
   LikeIcon,
   ProfileLinkIcon,
   TwitterIcon,
-} from "../components/atoms/vectors";
-import { CreateCollection, Footer, Modal } from "../components/organisms";
-import DashboardLayout from "../template/DashboardLayout";
-import { Button, Input2, Select } from "../components/atoms";
+} from "../../components/atoms/vectors";
+import { CreateCollection, Footer, Modal } from "../../components/organisms";
+import DashboardLayout from "../../template/DashboardLayout";
+import { Button, Input2, Select } from "../../components/atoms";
 import { GetServerSideProps } from "next";
-import { requireAuthentication } from "../utilities/auth/requireAuthentication";
+import { requireAuthentication } from "../../utilities/auth/requireAuthentication";
 // const IPFSCLIENT = require('ipfs-http-client');
 import { create } from "ipfs-http-client";
-import APPCONFIG from "../constants/Config";
-import abi from "../artifacts/abi.json";
+import APPCONFIG from "../../constants/Config";
+import abi from "../../artifacts/abi.json";
 import { ethers } from "ethers";
-import { findEvents } from "../functions/onChain/generalFunction";
-import { apiRequest } from "../functions/offChain/apiRequests";
+import { findEvents } from "../../functions/onChain/generalFunction";
+import { apiRequest } from "../../functions/offChain/apiRequests";
 
-import { connectedAccount } from "../functions/onChain/authFunction";
+import { connectedAccount } from "../../functions/onChain/authFunction";
+import { INftProps } from "@/src/utilities/types";
 const CreateNewNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [file, setFile] = useState<FileList | null>(null);
 
-  const [nftPayload, setNftPayload] = useState({
-    // coinPrice: "",
-    itemName: "",
-    nftName: "",
-    nftSymbol: "",
-    description: "",
-    supply: "0",
-    // royalties: "",
+  const [nftPayload, setNftPayload] = useState<INftProps>({
+    item_title: "",
+    item_description: "",
+    item_supply: "",
+    // item_royalty: "",
     collection: "",
   });
 
@@ -56,13 +54,6 @@ const CreateNewNft = () => {
     id: "",
   });
 
-  // const [properties, setProperties] = useState([
-  //   { label: "clothe", value: "Hoodie" },
-  //   { label: "Ape", value: "Glasses" },
-  //   { label: "Apetype", value: "Glasses" },
-  // ]);
-  // const [priceListType, setPriceListType] = useState("");
-  const [userCollectionList, setUserCollectionList] = useState([]);
   const [collections, setCollections] = useState([]);
   const [nftImage, setNftImage] = useState([]);
   const [nftCoverImage, setNftCoverImage] = useState("");
@@ -72,13 +63,16 @@ const CreateNewNft = () => {
   const [isTransloading, setIsTransLoading] = useState(false);
   const [connectedAddress, setConnectedAddress] = useState(null);
 
-  const { push } = useRouter();
+  const {
+    push,
+    query: { id },
+  } = useRouter();
 
   const projectId = process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_ID;
   const projectSecret = process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_SECRET;
   const projectIdAndSecret = `${projectId}:${projectSecret}`;
   const IPFS_URL = APPCONFIG.IPFS_URL;
-  var baseURI = APPCONFIG.TOKEN_BASE_URL;
+
   const client = create({
     host: "ipfs.infura.io",
     port: 5001,
@@ -89,16 +83,6 @@ const CreateNewNft = () => {
       )}`,
     },
   });
-
-  // const priceListingTypes = [
-  //   { type: "Fixed price", icon: <FixedPriceIcon /> },
-  //   { type: "Open for bids", icon: <BidIcon /> },
-  //   { type: "Auction", icon: <AuctionIcon /> },
-  // ];
-  const fees = [
-    { label: "Service fee", value: "2%" },
-    { label: "You will receive", value: "-" },
-  ];
 
   const fetchCollections = async () => {
     try {
@@ -116,7 +100,6 @@ const CreateNewNft = () => {
           return;
         } else if (response.status == 200) {
           setCollections(response.data.data);
-          setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
           return;
@@ -180,35 +163,74 @@ const CreateNewNft = () => {
     };
   };
 
+  const fetchItemDetail = async () => {
+    if (id !== undefined) {
+      const HEADER = {};
+      const REQUEST_URL = "nft-item/detail/" + id;
+      const METHOD = "GET";
+      const DATA = {};
+
+      await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          push("/");
+          return;
+        } else if (response.status == 200) {
+          setNftPayload({
+            item_title: response.data.data.item_title,
+            item_description: response.data.data.item_description,
+            item_supply: response.data.data.item_supply.toString(),
+            // item_royalty: response.data.data.item_supply.toString(),
+          });
+          setNftPayloadSelect({
+            ...nftPayloadselect,
+            label: response.data.data.collection_id.name,
+            id: response.data.data.collection_id._id,
+          });
+
+          setNftCoverImage(response.data.data.item_art_url);
+          setIsLoading(false);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    }
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     var msg = "";
 
-    if (!nftPayload.description.trim()) {
-      msg = "Item description is still empty";
+    if (!nftPayload.item_description.trim()) {
+      msg = "Item item_description is still empty";
       toast(msg);
       return;
-    } else if (!nftPayload.itemName.trim()) {
+    } else if (!nftPayload.item_title.trim()) {
       msg = "Item name is still empty";
       toast(msg);
       return;
-    } else if (!nftPayload.supply.trim()) {
+    } else if (!nftPayload.item_supply.trim()) {
       msg = "Item supply is still empty";
       toast(msg);
       return;
-    } else if (isNaN(parseFloat(nftPayload.supply)) === true) {
+    } else if (isNaN(parseFloat(nftPayload.item_supply)) === true) {
       msg = "Item supply must be a valid positive number";
       toast(msg);
       return;
-    } else if (!nftPayload.royalty.trim()) {
-      msg = "Item royalty is still empty";
-      toast(msg);
-      return;
-    } else if (isNaN(parseFloat(nftPayload.royalty)) === true) {
-      msg = "Item royalty must be a valid positive number";
-      toast(msg);
-      return;
-    } else if (validationError === true) {
+    }
+    // else if (!nftPayload.item_royalty.trim()) {
+    //   msg = "Item royalty is still empty";
+    //   toast(msg);
+    //   return;
+    // }
+    // else if (isNaN(parseFloat(nftPayload.item_royalty)) === true) {
+    //   msg = "Item royalty must be a valid positive number";
+    //   toast(msg);
+    //   return;
+    // }
+    else if (validationError === true) {
       msg = "Please check the uploaded Item image";
       toast(msg);
       return;
@@ -217,10 +239,10 @@ const CreateNewNft = () => {
         const IPFSItemres = await client.add(nftImage);
         const itemIPFSURL = IPFS_URL + IPFSItemres.path;
         var formData = {
-          item_title: nftPayload.itemName,
-          item_description: nftPayload.description,
-          item_supply: nftPayload.supply,
-          // item_royalty: nftPayload.royalties,
+          item_title: nftPayload.item_title,
+          item_description: nftPayload.item_description,
+          item_supply: nftPayload.item_supply,
+          // item_royalty: nftPayload.item_royalty,
           item_art_url: itemIPFSURL,
           collection_id:
             nftPayloadselect == "" ||
@@ -232,33 +254,32 @@ const CreateNewNft = () => {
 
         toast("Finalizing the transaction off-chain...");
         const HEADER = "authenticated";
-        const REQUEST_URL = "nft-item/store";
+        const REQUEST_URL = "nft-item/update/" + id;
         const METHOD = "POST";
         const DATA = formData;
 
         apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
           if (response.status == 400) {
             var error = response.data.error;
-            toast(error);
+            toast.error(error);
             setIsTransLoading(false);
             return;
           } else if (response.status == 401) {
-            toast("Unauthorized request!");
+            toast.error("Unauthorized request!");
             setIsTransLoading(false);
             return;
           } else if (response.status == 201) {
             setIsTransLoading(false);
-            toast(response.data.message);
+            toast.success(response.data.message);
             push("/profile");
-            // setShowModal(true);
           } else {
-            toast("Something went wrong, please try again!");
+            toast.error("Something went wrong, please try again!");
             setIsTransLoading(false);
             return;
           }
         });
       } catch (error) {
-        toast("Something went wrong, please try again!");
+        toast.error("Something went wrong, please try again!");
         return;
       }
     }
@@ -268,10 +289,12 @@ const CreateNewNft = () => {
     connectedAccount().then((response) => {
       if (response !== null) {
         setConnectedAddress(response);
+        fetchItemDetail();
         fetchCollections();
       }
     });
-  }, [userCollectionList]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSelect = (file) => {
     setNftPayloadSelect({ ...nftPayloadselect, ...file });
@@ -281,16 +304,16 @@ const CreateNewNft = () => {
     push("/create-collection");
   };
 
-  // console.log(nftPayloadselect);
+  // console.log({ nftPayload });
   return (
     <DashboardLayout isLoading={isLoading}>
       <div className="sub-layout-wrapper">
         <div className="center">
+          <ToastContainer />
           <div className="earnings-title-btn">
             <ArrowBack onClick={() => Router.back()} />
-            <h1>Create New Item</h1>
+            <h1>Update Item</h1>
           </div>
-          <ToastContainer />
           <div className="create-new-nft-wrapper">
             <form onSubmit={handleSubmit} className="create-new-nft-form">
               <div className="create-new-nft-wrapper-2">
@@ -329,10 +352,10 @@ const CreateNewNft = () => {
               </div>
               <Input2
                 label="Item name"
-                name="itemName"
+                name="item_title"
                 placeholder="Enter Item name"
                 onChange={handleFieldChange}
-                value={nftPayload.itemName}
+                value={nftPayload.item_title}
               />
 
               <div className="create-new-nft-wrapper-2">
@@ -344,13 +367,13 @@ const CreateNewNft = () => {
                   page underneath its image.
                 </span>
                 <textarea
-                  name="description"
+                  name="item_description"
                   className="w-full bg-transparent  outline-none select"
                   placeholder="Provide a detailed description of your item..."
                   rows={5}
                   maxLength={250}
                   onChange={handleFieldChange}
-                  value={nftPayload.description}
+                  value={nftPayload.item_description}
                 ></textarea>
               </div>
               <div className="create-new-nft-wrapper-2">
@@ -371,52 +394,22 @@ const CreateNewNft = () => {
               </div>
               <Input2
                 label="Supply"
-                name="supply"
+                name="item_supply"
                 placeholder="1,000"
                 onChange={handleFieldChange}
-                value={nftPayload.supply}
+                value={nftPayload.item_supply}
               />
               {/* <Input2
                 label="Royalties"
-                name="royalties"
+                name="item_royalty"
                 placeholder="10"
                 maxLength="2"
                 belowDesc="Suggested: 0%, 10%, 20%, 30%."
                 suffix="%"
                 onChange={handleFieldChange}
-                value={nftPayload.royalties}
+                value={nftPayload.item_royalty}
               /> */}
-              {/* <div className="create-new-nft-wrapper-2">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="create-new-nft-wrapper-2-label">
-                      Properties
-                    </span>
-                    <span className="create-new-nft-wrapper-2-label-type">
-                      Textual traits that show up as rectangles
-                    </span>
-                  </div>
-                  <span className="h-3 w-3 grid place-content-center p-4 bg-bg-5 rounded-md">
-                    <AddIcon color="#0F94F2" />
-                  </span>
-                </div>
-                <div className="create-new-nft-properties">
-                  {properties.map(({ label, value }) => (
-                    <div
-                      key={label}
-                      className="capitalize bg-bg-5 p-3 rounded-md"
-                    >
-                      <div className="flex gap-x-3 mb-1 earnings-card-history">
-                        {label}
-                        <span>
-                          <CloseIcon color="#A2A3B8" />
-                        </span>
-                      </div>
-                      <span>{value}</span>
-                    </div>
-                  ))}
-                </div>
-              </div> */}
+
               <Button title="Create" isDisabled={isTransloading} />
             </form>
             <div className="create-new-nft-wrapper-preview max-w-[50%] hidden lg:block">
@@ -445,7 +438,7 @@ const CreateNewNft = () => {
                       <Image
                         src={nftCoverImage ? nftCoverImage : ""}
                         layout="fill"
-                        alt={nftPayload.itemName}
+                        alt={nftPayload.item_title}
                         objectFit="cover"
                         className={`rounded-t-2xl ${
                           !nftCoverImage ? "hidden" : "block"
@@ -459,7 +452,7 @@ const CreateNewNft = () => {
                 <div className="w-full bg-white rounded-b-2xl p-4 flex flex-col ">
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-black text-[1.3rem]">
-                      {nftPayload.itemName || "Untitled"}
+                      {nftPayload.item_title || "Untitled"}
                     </span>
                     {/* <span className="flex text-black text-[1.3rem] gap-x-1">
                       <CoinIcon color="black" />
@@ -491,7 +484,7 @@ const CreateNewNft = () => {
           </div>
           <span className="text-lg">Your item has been created</span>
           <span className="text-sm font-medium mx-auto max-w-[60%] text-center text-txt-2">
-            {nftPayload.itemName} from {nftPayload.collection} Collection has
+            {nftPayload.item_title} from {nftPayload.collection} Collection has
             been listed for sale
           </span>
           <div className="flex flex-col items-center gap-y-2 my-2">
@@ -511,9 +504,9 @@ const CreateNewNft = () => {
               setShowModal((prev) => !prev);
               setNftPayload({
                 ...nftPayload,
-                itemName: nftPayload.itemName,
-                description: nftPayload.description,
-                supply: nftPayload.supply,
+                item_title: nftPayload.item_title,
+                item_description: nftPayload.item_description,
+                item_supply: nftPayload.item_supply,
                 royalties: nftPayload.royalties,
               });
               setFile(null);

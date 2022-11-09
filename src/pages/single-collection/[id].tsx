@@ -6,7 +6,7 @@ import {
   SendIcon,
 } from "@/src/components/atoms/vectors";
 import { ActivityCard, NftMediumCard2, Tab } from "@/src/components/molecules";
-import { BannerImg, Footer2 } from "@/src/components/organisms";
+import { BannerImg, Footer } from "@/src/components/organisms";
 // import { singleCollectionsDatas } from "@/src/store/data";
 import DashboardLayout from "@/src/template/DashboardLayout";
 import clsx from "clsx";
@@ -257,7 +257,7 @@ const ViewCollection = () => {
           ) : null}
         </div>
 
-        <Footer2 />
+        <Footer />
       </div>
     </DashboardLayout>
   );

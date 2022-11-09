@@ -15,7 +15,7 @@ import {
 
 import DashboardLayout from "@/src/template/DashboardLayout";
 
-import { Footer, Footer2 } from "@/src/components/organisms";
+import { Footer } from "@/src/components/organisms";
 
 import { heroCards } from "@/src/store/data";
 
@@ -199,7 +199,7 @@ const Home: NextPage = () => {
           </section> */}
           </div>
         </div>
-        {isLoggedIn ? <Footer2 /> : <Footer />}
+        <Footer />
       </div>
     </DashboardLayout>
   );

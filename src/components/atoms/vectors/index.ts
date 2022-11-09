@@ -3,6 +3,7 @@ export { default as AddIcon } from "./add-icon";
 export { default as ArrowBack } from "./arrow-back";
 export { default as AuctionIcon } from "./auction-icon";
 export { default as BidIcon } from "./bid-icon";
+export { default as BlogIcon } from "./blog-icon";
 export { default as CaretDown } from "./caret-down";
 export { default as CaretUp } from "./caret-up";
 export { default as CheckIcon } from "./check-icon";

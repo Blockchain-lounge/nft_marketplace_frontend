@@ -9,7 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { apiRequest } from "../functions/offChain/apiRequests";
 import DashboardLayout from "../template/DashboardLayout";
-import { BannerImg, Footer2 } from "../components/organisms";
+import { BannerImg, Footer } from "../components/organisms";
 import { uploadFile } from "../functions/offChain/apiRequests";
 import Image from "next/image";
 import {
@@ -73,29 +73,6 @@ const Settings = () => {
       [name]: value,
     });
   };
-
-  // export const uploadFile = async (file) => {
-  //   let { data } = await axios.post("/api/s3/uploadFile", {
-  //     name: file.name,
-  //     type: file.type,
-  //   });
-  //   //fetching out an URL
-  //   const url = data.url;
-
-  //   if (url) {
-  //     toast("Please wait, while your image load");
-  //   }
-  //   //uploading file
-  //   let res = await axios.put(url, file, {
-  //     headers: {
-  //       "Content-type": file.type,
-  //     },
-  //   });
-
-  //   const imgUrl = url.split("?")[0];
-
-  //   return { imgUrl };
-  // };
 
   const handleImageFieldChange = async (e) => {
     const { files, name } = e.target;
@@ -199,7 +176,6 @@ const Settings = () => {
   };
 
   useEffect(() => {
-    // try {
     const HEADER = "authenticated";
     const REQUEST_URL = "user/my_profile";
     const METHOD = "GET";
@@ -221,22 +197,11 @@ const Settings = () => {
           profileImg: response.data.data.userProfileImg,
         });
         setIsLoading(false);
-        // setUserBannerImgPreview(
-        //   APPCONFIG.ENV_BASE_URL + "images/" + response.data.data.userBannerImg
-        // );
-        // setUserImgPreview(
-        //   APPCONFIG.ENV_BASE_URL + "images/" + response.data.data.userProfileImg
-        // );
-        // setShowModal(true);
       } else {
         toast("Something went wrong, please try again!");
         return;
       }
     });
-    // } catch (error) {
-    //   toast('Something went wrong, please try again!');
-    //   return;
-    // }
   }, [myProfile]);
 
   return (
@@ -392,9 +357,7 @@ const Settings = () => {
                   value={userDetailsPayload.userEmail}
                 />
                 <div>
-                  <span className="create-new-nft-wrapper-2-label">
-                    Description
-                  </span>
+                  <span className="create-new-nft-wrapper-2-label">Bio</span>
                   <textarea
                     name="bio"
                     className="w-full bg-transparent  outline-none select"
@@ -462,7 +425,7 @@ const Settings = () => {
 
           null}
         </div>
-        <Footer2 />
+        <Footer />
       </div>
     </DashboardLayout>
   );
