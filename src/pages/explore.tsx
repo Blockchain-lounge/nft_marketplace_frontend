@@ -85,17 +85,21 @@ const Explore = () => {
             setStage={setActiveTab}
             stages={exploreTabs}
           />
-          <div className="explore-items-wrapper">
-            {collections
-              ? collections.map((item) => (
-                  <CollectionCard key={item._id} {...item} />
-                ))
-              : Array(12)
-                  .fill(0)
-                  .map((_, i) => (
-                    <NftCardSkeleton key={i + "explore-skeleton-card"} />
-                  ))}
-          </div>
+          {collections ? (
+            <div className="explore-items-wrapper">
+              {collections.map((item) => (
+                <CollectionCard key={item._id} {...item} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-wrap justify-evenly lg:justify-between gap-y-12">
+              {Array(12)
+                .fill(0)
+                .map((_, i) => (
+                  <NftCardSkeleton key={i + "explore-skeleton-card"} />
+                ))}
+            </div>
+          )}
         </div>
         <Footer />
       </div>

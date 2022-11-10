@@ -200,15 +200,17 @@ const CreateNewNft = () => {
       msg = "Item supply must be a valid positive number";
       toast(msg);
       return;
-    } else if (!nftPayload.royalty.trim()) {
-      msg = "Item royalty is still empty";
-      toast(msg);
-      return;
-    } else if (isNaN(parseFloat(nftPayload.royalty)) === true) {
-      msg = "Item royalty must be a valid positive number";
-      toast(msg);
-      return;
-    } else if (validationError === true) {
+    }
+    //  else if (!nftPayload.royalty.trim()) {
+    //   msg = "Item royalty is still empty";
+    //   toast(msg);
+    //   return;
+    // } else if (isNaN(parseFloat(nftPayload.royalty)) === true) {
+    //   msg = "Item royalty must be a valid positive number";
+    //   toast(msg);
+    //   return;
+    // }
+    else if (validationError === true) {
       msg = "Please check the uploaded Item image";
       toast(msg);
       return;

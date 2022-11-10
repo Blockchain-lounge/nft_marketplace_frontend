@@ -238,6 +238,8 @@ const CreateNewNft = () => {
       try {
         const IPFSItemres = await client.add(nftImage);
         const itemIPFSURL = IPFS_URL + IPFSItemres.path;
+        // console.log({ itemIPFSURL });
+        setIsTransLoading(true);
         var formData = {
           item_title: nftPayload.item_title,
           item_description: nftPayload.item_description,
@@ -257,7 +259,7 @@ const CreateNewNft = () => {
         const REQUEST_URL = "nft-item/update/" + id;
         const METHOD = "POST";
         const DATA = formData;
-
+        // console.log({ REQUEST_URL, formData });
         apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
           if (response.status == 400) {
             var error = response.data.error;
@@ -268,12 +270,13 @@ const CreateNewNft = () => {
             toast.error("Unauthorized request!");
             setIsTransLoading(false);
             return;
-          } else if (response.status == 201) {
+          } else if (response.status == 200) {
             setIsTransLoading(false);
+            console.log(response.data.data);
             toast.success(response.data.message);
             push("/profile");
           } else {
-            toast.error("Something went wrong, please try again!");
+            toast.error("Something went here wrong, please try again!");
             setIsTransLoading(false);
             return;
           }
@@ -295,7 +298,7 @@ const CreateNewNft = () => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  // console.log({ nftImage });
   const handleSelect = (file) => {
     setNftPayloadSelect({ ...nftPayloadselect, ...file });
   };
@@ -410,7 +413,7 @@ const CreateNewNft = () => {
                 value={nftPayload.item_royalty}
               /> */}
 
-              <Button title="Create" isDisabled={isTransloading} />
+              <Button title="Update" isDisabled={isTransloading} />
             </form>
             <div className="create-new-nft-wrapper-preview max-w-[50%] hidden lg:block">
               <div className="create-new-nft-wrapper-2">
@@ -434,7 +437,7 @@ const CreateNewNft = () => {
                         : "hidden"
                     )}
                   >
-                    {nftCoverImage.length > 0 ? (
+                    {nftCoverImage ? (
                       <Image
                         src={nftCoverImage ? nftCoverImage : ""}
                         layout="fill"

@@ -54,6 +54,7 @@ const Home: NextPage = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
+          console.log({ res: response.data });
           setCollections(response.data.data.collections);
           setFeaturedCollections(response.data.data.featured_collections);
           setItems(response.data.data.items);
@@ -152,7 +153,8 @@ const Home: NextPage = () => {
               {items ? (
                 <NftSlider data={items} />
               ) : (
-                <div className="grid gap-y-8 lg:grid-cols-3 2xl:grid-cols-4">
+                // <div className="grid justify-between gap-y-8 sm:grid-cols-2 md:grid-cols-3  2xl:grid-cols-4">
+                <div className="flex flex-wrap justify-evenly lg:justify-between gap-y-12">
                   {Array(12)
                     .fill(0)
                     .map((_, i) => (

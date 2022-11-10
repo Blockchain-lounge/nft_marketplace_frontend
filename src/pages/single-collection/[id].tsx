@@ -46,6 +46,7 @@ const ViewCollection = () => {
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        console.log({ response });
         if (response.status == 400) {
           var error = response.data.error;
           toast(error);

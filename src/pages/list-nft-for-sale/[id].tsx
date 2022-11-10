@@ -1,4 +1,7 @@
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Button, Input2 } from "@/src/components/atoms";
 import {
   AuctionIcon,
@@ -16,15 +19,17 @@ import { Modal } from "@/src/components/organisms";
 import EarningLayout from "@/src/template/EarningLayout";
 
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
 import { apiRequest } from "@/src/functions/offChain/apiRequests";
-import { toast } from "react-toastify";
 import { INftProps } from "@/src/utilities/types";
 
 const ListNft = () => {
   const [showModal, setShowModal] = useState(false);
-  const [price, setPrice] = useState("0");
-  const [royalty, setRoyalty] = useState("0");
+  const [isTransloading, setIsTransLoading] = useState(false);
+  const [nftListingPayload, setNftListingPayload] = useState({
+    listing_quantity: "0",
+    listing_price: "0",
+    listing_royalty: "0",
+  });
   const [itemDetail, setItemDetail] = useState<INftProps | null>(null);
   const {
     push,
@@ -70,28 +75,127 @@ const ListNft = () => {
     // { label: "Creator fee", value: "0%" },
   ];
 
+  //it handles field change
+  const handleFieldChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setNftListingPayload({
+      ...nftListingPayload,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    let msg = "";
+
+    if (!nftListingPayload.listing_quantity.trim()) {
+      msg = "quantity listed is empty";
+      toast(msg);
+      return;
+    } else if (isNaN(parseFloat(nftListingPayload.listing_quantity)) === true) {
+      msg = "quantity to be listed must be a valid positive number";
+      toast(msg);
+      return;
+    } else if (
+      Number(nftListingPayload.listing_quantity) >
+      Number(itemDetail?.item_supply)
+    ) {
+      msg = "quantity is greater than your item total supply";
+      toast(msg);
+      return;
+    }
+    if (!nftListingPayload.listing_royalty.trim()) {
+      msg = "listed royalty is empty";
+      toast(msg);
+      return;
+    } else if (isNaN(parseFloat(nftListingPayload.listing_royalty)) === true) {
+      msg = "royalty must be a valid positive number";
+      toast(msg);
+      return;
+    }
+    if (!nftListingPayload.listing_price.trim()) {
+      msg = "listed price is empty";
+      toast(msg);
+      return;
+    } else if (isNaN(parseFloat(nftListingPayload.listing_price)) === true) {
+      msg = "price of listed must be a valid positive number";
+      toast(msg);
+      return;
+    } else {
+      try {
+        // var formData = {};
+        const HEADER = "authenticated";
+        const REQUEST_URL = "nft-listing/store/" + id;
+        const METHOD = "POST";
+        const DATA = nftListingPayload;
+
+        apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+          console.log({ response });
+          if (response.status == 400) {
+            var error = response.data.error;
+            toast(error);
+            setIsTransLoading(false);
+            return;
+          } else if (response.status == 401) {
+            toast("Unauthorized request!");
+            setIsTransLoading(false);
+            return;
+          } else if (response.status == 201) {
+            // setIsTransLoading(false);
+            toast(response.data.message);
+            // push("/profile");
+            // setShowModal(true);
+          } else {
+            toast("Something went wrong, please try again!");
+            // setIsTransLoading(false);
+            return;
+          }
+        });
+      } catch (error) {
+        toast("Something went wrong, please try again!");
+        return;
+      }
+    }
+  };
+
+  // item_supply
+  //  console.log({ itemDetail });
+
   return (
     <EarningLayout title="List item for sale" isLoading={itemDetail === null}>
       <div className="create-new-nft-wrapper lg:h-[70vh]">
         <div className="space-y-8">
-          <div className="space-y-8">
+          <ToastContainer />
+          <form className="space-y-8" onSubmit={handleSubmit}>
             <div className="space-y-2">
               <div className="w-[80%] space-y-8">
                 {/* <Select title="ETH" icon={<CoinIcon />} /> */}
                 <Input2
                   label="Price"
-                  name="price"
+                  name="listing_price"
                   placeholder="0.00"
-                  onChange={(e) => setPrice(e.currentTarget.value)}
-                  value={price}
+                  onChange={handleFieldChange}
+                  value={nftListingPayload.listing_price}
                 />
 
                 <Input2
                   label="Royalty"
-                  name="royalty"
+                  name="listing_royalty"
+                  maxLength={2}
+                  suffix="%"
                   placeholder="0%"
-                  onChange={(e) => setRoyalty(e.currentTarget.value)}
-                  value={royalty}
+                  onChange={handleFieldChange}
+                  value={nftListingPayload.listing_royalty}
+                />
+
+                <Input2
+                  label="Quantity to be listed"
+                  name="listing_quantity"
+                  placeholder="0"
+                  onChange={handleFieldChange}
+                  value={nftListingPayload.listing_quantity}
                 />
               </div>
             </div>
@@ -110,10 +214,11 @@ const ListNft = () => {
               </div>
             </div>
             <Button
+              isDisabled={isTransloading}
               title="Complete listing"
-              onClick={() => setShowModal((prev) => !prev)}
+              // onClick={() => setShowModal((prev) => !prev)}
             />
-          </div>
+          </form>
         </div>
         {itemDetail !== null ? (
           <div className="create-new-nft-wrapper-preview max-w-[60%]">
