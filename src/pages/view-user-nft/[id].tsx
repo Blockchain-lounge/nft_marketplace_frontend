@@ -79,12 +79,13 @@ const ViewUserNft = () => {
     fetchUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+  // console.log({ itemDetail });
   return (
     <DashboardLayout>
       {itemDetail !== null ? (
         <div className="sub-layout-wrapper">
           <div className="center space-y-8 h-screen lg:h-[80vh]">
-            <div className="grid lg:gap-x-8 lg:grid-cols-[0.3fr_0.35fr_0.35fr]">
+            <div className="grid lg:gap-x-8 lg:grid-cols-[0.35fr_0.3fr_0.35fr]">
               <div>
                 <div className="relative h-[23rem] lg:h-[100%]">
                   <Image

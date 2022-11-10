@@ -145,12 +145,12 @@ const Profile = () => {
         toast("Unauthorized request!");
         return;
       } else if (response.status == 200) {
-        setUserCreatedProfileData(response.data.data);
-        // setMyProfile({
-        //   username: response.data.data.username,
-        //   userEmail: response.data.data.email,
-        //   bio: response.data.data.bio,
-        // });
+        setUserCreatedProfileData([
+          ...userCreatedProfileData,
+          ...response.data.data.created_items,
+          ...response.data.data.listed_items,
+        ]);
+
         setIsLoading(false);
         // setShowModal(true);
       } else {

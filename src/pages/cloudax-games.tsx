@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { Heading2 } from "../components/atoms";
-import { Footer2 } from "../components/organisms";
+import { Footer } from "../components/organisms";
 import DashboardLayout from "../template/DashboardLayout";
 
 const CloudaxGames = () => {
@@ -21,7 +21,7 @@ const CloudaxGames = () => {
             Cloudax games is coming soon
           </span>
         </div>
-        <Footer2 />
+        <Footer />
       </div>
     </DashboardLayout>
   );

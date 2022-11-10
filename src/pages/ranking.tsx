@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Heading2, Select } from "../components/atoms";
 import { NftList, Tab2 } from "../components/molecules";
-import { Footer2 } from "../components/organisms";
+import { Footer } from "../components/organisms";
 import DashboardLayout from "../template/DashboardLayout";
 
 const Ranking = () => {
@@ -50,7 +50,7 @@ const Ranking = () => {
           </div>
         </div>
 
-        <Footer2 />
+        <Footer />
       </div>
     </DashboardLayout>
   );

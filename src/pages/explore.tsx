@@ -4,7 +4,7 @@ import { Heading2, Loader } from "../components/atoms";
 import { NftCardSkeleton } from "../components/lazy-loaders";
 import { CollectionCard, NftMediumCard, Tab } from "../components/molecules";
 import { INftcard } from "../components/molecules/NftMediumCard";
-import { Footer2 } from "../components/organisms";
+import { Footer } from "../components/organisms";
 import { apiRequest } from "../functions/offChain/apiRequests";
 import DashboardLayout from "../template/DashboardLayout";
 
@@ -85,19 +85,23 @@ const Explore = () => {
             setStage={setActiveTab}
             stages={exploreTabs}
           />
-          <div className="explore-items-wrapper">
-            {collections
-              ? collections.map((item) => (
-                  <CollectionCard key={item._id} {...item} />
-                ))
-              : Array(12)
-                  .fill(0)
-                  .map((_, i) => (
-                    <NftCardSkeleton key={i + "explore-skeleton-card"} />
-                  ))}
-          </div>
+          {collections ? (
+            <div className="explore-items-wrapper">
+              {collections.map((item) => (
+                <CollectionCard key={item._id} {...item} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-wrap justify-evenly lg:justify-between gap-y-12">
+              {Array(12)
+                .fill(0)
+                .map((_, i) => (
+                  <NftCardSkeleton key={i + "explore-skeleton-card"} />
+                ))}
+            </div>
+          )}
         </div>
-        <Footer2 />
+        <Footer />
       </div>
     </DashboardLayout>
   );
