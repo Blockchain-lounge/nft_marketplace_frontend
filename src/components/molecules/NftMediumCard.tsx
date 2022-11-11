@@ -7,21 +7,17 @@ import Image from "next/image";
 
 export interface INftcard {
   _id: string;
-  item_title: string;
-  item_art_url: string;
-  item_price: string;
-  item_quantity: string;
+  listing_price: string;
   status: string;
   time?: string;
+  item_id: {};
 }
 
 const NftCard = ({
   _id,
-  item_title,
-  item_art_url,
-  item_price,
-  item_quantity,
+  listing_price,
   status,
+  item_id
 }: //@ts-ignore
 Partial<INftcard>) => {
   const { push } = useRouter();
@@ -35,8 +31,8 @@ Partial<INftcard>) => {
         </div>
         <div className="h-full w-full"></div>
         <Image
-          src={item_art_url}
-          alt={item_title}
+          src={item_id.item_art_url}
+          alt={item_id.item_title}
           objectFit="cover"
           layout="fill"
           placeholder="blur"
@@ -57,8 +53,8 @@ Partial<INftcard>) => {
         <div className="nmc-wrapper-3">
           <div className="h-14 w-14 relative">
             <Image
-              src={item_art_url}
-              alt={item_title}
+              src={item_id.item_art_url}
+              alt={item_id.item_title}
               layout="fill"
               placeholder="blur"
               blurDataURL="/images/placeholder.png"
@@ -67,11 +63,11 @@ Partial<INftcard>) => {
           </div>
           {/* <div className="nmc-wrapper-4"> */}
           <div className="flex flex-col">
-            <span className="text-2xl font-bold text-black">{item_title}</span>
+            <span className="text-2xl font-bold text-black">{item_id.item_title}</span>
             {/* <span className="owner">{owner}</span> */}
           </div>
           <span className="flex items-center gap-x-1 text-black">
-            <CoinIcon color="#2B2E32" /> {item_price}
+            <CoinIcon color="#2B2E32" /> {listing_price}
           </span>
           {/* {item_price && (
               <div className="price-wrapper">

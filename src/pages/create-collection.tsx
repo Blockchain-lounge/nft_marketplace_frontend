@@ -10,13 +10,15 @@ import React, {
   Dispatch,
   FC,
   SetStateAction,
+  useEffect,
   useState,
 } from "react";
-import { Button, Heading2, Input2 } from "../components/atoms";
+import { Button, Heading2, Input2, Select } from "../components/atoms";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { apiRequest } from "../functions/offChain/apiRequests";
 import EarningLayout from "../template/EarningLayout";
+import { ICategories } from "../utilities/types";
 
 // interface ICollectionProps {
 //   closeModal: Dispatch<SetStateAction<boolean>>;
@@ -32,6 +34,8 @@ const CreateCollection: FC<ICollectionProps> = (
   const [collectionBannerPreview, setCollectionBannerPreview] = useState("");
   const [collectionBanner, setCollectionBanner] = useState("");
 
+  const [categories, setCategories] = useState<Array<ICategories> | null>(null);
+  const [category, setCategory] = useState<Record<string, string> | null>(null);
   const [collectionFeaturedArt, setCollectionFeaturedArt] = useState("");
   const [collectionFeaturedArtPreview, setCollectionFeaturedArtPreview] =
     useState("");
@@ -49,6 +53,10 @@ const CreateCollection: FC<ICollectionProps> = (
 
   const { push } = useRouter();
 
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
   const handleFieldChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -57,6 +65,10 @@ const CreateCollection: FC<ICollectionProps> = (
       ...collectionPayload,
       [name]: value,
     });
+  };
+
+  const handleSelect = (category) => {
+    setCategory({ ...category, category });
   };
 
   const validateFileInput = (files, fieldName) => {
@@ -115,6 +127,34 @@ const CreateCollection: FC<ICollectionProps> = (
       setCollectionLogo(imgUrl);
       setCollectionLogoPreview(URL.createObjectURL(files[0]));
     } else {
+      return;
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const HEADER = "";
+      const REQUEST_URL = "category/index";
+      const METHOD = "GET";
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          return;
+        } else if (response.status == 401) {
+          toast("Unauthorized request!");
+          return;
+        } else if (response.status == 200) {
+          setCategory(response.data.data[1]);
+          setCategories(response.data.data);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    } catch (error) {
+      toast("Something went wrong, please try again!");
       return;
     }
   };
@@ -181,7 +221,7 @@ const CreateCollection: FC<ICollectionProps> = (
       return;
     }
   };
-  // console.log(collectionBannerPreview);
+
   return (
     <EarningLayout title="Create a Collection">
       <div className="create-new-nft-form max-w-[80%] 2xl:max-w-[60%]">
@@ -248,7 +288,7 @@ const CreateCollection: FC<ICollectionProps> = (
 
             {collectionFeaturedArtPreview && (
               <Image
-                src={collectionFeaturedArtPreview || "/ape.png"}
+                src={collectionFeaturedArtPreview || ""}
                 alt="collection-cover-art"
                 layout="fill"
                 objectFit="cover"
@@ -329,7 +369,19 @@ const CreateCollection: FC<ICollectionProps> = (
           required
         />
         <div>
-          <span className="create-new-nft-wrapper-2-label">Description</span>
+          <span className="create-new-nft-wrapper-2-label mb-2">Category</span>
+          {category !== null ? (
+            <Select
+              title={category.name || category.label}
+              lists={categories}
+              onClick2={handleSelect}
+            />
+          ) : null}
+        </div>
+        <div>
+          <span className="create-new-nft-wrapper-2-label mb-2">
+            Description
+          </span>
           <textarea
             name="collection_description"
             className="w-full bg-transparent text-white outline-none select"

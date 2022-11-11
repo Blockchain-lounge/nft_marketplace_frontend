@@ -8,13 +8,13 @@ export interface INftProps {
   item_art_url: string;
   item_supply: string;
   user_id: string;
-  collection_id: CollectionID;
+  collection_id: ICollectionID;
   createdAt: Date;
   updatedAt: Date;
   __v: number;
 }
 
-export interface CollectionID {
+export interface ICollectionID {
   _id: string;
   name: string;
   description: string;
@@ -25,4 +25,12 @@ export interface CollectionID {
   createdAt: Date;
   updatedAt: Date;
   __v: number;
+}
+
+export interface ICategories {
+  _id: string;
+  name: string;
+  description: string;
+  icon_image: string;
+  cover_image: string;
 }

@@ -72,14 +72,16 @@ const Select = ({
                   handleSelect2({ label: label.name, id: label._id })
                 }
               >
-                <div className="relative h-12 w-12">
-                  <Image
-                    src={label.collectionLogoImage}
-                    alt={label.name}
-                    layout="fill"
-                    className="rounded-full"
-                  />
-                </div>
+                {label.collectionLogoImage ? (
+                  <div className="relative h-12 w-12">
+                    <Image
+                      src={label.collectionLogoImage}
+                      alt={label.name}
+                      layout="fill"
+                      className="rounded-full"
+                    />
+                  </div>
+                ) : null}
                 <span key={label + i} className="capitalize">
                   {label.name}
                 </span>
