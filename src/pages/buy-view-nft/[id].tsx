@@ -145,9 +145,14 @@ const ViewNft = () => {
         abi,
         signer
       );
-      const price = ethers.utils
-        .parseUnits(itemDetail.listing_price.toString(), "ether")
-        .toString();
+      // const price = ethers.utils
+      //   .parseUnits(itemDetail.listing_price.toString(), "ether")
+      //   .toString();
+
+        const price = ethers.utils.parseUnits(
+          itemDetail.listing_price.toString(),
+          "ether"
+        );
       // const price = ethers.utils.parseUnits("20", "ether");
       console.log({ price });
       // itemDetail.itemId,
@@ -155,11 +160,14 @@ const ViewNft = () => {
       const item_base_uri = `${APPCONFIG.ITEM_BASE_URL}/${userId}/${itemDetail.item._id}`;
       const transaction = await contract.buyItemCopy(
         "0xeAe3aE6248243e82b9b149047544274CE7e0f6ea",
-        price,
         itemDetail.item.item_supply,
         itemDetail.listing_royalty,
         itemDetail.item._id,
-        item_base_uri
+        item_base_uri,
+        {
+          value: price,
+          gasLimit: 5000000,
+        }
       );
       var tnx = await transaction.wait();
       toast("Please approve this transaction!");
