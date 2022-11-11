@@ -177,7 +177,7 @@ const Profile = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // console.log({ userCreatedProfileData });
+  // console.log({ userListedProfileData });
 
   return (
     <DashboardLayout isLoading={isLoading}>
@@ -313,10 +313,10 @@ const Profile = () => {
                       ))
                   )
                 ) : profileActiveTab === 2 ? (
-                  userCreatedProfileData ? (
-                    userCreatedProfileData.length > 0 ? (
+                  userListedProfileData ? (
+                    userListedProfileData.length > 0 ? (
                       <div className="user-profile-owned-nfts">
-                        {userCreatedProfileData.map((val, i) => (
+                        {userListedProfileData.map((val, i) => (
                           <NftMediumCard2
                             key={val._id}
                             {...val}
