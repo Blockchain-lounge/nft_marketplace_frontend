@@ -45,7 +45,7 @@ const CreateCollection: FC<ICollectionProps> = (
 
   const [isTransloading, setIsTransLoading] = useState(false);
 
-  // const [validationError, setValidationError] = useState(false);
+  const [validationError, setValidationError] = useState(false);
   const [collectionPayload, setCollectionPayload] = useState({
     collection_name: "",
     collection_description: "",
@@ -85,17 +85,18 @@ const CreateCollection: FC<ICollectionProps> = (
       fullFileName.substring(0, 1) === "."
         ? ""
         : fullFileName.split(".").slice(1).pop() || "";
-    var fileExtArr = ["jpg", "jpeg", "png"];
+    var fileExtArr = ["jpg", "jpeg", "png", "svg", "gif", "webp", "avif"];
 
     if (fileExtArr.indexOf(fileExt) <= -1) {
-      msg = "Only images of type jpg, jpeg, png are allowed";
+      msg =
+        "Only images of type jpg, jpeg, png, svg, gif, webp, avif are allowed";
       toast(msg);
       return false;
     }
 
-    if (files[0].name >= 5120) {
+    if (files[0].name >= 20480) {
       // 5mb * 1024kb = 5120
-      msg = "File is larger than 5mb";
+      msg = "File is larger than 20mb";
       toast(msg);
       return false;
     }
@@ -181,6 +182,7 @@ const CreateCollection: FC<ICollectionProps> = (
       cover_image: collectionBanner,
       collectionFeaturedImage: collectionFeaturedArt,
       collectionLogoImage: collectionLogo,
+      category_id: category._id || category.id,
     };
     setIsTransLoading(true);
     try {
@@ -193,6 +195,7 @@ const CreateCollection: FC<ICollectionProps> = (
         if (response.status == 400 || response.status == 404) {
           var error = response.data.error;
           toast(error);
+          setIsTransLoading(false);
           return;
         }
         if (response.status == 401) {
@@ -201,6 +204,7 @@ const CreateCollection: FC<ICollectionProps> = (
         } else if (response.status == 201) {
           toast(response.data.message);
           setIsTransLoading(false);
+
           push("/create-new-nft");
           setCollectionPayload({
             ...collectionPayload,
@@ -213,11 +217,13 @@ const CreateCollection: FC<ICollectionProps> = (
           // closeModal((prev) => !prev);
         } else {
           toast("Something went wrong, please try again!");
+          setIsTransLoading(false);
           return;
         }
       });
     } catch (error) {
       toast("Internal server occured!");
+      setIsTransLoading(false);
       return;
     }
   };
@@ -231,7 +237,8 @@ const CreateCollection: FC<ICollectionProps> = (
         <div className="create-new-nft-wrapper-2">
           <span className="create-new-nft-wrapper-2-label">Banner Image</span>
           <span className="create-new-nft-wrapper-2-label-type">
-            File types supported: JPG, JPEG and PNG. Max size: 5 MB
+            File types supported: JPG, JPEG, PNG, SVG, WEBP and GIF. Max size:
+            20 MB
           </span>
           <div className="h-[20rem] rounded-lg relative mt-2">
             <input
@@ -275,7 +282,7 @@ const CreateCollection: FC<ICollectionProps> = (
         <div className="create-new-nft-wrapper-2">
           <span className="create-new-nft-wrapper-2-label">Featured Image</span>
           <span className="create-new-nft-wrapper-2-label-type">
-            File types supported: JPG and PNG. Max size: 5 MB
+            File types supported: JPG, JPEG, PNG, SVG, WEBP and GIF. Max
           </span>
           <div className="h-72 w-72 rounded-lg relative">
             <input
@@ -319,7 +326,7 @@ const CreateCollection: FC<ICollectionProps> = (
         <div className="create-new-nft-wrapper-2">
           <span className="create-new-nft-wrapper-2-label">Logo Image</span>
           <span className="create-new-nft-wrapper-2-label-type">
-            File types supported: JPG and PNG. Max size: 5 MB
+            size: 20 MB
           </span>
           <div className="h-40 w-40 relative">
             <input
