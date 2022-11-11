@@ -28,7 +28,7 @@ import { findEvents } from "../../functions/onChain/generalFunction";
 
 import { connectedAccount } from "../../functions/onChain/authFunction";
 import { INftcard } from "@/src/components/molecules/NftMediumCard";
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import APPCONFIG from "@/src/constants/Config";
 const ViewNft = () => {
   const [showModal, setShowModal] = useState(false);
@@ -145,17 +145,27 @@ const ViewNft = () => {
         abi,
         signer
       );
-      const price = ethers.utils
-        .parseUnits(itemDetail.listing_price.toString(), "ether")
-        .toString();
+      // const price = ethers.utils.parseUnits(
+      //   itemDetail.listing_price.toString(),
+      //   18
+      // );
+
+      // const amount = BigNumber.from(itemDetail?.listing_price).mul(
+      //   BigNumber.from(10).pow(18)
+      // );
+      const decimals = 18;
+      const amount = ethers.utils.parseUnits("0.005", decimals);
       // const price = ethers.utils.parseUnits("20", "ether");
-      console.log({ price });
+      console.log({ amount });
       // itemDetail.itemId,
       toast("Please approve this transaction!");
       const item_base_uri = `${APPCONFIG.ITEM_BASE_URL}/${userId}/${itemDetail.item._id}`;
       const transaction = await contract.buyItemCopy(
         "0xeAe3aE6248243e82b9b149047544274CE7e0f6ea",
-        price,
+        {
+          value: amount,
+          gasLimit: 5000000,
+        },
         itemDetail.item.item_supply,
         itemDetail.listing_royalty,
         itemDetail.item._id,
@@ -244,6 +254,8 @@ const ViewNft = () => {
         setConnectedAddress(response);
         fetchUser();
         fetchItemDetail(id as string);
+      } else {
+        push("/");
       }
     });
 
