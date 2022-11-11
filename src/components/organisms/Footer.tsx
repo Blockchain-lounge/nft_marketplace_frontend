@@ -46,7 +46,7 @@ const Footer = () => {
         <span className="footer-copy">All rights reserved @Cloudax 2022</span>
       </div>
 
-      <div className="footer-icon-copy lg:hidden">
+      <div className="footer-icon-copy ">
         <div className="footer-icons">
           <a href="https://twitter.com/CloudaxHQ">
             <TwitterIcon />
