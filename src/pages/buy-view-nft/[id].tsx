@@ -38,6 +38,7 @@ const ViewNft = () => {
   const { id } = query;
   const [viewNftStage, setViewNftStage] = useState("overview");
   const [connectedAddress, setConnectedAddress] = useState(null);
+  const [userId, setUserId] = useState<null | string>(null);
   const [isTransloading, setIsTransLoading] = useState(false);
 
   const nftOwnersInfo = [
@@ -110,6 +111,28 @@ const ViewNft = () => {
     },
   ];
 
+  const fetchUser = async () => {
+    const HEADER = "authenticated";
+    const REQUEST_URL = "user/my_profile";
+    const METHOD = "GET";
+    const DATA = {};
+    apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+      if (response.status == 400) {
+        var error = response.data.error;
+        toast(error);
+        return;
+      } else if (response.status == 401) {
+        toast("Unauthorized request!");
+        return;
+      } else if (response.status == 200) {
+        setUserId(response.data.data._id);
+      } else {
+        toast("Something went wrong, please try again!");
+        return;
+      }
+    });
+  };
+
   const handleBuy = async () => {
     {
       /*write your payment info here*/
@@ -119,22 +142,24 @@ const ViewNft = () => {
       const signer = provider.getSigner();
       const contract = new ethers.Contract(
         APPCONFIG.SmartContractAddress,
-        abi.abi,
+        abi,
         signer
       );
-      const price = ethers.utils.parseUnits(
-        itemDetail.item_price.toString(),
-        "ether"
-      );
+      const price = ethers.utils
+        .parseUnits(itemDetail.listing_price.toString(), "ether")
+        .toString();
+      // const price = ethers.utils.parseUnits("20", "ether");
+      console.log({ price });
       // itemDetail.itemId,
       toast("Please approve this transaction!");
+      const item_base_uri = `${APPCONFIG.ITEM_BASE_URL}/${userId}/${itemDetail.item._id}`;
       const transaction = await contract.buyItemCopy(
-        itemDetail.item_token_id,
-        itemDetail.item_base_url,
-        {
-          value: price,
-          gasLimit: 5000000,
-        }
+        "0xeAe3aE6248243e82b9b149047544274CE7e0f6ea",
+        price,
+        itemDetail.item.item_supply,
+        itemDetail.listing_royalty,
+        itemDetail.item._id,
+        item_base_uri
       );
       var tnx = await transaction.wait();
       toast("Please approve this transaction!");
@@ -153,6 +178,7 @@ const ViewNft = () => {
         trackCopyBaseUrl = events.soldItemBaseURI;
         soldItemCopyId = events.soldItemCopyId.toNumber();
         buyer = events.buyer;
+        console.log({ events });
       } else {
         toast("We were unable to complete your transaction!");
         return;
@@ -170,16 +196,16 @@ const ViewNft = () => {
       const METHOD = "POST";
       const DATA = formData;
       toast("Finalizing the transaction...");
-      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
-        if (response.status == 200 || response.status == 201) {
-          toast(response.data.message);
-          setIsTransLoading(false);
-          push("/profile");
-        } else {
-          toast(response.data.error);
-          setIsTransLoading(false);
-        }
-      });
+      // apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
+      //   if (response.status == 200 || response.status == 201) {
+      //     toast(response.data.message);
+      //     setIsTransLoading(false);
+      //     push("/profile");
+      //   } else {
+      //     toast(response.data.error);
+      //     setIsTransLoading(false);
+      //   }
+      // });
     }
     setShowModal((prev) => !prev);
   };
@@ -216,9 +242,10 @@ const ViewNft = () => {
     connectedAccount().then((response) => {
       if (response !== null) {
         setConnectedAddress(response);
+        fetchUser();
+        fetchItemDetail(id as string);
       }
     });
-    fetchItemDetail(id as string);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);

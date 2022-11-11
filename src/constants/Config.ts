@@ -1,13 +1,15 @@
 const APPCONFIG = {
-    DEFAULT_ITEM_ART: '/assets/images/defaults/song_art.png',
-    DEFAULT_USER_AVATAR: '/assets/images/defaults/user_avatar.jpg',
-    SmartContractAddress: "0x22a6084e163edc0a2c902745633f7207044a17cd",
-    TOKEN_BASE_URL: process.env.NEXT_PUBLIC_ENV_BASE_URL+'metadata/tokens/',
-    ENV_BASE_URL: process.env.NEXT_PUBLIC_ENV_BASE_URL,
-    API_BASE_URL: process.env.NEXT_PUBLIC_ENV_BASE_URL+'api/',
-    IPFS_ENDPOINT: "https://ipfs.infura.io:5001",
-    IPFS_URL: "https://cloudax.infura-ipfs.io/ipfs/",
-    OPENSEA_STORE_BASE_URL: process.env.NEXT_PUBLIC_ENV_BASE_URL+'metadata/contracts/',// E.g. https://cloudax.xyz/metadata/contracts/cloudax
-  };
-  
-  export default APPCONFIG;
+  DEFAULT_ITEM_ART: "/assets/images/defaults/song_art.png",
+  DEFAULT_USER_AVATAR: "/assets/images/defaults/user_avatar.jpg",
+  SmartContractAddress: "0x4e9A3BC004b58A984bBE45D4bd21382Bb517698b",
+  TOKEN_BASE_URL: process.env.NEXT_PUBLIC_ENV_BASE_URL + "metadata/tokens/",
+  ITEM_BASE_URL: process.env.NEXT_PUBLIC_ENV_BASE_URL + "metadata",
+  ENV_BASE_URL: process.env.NEXT_PUBLIC_ENV_BASE_URL,
+  API_BASE_URL: process.env.NEXT_PUBLIC_ENV_BASE_URL + "api/",
+  IPFS_ENDPOINT: "https://ipfs.infura.io:5001",
+  IPFS_URL: "https://cloudax.infura-ipfs.io/ipfs/",
+  OPENSEA_STORE_BASE_URL:
+    process.env.NEXT_PUBLIC_ENV_BASE_URL + "metadata/contracts/", // E.g. https://cloudax.xyz/metadata/contracts/cloudax
+};
+
+export default APPCONFIG;

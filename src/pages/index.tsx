@@ -54,7 +54,7 @@ const Home: NextPage = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
-          console.log({ res: response.data });
+         
           setCollections(response.data.data.collections);
           setFeaturedCollections(response.data.data.featured_collections);
           setItems(response.data.data.items);

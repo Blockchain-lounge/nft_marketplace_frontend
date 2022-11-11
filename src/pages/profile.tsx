@@ -38,6 +38,8 @@ const Profile = () => {
     useState<Array<INftcard> | null>([]);
   const [userCreatedProfileData, setUserCreatedProfileData] =
     useState<Array<INftcard> | null>([]);
+  const [userListedProfileData, setUserListedProfileData] =
+    useState<Array<INftcard> | null>([]);
   // const [user, setUser] = useState<null | Record<string, string>>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [myProfile, setMyProfile] = useState<{
@@ -55,6 +57,7 @@ const Profile = () => {
   const profileTab = [
     { text: "Owned", count: userOwnedProfileData.length },
     { text: "Created", count: userCreatedProfileData.length },
+    { text: "Listed", count: userListedProfileData.length },
     { text: "Activity" },
   ];
 
@@ -148,6 +151,9 @@ const Profile = () => {
         setUserCreatedProfileData([
           ...userCreatedProfileData,
           ...response.data.data.created_items,
+        ]);
+        setUserListedProfileData([
+          ...userListedProfileData,
           ...response.data.data.listed_items,
         ]);
 
@@ -307,6 +313,44 @@ const Profile = () => {
                       ))
                   )
                 ) : profileActiveTab === 2 ? (
+                  userCreatedProfileData ? (
+                    userCreatedProfileData.length > 0 ? (
+                      <div className="user-profile-owned-nfts">
+                        {userCreatedProfileData.map((val, i) => (
+                          <NftMediumCard2
+                            key={val._id}
+                            {...val}
+                            to="view-user-nft"
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="profile-user-nfts">
+                        <img
+                          src="/images/404-illustration.png"
+                          alt="empty-nfts"
+                        />
+                        <span className="profile-empty-nft-title">
+                          You do not own any NFT
+                        </span>
+                        <p className="profile-empty-nft-description">
+                          There&apos;s lots of other NFTs to explore
+                        </p>
+
+                        <GradientButton
+                          title="Explore NFTs"
+                          onClick={handleNavigateToHome}
+                        />
+                      </div>
+                    )
+                  ) : (
+                    Array(12)
+                      .fill(0)
+                      .map((_, i) => (
+                        <NftCardSkeleton key={i + "explore-skeleton-card"} />
+                      ))
+                  )
+                ) : profileActiveTab === 3 ? (
                   <div className="flex justify-center items-center">
                     <div className="profile-user-nfts">
                       <img
