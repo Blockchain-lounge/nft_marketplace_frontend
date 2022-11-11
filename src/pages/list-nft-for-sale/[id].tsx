@@ -52,7 +52,7 @@ const ListNft = () => {
         } else if (response.status == 200) {
           setItemDetail(response.data.data);
         } else {
-          toast("Something went wrong, please try again!");
+          // toast("Something went wrong, please try again!");
           return;
         }
       });
@@ -125,14 +125,12 @@ const ListNft = () => {
       return;
     } else {
       try {
-        // var formData = {};
         const HEADER = "authenticated";
         const REQUEST_URL = "nft-listing/store/" + id;
         const METHOD = "POST";
         const DATA = nftListingPayload;
 
         apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-          console.log({ response });
           if (response.status == 400) {
             var error = response.data.error;
             toast(error);
@@ -143,13 +141,12 @@ const ListNft = () => {
             setIsTransLoading(false);
             return;
           } else if (response.status == 201) {
-            // setIsTransLoading(false);
+            setIsTransLoading(false);
             toast(response.data.message);
-            // push("/profile");
-            // setShowModal(true);
+            push("/profile");
           } else {
             toast("Something went wrong, please try again!");
-            // setIsTransLoading(false);
+            setIsTransLoading(false);
             return;
           }
         });
@@ -160,17 +157,14 @@ const ListNft = () => {
     }
   };
 
-  // item_supply
-  //  console.log({ itemDetail });
-
   return (
     <EarningLayout title="List item for sale" isLoading={itemDetail === null}>
-      <div className="create-new-nft-wrapper lg:h-[70vh]">
-        <div className="space-y-8">
+      <div className="flex flex-col-reverse gap-y-20 lg:gap-0 lg:flex-row lg:h-[70vh]">
+        <div className="space-y-8 lg:w-[70%]">
           <ToastContainer />
           <form className="space-y-8" onSubmit={handleSubmit}>
             <div className="space-y-2">
-              <div className="w-[80%] space-y-8">
+              <div className="lg:w-[80%] space-y-8">
                 {/* <Select title="ETH" icon={<CoinIcon />} /> */}
                 <Input2
                   label="Price"
@@ -221,7 +215,7 @@ const ListNft = () => {
           </form>
         </div>
         {itemDetail !== null ? (
-          <div className="create-new-nft-wrapper-preview max-w-[60%]">
+          <div className="mb-8 max-w-[80%] mx-auto w-full lg:mx-0 lg:max-w-[40%]">
             <div className="create-new-nft-wrapper-2 mt-2">
               <span className="create-new-nft-wrapper-2-label">Preview</span>
               <span className="create-new-nft-wrapper-2-label-type">
@@ -229,7 +223,7 @@ const ListNft = () => {
               </span>
             </div>
 
-            <div className="w-[25rem] h-[27rem] mt-4">
+            <div className="lg:w-[25rem] h-[20rem] lg:h-[27rem] mt-4">
               <div className="h-[100%] relative">
                 {/* <div className="nmc-wrapper-likes nmc-wrapper2-likes z-10">
                 <LikeIcon />

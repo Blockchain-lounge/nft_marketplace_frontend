@@ -283,7 +283,6 @@ const CreateNewNft = () => {
     push("/create-collection");
   };
 
-  // console.log(nftPayloadselect);
   return (
     <DashboardLayout isLoading={isLoading}>
       <div className="sub-layout-wrapper">
