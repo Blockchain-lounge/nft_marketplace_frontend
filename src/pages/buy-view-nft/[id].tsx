@@ -159,7 +159,7 @@ const ViewNft = () => {
       }
       var formData = {
         item_token_id: token_id,
-        item_id: itemDetail._id,
+        item: itemDetail._id,
         item_copy_id: soldItemCopyId,
         item_copy_base_url: trackCopyBaseUrl,
         amount: amount,
@@ -194,7 +194,7 @@ const ViewNft = () => {
   const fetchItemDetail = async (id: string) => {
     if (id !== undefined) {
       const HEADER = {};
-      const REQUEST_URL = "nft-item/detail/" + id;
+      const REQUEST_URL = "nft-listing/detail/" + id;
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -204,7 +204,7 @@ const ViewNft = () => {
           push("/");
           return;
         } else if (response.status == 200) {
-          setItemDetail(response.data.data);
+          setItemDetail(response.data.listing);
         } else {
           toast("Something went wrong, please try again!");
           return;
@@ -223,8 +223,6 @@ const ViewNft = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  // console.log({ itemDetail });
-
   return (
     <DashboardLayout isLoading={!itemDetail}>
       <div className="sub-layout-wrapper">
@@ -233,8 +231,8 @@ const ViewNft = () => {
             <div className="view-wrapper-hero lg:grid-cols-[0.5fr_1fr]">
               <div className="relative h-[50vh] mb-6 lg:mb-0">
                 <Image
-                  src={itemDetail.item_art_url}
-                  alt={itemDetail.item_title}
+                  src={itemDetail.item.item_art_url}
+                  alt={itemDetail.item.item_title}
                   layout="fill"
                   objectFit="cover"
                   className="rounded-xl"
@@ -248,8 +246,8 @@ const ViewNft = () => {
                     <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
                       <Image
                         src={
-                          itemDetail.collection_id
-                            ? itemDetail.collection_id.collectionLogoImage
+                          itemDetail.item.collection
+                            ? itemDetail.item.collection.logo_image
                             : "/images/placeholder.png"
                         }
                         alt="colx-img"
@@ -261,7 +259,7 @@ const ViewNft = () => {
                       />
                     </div>
                     <span className="text-xl  lg:text-3xl lg:mr-1">
-                      {itemDetail.collection_id.name}
+                      {itemDetail.item.collection.name}
                     </span>
                     <div className="h-6 w-6 relative">
                       <Image
@@ -274,7 +272,7 @@ const ViewNft = () => {
                     </div>
                   </div>
                   <span className="text-4xl lg:text-5xl font-bold">
-                    {itemDetail.item_title}
+                    {itemDetail.item.item_title}
                   </span>
                 </div>
                 {/* <div className="view-hero-nft-owner">
@@ -305,7 +303,7 @@ const ViewNft = () => {
                       <div className="">
                         <span className="flex items-center text-[1.5rem] gap-x-1">
                           <CoinIcon />
-                          {itemDetail.item_price}
+                          {itemDetail.listing_price}
                         </span>
                         {/* <span className="text-lg block mt-2">$5,954,532</span> */}
                       </div>
@@ -418,7 +416,7 @@ const ViewNft = () => {
                     <div className="flex flex-col">
                       <p className="text-txt-2">
                         {/*@ts-ignore*/}
-                        {itemDetail.item_description}
+                        {itemDetail.item.item_description}
                       </p>
                     </div>
                     {/* <span className="flex items-center gap-x-2 text-txt-3 font-medium">
