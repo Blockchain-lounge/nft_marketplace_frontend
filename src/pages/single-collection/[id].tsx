@@ -64,7 +64,7 @@ const ViewCollection = () => {
     }
   };
   useEffect(() => {
-    fetchCollectionItems(id as string);
+    // fetchCollectionItems(id as string);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 

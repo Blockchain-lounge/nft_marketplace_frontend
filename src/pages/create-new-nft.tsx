@@ -218,6 +218,7 @@ const CreateNewNft = () => {
       try {
         const IPFSItemres = await client.add(nftImage);
         const itemIPFSURL = IPFS_URL + IPFSItemres.path;
+        setIsTransLoading(true);
         var formData = {
           item_title: nftPayload.itemName,
           item_description: nftPayload.description,
