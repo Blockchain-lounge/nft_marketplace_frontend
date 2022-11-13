@@ -282,7 +282,8 @@ const CreateCollection: FC<ICollectionProps> = (
         <div className="create-new-nft-wrapper-2">
           <span className="create-new-nft-wrapper-2-label">Featured Image</span>
           <span className="create-new-nft-wrapper-2-label-type">
-            File types supported: JPG, JPEG, PNG, SVG, WEBP and GIF. Max
+            File types supported: JPG, JPEG, PNG, SVG, WEBP and GIF. Max size:
+            20 MB
           </span>
           <div className="h-72 w-72 rounded-lg relative">
             <input
@@ -326,7 +327,8 @@ const CreateCollection: FC<ICollectionProps> = (
         <div className="create-new-nft-wrapper-2">
           <span className="create-new-nft-wrapper-2-label">Logo Image</span>
           <span className="create-new-nft-wrapper-2-label-type">
-            size: 20 MB
+            File types supported: JPG, JPEG, PNG, SVG, WEBP and GIF. Max size:
+            20 MB
           </span>
           <div className="h-40 w-40 relative">
             <input
