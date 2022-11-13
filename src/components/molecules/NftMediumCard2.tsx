@@ -14,7 +14,8 @@ const NftCard2 = ({
   item_title,
   item_art_url,
   item_price,
-  item_supply,
+  // item_supply,
+  item_quantity,
   time,
   item_id,
   to = "buy-view-nft",
@@ -23,7 +24,15 @@ const NftCard2 = ({
   to?: string;
 }) => {
   const { push } = useRouter();
-
+  // console.log({
+  //   _id,
+  //   item_title,
+  //   item_art_url,
+  //   item_price,
+  //   time,
+  //   item_id,
+  //   item_supply,
+  // });
   return (
     <div
       className="nmc-wrapper cursor-pointer"
@@ -31,7 +40,7 @@ const NftCard2 = ({
     >
       <div className="nmc-wrapper2-img">
         <div className="nmc-wrapper-likes nmc-wrapper2-likes">
-          <LikeIcon />
+          {/* <LikeIcon /> */}
           {/* <span>298</span> */}
         </div>
         <Image
@@ -65,14 +74,15 @@ const NftCard2 = ({
               : item_title}
           </span>
           <span className="nmc-sub-wrapper-2-owner">
-            {item_supply === undefined ||
+            {/* <span className="font-bold text-black text-xl">Quantity: </span> */}
+            {item_quantity === undefined ||
             item_title === null ||
             (item_title === "" &&
               item_id !== undefined &&
               item_id !== null &&
               item_id !== "")
-              ? item_id.item_supply + "/" + item_id.item_supply
-              : item_supply + "/" + item_supply}
+              ? item_id.item_quantity + "/" + item_id.item_quantity
+              : item_quantity}
           </span>
         </div>
         {time ? (

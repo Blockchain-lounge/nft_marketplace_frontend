@@ -293,7 +293,7 @@ const Profile = () => {
                           alt="empty-nfts"
                         />
                         <span className="profile-empty-nft-title">
-                          You do not own any NFT
+                          You have not created any NFT
                         </span>
                         <p className="profile-empty-nft-description">
                           There&apos;s lots of other NFTs to explore
@@ -312,45 +312,46 @@ const Profile = () => {
                         <NftCardSkeleton key={i + "explore-skeleton-card"} />
                       ))
                   )
-                ) : profileActiveTab === 2 ? (
-                  userListedProfileData ? (
-                    userListedProfileData.length > 0 ? (
-                      <div className="user-profile-owned-nfts">
-                        {userListedProfileData.map((val, i) => (
-                          <NftMediumCard2
-                            key={val._id}
-                            {...val}
-                            to="view-user-nft"
-                          />
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="profile-user-nfts">
-                        <img
-                          src="/images/404-illustration.png"
-                          alt="empty-nfts"
-                        />
-                        <span className="profile-empty-nft-title">
-                          You do not own any NFT
-                        </span>
-                        <p className="profile-empty-nft-description">
-                          There&apos;s lots of other NFTs to explore
-                        </p>
+                ) : // profileActiveTab === 2 ? (
+                //   userListedProfileData ? (
+                //     userListedProfileData.length > 0 ? (
+                //       <div className="user-profile-owned-nfts">
+                //         {userListedProfileData.map((val, i) => (
+                //           <NftMediumCard2
+                //             key={val._id}
+                //             {...val}
+                //             to="view-user-nft"
+                //           />
+                //         ))}
+                //       </div>
+                //     ) : (
+                //       <div className="profile-user-nfts">
+                //         <img
+                //           src="/images/404-illustration.png"
+                //           alt="empty-nfts"
+                //         />
+                //         <span className="profile-empty-nft-title">
+                //           You do not own any NFT
+                //         </span>
+                //         <p className="profile-empty-nft-description">
+                //           There&apos;s lots of other NFTs to explore
+                //         </p>
 
-                        <GradientButton
-                          title="Explore NFTs"
-                          onClick={handleNavigateToHome}
-                        />
-                      </div>
-                    )
-                  ) : (
-                    Array(12)
-                      .fill(0)
-                      .map((_, i) => (
-                        <NftCardSkeleton key={i + "explore-skeleton-card"} />
-                      ))
-                  )
-                ) : profileActiveTab === 3 ? (
+                //         <GradientButton
+                //           title="Explore NFTs"
+                //           onClick={handleNavigateToHome}
+                //         />
+                //       </div>
+                //     )
+                //   ) : (
+                //     Array(12)
+                //       .fill(0)
+                //       .map((_, i) => (
+                //         <NftCardSkeleton key={i + "explore-skeleton-card"} />
+                //       ))
+                //   )
+                // ) :
+                profileActiveTab === 3 ? (
                   <div className="flex justify-center items-center">
                     <div className="profile-user-nfts">
                       <img
