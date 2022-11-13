@@ -312,7 +312,7 @@ const Profile = () => {
                         <NftCardSkeleton key={i + "explore-skeleton-card"} />
                       ))
                   )
-                ) : // profileActiveTab === 2 ? (
+                ) : // : profileActiveTab === 2 ? (
                 //   userListedProfileData ? (
                 //     userListedProfileData.length > 0 ? (
                 //       <div className="user-profile-owned-nfts">
@@ -350,7 +350,7 @@ const Profile = () => {
                 //         <NftCardSkeleton key={i + "explore-skeleton-card"} />
                 //       ))
                 //   )
-                // ) :
+                // )
                 profileActiveTab === 3 ? (
                   <div className="flex justify-center items-center">
                     <div className="profile-user-nfts">
