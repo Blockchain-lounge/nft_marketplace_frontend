@@ -20,7 +20,9 @@ import { Footer, Modal } from "../../components/organisms";
 import DashboardLayout from "../../template/DashboardLayout";
 import EyeIcon from "@/src/components/atoms/vectors/eye-icon";
 import { apiRequest } from "../../functions/offChain/apiRequests";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import { useRouter } from "next/router";
 
 import abi from "../../artifacts/abi.json";
@@ -145,11 +147,11 @@ const ViewNft = () => {
         abi,
         signer
       );
-    
-        const price = ethers.utils.parseUnits(
-          itemDetail.listing_price.toString(),
-          "ether"
-        );
+
+      const price = ethers.utils.parseUnits(
+        itemDetail.listing_price.toString(),
+        "ether"
+      );
 
       // const decimals = 18;
       // const input = 0.005;
@@ -158,11 +160,10 @@ const ViewNft = () => {
       // const decimals = 18;
       // const input = "0.005"; // Note: this is a string, e.g. user input
       // const price = ethers.utils.parseUnits(input, decimals).toString()
-      
+
       toast("Please approve this transaction!");
       const item_base_uri = `${APPCONFIG.ITEM_BASE_URL}/${userId}/${itemDetail.item._id}`;
-    
-      
+
       const transaction = await contract.buyItemCopy(
         itemDetail.listed_by.address,
         price,
@@ -171,8 +172,8 @@ const ViewNft = () => {
         itemDetail.item._id,
         item_base_uri,
         {
-          value: price
-        },
+          value: price,
+        }
       );
       var tnx = await transaction.wait();
       toast("Please approve this transaction!");
@@ -189,7 +190,7 @@ const ViewNft = () => {
         soldItemCopyId = events.soldItemCopyId.toNumber();
         buyer = events.buyer;
         trackCopyBaseUrl = events.soldItemBaseURI;
-        console.log({ events });
+        // console.log({ events });
       } else {
         toast("We were unable to complete your transaction!");
         return;
@@ -199,7 +200,7 @@ const ViewNft = () => {
         item_copy_id: soldItemCopyId,
         item_copy_base_url: trackCopyBaseUrl,
         amount: amount,
-        buyer: buyer
+        buyer: buyer,
       };
       const HEADER = "authenticated";
       const REQUEST_URL = "nft-listing/buy";
@@ -207,6 +208,7 @@ const ViewNft = () => {
       const DATA = formData;
       toast("Finalizing the transaction...");
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
+        console.log({ response });
         if (response.status == 200 || response.status == 201) {
           toast(response.data.message);
           setIsTransLoading(false);
@@ -217,15 +219,14 @@ const ViewNft = () => {
         }
       });
     }
-    setShowModal((prev) => !prev);
+    // setShowModal((prev) => !prev);
   };
-  const handleBid = () => {
-    {
-      /*write your bid info here*/
-    }
-    setShowModal((prev) => !prev);
-    setModaltype("buy");
-  };
+
+  /*write your bid info here*/
+  // const handleBid = () => {
+  //   setShowModal((prev) => !prev);
+  //   setModaltype("buy");
+  // };
 
   const fetchItemDetail = async (id: string) => {
     if (id !== undefined) {
@@ -265,6 +266,7 @@ const ViewNft = () => {
   return (
     <DashboardLayout isLoading={!itemDetail}>
       <div className="sub-layout-wrapper">
+        <ToastContainer />
         {itemDetail !== null ? (
           <div className="center space-y-8">
             <div className="view-wrapper-hero lg:grid-cols-[0.5fr_1fr]">
