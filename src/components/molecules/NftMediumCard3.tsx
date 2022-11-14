@@ -27,6 +27,8 @@ const NftMediumCard3 = ({
           alt={name + "img"}
           layout="fill"
           objectFit="cover"
+          placeholder="blur"
+          blurDataURL="/images/placeholder.png"
         />
       </div>
       <div className="pt-[1.25rem] pb-[1.3rem] px-6 flex justify-between items-center">

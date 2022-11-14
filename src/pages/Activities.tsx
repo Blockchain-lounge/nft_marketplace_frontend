@@ -1,15 +1,25 @@
 import Image from "next/image";
-import React, { useState } from "react";
-import { Heading2, Select, SelectCheckBox } from "../components/atoms";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { Heading2, Select, Select2, SelectCheckBox } from "../components/atoms";
 import { ISelectCheckProps } from "../components/atoms/SelectCheckbox";
 import { CloseIcon } from "../components/atoms/vectors";
 import { Tab2, TransactionCard } from "../components/molecules";
 import { Footer } from "../components/organisms";
+import { apiRequest } from "../functions/offChain/apiRequests";
 import DashboardLayout from "../template/DashboardLayout";
+import { ITransactionCard } from "../utilities/types";
 
 const Activities = () => {
   const [currentTab, setCurrentTab] = useState("1 h");
-  const [currentEvent, setCurrentEvent] = useState("All");
+  const [activities, setActivities] = useState<Array<ITransactionCard>>([]);
+  const [currentEvent, setCurrentEvent] = useState<{
+    name: string;
+    value: string;
+  }>({
+    name: "All",
+    value: "",
+  });
   const [collections, setCollections] = useState([
     {
       label: "Clonex",
@@ -40,18 +50,7 @@ const Activities = () => {
     ISelectCheckProps[]
   >([]);
 
-  const tabs = ["1 h", "6 h", "24 h", "1 w", "1 m", "All"];
-
-  //     transactionType,
-  //   imgUrl,
-  //   address,
-  //   user,
-  //   collectionName,
-  //   receiver,
-  //   coinAmount = "4.5",
-  //   amount = "5,954,532",
-  //   date = "02/08/2022",
-  //   time = "10:52",
+  // const tabs = ["1 h", "6 h", "24 h", "1 w", "1 m", "All"];
 
   const activitiesData = [
     {
@@ -136,7 +135,74 @@ const Activities = () => {
       address: "0xb4d...002d",
     },
   ];
-  const events = ["All", "Sales", "listings", "offers", "transfers"];
+  const events = [
+    { name: "All", value: "" },
+    { name: "Sales", value: "" },
+    { name: "Newly listed Item", value: "newly_listed_item" },
+    { name: "Newly Created Item", value: "newly_created_item" },
+    { name: "Offers", value: "" },
+    { name: "Transfers", value: "" },
+  ];
+
+  const sorting = [{ name: "Ascending", value: "asc" }];
+
+  const fetchActivities = async () => {
+    try {
+      const HEADER = {};
+      const REQUEST_URL = "/activities";
+      const METHOD = "GET";
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          return;
+        } else if (response.status == 401) {
+          toast("Unauthorized request!");
+          return;
+        } else if (response.status == 200) {
+          console.log(response.data);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    } catch (error) {
+      toast("Something went wrong, please try again!");
+      return;
+    }
+  };
+
+  useEffect(() => {
+    try {
+      const HEADER = {};
+      const REQUEST_URL = "/activities";
+      const METHOD = "GET";
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          return;
+        } else if (response.status == 401) {
+          toast("Unauthorized request!");
+          return;
+        } else if (response.status == 200) {
+          // console.log(response.data);
+          setActivities([...activities, ...response.data.data]);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    } catch (error) {
+      toast("Something went wrong, please try again!");
+      return;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentEvent.name]);
+
+  // console.log({ activities });
 
   return (
     <DashboardLayout>
@@ -145,27 +211,34 @@ const Activities = () => {
           <div className="collection-page-top">
             <div className="collection-page-sub-top">
               <Heading2 title="Activities" />
-              <Select
+              <Select2
                 title="Event type"
-                placeholder={currentEvent}
-                onClick={setCurrentEvent}
+                placeholder={
+                  typeof currentEvent === "object" ? currentEvent.name : ""
+                }
+                onClick={
+                  setCurrentEvent as React.Dispatch<
+                    React.SetStateAction<string | Record<string, string>>
+                  >
+                }
                 lists={events}
+                wt="w-[12rem]"
               />
-              <SelectCheckBox
+              {/* <SelectCheckBox
                 lists={collections}
                 //@ts-ignore
                 setLists={setCollections}
                 title="Collection"
                 selectedLists={selectedCollection}
                 newLists={setSelectedCollection}
-              />
+              /> */}
               {/* <Select title="Chains" /> */}
             </div>
-            <Tab2
+            {/* <Tab2
               tabs={tabs}
               activeTab={currentTab}
               setActiveTab={setCurrentTab}
-            />
+            /> */}
           </div>
           <div className="flex items-center gap-x-4 mb-6">
             {selectedCollection.map((val, i) => (
