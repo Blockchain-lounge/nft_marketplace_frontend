@@ -146,18 +146,18 @@ const ViewNft = () => {
         signer
       );
     
-        // const price = ethers.utils.parseUnits(
-        //   itemDetail.listing_price.toString(),
-        //   "ether"
-        // );
+        const price = ethers.utils.parseUnits(
+          itemDetail.listing_price.toString(),
+          "ether"
+        );
 
       // const decimals = 18;
       // const input = 0.005;
       // const price = BigNumber.from(input).mul(BigNumber.from(10).pow(decimals)).toString();
 
-      const decimals = 18;
-      const input = "0.005"; // Note: this is a string, e.g. user input
-      const price = ethers.utils.parseUnits(input, decimals).toString()
+      // const decimals = 18;
+      // const input = "0.005"; // Note: this is a string, e.g. user input
+      // const price = ethers.utils.parseUnits(input, decimals).toString()
       
       
       // itemDetail.itemId,
@@ -185,8 +185,8 @@ const ViewNft = () => {
         price,
         itemDetail.item.item_supply,
         itemDetail.listing_royalty,
-        "2121",
-        "https://test.com",
+        itemDetail.item._id,
+        item_base_uri,
         {
           value: price
         },
