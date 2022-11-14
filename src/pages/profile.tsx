@@ -293,7 +293,7 @@ const Profile = () => {
                           alt="empty-nfts"
                         />
                         <span className="profile-empty-nft-title">
-                          You do not own any NFT
+                          You have not created any NFT
                         </span>
                         <p className="profile-empty-nft-description">
                           There&apos;s lots of other NFTs to explore

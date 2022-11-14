@@ -39,22 +39,22 @@ const ViewCollection = () => {
   const [singleCollectionDetail, setSingleCollectionDetail] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchCollectionItems = async (id: string) => {
+  const fetchCollectionItems = async () => {
     if (id !== undefined) {
       const HEADER = {};
-      const REQUEST_URL = "nft-item/collection/" + id;
+      const REQUEST_URL = "nft-listing/collection/" + id;
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-        console.log({ response });
+        // console.log({ response });
         if (response.status == 400) {
           var error = response.data.error;
           toast(error);
           push("/");
           return;
         } else if (response.status == 200) {
-          setSingleCollectionsData(response.data.data.items);
-          setSingleCollectionDetail(response.data.data.collection);
+          setSingleCollectionsData(response.data.items);
+          setSingleCollectionDetail(response.data.collection);
           setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
@@ -64,7 +64,7 @@ const ViewCollection = () => {
     }
   };
   useEffect(() => {
-    // fetchCollectionItems(id as string);
+    fetchCollectionItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
@@ -92,9 +92,9 @@ const ViewCollection = () => {
                     alt="collection-logo"
                     objectFit="cover"
                     layout="fill"
-                    className="rounded-full"
                     placeholder="blur"
                     blurDataURL="/images/placeholder.png"
+                    className="rounded-full"
                   />
                 </div>
               </div>
@@ -230,7 +230,7 @@ const ViewCollection = () => {
                 <div className="grid lg:grid-cols-3 2xl:grid-cols-4 gap-8">
                   {singleCollectionsData ? (
                     singleCollectionsData.map((val, i) => (
-                      <NftMediumCard2 {...val} key={val.name + i} />
+                      <NftMediumCard2 {...val} key={val._id} />
                     ))
                   ) : (
                     <Heading2 title="You have no items in this collection." />
