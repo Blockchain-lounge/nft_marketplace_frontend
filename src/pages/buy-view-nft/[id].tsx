@@ -161,12 +161,7 @@ const ViewNft = () => {
       
       toast("Please approve this transaction!");
       const item_base_uri = `${APPCONFIG.ITEM_BASE_URL}/${userId}/${itemDetail.item._id}`;
-      console.log("price", price );
-      console.log( "item_supply", itemDetail.item.item_supply );
-      console.log("listing_royalty", itemDetail.listing_royalty );
-      console.log("item._id,", itemDetail.item._id );
-      console.log("item_base_uri,", item_base_uri );
-      console.log("itemDetail,", itemDetail );
+    
       
       const transaction = await contract.buyItemCopy(
         itemDetail.listed_by.address,
