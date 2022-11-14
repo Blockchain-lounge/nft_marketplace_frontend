@@ -17,7 +17,7 @@ const NftCard = ({
   _id,
   listing_price,
   status,
-  item_id
+  item_id,
 }: //@ts-ignore
 Partial<INftcard>) => {
   const { push } = useRouter();
@@ -31,7 +31,7 @@ Partial<INftcard>) => {
         </div>
         <div className="h-full w-full"></div>
         <Image
-          src={item_id.item_art_url}
+          src={item_id.item_art_url ? item_id.item_art_url : ""}
           alt={item_id.item_title}
           objectFit="cover"
           layout="fill"
@@ -63,7 +63,9 @@ Partial<INftcard>) => {
           </div>
           {/* <div className="nmc-wrapper-4"> */}
           <div className="flex flex-col">
-            <span className="text-2xl font-bold text-black">{item_id.item_title}</span>
+            <span className="text-2xl font-bold text-black">
+              {item_id.item_title}
+            </span>
             {/* <span className="owner">{owner}</span> */}
           </div>
           <span className="flex items-center gap-x-1 text-black">

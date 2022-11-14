@@ -10,6 +10,7 @@ export { default as Input2 } from "./Input-2";
 export { default as Loader } from "./Loader";
 export { default as NextSliderBtn } from "./NextSliderBtn";
 export { default as Select } from "./Select";
+export { default as Select2 } from "./Select2";
 export { default as SelectCheckBox } from "./SelectCheckbox";
 export { default as SidebarLink } from "./SidebarLink";
 export { default as Tag } from "./Tag";

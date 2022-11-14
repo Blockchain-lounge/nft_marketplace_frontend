@@ -11,6 +11,7 @@ import {
   NftMiniCard,
   HeroCard,
   NftSlider,
+  CategoryHeroCard,
 } from "@/src/components/molecules";
 
 import DashboardLayout from "@/src/template/DashboardLayout";
@@ -28,7 +29,6 @@ import {
   NftCardSkeleton,
   NftMiniCardSkeleton,
 } from "../components/lazy-loaders";
-import Skeleton from "react-loading-skeleton";
 
 const Home: NextPage = () => {
   const [heroData, setHeroData] = useState(heroCards);
@@ -54,7 +54,6 @@ const Home: NextPage = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
-         
           setCollections(response.data.data.collections);
           setFeaturedCollections(response.data.data.featured_collections);
           setItems(response.data.data.items);
@@ -76,7 +75,7 @@ const Home: NextPage = () => {
     <DashboardLayout>
       <div className="home-wrapper">
         <div className="space-y-[9rem] center mb-[10.125rem]">
-          <section className="hero">
+          {/* <section className="hero">
             <div>
               {<Tag tag={activeCard?.tag} icon={<FeaturedIcon />} />}
               <Heading title={activeCard.title} twClasses="mt-4" />
@@ -108,19 +107,7 @@ const Home: NextPage = () => {
                     />
                   ))}
               </div>
-              {/* <div className="hero-cards">
-                {featuredCollections
-                  ? featuredCollections.map((val, i) => (
-                      <HeroCard
-                        key={val._id}
-                        {...val}
-                        onClick={() => {
-                          setActiveCard(val);
-                        }}
-                      />
-                    ))
-                  : ""}
-              </div> */}
+
               <div className="flex w-full mb-4 lg:mb-0 items-center justify-center lg:block">
                 <HeroIndicator
                   arr={heroData}
@@ -129,7 +116,8 @@ const Home: NextPage = () => {
                 />
               </div>
             </div>
-          </section>
+          </section> */}
+          <CategoryHeroCard />
           <div className="hero-section-1">
             <section className="mb-20">
               <NftHeaderCard

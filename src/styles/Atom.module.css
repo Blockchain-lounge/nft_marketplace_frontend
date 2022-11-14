@@ -177,7 +177,7 @@ input[type="number"] {
 }
 
 .select-lists {
-  @apply absolute rounded-[0.5rem] border-[1px] border-border-1-line flex-col top-[110%] bg-bg-4 p-2 z-10 h-[20rem] overflow-y-auto;
+  @apply absolute rounded-[0.5rem] border-[1px] border-border-1-line flex-col top-[110%] bg-bg-4 p-2 z-10  overflow-y-auto;
 }
 
 span {
