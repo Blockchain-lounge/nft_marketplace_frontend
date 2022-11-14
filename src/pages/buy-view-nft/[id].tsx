@@ -145,77 +145,77 @@ const ViewNft = () => {
         abi,
         signer
       );
-      // const price = ethers.utils.parseUnits(
-      //   itemDetail.listing_price.toString(),
-      //   18
-      // );
+    
+        const price = ethers.utils.parseUnits(
+          itemDetail.listing_price.toString(),
+          "ether"
+        );
 
-      // const amount = BigNumber.from(itemDetail?.listing_price).mul(
-      //   BigNumber.from(10).pow(18)
-      // );
-      const decimals = 18;
-      const amount = ethers.utils.parseUnits("0.005", decimals);
-      // const price = ethers.utils.parseUnits("20", "ether");
-      console.log({ amount });
-      // itemDetail.itemId,
+      // const decimals = 18;
+      // const input = 0.005;
+      // const price = BigNumber.from(input).mul(BigNumber.from(10).pow(decimals)).toString();
+
+      // const decimals = 18;
+      // const input = "0.005"; // Note: this is a string, e.g. user input
+      // const price = ethers.utils.parseUnits(input, decimals).toString()
+      
       toast("Please approve this transaction!");
       const item_base_uri = `${APPCONFIG.ITEM_BASE_URL}/${userId}/${itemDetail.item._id}`;
+    
+      
       const transaction = await contract.buyItemCopy(
-        "0xeAe3aE6248243e82b9b149047544274CE7e0f6ea",
-        {
-          value: amount,
-          gasLimit: 5000000,
-        },
+        itemDetail.listed_by.address,
+        price,
         itemDetail.item.item_supply,
         itemDetail.listing_royalty,
         itemDetail.item._id,
-        item_base_uri
+        item_base_uri,
+        {
+          value: price
+        },
       );
       var tnx = await transaction.wait();
       toast("Please approve this transaction!");
 
-      var token_id = itemDetail.token_id;
+      // var token_id = itemDetail.token_id;
       //@ts-ignore
       var amount = itemDetail.item_price as string;
       var buyer = connectedAddress;
-      var trackCopyTokenId = "";
       var trackCopyBaseUrl = "";
       var soldItemCopyId = "";
 
       const events = findEvents("itemCopySold", tnx.events, true);
       if (events !== undefined && events.length > 0 && events !== true) {
-        trackCopyTokenId = events.soldItemCopyId.toNumber();
-        trackCopyBaseUrl = events.soldItemBaseURI;
         soldItemCopyId = events.soldItemCopyId.toNumber();
         buyer = events.buyer;
+        trackCopyBaseUrl = events.soldItemBaseURI;
         console.log({ events });
       } else {
         toast("We were unable to complete your transaction!");
         return;
       }
       var formData = {
-        item_token_id: token_id,
-        item: itemDetail._id,
+        listing_id: itemDetail._id,
         item_copy_id: soldItemCopyId,
         item_copy_base_url: trackCopyBaseUrl,
         amount: amount,
-        buyer: buyer,
+        buyer: buyer
       };
       const HEADER = "authenticated";
-      const REQUEST_URL = "nft-item/buy";
+      const REQUEST_URL = "nft-listing/buy";
       const METHOD = "POST";
       const DATA = formData;
       toast("Finalizing the transaction...");
-      // apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
-      //   if (response.status == 200 || response.status == 201) {
-      //     toast(response.data.message);
-      //     setIsTransLoading(false);
-      //     push("/profile");
-      //   } else {
-      //     toast(response.data.error);
-      //     setIsTransLoading(false);
-      //   }
-      // });
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
+        if (response.status == 200 || response.status == 201) {
+          toast(response.data.message);
+          setIsTransLoading(false);
+          push("/profile");
+        } else {
+          toast(response.data.error);
+          setIsTransLoading(false);
+        }
+      });
     }
     setShowModal((prev) => !prev);
   };
