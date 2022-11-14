@@ -159,8 +159,6 @@ const ViewNft = () => {
       // const input = "0.005"; // Note: this is a string, e.g. user input
       // const price = ethers.utils.parseUnits(input, decimals).toString()
       
-      
-      // itemDetail.itemId,
       toast("Please approve this transaction!");
       const item_base_uri = `${APPCONFIG.ITEM_BASE_URL}/${userId}/${itemDetail.item._id}`;
       console.log("price", price );
@@ -169,19 +167,9 @@ const ViewNft = () => {
       console.log("item._id,", itemDetail.item._id );
       console.log("item_base_uri,", item_base_uri );
       console.log("itemDetail,", itemDetail );
-      // const transaction = await contract.buyItemCopy(
-      //   "0xeAe3aE6248243e82b9b149047544274CE7e0f6ea",
-      //   price,
-      //   itemDetail.item.item_supply,
-      //   itemDetail.listing_royalty,
-      //   itemDetail.item._id,
-      //   item_base_uri,
-      // {
-      //   value: price
-      // }
-      // );
+      
       const transaction = await contract.buyItemCopy(
-        "0xeAe3aE6248243e82b9b149047544274CE7e0f6ea",
+        itemDetail.listed_by.address,
         price,
         itemDetail.item.item_supply,
         itemDetail.listing_royalty,
