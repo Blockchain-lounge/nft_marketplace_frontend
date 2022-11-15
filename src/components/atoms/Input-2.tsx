@@ -42,7 +42,9 @@ const Input2: FC<InputProps> = ({
           onChange={onChange}
           {...rest}
         />
-        {suffix && <span className="text-txt-2">{suffix}</span>}
+        {suffix && (
+          <span className="text-txt-2 w-[30%] text-right">{suffix}</span>
+        )}
       </div>
       {belowDesc && (
         <p className="create-new-nft-wrapper-2-label-type">{belowDesc}</p>
