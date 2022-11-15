@@ -185,25 +185,31 @@ const ViewNft = () => {
       var trackCopyBaseUrl = "";
       var soldItemCopyId = "";
 
-      const events = findEvents("ItemCopySold", tnx.events, true);
-      try{
-        if (events !== undefined && events.length > 0 && events !== true) {
-          soldItemCopyId = events.soldItemCopyId;
-          buyer = events.buyer;
-          trackCopyBaseUrl = events.soldItemBaseURI;
-          console.log({ events });
-          console.log("soldItemCopyIdTop", events.soldItemCopyId)
-          console.log("buyer", events.buyer)
-          console.log("buytrackCopyBaseUrler", events.soldItemBaseURI)
-        } else {
-          toast("We were unable to complete your transaction!");
-          return;
-        }
-        console.log("soldItemCopyId", events.soldItemCopyId)
-      }catch (error){
-        console.log("Event error", error)
-        return;
-      }
+      contract.on("ItemCopySold", (soldItemCopyId, buyer, soldItemBaseURI) => {
+        console.log("soldItemCopyIdTop", soldItemCopyId)
+          console.log("buyer", buyer)
+          console.log("buytrackCopyBaseUrler", soldItemBaseURI)
+    });
+
+      // const events = findEvents("ItemCopySold", tnx.events, true);
+      // try{
+      //   if (events !== undefined && events.length > 0 && events !== true) {
+      //     soldItemCopyId = events.soldItemCopyId;
+      //     buyer = events.buyer;
+      //     trackCopyBaseUrl = events.soldItemBaseURI;
+      //     console.log({ events });
+      //     console.log("soldItemCopyIdTop", events.soldItemCopyId)
+      //     console.log("buyer", events.buyer)
+      //     console.log("buytrackCopyBaseUrler", events.soldItemBaseURI)
+      //   } else {
+      //     toast("We were unable to complete your transaction!");
+      //     return;
+      //   }
+      //   console.log("soldItemCopyId", events.soldItemCopyId)
+      // }catch (error){
+      //   console.log("Event error", error)
+      //   return;
+      // }
       
       var formData = {
         listing_id: itemDetail._id,
@@ -219,22 +225,22 @@ const ViewNft = () => {
       //   amount: "0.005",
       //   buyer: buyer,
       // };
-      const HEADER = "authenticated";
-      const REQUEST_URL = "nft-listing/buy";
-      const METHOD = "POST";
-      const DATA = formData;
-      toast("Finalizing the transaction...");
-      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
-        console.log({ response });
-        if (response.status == 200 || response.status == 201) {
-          toast(response.data.message);
-          setIsTransLoading(false);
-          push("/profile");
-        } else {
-          toast(response.data.error);
-          setIsTransLoading(false);
-        }
-      });
+      // const HEADER = "authenticated";
+      // const REQUEST_URL = "nft-listing/buy";
+      // const METHOD = "POST";
+      // const DATA = formData;
+      // toast("Finalizing the transaction...");
+      // apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
+      //   console.log({ response });
+      //   if (response.status == 200 || response.status == 201) {
+      //     toast(response.data.message);
+      //     setIsTransLoading(false);
+      //     push("/profile");
+      //   } else {
+      //     toast(response.data.error);
+      //     setIsTransLoading(false);
+      //   }
+      // });
     }
     // setShowModal((prev) => !prev);
   };
