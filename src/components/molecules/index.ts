@@ -1,5 +1,6 @@
 export { default as ConnectWallet } from "./ConnectWallet";
 export { default as ActivityCard } from "./ActivityCard";
+export { default as CategoryHeroCard } from "./CategoryHeroCard";
 export { default as CollectionCard } from "./CollectionCard";
 export { default as ConnectWalletStage1 } from "./ConnectWalletStage1";
 export { default as ConnectWalletTab } from "./ConnectWalletTab";

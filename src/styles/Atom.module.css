@@ -177,7 +177,7 @@ input[type="number"] {
 }
 
 .select-lists {
-  @apply absolute rounded-[0.5rem] border-[1px] border-border-1-line flex-col top-[110%] bg-bg-4 p-2 z-10 h-[20rem] overflow-y-auto;
+  @apply absolute rounded-[0.5rem] border-[1px] border-border-1-line flex-col top-[110%] bg-bg-4 p-2 z-10  overflow-y-auto;
 }
 
 span {
@@ -240,7 +240,7 @@ span {
 }
 
 .gradient-btn {
-  @apply py-[0.3rem] lg:h-12 px-2 lg:px-7 border-none outline-none relative z-[1] rounded-[0.625rem] bg-gradient-to-r from-[#2f79f9] to-[#3daefa];
+  @apply py-[0.3rem] px-2 lg:px-7 border-none outline-none relative z-[1] rounded-[0.625rem] lg:h-[3.625rem] text-base font-medium bg-gradient-to-r from-[#2f79f9] to-[#3daefa];
 }
 
 .gradient-btn::before {

@@ -1,3 +1,4 @@
+import { ITransactionCard } from "@/src/utilities/types";
 import Image from "next/image";
 import React from "react";
 import { CoinIcon } from "../atoms/vectors";
@@ -13,7 +14,9 @@ const TransactionCard = ({
   amount = "5,954,532",
   date = "02/08/2022",
   time = "10:52",
-}: {
+}: // activity_type,
+// ITransactionCard &
+{
   transactionType: string;
   imgUrl: string;
   address?: string;
@@ -30,10 +33,12 @@ const TransactionCard = ({
       <div className="total-earning-details">
         <div className="total-earning-details-img">
           <Image
-            src={imgUrl}
+            src={imgUrl ? imgUrl : ""}
             alt="user-img"
             layout="fill"
             className="rounded-full"
+            placeholder="blur"
+            blurDataURL="/images/placeholder.png"
           />
         </div>
         <div className="transaction-card">

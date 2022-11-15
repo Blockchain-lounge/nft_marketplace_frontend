@@ -67,3 +67,44 @@ export interface IListedByProps {
   userBannerImg: string;
   userProfileImg: string;
 }
+
+export interface IListedNFt {
+  createdAt: string;
+  item_id: string;
+  listing_price: number;
+  listing_quantity: number;
+  listing_remaining: number;
+  listing_royalty: number;
+  updatedAt: string;
+  user_id: string;
+  __v: number;
+  _id: string;
+}
+
+export interface ITransactionCard {
+  activity_type: "newly_created_item" | "newly_listed_item";
+  createdAt: string;
+  created_item: null | Omit<
+    INftProps,
+    "item_token_id" | "item_base_url" | "item_price"
+  >;
+  listed_item: null | IListedNFt;
+  updatedAt: string;
+  user: string;
+  __v: number;
+  _id: string;
+}
+
+// export interface ICreatedNft {
+//   collection_id: string;
+//   createdAt: string;
+//   item_art_url: string;
+//   item_description: string;
+//   item_remaining: number;
+//   item_supply: number;
+//   item_title: string;
+//   updatedAt: string;
+//   user_id: string;
+//   __v: number;
+//   _id: string;
+// }

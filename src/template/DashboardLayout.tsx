@@ -67,7 +67,10 @@ const DashboardLayout = ({
         <div className="lg:hidden">
           <MiniUserWallet showBal={showBal} onClick={setShowBal} />
         </div>
-        <div className="aside-2 text-white" onMouseEnter={handleCloseAllModal}>
+        <div
+          className="aside-2 text-white scrollbar-hide"
+          onMouseEnter={handleCloseAllModal}
+        >
           {isLoading ? (
             <div className="h-[80vh] inset-0 flex justify-center items-center">
               <Loader2 />

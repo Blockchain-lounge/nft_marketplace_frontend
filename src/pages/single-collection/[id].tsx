@@ -227,11 +227,13 @@ const ViewCollection = () => {
               </div> */}
               <div className="single-collection-lists">
                 {/* <div>hello</div> */}
-                <div className="grid lg:grid-cols-3 2xl:grid-cols-4 gap-8">
-                  {singleCollectionsData ? (
-                    singleCollectionsData.map((val, i) => (
-                      <NftMediumCard2 {...val} key={val._id} />
-                    ))
+                <div className="">
+                  {singleCollectionsData && singleCollectionsData.length > 0 ? (
+                    <div className="grid lg:grid-cols-3 2xl:grid-cols-4 gap-8">
+                      {singleCollectionsData.map((val, i) => (
+                        <NftMediumCard2 {...val} key={val._id} />
+                      ))}
+                    </div>
                   ) : (
                     <Heading2 title="You have no items in this collection." />
                   )}
@@ -241,8 +243,8 @@ const ViewCollection = () => {
           ) : activeStage === "activity" ? (
             <>
               {/*Activities Heading-*/}
-              <Heading2 title="You have not perform any activity." />
-              {/* <div className="profile-activity-headers-tab mt-8">
+              {/* <Heading2 title="You have not perform any activity." /> */}
+              <div className="profile-activity-headers-tab mt-8">
                 {activityHeaders.map((header, i) => (
                   <span key={header + i} className="profile-activity-header">
                     {header}
@@ -253,7 +255,7 @@ const ViewCollection = () => {
                 {activityList.map((activity) => (
                   <ActivityCard key={activity} />
                 ))}
-              </div> */}
+              </div>
             </>
           ) : null}
         </div>
