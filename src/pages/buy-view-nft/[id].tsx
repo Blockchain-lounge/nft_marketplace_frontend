@@ -181,7 +181,8 @@ const ViewNft = () => {
 
       // var token_id = itemDetail.token_id;
       //@ts-ignore
-      var amount = itemDetail.item_price as string;
+      // var amount = itemDetail.item_price as string;
+      var amount = price;
       var buyer = connectedAddress;
       var trackCopyBaseUrl = "";
       var soldItemCopyId = "";
