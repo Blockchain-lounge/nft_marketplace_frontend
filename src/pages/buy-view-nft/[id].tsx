@@ -240,29 +240,22 @@ const ViewNft = () => {
         amount: amount,
         buyer: buyer,
       };
-      // var formData = {
-      //   listing_id: 1,
-      //   item_copy_id: 44,
-      //   item_copy_base_url: "www",
-      //   amount: "0.005",
-      //   buyer: buyer,
-      // };
-      // const HEADER = "authenticated";
-      // const REQUEST_URL = "nft-listing/buy";
-      // const METHOD = "POST";
-      // const DATA = formData;
-      // toast("Finalizing the transaction...");
-      // apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
-      //   console.log({ response });
-      //   if (response.status == 200 || response.status == 201) {
-      //     toast(response.data.message);
-      //     setIsTransLoading(false);
-      //     push("/profile");
-      //   } else {
-      //     toast(response.data.error);
-      //     setIsTransLoading(false);
-      //   }
-      // });
+      const HEADER = "authenticated";
+      const REQUEST_URL = "nft-listing/buy";
+      const METHOD = "POST";
+      const DATA = formData;
+      toast("Finalizing the transaction...");
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
+        console.log({ response });
+        if (response.status == 200 || response.status == 201) {
+          toast(response.data.message);
+          setIsTransLoading(false);
+          push("/profile");
+        } else {
+          toast(response.data.error);
+          setIsTransLoading(false);
+        }
+      });
     }
     // setShowModal((prev) => !prev);
   };
