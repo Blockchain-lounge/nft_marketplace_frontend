@@ -177,8 +177,9 @@ const ViewNft = () => {
       );
       var tnx = await transaction.wait();
       toast("Please approve this transaction!");
-    const hash = tnx.events[1].args[0];
-    console.log("Events", hash.toNumber())
+    console.log("soldItemCopyIdTop", tnx.events[1].args[0].toNumber())
+    console.log("buyer", tnx.events[1].args[3])
+    console.log("buytrackCopyBaseUrl", tnx.events[1].args[5])
 
       // var token_id = itemDetail.token_id;
       //@ts-ignore
