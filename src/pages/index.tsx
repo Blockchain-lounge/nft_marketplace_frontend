@@ -73,7 +73,7 @@ const Home: NextPage = () => {
 
   return (
     <DashboardLayout>
-      <div className="home-wrapper">
+      <div className="home-wrapper scrollbar-hide">
         <div className="space-y-[9rem] center mb-[10.125rem]">
           <section className="hero">
             <div>
