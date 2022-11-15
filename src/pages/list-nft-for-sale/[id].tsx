@@ -27,7 +27,7 @@ const ListNft = () => {
   const [isTransloading, setIsTransLoading] = useState(false);
   const [nftListingPayload, setNftListingPayload] = useState({
     listing_quantity: "0",
-    listing_price: "0",
+    listing_price: "0.00",
     listing_royalty: "0",
   });
   const [itemDetail, setItemDetail] = useState<INftProps | null>(null);
@@ -124,6 +124,7 @@ const ListNft = () => {
       toast(msg);
       return;
     } else {
+      setIsTransLoading((prev) => !prev);
       try {
         const HEADER = "authenticated";
         const REQUEST_URL = "nft-listing/store/" + id;
@@ -159,7 +160,7 @@ const ListNft = () => {
 
   return (
     <EarningLayout title="List item for sale" isLoading={itemDetail === null}>
-      <div className="flex flex-col-reverse gap-y-20 lg:gap-0 lg:flex-row lg:h-[70vh]">
+      <div className="flex flex-col-reverse gap-y-20 lg:gap-0 lg:flex-row lg:h-[70vh] ">
         <div className="space-y-8 lg:w-[70%]">
           <ToastContainer />
           <form className="space-y-8" onSubmit={handleSubmit}>
@@ -167,7 +168,7 @@ const ListNft = () => {
               <div className="lg:w-[80%] space-y-8">
                 {/* <Select title="ETH" icon={<CoinIcon />} /> */}
                 <Input2
-                  label="Price"
+                  label="Price in ethereum"
                   name="listing_price"
                   placeholder="0.00"
                   onChange={handleFieldChange}
@@ -190,6 +191,7 @@ const ListNft = () => {
                   placeholder="0"
                   onChange={handleFieldChange}
                   value={nftListingPayload.listing_quantity}
+                  suffix={`Total Supply: ${itemDetail?.item_supply}`}
                 />
               </div>
             </div>
@@ -246,9 +248,9 @@ const ListNft = () => {
                   <span className="text-black text-[1.3rem]">
                     {itemDetail.item_title}
                   </span>
-                  <span className="flex text-black text-[1.3rem]">
+                  <span className="flex items-center text-black text-[1.3rem] gap-x-1">
                     <CoinIcon color="black" />
-                    {itemDetail.item_price}
+                    {nftListingPayload.listing_price}
                   </span>
                 </div>
                 <span className="text-[1.1rem] text-black ">

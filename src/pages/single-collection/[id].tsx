@@ -145,7 +145,7 @@ const ViewCollection = () => {
               {/* <span className="flex font-bold">
                 See more <CaretDown />
               </span> */}
-              <div className="flex gap-x-6 mt-4 items-center">
+              {/* <div className="flex gap-x-6 mt-4 items-center">
                 <span className="border border-border-3-line p-1 rounded-md">
                   <SendIcon />
                 </span>
@@ -157,7 +157,7 @@ const ViewCollection = () => {
                     objectFit="contain"
                   />
                 </span>
-              </div>
+              </div> */}
             </div>
             <div className="mt-4 flex-wrap justify-around lg:flex-nowrap lg:mt-0 lg:max-w-[20%] w-full flex lg:flex-col gap-3 lg:gap-y-3 lg:border border-border-1-line lg:p-3 rounded-xl">
               {collectionPriceInfo.map((info) => (
