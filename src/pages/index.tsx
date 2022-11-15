@@ -75,7 +75,7 @@ const Home: NextPage = () => {
     <DashboardLayout>
       <div className="home-wrapper">
         <div className="space-y-[9rem] center mb-[10.125rem]">
-          {/* <section className="hero">
+          <section className="hero">
             <div>
               {<Tag tag={activeCard?.tag} icon={<FeaturedIcon />} />}
               <Heading title={activeCard.title} twClasses="mt-4" />
@@ -116,8 +116,8 @@ const Home: NextPage = () => {
                 />
               </div>
             </div>
-          </section> */}
-          <CategoryHeroCard />
+          </section>
+
           <div className="hero-section-1">
             <section className="mb-20">
               <NftHeaderCard

@@ -2,6 +2,7 @@
 import { Heading2 } from "@/src/components/atoms";
 import { NftCardSkeleton } from "@/src/components/lazy-loaders";
 import {
+  CategoryHeroCard,
   CollectionCard,
   NftMediumCard2,
   Tab,
@@ -22,7 +23,7 @@ const CategoryPage = () => {
     <DashboardLayout>
       <div className="sub-layout-wrapper scrollbar-hide">
         <div className="center">
-          <div className="profile-banner">
+          {/* <div className="profile-banner">
             {categoryBannerImg ? (
               <Image
                 src="/images/utility-banner-img.svg"
@@ -43,8 +44,8 @@ const CategoryPage = () => {
                 />
               </label>
             )}
-          </div>
-          <div className="mt-8">
+          </div> */}
+          {/* <div className="mt-8">
             <Heading2 title="Explore Utility NFTs" />
             <p className="w-2/3 mt-2 text-lg">
               An online community of makers, developers, and traders is pushing
@@ -52,12 +53,13 @@ const CategoryPage = () => {
               a set of 10,000 randomly generated punks that proved demand for
               the digital ownership of non-physical
             </p>
-            <Tab
-              placeholder={activeTab}
-              setStage={setActiveTab}
-              stages={exploreTabs}
-            />
-          </div>
+          </div> */}
+          <CategoryHeroCard />
+          <Tab
+            placeholder={activeTab}
+            setStage={setActiveTab}
+            stages={exploreTabs}
+          />
           <div className="">
             {activeTab === "Collections" ? (
               <div>
