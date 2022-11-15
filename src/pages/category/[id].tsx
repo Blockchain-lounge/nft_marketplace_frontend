@@ -26,7 +26,7 @@ const CategoryPage = () => {
           <CategoryHeroCard />
           <div className="mt-20">
             <NftHeaderCard
-              heading="Latest Collections"
+              heading="Collections"
               // to="/explore"
               // selectTitle="Last 24 hours"
             />
