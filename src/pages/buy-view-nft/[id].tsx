@@ -177,9 +177,18 @@ const ViewNft = () => {
       );
       var tnx = await transaction.wait();
       toast("Please approve this transaction!");
-    console.log("soldItemCopyIdTop", tnx.events[1].args[0].toNumber())
+      if(tnx.events[4]){
+        console.log("Log 5: soldItemCopyIdTop", tnx.events[3].args[0].toNumber())
+    console.log("buyer", tnx.events[3].args[3])
+    console.log("buytrackCopyBaseUrl", tnx.events[3].args[5])
+      }else{
+        console.log("Log 3: soldItemCopyIdTop", tnx.events[1].args[0].toNumber())
     console.log("buyer", tnx.events[1].args[3])
     console.log("buytrackCopyBaseUrl", tnx.events[1].args[5])
+      }
+    // console.log("soldItemCopyIdTop", tnx.events[1].args[0].toNumber())
+    // console.log("buyer", tnx.events[1].args[3])
+    // console.log("buytrackCopyBaseUrl", tnx.events[1].args[5])
 
       // var token_id = itemDetail.token_id;
       //@ts-ignore
@@ -187,12 +196,6 @@ const ViewNft = () => {
       var buyer = connectedAddress;
       var trackCopyBaseUrl = "";
       var soldItemCopyId = "";
-
-    //   contract.on("ItemCopySold", (soldItemCopyId, buyer, soldItemBaseURI) => {
-    //     console.log("soldItemCopyIdTop", soldItemCopyId)
-    //       console.log("buyer", buyer)
-    //       console.log("buytrackCopyBaseUrler", soldItemBaseURI)
-    // });
 
       // const events = findEvents("ItemCopySold", tnx.events, true);
       // try{
