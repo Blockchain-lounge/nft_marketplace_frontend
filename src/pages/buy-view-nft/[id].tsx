@@ -185,7 +185,7 @@ const ViewNft = () => {
       var trackCopyBaseUrl = "";
       var soldItemCopyId = "";
 
-      const events = findEvents("itemCopySold", tnx.events, true);
+      const events = findEvents("ItemCopySold", tnx.events, true);
       if (events !== undefined && events.length > 0 && events !== true) {
         soldItemCopyId = events.soldItemCopyId.toNumber();
         buyer = events.buyer;
@@ -195,20 +195,20 @@ const ViewNft = () => {
         toast("We were unable to complete your transaction!");
         return;
       }
-      // var formData = {
-      //   listing_id: itemDetail._id,
-      //   item_copy_id: soldItemCopyId,
-      //   item_copy_base_url: trackCopyBaseUrl,
-      //   amount: amount,
-      //   buyer: buyer,
-      // };
       var formData = {
-        listing_id: 1,
-        item_copy_id: 44,
-        item_copy_base_url: "www",
-        amount: "0.005",
+        listing_id: itemDetail._id,
+        item_copy_id: soldItemCopyId,
+        item_copy_base_url: trackCopyBaseUrl,
+        amount: amount,
         buyer: buyer,
       };
+      // var formData = {
+      //   listing_id: 1,
+      //   item_copy_id: 44,
+      //   item_copy_base_url: "www",
+      //   amount: "0.005",
+      //   buyer: buyer,
+      // };
       const HEADER = "authenticated";
       const REQUEST_URL = "nft-listing/buy";
       const METHOD = "POST";
