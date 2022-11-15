@@ -196,6 +196,7 @@ const ViewNft = () => {
           toast("We were unable to complete your transaction!");
           return;
         }
+        console.log("soldItemCopyId", events.soldItemCopyId)
       }catch (error){
         console.log("Event error", error)
         return;
