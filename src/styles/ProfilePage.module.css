@@ -40,7 +40,7 @@
 }
 
 .profile-tab {
-  @apply mx-auto max-w-[32%] my-6;
+  @apply mx-auto max-w-[37%] my-6;
 }
 
 .profile-user-nfts {
