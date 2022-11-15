@@ -177,18 +177,7 @@ const ViewNft = () => {
       );
       var tnx = await transaction.wait();
       toast("Please approve this transaction!");
-      if(tnx.events[4]){
-        console.log("Log 5: soldItemCopyIdTop", tnx.events[3].args[0].toNumber())
-    console.log("buyer", tnx.events[3].args[3])
-    console.log("buytrackCopyBaseUrl", tnx.events[3].args[5])
-      }else{
-        console.log("Log 3: soldItemCopyIdTop", tnx.events[1].args[0].toNumber())
-    console.log("buyer", tnx.events[1].args[3])
-    console.log("buytrackCopyBaseUrl", tnx.events[1].args[5])
-      }
-    // console.log("soldItemCopyIdTop", tnx.events[1].args[0].toNumber())
-    // console.log("buyer", tnx.events[1].args[3])
-    // console.log("buytrackCopyBaseUrl", tnx.events[1].args[5])
+      
 
       // var token_id = itemDetail.token_id;
       //@ts-ignore
@@ -196,6 +185,33 @@ const ViewNft = () => {
       var buyer = connectedAddress;
       var trackCopyBaseUrl = "";
       var soldItemCopyId = "";
+
+      try{
+        if(tnx.events[0]){
+          if(tnx.events[4]){
+            soldItemCopyId = tnx.events[3].args[0].toNumber();
+            buyer = tnx.events[3].args[3];
+            trackCopyBaseUrl = tnx.events[3].args[5]
+            console.log("Log 5: soldItemCopyIdTop", tnx.events[3].args[0].toNumber())
+            console.log("buyer", tnx.events[3].args[3])
+            console.log("buytrackCopyBaseUrl", tnx.events[3].args[5])
+          }else{
+            soldItemCopyId = tnx.events[1].args[0].toNumber();
+            buyer = tnx.events[1].args[3];
+            trackCopyBaseUrl = tnx.events[1].args[5]
+            console.log("Log 3: soldItemCopyIdTop", tnx.events[1].args[0].toNumber())
+            console.log("buyer", tnx.events[1].args[3])
+            console.log("buytrackCopyBaseUrl", tnx.events[1].args[5])
+          }
+        }else{
+          toast("We were unable to complete your transaction!");
+          return;
+        }
+      }catch (error){
+        console.log("Event error", error)
+        return;
+      }
+      
 
       // const events = findEvents("ItemCopySold", tnx.events, true);
       // try{
