@@ -210,28 +210,7 @@ const ViewNft = () => {
       }catch (error){
         console.log("Event error", error)
         return;
-      }
-      
-
-      // const events = findEvents("ItemCopySold", tnx.events, true);
-      // try{
-      //   if (events !== undefined && events.length > 0 && events !== true) {
-      //     soldItemCopyId = events.soldItemCopyId;
-      //     buyer = events.buyer;
-      //     trackCopyBaseUrl = events.soldItemBaseURI;
-      //     console.log({ events });
-      //     console.log("soldItemCopyIdTop", events.soldItemCopyId)
-      //     console.log("buyer", events.buyer)
-      //     console.log("buytrackCopyBaseUrler", events.soldItemBaseURI)
-      //   } else {
-      //     toast("We were unable to complete your transaction!");
-      //     return;
-      //   }
-      //   console.log("soldItemCopyId", events.soldItemCopyId)
-      // }catch (error){
-      //   console.log("Event error", error)
-      //   return;
-      // }
+      }   
       
       var formData = {
         listing_id: itemDetail._id,
