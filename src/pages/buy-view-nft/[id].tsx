@@ -188,11 +188,11 @@ const ViewNft = () => {
       var trackCopyBaseUrl = "";
       var soldItemCopyId = "";
 
-      contract.on("ItemCopySold", (soldItemCopyId, buyer, soldItemBaseURI) => {
-        console.log("soldItemCopyIdTop", soldItemCopyId)
-          console.log("buyer", buyer)
-          console.log("buytrackCopyBaseUrler", soldItemBaseURI)
-    });
+    //   contract.on("ItemCopySold", (soldItemCopyId, buyer, soldItemBaseURI) => {
+    //     console.log("soldItemCopyIdTop", soldItemCopyId)
+    //       console.log("buyer", buyer)
+    //       console.log("buytrackCopyBaseUrler", soldItemBaseURI)
+    // });
 
       // const events = findEvents("ItemCopySold", tnx.events, true);
       // try{
