@@ -192,6 +192,9 @@ const ViewNft = () => {
           buyer = events.buyer;
           trackCopyBaseUrl = events.soldItemBaseURI;
           console.log({ events });
+          console.log("soldItemCopyIdTop", events.soldItemCopyId)
+          console.log("buyer", events.buyer)
+          console.log("buytrackCopyBaseUrler", events.soldItemBaseURI)
         } else {
           toast("We were unable to complete your transaction!");
           return;
