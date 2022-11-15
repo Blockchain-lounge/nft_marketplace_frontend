@@ -351,16 +351,16 @@ const Profile = () => {
                       ))
                   )
                 ) : profileActiveTab === 3 ? (
-                  <div className="flex justify-center items-center">
-                    <div className="profile-user-nfts">
-                      <img
+                  <div className="">
+                    {/* <div className="profile-user-nfts"> */}
+                    {/* <img
                         src="/images/404-illustration.png"
                         alt="empty-nfts"
                       />
                       <span className="profile-empty-nft-title">
                         You do not have any activity.
-                      </span>
-                      {/* <p className="profile-empty-nft-description">
+                      </span> */}
+                    {/* <p className="profile-empty-nft-description">
                         There&apos;s lots of other NFTs to explore
                       </p>
 
@@ -368,9 +368,9 @@ const Profile = () => {
                         title="Explore NFTs"
                         onClick={handleNavigateToHome}
                       /> */}
-                    </div>
+                    {/* </div> */}
                     {/*Activities Heading-*/}
-                    {/* <div className="profile-activity-headers-tab">
+                    <div className="profile-activity-headers-tab">
                       {profileActivityHeaders.map((header, i) => (
                         <span
                           key={header + i}
@@ -379,13 +379,13 @@ const Profile = () => {
                           {header}
                         </span>
                       ))}
-                    </div> */}
+                    </div>
                     {/*list of activities*/}
-                    {/* <div className="profile-activities-wrappe">
+                    <div className="profile-activities-wrappe">
                       {profileActivityList.map((activity) => (
                         <ActivityCard key={activity} />
                       ))}
-                    </div> */}
+                    </div>
                   </div>
                 ) : null}
               </div>
