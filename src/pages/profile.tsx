@@ -251,7 +251,7 @@ const Profile = () => {
                         <NftMediumCard2
                           key={val._id}
                           {...val}
-                          to="view-user-nft"
+                          to="view-owned-user-nft"
                         />
                       ))}
                     </div>
