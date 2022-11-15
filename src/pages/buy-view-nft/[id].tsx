@@ -177,7 +177,7 @@ const ViewNft = () => {
       );
       var tnx = await transaction.wait();
       toast("Please approve this transaction!");
-    const hash = tnx.events[0].args[0];
+    const hash = tnx.events[1].args[0];
     console.log("Events",hash)
 
       // var token_id = itemDetail.token_id;
