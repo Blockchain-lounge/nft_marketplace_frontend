@@ -52,7 +52,7 @@ const ViewNft = () => {
     { label: "Current Owner", value: "Jakes💸", img: "/images/nftsample3.png" },
   ];
   // const viewNftStages = ["overview", "properties", "bids", "history"];
-  const viewNftStages = ["overview", "bids"];
+  const viewNftStages = ["overview", "History"];
   const nftProperties = [
     { label: "dna", value: "human", trait: 19 },
     { label: "eyewear", value: "cyber bindi", trait: 16 },
@@ -585,7 +585,7 @@ const ViewNft = () => {
                   ))} */}
                   <Heading2 title="There's no bidding" />
                 </div>
-              ) : viewNftStage === "history" ? (
+              ) : viewNftStage === "History" ? (
                 <div className="flex flex-col gap-y-6">
                   {nftHistory.map(
                     ({ imgUrl, time, date, owner, txn, icon, receiver }) => (

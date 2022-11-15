@@ -1,8 +1,15 @@
 import Image from "next/image";
 import React from "react";
 import { Button, Heading } from "../atoms";
+import { useRouter } from "next/router";
 
 const CategoryHeroCard = () => {
+  const { push } = useRouter();
+
+  const handlePush = () => {
+    push(`/category/1`);
+  };
+
   return (
     <div className="space-y-[9rem] center mb-[10.125rem]">
       <section className="hero">
@@ -17,7 +24,7 @@ const CategoryHeroCard = () => {
             personal benefit or want to contribute to the projects with a good
             cause, this is the place to be.
           </p>
-          <Button title="Explore" />
+          <Button title="Explore" onClick={handlePush} />
         </div>
         <div className="hero-img-cards">
           <div className="hero-img">
