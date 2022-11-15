@@ -188,11 +188,10 @@ const ViewNft = () => {
       const events = findEvents("ItemCopySold", tnx.events, true);
       try{
         if (events !== undefined && events.length > 0 && events !== true) {
-          soldItemCopyId = events.soldItemCopyId;
+          soldItemCopyId = events.soldItemCopyId.toNumber();
           buyer = events.buyer;
           trackCopyBaseUrl = events.soldItemBaseURI;
           console.log({ events });
-          console.log(parseInt(Number(events.soldItemCopyId), 10));
         } else {
           toast("We were unable to complete your transaction!");
           return;
