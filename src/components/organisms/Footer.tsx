@@ -47,18 +47,7 @@ const Footer = () => {
       </div>
 
       <div className="footer-icon-copy ">
-        <div className="footer-icons">
-          <a href="https://twitter.com/CloudaxHQ">
-            <TwitterIcon />
-          </a>
-          <a href="https://t.me/cloudaxofficial">
-            <TelegramIcon />
-          </a>
-          <a href="http://cloudax.medium.com/">
-            <MediumIcon />
-          </a>
-        </div>
-        <span className="text-xl mt-4 text-[#A5AEC1] lg:mt-0">
+        <span className="text-xl mb-4 text-[#A5AEC1] lg:mt-0">
           All rights reserved @Cloudax 2022
         </span>
       </div>

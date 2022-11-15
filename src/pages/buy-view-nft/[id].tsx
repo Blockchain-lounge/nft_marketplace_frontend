@@ -177,24 +177,42 @@ const ViewNft = () => {
       );
       var tnx = await transaction.wait();
       toast("Please approve this transaction!");
+      
 
       // var token_id = itemDetail.token_id;
       //@ts-ignore
-      var amount = itemDetail.item_price as string;
+      // var amount = itemDetail.item_price as string;
+      var amount = price;
       var buyer = connectedAddress;
       var trackCopyBaseUrl = "";
       var soldItemCopyId = "";
 
-      const events = findEvents("ItemCopySold", tnx.events, true);
-      if (events !== undefined && events.length > 0 && events !== true) {
-        soldItemCopyId = events.soldItemCopyId.toNumber();
-        buyer = events.buyer;
-        trackCopyBaseUrl = events.soldItemBaseURI;
-        console.log({ events });
-      } else {
-        toast("We were unable to complete your transaction!");
+      try{
+        if(tnx.events[0]){
+          if(tnx.events[4]){
+            soldItemCopyId = tnx.events[3].args[0].toNumber();
+            buyer = tnx.events[3].args[3];
+            trackCopyBaseUrl = tnx.events[3].args[5]
+            console.log("Log 5: soldItemCopyIdTop", tnx.events[3].args[0].toNumber())
+            console.log("buyer", tnx.events[3].args[3])
+            console.log("buytrackCopyBaseUrl", tnx.events[3].args[5])
+          }else{
+            soldItemCopyId = tnx.events[1].args[0].toNumber();
+            buyer = tnx.events[1].args[3];
+            trackCopyBaseUrl = tnx.events[1].args[5]
+            console.log("Log 3: soldItemCopyIdTop", tnx.events[1].args[0].toNumber())
+            console.log("buyer", tnx.events[1].args[3])
+            console.log("buytrackCopyBaseUrl", tnx.events[1].args[5])
+          }
+        }else{
+          toast("We were unable to complete your transaction!");
+          return;
+        }
+      }catch (error){
+        console.log("Event error", error)
         return;
-      }
+      }   
+      
       var formData = {
         listing_id: itemDetail._id,
         item_copy_id: soldItemCopyId,
@@ -202,13 +220,6 @@ const ViewNft = () => {
         amount: amount,
         buyer: buyer,
       };
-      // var formData = {
-      //   listing_id: 1,
-      //   item_copy_id: 44,
-      //   item_copy_base_url: "www",
-      //   amount: "0.005",
-      //   buyer: buyer,
-      // };
       const HEADER = "authenticated";
       const REQUEST_URL = "nft-listing/buy";
       const METHOD = "POST";
