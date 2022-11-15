@@ -188,7 +188,7 @@ const ViewNft = () => {
       const events = findEvents("ItemCopySold", tnx.events, true);
       try{
         if (events !== undefined && events.length > 0 && events !== true) {
-          soldItemCopyId = events.soldItemCopyId.toNumber();
+          soldItemCopyId = events.soldItemCopyId.toString();
           buyer = events.buyer;
           trackCopyBaseUrl = events.soldItemBaseURI;
           console.log({ events });
