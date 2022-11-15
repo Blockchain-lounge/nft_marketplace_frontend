@@ -11,8 +11,8 @@ const CategoryHeroCard = () => {
   };
 
   return (
-    <div className="space-y-[9rem] center mb-[10.125rem]">
-      <section className="hero">
+    <div className="space-y-[9rem] center ">
+      <section className="category-hero">
         <div>
           <span className="uppercase font-bold tracking-widest earnings-card-history">
             Experience even more
@@ -24,7 +24,7 @@ const CategoryHeroCard = () => {
             personal benefit or want to contribute to the projects with a good
             cause, this is the place to be.
           </p>
-          <Button title="Explore" onClick={handlePush} />
+          <Button title="Explore" />
         </div>
         <div className="hero-img-cards">
           <div className="hero-img">
