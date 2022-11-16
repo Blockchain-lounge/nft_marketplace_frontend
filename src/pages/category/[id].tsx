@@ -14,6 +14,7 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { apiRequest } from "../../functions/offChain/apiRequests";
+import { toast } from "react-toastify";
 
 const CategoryPage = () => {
   const [categoryBannerImg, setCategoryBannerImg] = useState(true);
@@ -22,7 +23,7 @@ const CategoryPage = () => {
   const [nfts, setNfts] = useState([]);
   const [activeTab, setActiveTab] = useState("Collections");
   const exploreTabs = ["Collections", "NFTs"];
-const {
+  const {
     push,
     query: { id },
   } = useRouter();
@@ -64,25 +65,23 @@ const {
               to="/explore"
               // selectTitle="Last 24 hours"
             />
-            {
-              collections && collections.length === 0
-              ?
-              ("No matching collections found")
-              : collections && collections.length > 1 ? (
-                  <div className="explore-items-wrapper">
-                    {collections.map((item) => (
-                      <CollectionCard key={item._id} {...item} />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex flex-wrap justify-evenly lg:justify-between gap-y-12">
-                    {Array(9)
-                      .fill(0)
-                      .map((_, i) => (
-                        <NftCardSkeleton key={i + "explore-skeleton-card"} />
-                      ))}
-                  </div>
-                )}
+            {collections && collections.length === 0 ? (
+              "No matching collections found"
+            ) : collections && collections.length > 1 ? (
+              <div className="explore-items-wrapper">
+                {collections.map((item) => (
+                  <CollectionCard key={item._id} {...item} />
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-wrap justify-evenly lg:justify-between gap-y-12">
+                {Array(9)
+                  .fill(0)
+                  .map((_, i) => (
+                    <NftCardSkeleton key={i + "explore-skeleton-card"} />
+                  ))}
+              </div>
+            )}
           </div>
         </div>
         <Footer />
