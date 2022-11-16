@@ -70,7 +70,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     fetchHomePageData();
   }, []);
-
+  // console.log({ collections });
   return (
     <DashboardLayout>
       <div className="home-wrapper scrollbar-hide">

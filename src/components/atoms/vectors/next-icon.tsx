@@ -10,7 +10,7 @@ const NextIcon = (props: React.SVGProps<SVGSVGElement>) => (
   >
     <path
       d="M42.43 5.93 48.5 12l-6.07 6.07M1 12h47"
-      stroke="#5c5c6c"
+      stroke={props.color || "#5c5c6c"}
       strokeWidth={1.5}
       strokeMiterlimit={10}
       strokeLinecap="round"

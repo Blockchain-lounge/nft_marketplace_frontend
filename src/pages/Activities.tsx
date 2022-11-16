@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -64,37 +65,37 @@ const Activities = () => {
   const sorting = [{ name: "Ascending", value: "asc" }];
 
   const fetchActivities = async (activityType) => {
-      var REQUEST_URL = "/activities";
+    var REQUEST_URL = "/activities";
     switch (activityType) {
-        case "newly_created_item":
-            REQUEST_URL = "/activities?activity_type="+activityType;
-            break;
+      case "newly_created_item":
+        REQUEST_URL = "/activities?activity_type=" + activityType;
+        break;
 
-        case "updated_item":
-            REQUEST_URL = "/activities?activity_type="+activityType;
-            break;
+      case "updated_item":
+        REQUEST_URL = "/activities?activity_type=" + activityType;
+        break;
 
-        case "newly_listed_item":
-            REQUEST_URL = "/activities?activity_type="+activityType;
-            break;
+      case "newly_listed_item":
+        REQUEST_URL = "/activities?activity_type=" + activityType;
+        break;
 
-        case "updated_listing":
-            REQUEST_URL = "/activities?activity_type="+activityType;
-            break;
+      case "updated_listing":
+        REQUEST_URL = "/activities?activity_type=" + activityType;
+        break;
 
-        case "new_mint":
-            REQUEST_URL = "/activities?activity_type="+activityType;
-            break;
+      case "new_mint":
+        REQUEST_URL = "/activities?activity_type=" + activityType;
+        break;
 
-        case "new_sales":
-            REQUEST_URL = "/activities?activity_type="+activityType;
-            break;
-        case "cancelled_listing":
-            REQUEST_URL = "/activities?activity_type="+activityType;
-            break;
+      case "new_sales":
+        REQUEST_URL = "/activities?activity_type=" + activityType;
+        break;
+      case "cancelled_listing":
+        REQUEST_URL = "/activities?activity_type=" + activityType;
+        break;
 
-        default:
-      var REQUEST_URL = "/activities";
+      default:
+        var REQUEST_URL = "/activities";
     }
     try {
       const HEADER = {};
@@ -122,7 +123,7 @@ const Activities = () => {
   };
 
   useEffect(() => {
-   fetchActivities('all')
+    fetchActivities("all");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -140,9 +141,7 @@ const Activities = () => {
                 placeholder={
                   typeof currentEvent === "object" ? currentEvent.name : ""
                 }
-                handleChange={
-                  "fetchActivities(currentEvent.value)"
-                  }
+                handleChange={"fetchActivities(currentEvent.value)"}
                 onClick={
                   setCurrentEvent as React.Dispatch<
                     React.SetStateAction<string | Record<string, string>>
