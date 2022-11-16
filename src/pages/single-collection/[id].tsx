@@ -56,6 +56,7 @@ const ViewCollection = () => {
           setSingleCollectionsData(response.data.items);
           setSingleCollectionDetail(response.data.collection);
           console.log(response.data)
+          console.log(response.data.items.length)
           setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
