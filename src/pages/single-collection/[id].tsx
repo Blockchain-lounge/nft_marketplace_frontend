@@ -51,7 +51,7 @@ const ViewCollection = () => {
           setSingleCollectionsData(response.data.items);
           setSingleCollectionDetail(response.data.collection);
           console.log(response.data)
-          console.log("Item Length".response.data.items.length)
+          // console.log("Item Length".response.data.items.length)
           // console.log(response.data.items[0].item_price)
           setIsLoading(false);
         } else {
@@ -70,8 +70,8 @@ const ViewCollection = () => {
   const collectionPriceInfo = [
     { label: "floor", price: "0.04", type: "coin" },
     { label: "volume", price: "0", type: "coin" },
-    { label: "items", price: singleCollectionsData.length, type: "quantity" },
-    { label: "owners", price: singleCollectionsData.length * 2, type: "quantity" },
+    // { label: "items", price: singleCollectionsData.length, type: "quantity" },
+    // { label: "owners", price: singleCollectionsData.length * 2, type: "quantity" },
   ];
   useEffect(() => {
     fetchCollectionItems();
