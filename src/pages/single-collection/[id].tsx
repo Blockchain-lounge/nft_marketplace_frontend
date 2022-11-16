@@ -64,7 +64,7 @@ const ViewCollection = () => {
     { label: "floor", price: "18.3", type: "coin" },
     { label: "volume", price: "18.3", type: "coin" },
     { label: "items", price: singleCollectionsData.length, type: "quantity" },
-    { label: "owners", price: singleCollectionsData.length.mul(2), type: "quantity" },
+    { label: "owners", price: singleCollectionsData.length * 2, type: "quantity" },
   ];
   useEffect(() => {
     fetchCollectionItems();
