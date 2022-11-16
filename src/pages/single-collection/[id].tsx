@@ -50,7 +50,6 @@ const ViewCollection = () => {
         } else if (response.status == 200) {
           setSingleCollectionsData(response.data.items);
           setSingleCollectionDetail(response.data.collection);
-          // console.log(response.data)
           // console.log("Item Length".response.data.items.length)
           // console.log(response.data.items[0].item_price)
           setIsLoading(false);
@@ -68,10 +67,10 @@ const ViewCollection = () => {
   //   sampleFloorPrice = singleCollectionsData[0].item_price;
   // }
   const collectionPriceInfo = [
-    { label: "floor", price: 0.04, type: "coin" },
-    { label: "volume", price: "18.3", type: "coin" },
-    { label: "items", price: singleCollectionsData.length, type: "quantity" },
-    { label: "owners", price: singleCollectionsData.length * 2, type: "quantity" },
+    { label: "floor", price: "0.04", type: "coin" },
+    { label: "volume", price: "0", type: "coin" },
+    // { label: "items", price: singleCollectionsData.length, type: "quantity" },
+    // { label: "owners", price: singleCollectionsData.length * 2, type: "quantity" },
   ];
   useEffect(() => {
     fetchCollectionItems();
@@ -79,6 +78,7 @@ const ViewCollection = () => {
   }, [id]);
 
   // console.log({ singleCollectionsData });
+  
 
   return (
     <DashboardLayout isLoading={isLoading}>
