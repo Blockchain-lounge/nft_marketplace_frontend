@@ -83,11 +83,11 @@ const SideBar = () => {
       icon: <BlogIcon />,
       to: "https://spotlight.cloudax.io/topics/nft/",
     },
-    {
-      label: "Support",
-      icon: <SupportIcon />,
-      link: "/support",
-    },
+    // {
+    //   label: "Support",
+    //   icon: <SupportIcon />,
+    //   link: "/support",
+    // },
   ];
 
   const socialLinks = [
