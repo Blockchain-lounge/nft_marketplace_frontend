@@ -50,8 +50,8 @@ const ViewCollection = () => {
         } else if (response.status == 200) {
           setSingleCollectionsData(response.data.items);
           setSingleCollectionDetail(response.data.collection);
-          console.log(response.data)
-          console.log("Item Length".response.data.items.length)
+          // console.log(response.data)
+          // console.log("Item Length".response.data.items.length)
           // console.log(response.data.items[0].item_price)
           setIsLoading(false);
         } else {

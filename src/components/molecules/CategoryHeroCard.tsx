@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Image from "next/image";
 import React from "react";
 import { Button, Heading } from "../atoms";
