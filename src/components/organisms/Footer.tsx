@@ -18,10 +18,10 @@ const Footer = () => {
   ];
 
   const aboutLinks = [
-    "About",
-    "About us",
-    "Terms of service",
-    "Privacy policy",
+    { label: "About", to: "/" },
+    { label: "About us", to: "/about-us" },
+    { label: "Terms of service", to: "" },
+    { label: "Privacy policy", to: "" },
   ];
   const supportLinks = [
     { label: "Support", to: "" },
@@ -64,12 +64,13 @@ const Footer = () => {
       </div>
       <div className="about-links">
         {aboutLinks.map((link, i) => (
-          <a
-            key={link}
+          <span
+            key={link.label}
             className={clsx(i === 0 ? "footer-link-title" : "footer-links")}
+            onClick={() => push(link.to)}
           >
-            {link}
-          </a>
+            {link.label}
+          </span>
         ))}
       </div>
       <div className="about-links">
