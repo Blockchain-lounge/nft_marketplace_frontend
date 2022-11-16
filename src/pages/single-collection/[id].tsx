@@ -52,7 +52,7 @@ const ViewCollection = () => {
           setSingleCollectionDetail(response.data.collection);
           console.log(response.data)
           console.log(response.data.items.length)
-          console.log(response.data.items.item_price)
+          console.log(response.data.items.item_price[0])
           setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
