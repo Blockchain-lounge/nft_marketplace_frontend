@@ -9,6 +9,7 @@ const Select2 = ({
   placeholder,
   lists,
   onClick,
+  onChange,
   wt,
 }: {
   title: string;
@@ -18,6 +19,7 @@ const Select2 = ({
   placeholder: string;
   lists: Array<Record<string, string>>;
   onClick: Dispatch<SetStateAction<Record<string, string> | string>>;
+  onChange?: any;
 }) => {
   const [openSubmenu, setOpenSubmenu] = useState(false);
   const handleOpenSubmenu = () => {
@@ -25,7 +27,9 @@ const Select2 = ({
   };
   const handleSelect = (params: Record<string, string>) => {
     onClick(params);
+    // onChange;
     setOpenSubmenu((prev) => !prev);
+    console.log(onChange)
   };
 
   return (

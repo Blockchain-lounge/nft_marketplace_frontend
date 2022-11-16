@@ -5,17 +5,21 @@ import { CoinIcon } from "../atoms/vectors";
 import * as moment from "moment";
 
 const UserActivityCard = ({
-  listed_item,
-  user,
-  created_item,
-  activity_type,
-  createdAt,
-}: {
-  user: string;
-  listed_item: string;
-  created_item: string;
-  activity_type: string;
-  createdAt: string;
+listed_item,
+to_user_id,
+from_user_id,
+created_item,
+activity_type,
+createdAt,
+created_item_listed,
+}:{
+to_user_id: string;
+from_user_id: string;
+listed_item: string;
+created_item: string;
+created_item_listed: string;
+activity_type: string;
+createdAt : string;
 }) => {
   var item = null;
   var item_price = null;
@@ -63,15 +67,69 @@ const UserActivityCard = ({
   }
   return (
     <div className="profile-activity-list">
-      <div className="profile-activity-item">
-        <img src="/images/profile-nft.png" alt="coin-img" />
-        <div className="profile-activity-coin-info-wrapper">
-          <span className="text-[1.375rem] font-bold">CloneX #4537</span>
-          <span className="profile-activity-coin-tx-type text-txt-2">
-            {activityType}
-          </span>
-        </div>
-      </div>
+          <div className="profile-activity-item">
+            {
+              created_item
+              ?
+                 <img src={
+                  created_item
+                  && created_item !== undefined
+                  && created_item !== null
+                  ?
+                    created_item.item_art_url
+                  :
+              "/images/profile-nft.png"
+              } alt="" />
+              :
+              ""
+              }
+
+              {
+                listed_item
+                ?
+                <img src={
+                  listed_item
+                  && listed_item !== undefined
+                  && listed_item !== null
+                  && created_item_listed !== undefined
+                  && created_item_listed !== null
+                  ?
+                    created_item_listed.item_art_url
+                  :
+              "/images/profile-nft.png"
+              } alt="" />
+:
+""
+                }
+            <div className="profile-activity-coin-info-wrapper">
+              <span className="text-[1.375rem] font-bold">
+                {
+                  created_item
+                  && created_item !== undefined
+                  && created_item !== null
+                  ?
+                  created_item.item_title
+                  :
+                  ""
+                }
+
+                {
+                  listed_item
+                  && listed_item !== undefined
+                  && listed_item !== null
+                  && created_item_listed !== undefined
+                  && created_item_listed !== null
+                  ?
+                  created_item_listed.item_title
+                  :
+                  ""
+                }
+              </span>
+              <span className="profile-activity-coin-tx-type text-txt-2">
+                {activityType}</span>
+            </div>
+          </div>
+
 
       <div className="profile-activity-price-wrapper">
         <span className="profile-activity-coin-price">
@@ -80,29 +138,86 @@ const UserActivityCard = ({
         {/* <span className="profile-activity-amount text-txt-2">$5,954,532</span> */}
       </div>
 
-      <div className="profile-activity-sender-wrapper">
-        <img
-          src={
-            user.userBannerImg && user.userBannerImg !== undefined
-              ? user.userBannerImg
-              : "/images/ape.png"
-          }
-          alt="sender-img"
-        />
-        <span className="profile-activity-sender">
-          {user.username && user.username !== undefined ? user.username : ""}
-        </span>
-      </div>
+          <div className="profile-activity-sender-wrapper">
+            {
+              from_user_id
+              && from_user_id !== undefined
+              ?
+                    <img src={
+                    from_user_id
+                    && from_user_id !== undefined
+                    && from_user_id.userBannerImg !== undefined
+                    ? from_user_id.userBannerImg
+                    : "/images/ape.png"
+                    } 
+                    alt="" />
+                    :
+                    "--"
+                    }
 
-      <div className="profile-activity-receiver-wrapper">
-        <div className="profile-activity-receiver">
-          <img src="/images/hero-dashboard.jpg" alt="receiver-img" />
-          <span>0xf7ec…952d</span>
-        </div>
-        <span className="profile-activity-receiver-time text-txt-1">
-          {moment(createdAt).format("ddd, MMM Do YYYY, hh:mm:ss")}
-        </span>
-      </div>
+                    {
+              from_user_id
+              && from_user_id !== undefined
+              ?
+                  <span className="profile-activity-sender">
+                    {
+                      from_user_id
+                      && from_user_id !== undefined
+                      && from_user_id.username
+                      && from_user_id.username !== undefined
+                      ? from_user_id.username
+                      : ""
+                      }
+                  </span>
+                  :
+                  "--"
+                  }
+            
+          </div>
+
+          <div className="profile-activity-receiver-wrapper">
+            <div className="profile-activity-receiver">
+              {
+              to_user_id
+              && to_user_id !== undefined
+              ?
+              <img src=
+                {
+                  to_user_id
+                    && to_user_id !== undefined
+                    && to_user_id.userBannerImg !== undefined
+                    ? to_user_id.userBannerImg
+                    :
+                  "/images/hero-dashboard.jpg"
+                } alt="" />
+:
+"--"
+}
+                {
+              to_user_id
+              && to_user_id !== undefined
+              ?
+              <span>
+              {
+                to_user_id
+                      && to_user_id !== undefined
+                      && to_user_id.username
+                      && to_user_id.username !== undefined
+                      ? to_user_id.username
+                      : ""
+                      }
+                      </span>
+              :
+"--"
+}
+            </div>
+            <span className="profile-activity-receiver-time text-txt-1">
+              {
+                moment(createdAt).format('ddd, MMM Do YYYY, hh:mm:ss')
+                }
+            </span>
+          </div>
+
     </div>
   );
 };

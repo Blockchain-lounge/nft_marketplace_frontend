@@ -12,7 +12,7 @@ import { ITransactionCard } from "../utilities/types";
 
 const Activities = () => {
   const [currentTab, setCurrentTab] = useState("1 h");
-  const [activities, setActivities] = useState<Array<ITransactionCard>>([]);
+  const [activities, setActivities] = useState([]);
   const [currentEvent, setCurrentEvent] = useState<{
     name: string;
     value: string;
@@ -52,104 +52,52 @@ const Activities = () => {
 
   // const tabs = ["1 h", "6 h", "24 h", "1 w", "1 m", "All"];
 
-  const activitiesData = [
-    {
-      imgUrl: "/images/nftsample2.png",
-      transactionType: "listing",
-      coinName: "CloneX#5434",
-      address: "0x19f...1138",
-    },
-    {
-      imgUrl: "/images/nftSample3.png",
-      transactionType: "add",
-      collectionName: "Clone X",
-      user: "Mike0xf🔑",
-    },
-    {
-      imgUrl: "/images/Dreamy-ape.png",
-      transactionType: "transfer",
-      user: "Zara",
-      address: "0xb4d...002d",
-    },
-    {
-      imgUrl: "/images/profile-nft.png",
-      transactionType: "purchase",
-      user: "jakes💸",
-    },
-    {
-      imgUrl: "/images/nftsample2.png",
-      transactionType: "listing",
-      coinName: "CloneX#5434",
-      address: "0x19f...1138",
-    },
-    {
-      imgUrl: "/images/nftsample2.png",
-      transactionType: "bid",
-      address: "0x19f...1138",
-    },
-    {
-      imgUrl: "/images/Dreamy-ape.png",
-      transactionType: "bid",
-      address: "0x19f...1138",
-    },
-    {
-      imgUrl: "/images/Dreamy-ape.png",
-      transactionType: "transfer",
-      user: "Zara",
-      address: "0xb4d...002d",
-    },
-    {
-      imgUrl: "/images/nftsample2.png",
-      transactionType: "transfer",
-      user: "Zara",
-      address: "0xb4d...002d",
-    },
-    {
-      imgUrl: "/images/nftSample3.png",
-      transactionType: "transfer",
-      user: "Zara",
-      address: "0xb4d...002d",
-    },
-    {
-      imgUrl: "/images/Dreamy-ape.png",
-      transactionType: "transfer",
-      user: "Zara",
-      address: "0xb4d...002d",
-    },
-    {
-      imgUrl: "/images/profile-nft.png",
-      transactionType: "transfer",
-      user: "Zara",
-      address: "0xb4d...002d",
-    },
-    {
-      imgUrl: "/images/Dreamy-ape.png",
-      transactionType: "transfer",
-      user: "Zara",
-      address: "0xb4d...002d",
-    },
-    {
-      imgUrl: "/images/Dreamy-ape.png",
-      transactionType: "transfer",
-      user: "Zara",
-      address: "0xb4d...002d",
-    },
-  ];
   const events = [
-    { name: "All", value: "" },
-    { name: "Sales", value: "" },
+    { name: "All", value: "all" },
+    { name: "Sales", value: "new_sales" },
     { name: "Newly listed Item", value: "newly_listed_item" },
     { name: "Newly Created Item", value: "newly_created_item" },
-    { name: "Offers", value: "" },
-    { name: "Transfers", value: "" },
+    // { name: "Offers", value: "" },
+    // { name: "Transfers", value: "" },
   ];
 
   const sorting = [{ name: "Ascending", value: "asc" }];
 
-  const fetchActivities = async () => {
+  const fetchActivities = async (activityType) => {
+      var REQUEST_URL = "/activities";
+    switch (activityType) {
+        case "newly_created_item":
+            REQUEST_URL = "/activities?activity_type="+activityType;
+            break;
+
+        case "updated_item":
+            REQUEST_URL = "/activities?activity_type="+activityType;
+            break;
+
+        case "newly_listed_item":
+            REQUEST_URL = "/activities?activity_type="+activityType;
+            break;
+
+        case "updated_listing":
+            REQUEST_URL = "/activities?activity_type="+activityType;
+            break;
+
+        case "new_mint":
+            REQUEST_URL = "/activities?activity_type="+activityType;
+            break;
+
+        case "new_sales":
+            REQUEST_URL = "/activities?activity_type="+activityType;
+            break;
+        case "cancelled_listing":
+            REQUEST_URL = "/activities?activity_type="+activityType;
+            break;
+
+        default:
+      var REQUEST_URL = "/activities";
+    }
     try {
       const HEADER = {};
-      const REQUEST_URL = "/activities";
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -161,7 +109,7 @@ const Activities = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
-          console.log(response.data);
+          setActivities(response.data.data);
         } else {
           toast("Something went wrong, please try again!");
           return;
@@ -174,33 +122,9 @@ const Activities = () => {
   };
 
   useEffect(() => {
-    try {
-      const HEADER = {};
-      const REQUEST_URL = "/activities";
-      const METHOD = "GET";
-      const DATA = {};
-      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-        if (response.status == 400) {
-          var error = response.data.error;
-          toast(error);
-          return;
-        } else if (response.status == 401) {
-          toast("Unauthorized request!");
-          return;
-        } else if (response.status == 200) {
-          // console.log(response.data);
-          setActivities([...activities, ...response.data.data]);
-        } else {
-          toast("Something went wrong, please try again!");
-          return;
-        }
-      });
-    } catch (error) {
-      toast("Something went wrong, please try again!");
-      return;
-    }
+   fetchActivities('all')
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentEvent.name]);
+  }, []);
 
   // console.log({ activities });
 
@@ -216,6 +140,9 @@ const Activities = () => {
                 placeholder={
                   typeof currentEvent === "object" ? currentEvent.name : ""
                 }
+                handleChange={
+                  "fetchActivities(currentEvent.value)"
+                  }
                 onClick={
                   setCurrentEvent as React.Dispatch<
                     React.SetStateAction<string | Record<string, string>>
@@ -277,8 +204,8 @@ const Activities = () => {
             ))}
           </div>
           <div className="total-earnings-history-wrapper">
-            {activitiesData.map((txn, i) => (
-              <TransactionCard key={i + 1} {...txn} />
+            {activities.map((txn, i) => (
+              <TransactionCard key={i} {...txn} />
             ))}
           </div>
         </div>
