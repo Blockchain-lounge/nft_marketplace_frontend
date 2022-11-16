@@ -404,11 +404,11 @@ const Profile = () => {
                     </div>
                     {/*list of activities*/}
                     <div className="profile-activities-wrappe">
-                      {activities !== []
-                        ? activities.map((activity, i) => (
-                            <UserActivityCard {...activity} key={i} />
-                          ))
-                        : ""}
+                       {activities !== []
+                        ?
+                        activities.map((activity, i) => (
+                        <UserActivityCard {...activity} key={i} />
+                      )) : ""}
                     </div>
                   </div>
                 ) : null}
