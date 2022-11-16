@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 // import { CaretDown } from "@/src/components/atoms/vectors";
 import { ICategories } from "@/src/utilities/types";
 import { apiRequest } from "@/src/functions/offChain/apiRequests";
+import Skeleton from "react-loading-skeleton";
 
 const NavTab = () => {
   const [categories, setCategories] = useState<Array<ICategories> | null>(null);
@@ -57,7 +58,11 @@ const NavTab = () => {
               </span>
             </div>
           ))
-        : null}
+        : Array(5)
+            .fill(0)
+            .map((_, i) => (
+              <Skeleton key={"navtab-loading" + i} height="1rem" width="5rem" />
+            ))}
     </div>
   );
 };
