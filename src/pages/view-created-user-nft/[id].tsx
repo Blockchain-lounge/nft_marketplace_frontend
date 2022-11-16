@@ -22,32 +22,12 @@ const ViewUserNft = () => {
   const [owner, setOwner] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [itemDetail, setItemDetail] = useState(null);
-
-  const handleCancelNftListing = async () => {
-    if (id !== undefined) {
-      const HEADER = "authenticated";
-      const REQUEST_URL = "nft-listing/cancel/" + id;
-      const METHOD = "DELETE";
-      const DATA = {};
-
-      await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-        if (response.status == 400) {
-          var error = response.data.error;
-          toast(error);
-          return;
-        } else if (response.status == 200) {
-          toast(response.data.message);
-          push(`/profile`);
-        } else {
-          toast(response.data.error);
-          return;
-        }
-      });
-    }
+  const handleSellNft = () => {
+    push(`/list-created-nft-for-sale/${id}`);
   };
 
   const handleEditNft = () => {
-    push(`/update-listed-nft/${id}`);
+    push(`/update-nft/${id}`);
   };
 
   const fetchUser = async () => {
@@ -74,7 +54,7 @@ const ViewUserNft = () => {
   const fetchItemDetail = async () => {
     if (id !== undefined) {
       const HEADER = {};
-      const REQUEST_URL = "nft-listing/detail/" + id;
+      const REQUEST_URL = "nft-item/detail/" + id;
       const METHOD = "GET";
       const DATA = {};
 
@@ -85,10 +65,7 @@ const ViewUserNft = () => {
           push("/");
           return;
         } else if (response.status == 200) {
-          if(response.data.listing === null){
-             push(`/profile`);
-          }
-          setItemDetail(response.data.listing);
+          setItemDetail(response.data.data);
         } else {
           toast("Something went wrong, please try again!");
           return;
@@ -112,8 +89,8 @@ const ViewUserNft = () => {
               <div>
                 <div className="relative h-[23rem] lg:h-[100%]">
                   <Image
-                    src={itemDetail.item.item_art_url}
-                    alt={itemDetail.item.item_title}
+                    src={itemDetail.item_art_url}
+                    alt={itemDetail.item_title}
                     layout="fill"
                     objectFit="cover"
                     className="rounded-xl"
@@ -168,8 +145,8 @@ const ViewUserNft = () => {
                       <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
                         <Image
                           src={
-                            itemDetail.item.collection
-                              ? itemDetail.item.collection.logo_image
+                            itemDetail.collection_id
+                              ? itemDetail.collection_id.collectionLogoImage
                               : "/images/placeholder.png"
                           }
                           alt="colx-img"
@@ -181,7 +158,7 @@ const ViewUserNft = () => {
                         />
                       </div>
                       <span className="text-xl lg:mr-1">
-                        {itemDetail.item.collection.name}
+                        {itemDetail.collection_id.name}
                       </span>
                       <div className="h-6 w-6 relative">
                         <Image
@@ -195,7 +172,7 @@ const ViewUserNft = () => {
                     </div>
                   </div>
                   <span className="text-4xl font-bold capitalize">
-                    {itemDetail.item.item_title}
+                    {itemDetail.item_title}
                   </span>
                 </div>
                 <div className="view-hero-nft-owner">
@@ -220,16 +197,9 @@ const ViewUserNft = () => {
                 <div className="view-hero-nft-cta-wrapper">
                   <div className="flex flex-col w-full gap-x-6">
                     <div className="p-4 bg-bg-5 rounded-md w-full">
-                      <span className="text-txt-2 block mb-4 text-xl">
-                        Selling price
-                      </span>
                       <div className="">
-                        <span className="flex items-center text-[1.5rem] gap-x-1">
-                          <CoinIcon />
-                          {itemDetail.listing_price || 0}
-                        </span>
                         <span className="text-xl block mt-2">
-                          Item quantity: {itemDetail.listing_remaining+"/"+itemDetail.listing_quantity}
+                          Item supply: {itemDetail.item_supply}
                         </span>
                       </div>
                     </div>
@@ -241,9 +211,9 @@ const ViewUserNft = () => {
                         onClick={handleEditNft}
                       />
                       <Button
-                        title="Cancel listing"
+                        title="Sell"
                         wt="w-full"
-                        onClick={() => handleCancelNftListing()}
+                        onClick={handleSellNft}
                       />
                     </div>
                   </div>

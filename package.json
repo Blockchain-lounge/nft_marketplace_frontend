@@ -15,6 +15,7 @@
     "clsx": "^1.2.1",
     "ethers": "^5.7.1",
     "ipfs-http-client": "^59.0.0",
+    "moment": "^2.29.4",
     "moralis": "^2.6.4",
     "next": "12.3.1",
     "next-auth": "^4.16.4",

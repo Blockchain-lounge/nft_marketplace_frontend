@@ -23,7 +23,7 @@ const ViewUserNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [itemDetail, setItemDetail] = useState(null);
   const handleSellNft = () => {
-    push(`/list-nft-for-sale/${id}`);
+    push(`/list-owned-nft-for-sale/${id}`);
   };
 
   const handleEditNft = () => {
@@ -198,7 +198,7 @@ const ViewUserNft = () => {
                   <div className="flex flex-col w-full gap-x-6">
                     <div className="p-4 bg-bg-5 rounded-md w-full">
                       <span className="text-txt-2 block mb-4 text-xl">
-                        Price
+                        Purchase price
                       </span>
                       <div className="">
                         <span className="flex items-center text-[1.5rem] gap-x-1">
@@ -206,23 +206,17 @@ const ViewUserNft = () => {
                           {itemDetail.item_price || 0}
                         </span>
                         <span className="text-xl block mt-2">
-                          Item quantity: {itemDetail.item_supply}
+                          Item quantity: 1
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between gap-x-4 mt-4">
-                      <Button
-                        title="Edit"
-                        outline2
-                        wt="w-full"
-                        onClick={handleEditNft}
-                      />
-                      <Button
-                        title="Sell"
-                        wt="w-full"
-                        onClick={handleSellNft}
-                      />
-                    </div>
+                    {/* <div className="flex items-center justify-between gap-x-4 mt-4"> */}
+                    {/*   <Button */}
+                    {/*     title="Sell" */}
+                    {/*     wt="w-full" */}
+                    {/*     onClick={handleSellNft} */}
+                    {/*   /> */}
+                    {/* </div> */}
                   </div>
 
                   {/* <Button title="Edit" wt="w-full" outline2 /> */}
