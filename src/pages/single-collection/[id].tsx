@@ -79,6 +79,7 @@ const ViewCollection = () => {
   }, [id]);
 
   // console.log({ singleCollectionsData });
+  
 
   return (
     <DashboardLayout isLoading={isLoading}>
