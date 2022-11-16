@@ -21,7 +21,7 @@ import {
   ConnectWalletTab,
   OwnedNftCard,
   CreatedNftCard,
-  ListedNftCard
+  ListedNftCard,
 } from "@/src/components/molecules";
 
 import { apiRequest } from "../functions/offChain/apiRequests";
@@ -141,15 +141,14 @@ const Profile = () => {
     });
   };
 
-
-const fetchUserActivities = async (user_id) => {
+  const fetchUserActivities = async (user_id) => {
     const HEADER = "authenticated";
-    const REQUEST_URL = "activities?user="+user_id;
+    const REQUEST_URL = "activities?user=" + user_id;
     const METHOD = "GET";
     const DATA = {};
     apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
       if (response.status == 200) {
-        setActivities(response.data.data)
+        setActivities(response.data.data);
       } else {
         toast("Unable to fetch your activities, please reload this page!");
         return;
@@ -410,8 +409,6 @@ const fetchUserActivities = async (user_id) => {
                         activities.map((activity, i) => (
                         <UserActivityCard {...activity} key={i} />
                       )) : ""}
-                        
-                     
                     </div>
                   </div>
                 ) : null}
