@@ -24,12 +24,7 @@ const ViewCollection = () => {
   const [filter, setFilter] = useState(false);
   const info =
     "CryptoPunks launched as a fixed set of 10,000 items in mid-2017 and became one of the inspirations for the ERC-721 standard. They have been featured in places like The New York Times, Christie’s of London, Art|Basel Miami, and The PBS NewsHour.";
-  const collectionPriceInfo = [
-    { label: "floor", price: "18.3", type: "coin" },
-    { label: "volume", price: "18.3", type: "coin" },
-    { label: "items", price: "18.3", type: "quantity" },
-    { label: "owners", price: 897, type: "quantity" },
-  ];
+  
   const { query, push } = useRouter();
   const { id } = query;
   const collectionStages = ["items", "activity"];
@@ -65,6 +60,12 @@ const ViewCollection = () => {
       });
     }
   };
+  const collectionPriceInfo = [
+    { label: "floor", price: "18.3", type: "coin" },
+    { label: "volume", price: "18.3", type: "coin" },
+    { label: "items", price: singleCollectionsData.length, type: "quantity" },
+    { label: "owners", price: 897, type: "quantity" },
+  ];
   useEffect(() => {
     fetchCollectionItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
