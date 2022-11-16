@@ -61,14 +61,14 @@ const ViewCollection = () => {
       });
     }
   };
-  const sampleFloorPrice = 0.02;
-  if(!singleCollectionsData){
-    sampleFloorPrice = 0.02;
-  } else{
-    sampleFloorPrice = singleCollectionsData[0].item_price;
-  }
+  // const sampleFloorPrice = 0.02;
+  // if(!singleCollectionsData){
+  //   sampleFloorPrice = 0.02;
+  // } else{
+  //   sampleFloorPrice = singleCollectionsData[0].item_price;
+  // }
   const collectionPriceInfo = [
-    { label: "floor", price: sampleFloorPrice, type: "coin" },
+    { label: "floor", price: singleCollectionsData[0].item_price, type: "coin" },
     { label: "volume", price: "18.3", type: "coin" },
     { label: "items", price: singleCollectionsData.length, type: "quantity" },
     { label: "owners", price: singleCollectionsData.length * 2, type: "quantity" },
