@@ -3,11 +3,11 @@ import React from "react";
 import { Button, Heading } from "../atoms";
 import { useRouter } from "next/router";
 
-const CategoryHeroCard = () => {
+const CategoryHeroCard = ({category}) => {
   const { push } = useRouter();
 
   const handlePush = () => {
-    push(`/category/1`);
+    push(`/category/${category._id}`);
   };
 
   return (
@@ -17,22 +17,19 @@ const CategoryHeroCard = () => {
           <span className="uppercase font-bold tracking-widest earnings-card-history">
             Experience even more
           </span>
-          <Heading title="Utility" twClasses="mt-4" />
+          <Heading title={category.name} twClasses="mt-4" />
           <p className="lg:max-w-xl">
-            NFTs can serve you as the keys to new communities, events in the
-            physical world, gifts, or tools. Whether you are looking for
-            personal benefit or want to contribute to the projects with a good
-            cause, this is the place to be.
+            {category.description}
           </p>
-          <Button title="Explore" />
+          {/* <Button title="Explore" /> */}
         </div>
         <div className="hero-img-cards">
           <div className="hero-img">
             <Image
               layout="fill"
               objectFit="cover"
-              src={"/images/utility-featured.svg"}
-              alt={"utility-img"}
+              src={category.icon_image}
+              alt={category.name}
               className="rounded-2xl"
               placeholder="blur"
               blurDataURL="/images/placeholder.png"

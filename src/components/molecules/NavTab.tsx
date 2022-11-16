@@ -50,7 +50,7 @@ const NavTab = () => {
                 className={clsx("tab", tab.name === active && "border-b-2")}
                 onClick={() => {
                   setActive(tab.name);
-                  push(`/category/${tab.name}`);
+                  push(`/category/${tab._id}`);
                 }}
               >
                 {tab.name}

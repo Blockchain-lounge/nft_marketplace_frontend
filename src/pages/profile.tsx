@@ -410,7 +410,7 @@ const fetchUserActivities = async (user_id) => {
                         activities.map((activity, i) => (
                         <UserActivityCard {...activity} key={i} />
                       )) : ""}
-                        }
+                        
                      
                     </div>
                   </div>
