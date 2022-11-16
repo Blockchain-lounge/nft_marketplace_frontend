@@ -68,7 +68,7 @@ const ViewCollection = () => {
   //   sampleFloorPrice = singleCollectionsData[0].item_price;
   // }
   const collectionPriceInfo = [
-    { label: "floor", price: singleCollectionsData[0].item_price, type: "coin" },
+    { label: "floor", price: 0.04, type: "coin" },
     { label: "volume", price: "18.3", type: "coin" },
     { label: "items", price: singleCollectionsData.length, type: "quantity" },
     { label: "owners", price: singleCollectionsData.length * 2, type: "quantity" },
