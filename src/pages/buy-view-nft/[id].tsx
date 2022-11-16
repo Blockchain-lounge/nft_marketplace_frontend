@@ -52,7 +52,7 @@ const ViewNft = () => {
     { label: "Current Owner", value: "Jakes💸", img: "/images/nftsample3.png" },
   ];
   // const viewNftStages = ["overview", "properties", "bids", "history"];
-  const viewNftStages = ["overview", "History"];
+  const viewNftStages = ["overview", "activities"];
   const nftProperties = [
     { label: "dna", value: "human", trait: 19 },
     { label: "eyewear", value: "cyber bindi", trait: 16 },
@@ -177,7 +177,6 @@ const ViewNft = () => {
       );
       var tnx = await transaction.wait();
       toast("Please approve this transaction!");
-      
 
       // var token_id = itemDetail.token_id;
       //@ts-ignore
@@ -187,26 +186,38 @@ const ViewNft = () => {
       var trackCopyBaseUrl = "";
       var soldItemCopyId = "";
 
-      try{
-        if(tnx.events[0]){
-          if(tnx.events[4]){
+      try {
+        if (tnx.events[0]) {
+          if (tnx.events[4]) {
             soldItemCopyId = tnx.events[3].args[0].toNumber();
             buyer = tnx.events[3].args[3];
-            trackCopyBaseUrl = tnx.events[3].args[5]
-          }else{
+            trackCopyBaseUrl = tnx.events[3].args[5];
+            console.log(
+              "Log 5: soldItemCopyIdTop",
+              tnx.events[3].args[0].toNumber()
+            );
+            console.log("buyer", tnx.events[3].args[3]);
+            console.log("buytrackCopyBaseUrl", tnx.events[3].args[5]);
+          } else {
             soldItemCopyId = tnx.events[1].args[0].toNumber();
             buyer = tnx.events[1].args[3];
-            trackCopyBaseUrl = tnx.events[1].args[5]
+            trackCopyBaseUrl = tnx.events[1].args[5];
+            console.log(
+              "Log 3: soldItemCopyIdTop",
+              tnx.events[1].args[0].toNumber()
+            );
+            console.log("buyer", tnx.events[1].args[3]);
+            console.log("buytrackCopyBaseUrl", tnx.events[1].args[5]);
           }
-        }else{
+        } else {
           toast("We were unable to complete your transaction!");
           return;
         }
-      }catch (error){
-        console.log("Event error", error)
+      } catch (error) {
+        console.log("Event error", error);
         return;
-      }   
-      
+      }
+
       var formData = {
         listing_id: itemDetail._id,
         item_copy_id: soldItemCopyId,
@@ -584,7 +595,7 @@ const ViewNft = () => {
                   ))} */}
                   <Heading2 title="There's no bidding" />
                 </div>
-              ) : viewNftStage === "History" ? (
+              ) : viewNftStage === "activities" ? (
                 <div className="flex flex-col gap-y-6">
                   {nftHistory.map(
                     ({ imgUrl, time, date, owner, txn, icon, receiver }) => (
