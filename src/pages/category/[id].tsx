@@ -1,8 +1,9 @@
-// @ts-nocheck
 import { Heading2 } from "@/src/components/atoms";
 import { NftCardSkeleton } from "@/src/components/lazy-loaders";
 import {
+  CategoryHeroCard,
   CollectionCard,
+  NftHeaderCard,
   NftMediumCard2,
   Tab,
 } from "@/src/components/molecules";
@@ -22,84 +23,28 @@ const CategoryPage = () => {
     <DashboardLayout>
       <div className="sub-layout-wrapper scrollbar-hide">
         <div className="center">
-          <div className="profile-banner">
-            {categoryBannerImg ? (
-              <Image
-                src="/images/utility-banner-img.svg"
-                alt="collection-img-banner"
-                objectFit="cover"
-                layout="fill"
-                placeholder="blur"
-                blurDataURL="/images/placeholder.png"
-              />
-            ) : (
-              <label className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d49]">
-                <Image
-                  src="/images/banner-placeholder.svg"
-                  alt="banner-img-svg"
-                  width="64px"
-                  height="64px"
-                  objectFit="cover"
-                />
-              </label>
-            )}
-          </div>
-          <div className="mt-8">
-            <Heading2 title="Explore Utility NFTs" />
-            <p className="w-2/3 mt-2 text-lg">
-              An online community of makers, developers, and traders is pushing
-              the art world into new territory. It all started with CryptoPunks,
-              a set of 10,000 randomly generated punks that proved demand for
-              the digital ownership of non-physical
-            </p>
-            <Tab
-              placeholder={activeTab}
-              setStage={setActiveTab}
-              stages={exploreTabs}
+          <CategoryHeroCard />
+          <div className="mt-20">
+            <NftHeaderCard
+              heading="Collections"
+              // to="/explore"
+              // selectTitle="Last 24 hours"
             />
-          </div>
-          <div className="">
-            {activeTab === "Collections" ? (
-              <div>
-                {collections.length > 0 ? (
-                  <div className="explore-items-wrapper">
-                    {collections.map((item) => (
-                      <CollectionCard key={item._id} {...item} />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex flex-wrap justify-evenly lg:justify-between gap-y-12">
-                    {Array(6)
-                      .fill(0)
-                      .map((_, i) => (
-                        <NftCardSkeleton key={i + "explore-skeleton-card"} />
-                      ))}
-                  </div>
-                )}
+            {collections && collections.length > 1 ? (
+              <div className="explore-items-wrapper">
+                {collections.map((item) => (
+                  <CollectionCard key={item._id} {...item} />
+                ))}
               </div>
-            ) : activeTab === "NFTs" ? (
-              <div>
-                {nfts.length > 0 ? (
-                  <div className="explore-items-wrapper">
-                    {nfts.map((val, i) => (
-                      <NftMediumCard2
-                        key={val._id}
-                        {...val}
-                        to="view-user-nft"
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex flex-wrap justify-evenly lg:justify-between gap-y-12">
-                    {Array(6)
-                      .fill(0)
-                      .map((_, i) => (
-                        <NftCardSkeleton key={i + "explore-skeleton-card"} />
-                      ))}
-                  </div>
-                )}
+            ) : (
+              <div className="flex flex-wrap justify-evenly lg:justify-between gap-y-12">
+                {Array(9)
+                  .fill(0)
+                  .map((_, i) => (
+                    <NftCardSkeleton key={i + "explore-skeleton-card"} />
+                  ))}
               </div>
-            ) : null}
+            )}
           </div>
         </div>
         <Footer />

@@ -2,11 +2,13 @@
   @apply h-screen overflow-auto pb-52 lg:pb-[6rem];
 }
 
-.home-wrapper .hero {
+.home-wrapper .hero,
+.category-hero {
   @apply flex-col-reverse gap-y-12 lg:gap-0 flex lg:flex-row justify-between items-center gap-x-[3.94rem] p-[1.125rem] lg:p-0 rounded-3xl lg:rounded-none bg-bg-2 lg:bg-transparent;
 }
 
-.home-wrapper .hero p {
+.home-wrapper .hero p,
+.category-hero p {
   @apply text-[1.125rem] text-[#E0EEFF] leading-[2.125rem] tracking-[0.03rem] mt-[1rem] mb-[2.375rem] lg:max-w-md 2xl:max-w-lg;
 }
 

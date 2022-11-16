@@ -30,7 +30,7 @@ const EarningLayout = ({
   // };
   return (
     <DashboardLayout isLoading={isLoading}>
-      <div className="sub-layout-wrapper">
+      <div className="sub-layout-wrapper scrollbar-hide">
         <div className="center">
           <div className="earnings-actions">
             <div className="earnings-title-btn">
