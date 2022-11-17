@@ -30,7 +30,7 @@ const ViewCollection = () => {
   const collectionStages = ["items", "activity"];
   const activityList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const activityHeaders = ["Item", "Price", "From", "To"];
-  const [singleCollectionsListedItemsData, setSingleCollectionsListedItemsData] = useState("");
+  const [singleCollectionsListedItemsData, setSingleCollectionsListedItemsData] = useState<string|number>("");
   const [singleCollectionDetail, setSingleCollectionDetail] = useState("");
   const [singleCollectionActivities, setSingleCollectionActivities] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -51,7 +51,7 @@ const ViewCollection = () => {
         } else if (response.status == 200) {
           setSingleCollectionsListedItemsData(response.data.listedItems);
           setSingleCollectionDetail(response.data.collection);
-          console.log(response.data)
+          console.log("Listing price",response.data.listedItems[0].listing_price)
           // console.log(response.data.items[0].item_price)
           setSingleCollectionActivities(response.data.activities);
           // console.log("Item Length".response.data.items.length)
@@ -68,7 +68,7 @@ const ViewCollection = () => {
   // if(!singleCollectionsListedItemsData){
   //   sampleFloorPrice = 0.02;
   // } else{
-  //   sampleFloorPrice = singleCollectionsListedItemsData[0].item_price;
+  //   sampleFloorPrice = singleCollectionsListedItemsData[0].listing_price;
   // }
   
   const collectionPriceInfo = [
