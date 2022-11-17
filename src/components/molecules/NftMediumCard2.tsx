@@ -24,7 +24,6 @@ const NftCard2 = ({
   to?: string;
 }) => {
   const { push } = useRouter();
-
   return (
     <div
       className="nmc-wrapper cursor-pointer"
