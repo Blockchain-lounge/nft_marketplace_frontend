@@ -51,7 +51,7 @@ const ViewCollection = () => {
         } else if (response.status == 200) {
           setSingleCollectionsListedItemsData(response.data.listedItems);
           setSingleCollectionDetail(response.data.collection);
-          console.log("Listing price",response.data.listedItems[0].listing_price)
+          console.log(response.data)
           // console.log(response.data.items[0].item_price)
           setSingleCollectionActivities(response.data.activities);
           // console.log("Item Length".response.data.items.length)
