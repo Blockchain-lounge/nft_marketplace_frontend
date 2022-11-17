@@ -294,6 +294,9 @@ const ViewNft = () => {
           push("/");
           return;
         } else if (response.status == 200) {
+          if(response.data.listing ==- null){
+              push("/");
+          }
           setItemDetail(response.data.listing);
         } else {
           toast("Something went wrong, please try again!");
