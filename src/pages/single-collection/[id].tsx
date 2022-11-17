@@ -5,7 +5,7 @@ import {
   FilterIcon,
   SendIcon,
 } from "@/src/components/atoms/vectors";
-import { ActivityCard, NftMediumCard2, Tab } from "@/src/components/molecules";
+import { CollectionActivityCard, NftMediumCard2, Tab } from "@/src/components/molecules";
 import { BannerImg, Footer } from "@/src/components/organisms";
 // import { singleCollectionsDatas } from "@/src/store/data";
 import DashboardLayout from "@/src/template/DashboardLayout";
@@ -32,6 +32,7 @@ const ViewCollection = () => {
   const activityHeaders = ["Item", "Price", "From", "To"];
   const [singleCollectionsData, setSingleCollectionsData] = useState("");
   const [singleCollectionDetail, setSingleCollectionDetail] = useState("");
+  const [singleCollectionActivities, setSingleCollectionActivities] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchCollectionItems = async () => {
@@ -50,8 +51,11 @@ const ViewCollection = () => {
         } else if (response.status == 200) {
           setSingleCollectionsData(response.data.items);
           setSingleCollectionDetail(response.data.collection);
-          console.log("Item Length", response.data.items.length)
-          console.log(response.data.items[0].item_price)
+          // console.log("Item Length", response.data.items.length)
+          // console.log(response.data.items[0].item_price)
+          setSingleCollectionActivities(response.data.activities);
+          // console.log("Item Length".response.data.items.length)
+          // console.log(response.data.items[0].item_price)
           setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
@@ -66,11 +70,12 @@ const ViewCollection = () => {
   // } else{
   //   sampleFloorPrice = singleCollectionsData[0].item_price;
   // }
+  
   const collectionPriceInfo = [
-    { label: "floor", price: "0.04", type: "coin" },
-    { label: "volume", price: "0", type: "coin" },
-    { label: "items", price: "0", type: "quantity" },
-    { label: "owners", price: "0", type: "quantity" },
+    { label: "floor", price: "0", type: "coin" },
+    { label: "volume", price: "0", type: "coin" }, 
+    { label: "items", price: singleCollectionsData.length, type: "quantity" },
+    { label: "owners", price: singleCollectionsData.length  * 2, type: "quantity" },
     // { label: "items", price: singleCollectionsData.length, type: "quantity" },
     // { label: "owners", price: singleCollectionsData.length * 2, type: "quantity" },
   ];
@@ -264,9 +269,16 @@ const ViewCollection = () => {
                 ))}
               </div>
               <div className="profile-activities-wrapper">
-                {activityList.map((activity) => (
-                  <ActivityCard key={activity} />
-                ))}
+                {
+                  singleCollectionActivities.length === 0
+                  ? ("No activities yet!")
+                  : singleCollectionActivities.length > 0 
+                  ? singleCollectionActivities.map((activity, i) => (
+                  <CollectionActivityCard 
+                    {...activity} key={i} />
+                )): ("No activities yet!")
+                  }
+                {}
               </div>
             </>
           ) : null}

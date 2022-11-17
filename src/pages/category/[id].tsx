@@ -67,7 +67,7 @@ const CategoryPage = () => {
             />
             {collections && collections.length === 0 ? (
               "No matching collections found"
-            ) : collections && collections.length > 1 ? (
+            ) : collections && collections.length > 0 ? (
               <div className="explore-items-wrapper">
                 {collections.map((item) => (
                   <CollectionCard key={item._id} {...item} />
