@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import React from "react";
 import Slider from "react-slick";
 
@@ -61,14 +62,14 @@ const AboutUs = () => {
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper scrollbar-hide">
-        <div className="center space-y-[3rem] w-[80vw] overflow-x-hidden">
+        <div className="center space-y-[3rem]">
           <Heading2 title="About us" />
           <section className="bg-[url('/images/about-us-bg.svg')] bg-cover h-64 w-full grid place-content-center">
             <h1 className=" text-[2.7rem] lg:text-6xl font-bold text-center max-w-5xl leading-snug">
               Making it easier to participate in the cloud-based economy
             </h1>
           </section>
-          <p className="text-xl bg-bg-3 rounded-3xl p-6 lg:p-12 leading-relaxed">
+          <p className="text-xl bg-bg-3 rounded-3xl p-6 lg:p-12 leading-relaxed text-center">
             We are focusing our innovation on &quot;ease of access&quot; - we
             want you to have the best experience collecting NFT - Non-Fungible
             Tokens. For whatever it is you are passionate about; our NFT
@@ -100,20 +101,21 @@ const AboutUs = () => {
               </div>
             ))}
           </section>
-          {/* <section className="w-[100%] overflow-x-auto">
+          <section className="lg:w-[80vw] overflow-hidden">
             <NftHeader heading="Blog" />
-            <div className="flex gap-x-14 w-[100%] overflow-auto">
+            <div className="flex gap-x-14 w-[100%] overflow-auto scrollbar-hide">
               {blogSection.map(({ content, image, name }) => (
-                <BlogCard
-                  key={"about-us-blog-section - " + name}
-                  content={content}
-                  image={image}
-                  name={name}
-                  wt="w-[32rem]"
-                />
+                <div key={"about-us-blog-section - " + name}>
+                  <BlogCard
+                    content={content}
+                    image={image}
+                    name={name}
+                    wt="w-[32rem] cursor-pointer"
+                  />
+                </div>
               ))}
             </div>
-          </section> */}
+          </section>
         </div>
         <Footer />
       </div>
