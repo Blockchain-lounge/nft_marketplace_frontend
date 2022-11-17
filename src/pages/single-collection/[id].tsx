@@ -70,7 +70,7 @@ const ViewCollection = () => {
   // } else{
   //   sampleFloorPrice = singleCollectionsData[0].item_price;
   // }
-  // const sampleFloorPrice Array<string> = singleCollectionsData[0].item_price;
+  
   const collectionPriceInfo = [
     { label: "floor", price: "0", type: "coin" },
     { label: "volume", price: "0", type: "coin" }, 
