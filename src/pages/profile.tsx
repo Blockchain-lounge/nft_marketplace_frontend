@@ -17,9 +17,11 @@ import {
   Loader,
 } from "@/src/components/atoms";
 import {
-  ActivityCard,
+  UserActivityCard,
   ConnectWalletTab,
-  NftMediumCard2,
+  OwnedNftCard,
+  CreatedNftCard,
+  ListedNftCard,
 } from "@/src/components/molecules";
 
 import { apiRequest } from "../functions/offChain/apiRequests";
@@ -48,11 +50,13 @@ const Profile = () => {
     bio: string;
     bannerImg: string;
     profileImg: string;
+    _id: string;
   } | null>(null);
   // const [data, isLoading] = UseFetch("/user/my_profile");
   const { push } = useRouter();
   const [userProfileImg, setUserProfileImg] = useState("");
   const [userBannerImg, setUserBannerImg] = useState("");
+  const [activities, setActivities] = useState([]);
 
   const profileTab = [
     { text: "Owned", count: userOwnedProfileData.length },
@@ -86,7 +90,9 @@ const Profile = () => {
           bio: response.data.data.bio,
           bannerImg: response.data.data.userBannerImg,
           profileImg: response.data.data.userProfileImg,
+          _id: response.data.data._id,
         });
+
         setUserBannerImg(
           response.data.data.userBannerImg &&
             response.data.data.userBannerImg !== undefined
@@ -103,6 +109,7 @@ const Profile = () => {
                 response.data.data.userProfileImg
             : ""
         );
+        fetchUserActivities(response.data.data._id);
         setIsLoading(false);
         // setShowModal(true);
       } else {
@@ -129,6 +136,21 @@ const Profile = () => {
         setUserOwnedProfileData(response.data.data);
       } else {
         toast("Something went wrong, please try again!");
+        return;
+      }
+    });
+  };
+
+  const fetchUserActivities = async (user_id) => {
+    const HEADER = "authenticated";
+    const REQUEST_URL = "activities?user=" + user_id;
+    const METHOD = "GET";
+    const DATA = {};
+    apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+      if (response.status == 200) {
+        setActivities(response.data.data);
+      } else {
+        toast("Unable to fetch your activities, please reload this page!");
         return;
       }
     });
@@ -248,10 +270,10 @@ const Profile = () => {
                   userOwnedProfileData.length > 0 ? (
                     <div className="user-profile-owned-nfts">
                       {userOwnedProfileData.map((val, i) => (
-                        <NftMediumCard2
+                        <OwnedNftCard
                           key={val._id}
                           {...val}
-                          to="view-user-nft"
+                          to="view-owned-user-nft"
                         />
                       ))}
                     </div>
@@ -279,10 +301,10 @@ const Profile = () => {
                     userCreatedProfileData.length > 0 ? (
                       <div className="user-profile-owned-nfts">
                         {userCreatedProfileData.map((val, i) => (
-                          <NftMediumCard2
+                          <CreatedNftCard
                             key={val._id}
                             {...val}
-                            to="view-user-nft"
+                            to="view-created-user-nft"
                           />
                         ))}
                       </div>
@@ -317,10 +339,10 @@ const Profile = () => {
                     userListedProfileData.length > 0 ? (
                       <div className="user-profile-owned-nfts">
                         {userListedProfileData.map((val, i) => (
-                          <NftMediumCard2
+                          <ListedNftCard
                             key={val._id}
                             {...val}
-                            to="view-user-nft"
+                            to="view-listed-user-nft"
                           />
                         ))}
                       </div>
@@ -382,9 +404,11 @@ const Profile = () => {
                     </div>
                     {/*list of activities*/}
                     <div className="profile-activities-wrappe">
-                      {profileActivityList.map((activity) => (
-                        <ActivityCard key={activity} />
-                      ))}
+                       {activities !== []
+                        ?
+                        activities.map((activity, i) => (
+                        <UserActivityCard {...activity} key={i} />
+                      )) : ""}
                     </div>
                   </div>
                 ) : null}

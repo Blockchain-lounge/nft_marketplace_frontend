@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import clsx from "clsx";
-
+import { useRouter } from "next/router";
 // import { CaretDown } from "@/src/components/atoms/vectors";
 import { ICategories } from "@/src/utilities/types";
 import { apiRequest } from "@/src/functions/offChain/apiRequests";
+import Skeleton from "react-loading-skeleton";
 
 const NavTab = () => {
   const [categories, setCategories] = useState<Array<ICategories> | null>(null);
   const [category, setCategory] = useState<Record<string, string> | null>(null);
   const [active, setActive] = useState("");
+  const { push } = useRouter();
   const fetchCategories = async () => {
     try {
       const HEADER = "";
@@ -36,14 +38,7 @@ const NavTab = () => {
       return;
     }
   };
-  // const tabsArr = [
-  //   "All",
-  //   "Utility",
-  //   "Art",
-  //   "Collectibles",
-  //   "Photography",
-  //   "Virtual World",
-  // ];
+
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -54,13 +49,20 @@ const NavTab = () => {
             <div key={tab.name}>
               <span
                 className={clsx("tab", tab.name === active && "border-b-2")}
-                onClick={() => setActive(tab.name)}
+                onClick={() => {
+                  setActive(tab.name);
+                  push(`/category/${tab._id}`);
+                }}
               >
                 {tab.name}
               </span>
             </div>
           ))
-        : null}
+        : Array(5)
+            .fill(0)
+            .map((_, i) => (
+              <Skeleton key={"navtab-loading" + i} height="1rem" width="5rem" />
+            ))}
     </div>
   );
 };

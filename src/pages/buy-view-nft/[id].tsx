@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import clsx from "clsx";
+import * as moment from 'moment';
+
 import {
   Button,
   Heading2,
@@ -42,6 +44,7 @@ const ViewNft = () => {
   const [connectedAddress, setConnectedAddress] = useState(null);
   const [userId, setUserId] = useState<null | string>(null);
   const [isTransloading, setIsTransLoading] = useState(false);
+  const [activities, setActivities] = useState([]);
 
   const nftOwnersInfo = [
     {
@@ -52,7 +55,7 @@ const ViewNft = () => {
     { label: "Current Owner", value: "Jakes💸", img: "/images/nftsample3.png" },
   ];
   // const viewNftStages = ["overview", "properties", "bids", "history"];
-  const viewNftStages = ["overview", "History"];
+  const viewNftStages = ["overview", "activities"];
   const nftProperties = [
     { label: "dna", value: "human", trait: 19 },
     { label: "eyewear", value: "cyber bindi", trait: 16 },
@@ -79,39 +82,39 @@ const ViewNft = () => {
       expiresIn: "7 weeks",
     },
   ];
-  const nftHistory = [
-    {
-      imgUrl: "/images/nftsample2.png",
-      owner: "0x19f...1138",
-      date: "02/09/2022",
-      txn: "listed for",
-      time: "10:52",
-    },
-    {
-      imgUrl: "/images/profile-nft.png",
-      owner: "zara",
-      receiver: "0x19f...1138",
-      date: "02/08/2022",
-      txn: "transferred to",
-      time: "19:56",
-      icon: "/vectors/export.svg",
-    },
-    {
-      imgUrl: "/images/nftsample3.png",
-      owner: "jakes💸",
-      date: "02/09/2022",
-      txn: "purchased for",
-      time: "10:52",
-    },
-    {
-      imgUrl: "/images/nftsample2.png",
-      owner: "0xb4d...002d",
-      date: "02/08/2022",
-      txn: "accepted bid",
-      time: "19:56",
-      icon: "/vectors/export.svg",
-    },
-  ];
+  // const nftHistory = [
+  //   {
+  //     imgUrl: "/images/nftsample2.png",
+  //     owner: "0x19f...1138",
+  //     date: "02/09/2022",
+  //     txn: "listed for",
+  //     time: "10:52",
+  //   },
+  //   {
+  //     imgUrl: "/images/profile-nft.png",
+  //     owner: "zara",
+  //     receiver: "0x19f...1138",
+  //     date: "02/08/2022",
+  //     txn: "transferred to",
+  //     time: "19:56",
+  //     icon: "/vectors/export.svg",
+  //   },
+  //   {
+  //     imgUrl: "/images/nftsample3.png",
+  //     owner: "jakes💸",
+  //     date: "02/09/2022",
+  //     txn: "purchased for",
+  //     time: "10:52",
+  //   },
+  //   {
+  //     imgUrl: "/images/nftsample2.png",
+  //     owner: "0xb4d...002d",
+  //     date: "02/08/2022",
+  //     txn: "accepted bid",
+  //     time: "19:56",
+  //     icon: "/vectors/export.svg",
+  //   },
+  // ];
 
   const fetchUser = async () => {
     const HEADER = "authenticated";
@@ -133,6 +136,33 @@ const ViewNft = () => {
         return;
       }
     });
+  };
+
+  const fetchActivities = async () => {
+    try {
+      var REQUEST_URL = "/activities?content_id="+id;
+      const HEADER = {};
+      const METHOD = "GET";
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          return;
+        } else if (response.status == 401) {
+          toast("Unauthorized request!");
+          return;
+        } else if (response.status == 200) {
+          setActivities(response.data.data);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    } catch (error) {
+      toast("Something went wrong, please try again!");
+      return;
+    }
   };
 
   const handleBuy = async () => {
@@ -177,42 +207,47 @@ const ViewNft = () => {
       );
       var tnx = await transaction.wait();
       toast("Please approve this transaction!");
-      
 
       // var token_id = itemDetail.token_id;
       //@ts-ignore
-      // var amount = itemDetail.item_price as string;
-      var amount = price;
+      var amount = itemDetail.listing_price as string;
+      // var amount = price;
       var buyer = connectedAddress;
       var trackCopyBaseUrl = "";
       var soldItemCopyId = "";
 
-      try{
-        if(tnx.events[0]){
-          if(tnx.events[4]){
+      try {
+        if (tnx.events[0]) {
+          if (tnx.events[4]) {
             soldItemCopyId = tnx.events[3].args[0].toNumber();
             buyer = tnx.events[3].args[3];
-            trackCopyBaseUrl = tnx.events[3].args[5]
-            console.log("Log 5: soldItemCopyIdTop", tnx.events[3].args[0].toNumber())
-            console.log("buyer", tnx.events[3].args[3])
-            console.log("buytrackCopyBaseUrl", tnx.events[3].args[5])
-          }else{
+            trackCopyBaseUrl = tnx.events[3].args[5];
+            console.log(
+              "Log 5: soldItemCopyIdTop",
+              tnx.events[3].args[0].toNumber()
+            );
+            console.log("buyer", tnx.events[3].args[3]);
+            console.log("buytrackCopyBaseUrl", tnx.events[3].args[5]);
+          } else {
             soldItemCopyId = tnx.events[1].args[0].toNumber();
             buyer = tnx.events[1].args[3];
-            trackCopyBaseUrl = tnx.events[1].args[5]
-            console.log("Log 3: soldItemCopyIdTop", tnx.events[1].args[0].toNumber())
-            console.log("buyer", tnx.events[1].args[3])
-            console.log("buytrackCopyBaseUrl", tnx.events[1].args[5])
+            trackCopyBaseUrl = tnx.events[1].args[5];
+            console.log(
+              "Log 3: soldItemCopyIdTop",
+              tnx.events[1].args[0].toNumber()
+            );
+            console.log("buyer", tnx.events[1].args[3]);
+            console.log("buytrackCopyBaseUrl", tnx.events[1].args[5]);
           }
-        }else{
+        } else {
           toast("We were unable to complete your transaction!");
           return;
         }
-      }catch (error){
-        console.log("Event error", error)
+      } catch (error) {
+        console.log("Event error", error);
         return;
-      }   
-      
+      }
+
       var formData = {
         listing_id: itemDetail._id,
         item_copy_id: soldItemCopyId,
@@ -259,6 +294,9 @@ const ViewNft = () => {
           push("/");
           return;
         } else if (response.status == 200) {
+          if(response.data.listing ==- null){
+              push("/");
+          }
           setItemDetail(response.data.listing);
         } else {
           toast("Something went wrong, please try again!");
@@ -277,7 +315,7 @@ const ViewNft = () => {
         push("/");
       }
     });
-
+   fetchActivities()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
@@ -590,61 +628,136 @@ const ViewNft = () => {
                   ))} */}
                   <Heading2 title="There's no bidding" />
                 </div>
-              ) : viewNftStage === "History" ? (
+              ) : viewNftStage === "activities" ? (
                 <div className="flex flex-col gap-y-6">
-                  {nftHistory.map(
-                    ({ imgUrl, time, date, owner, txn, icon, receiver }) => (
+                  {activities.map(
+                    ({ 
+                      _id,
+                      listed_item,
+                      to_user_id,
+                      from_user_id,
+                      created_item,
+                      activity_type,
+                      createdAt,
+                      created_item_listed 
+                    }) => (
                       <div
-                        key={owner}
+                        key={_id}
                         className="flex items-center justify-between bg-bg-5 py-4 pl-6 pr-8 rounded-xl"
                       >
                         <div className="flex items-center gap-x-4">
                           <div className="h-16 w-16 relative">
-                            <Image
-                              src={imgUrl}
-                              alt={owner}
+
+                            {
+                              created_item
+                              ?
+                              (
+                                 <Image
+                              src={created_item
+                                                && created_item !== undefined
+                                                && created_item !== null
+                                                ?
+                                                  created_item.item_art_url
+                                                :""}
+                                          alt=""
                               layout="fill"
                               objectFit="contain"
                               className="rounded-full"
                             />
+                              )
+                              :listed_item
+                                ?
+                                (
+                                  <Image
+                              src={listed_item
+                                  && listed_item !== undefined
+                                  && listed_item !== null
+                                  && created_item_listed !== undefined
+                                  && created_item_listed !== null
+                                  ?
+                                    created_item_listed.item_art_url
+                                                :""}
+                                          alt=""
+                              layout="fill"
+                              objectFit="contain"
+                              className="rounded-full"
+                            />
+
+                              )
+                :
+                              ""
+                              }
+
+                           
                           </div>
                           <div>
                             <div className="flex items-center gap-x-2">
-                              <span className="text-xl font-bold">{owner}</span>
+                              <span className="text-xl font-bold">{
+                                from_user_id
+                      && from_user_id !== undefined
+                      && from_user_id.username
+                      && from_user_id.username !== undefined
+                      ? from_user_id.username
+                      : "----"
+                      }</span>
                               <span className="text-xl font-bold text-txt-2">
-                                {txn}
+                                 {
+                                  activity_type === "newly_created_item" 
+                                  ? ("item created")
+                                  : activity_type === "updated_item" 
+                                  ? ("item updated")
+                                  : activity_type === "newly_listed_item" 
+                                  ? ("item listed")
+                                  : activity_type === "updated_listing" 
+                                  ? ("listed item updated")
+                                  : activity_type === "new_mint" 
+                                  ? ("item minted")
+                                  : activity_type === "new_sales" 
+                                  ? ("item sold")
+                                  : activity_type === "new_mint" 
+                                  ? ("item minted")
+                                  : activity_type === "cancelled_listing" 
+                                  ? ("item listing cancelled")
+                                 : ""
+                                 }
                               </span>
-                              {receiver && (
+                              {to_user_id && (
                                 <span className="text-xl font-bold">
-                                  {receiver}
+                                  {
+                                    to_user_id
+                      && to_user_id !== undefined
+                      && to_user_id.username
+                      && to_user_id.username !== undefined
+                      ? to_user_id.username
+                      : "----"}
                                 </span>
                               )}
                             </div>
                             <div className="flex items-center gap-x-2">
                               <span className="font-medium text-txt-2">
-                                {date}
+                                {moment(createdAt).format('ddd, MMM Do YYYY, hh:mm:ss')}
                               </span>
                               <span className="font-medium text-txt-2">
-                                {time}
+                                {/* {time} */}
                               </span>
-                              {icon && (
-                                <span className="relative h-5 w-5 cursor-pointer">
-                                  <Image
-                                    src={icon}
-                                    alt={txn}
-                                    layout="fill"
-                                    objectFit="cover"
-                                  />
-                                </span>
-                              )}
+                              {/* {icon && ( */}
+                              {/*   <span className="relative h-5 w-5 cursor-pointer"> */}
+                              {/*     <Image */}
+                              {/*       src={icon} */}
+                              {/*       alt={txn} */}
+                              {/*       layout="fill" */}
+                              {/*       objectFit="cover" */}
+                              {/*     /> */}
+                              {/*   </span> */}
+                              {/* )} */}
                             </div>
                           </div>
                         </div>
                         <div>
-                          <span className="flex text-xl font-bold">
-                            <CoinIcon /> 4.5k
-                          </span>
-                          <span className="text-txt-2">$5,954,532</span>
+                          {/* <span className="flex text-xl font-bold"> */}
+                          {/*   <CoinIcon /> 4.5k */}
+                          {/* </span> */}
+                          {/* <span className="text-txt-2">$5,954,532</span> */}
                         </div>
                       </div>
                     )

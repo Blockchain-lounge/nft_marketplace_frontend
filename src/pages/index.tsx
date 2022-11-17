@@ -42,7 +42,7 @@ const Home: NextPage = () => {
   const fetchHomePageData = async () => {
     try {
       const HEADER = {};
-      const REQUEST_URL = "nft-listing/home_data";
+      const REQUEST_URL = "home-page/";
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -70,7 +70,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     fetchHomePageData();
   }, []);
-
+  // console.log({ collections });
   return (
     <DashboardLayout>
       <div className="home-wrapper scrollbar-hide">
