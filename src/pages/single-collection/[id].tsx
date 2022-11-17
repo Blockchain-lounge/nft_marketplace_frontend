@@ -7,7 +7,7 @@ import {
 } from "@/src/components/atoms/vectors";
 import { CollectionActivityCard, NftMediumCard2, Tab } from "@/src/components/molecules";
 import { BannerImg, Footer } from "@/src/components/organisms";
-// import { singleCollectionsDatas } from "@/src/store/data";
+// import { singleCollectionsListedItemsDatas } from "@/src/store/data";
 import DashboardLayout from "@/src/template/DashboardLayout";
 import clsx from "clsx";
 import Image from "next/image";
@@ -30,7 +30,7 @@ const ViewCollection = () => {
   const collectionStages = ["items", "activity"];
   const activityList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const activityHeaders = ["Item", "Price", "From", "To"];
-  const [singleCollectionsData, setSingleCollectionsData] = useState("");
+  const [singleCollectionsListedItemsData, setSingleCollectionsListedItemsData] = useState("");
   const [singleCollectionDetail, setSingleCollectionDetail] = useState("");
   const [singleCollectionActivities, setSingleCollectionActivities] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -49,9 +49,9 @@ const ViewCollection = () => {
           push("/");
           return;
         } else if (response.status == 200) {
-          setSingleCollectionsData(response.data.items);
+          setSingleCollectionsListedItemsData(response.data.listedItems);
           setSingleCollectionDetail(response.data.collection);
-          // console.log("Item Length", response.data.items.length)
+          console.log(response.data)
           // console.log(response.data.items[0].item_price)
           setSingleCollectionActivities(response.data.activities);
           // console.log("Item Length".response.data.items.length)
@@ -65,26 +65,26 @@ const ViewCollection = () => {
     }
   };
   // const sampleFloorPrice = 0.02;
-  // if(!singleCollectionsData){
+  // if(!singleCollectionsListedItemsData){
   //   sampleFloorPrice = 0.02;
   // } else{
-  //   sampleFloorPrice = singleCollectionsData[0].item_price;
+  //   sampleFloorPrice = singleCollectionsListedItemsData[0].item_price;
   // }
   
   const collectionPriceInfo = [
     { label: "floor", price: "0", type: "coin" },
     { label: "volume", price: "0", type: "coin" }, 
-    { label: "items", price: singleCollectionsData.length, type: "quantity" },
-    { label: "owners", price: singleCollectionsData.length  * 2, type: "quantity" },
-    // { label: "items", price: singleCollectionsData.length, type: "quantity" },
-    // { label: "owners", price: singleCollectionsData.length * 2, type: "quantity" },
+    { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
+    { label: "owners", price: singleCollectionsListedItemsData.length  * 2, type: "quantity" },
+    // { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
+    // { label: "owners", price: singleCollectionsListedItemsData.length * 2, type: "quantity" },
   ];
   useEffect(() => {
     fetchCollectionItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  // console.log({ singleCollectionsData });
+  // console.log({ singleCollectionsListedItemsData });
   
 
   return (
@@ -245,9 +245,9 @@ const ViewCollection = () => {
               <div className="single-collection-lists">
                 {/* <div>hello</div> */}
                 <div className="">
-                  {singleCollectionsData && singleCollectionsData.length > 0 ? (
+                  {singleCollectionsListedItemsData && singleCollectionsListedItemsData.length > 0 ? (
                     <div className="grid lg:grid-cols-3 2xl:grid-cols-4 gap-8">
-                      {singleCollectionsData.map((val, i) => (
+                      {singleCollectionsListedItemsData.map((val, i) => (
                         <NftMediumCard2 {...val} key={val._id} />
                       ))}
                     </div>
