@@ -14,6 +14,7 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { apiRequest } from "../../functions/offChain/apiRequests";
+import { floorPrice } from "../../functions/offChain/generalFunctions";
 import APPCONFIG from "../../constants/Config";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -33,6 +34,7 @@ const ViewCollection = () => {
   const [singleCollectionsListedItemsData, setSingleCollectionsListedItemsData] = useState<string|number>("");
   const [singleCollectionDetail, setSingleCollectionDetail] = useState("");
   const [singleCollectionActivities, setSingleCollectionActivities] = useState("");
+  const [singleCollectionPurchasedItems, setSingleCollectionPurchasedItems] = useState<string|number>("");
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchCollectionItems = async () => {
@@ -54,6 +56,10 @@ const ViewCollection = () => {
           console.log(response.data)
           // console.log(response.data.items[0].item_price)
           setSingleCollectionActivities(response.data.activities);
+          setSingleCollectionPurchasedItems(response.data.purchasedItems);
+          // floorPrice(response.data.purchasedItems)
+          // console.log("Floor price",floorPrice(response.data.purchasedItems))
+
           // console.log("Item Length".response.data.items.length)
           // console.log(response.data.items[0].item_price)
           setIsLoading(false);
@@ -70,12 +76,13 @@ const ViewCollection = () => {
   // } else{
   //   sampleFloorPrice = singleCollectionsListedItemsData[0].listing_price;
   // }
-  
+  const owners = singleCollectionsListedItemsData.length + singleCollectionPurchasedItems.length;
+
   const collectionPriceInfo = [
     { label: "floor", price: "0", type: "coin" },
     { label: "volume", price: "0", type: "coin" }, 
     { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
-    { label: "owners", price: singleCollectionsListedItemsData.length  * 2, type: "quantity" },
+    { label: "owners", price: owners, type: "quantity" },
     // { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
     // { label: "owners", price: singleCollectionsListedItemsData.length * 2, type: "quantity" },
   ];
