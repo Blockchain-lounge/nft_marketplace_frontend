@@ -25,11 +25,6 @@ Partial<INftcard>) => {
   return (
     <div className="nmc-wrapper" onClick={() => push(`/buy-view-nft/${_id}`)}>
       <div className="nmc-wrapper-img">
-        <div className="nmc-wrapper-likes">
-          <OutlineLikesIcon />
-          {/* <span>295</span> */}
-        </div>
-        <div className="h-full w-full"></div>
         <Image
           src={item_id.item_art_url ? item_id.item_art_url : ""}
           alt={item_id.item_title}
@@ -37,6 +32,7 @@ Partial<INftcard>) => {
           layout="fill"
           placeholder="blur"
           blurDataURL="/images/placeholder.png"
+          className="rounded-t-[0.975rem]"
         />
       </div>
       <div className="nmc-sub-wrapper">

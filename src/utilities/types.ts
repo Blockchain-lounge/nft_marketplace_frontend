@@ -108,3 +108,16 @@ export interface ITransactionCard {
 //   __v: number;
 //   _id: string;
 // }
+
+export interface ICollection {
+  category_id: string;
+  collectionFeaturedImage: string;
+  collectionLogoImage: string;
+  cover_image_id: string;
+  createdAt: string;
+  description: string;
+  name: string;
+  updatedAt: string;
+  user_id: string;
+  _id: string;
+}

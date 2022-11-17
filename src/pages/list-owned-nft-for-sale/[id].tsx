@@ -177,9 +177,8 @@ const ListNft = () => {
                 <Input2
                   label="Royalty"
                   name="listing_royalty"
-                  maxLength={2}
-                  suffix="%"
-                  placeholder="0%"
+                  maxLength={4}
+                  placeholder="0.00"
                   onChange={handleFieldChange}
                   value={nftListingPayload.listing_royalty}
                 />

@@ -24,6 +24,7 @@ const HeroCard = ({
   title,
   cover_image_id,
   collectionLogoImage,
+  collectionFeaturedImage,
   onClick,
   img,
   price,
@@ -34,12 +35,7 @@ const HeroCard = ({
     <div className="hero-card-wrapper" onClick={onClick}>
       <div className="h-[80%] w-[100%] relative mb-2">
         <Image
-          src={
-            img as string
-            // cover_image_id
-            //   ? APPCONFIG.ENV_BASE_URL + "images/" + cover_image_id
-            //   : ""
-          }
+          src={collectionFeaturedImage}
           alt={name}
           layout="fill"
           objectFit="cover"
@@ -48,12 +44,12 @@ const HeroCard = ({
         />
       </div>
       <span className="title">{name || title}</span>
-      <div className="flex items-center gap-x-1 my-1">
+      {/* <div className="flex items-center gap-x-1 my-1">
         <span className="relative h-5 w-3  block">
           <Image src="/icon-svg/coin-case.svg" alt="coin-svg" layout="fill" />
         </span>
         <span className="price">{price}</span>
-      </div>
+      </div> */}
     </div>
   );
 };
