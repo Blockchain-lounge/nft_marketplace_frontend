@@ -85,12 +85,10 @@ createdAt : string;
               }
 
               {
-                listed_item
+                created_item_listed
                 ?
                 <img src={
-                  listed_item
-                  && listed_item !== undefined
-                  && listed_item !== null
+                  created_item_listed
                   && created_item_listed !== undefined
                   && created_item_listed !== null
                   ?
