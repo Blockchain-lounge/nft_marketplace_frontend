@@ -68,8 +68,11 @@ const ViewCollection = () => {
             return price;
           }
           console.log("Floor Price", floorPrices(response.data.listedItems))
-          setcollectionfloorPrice(floorPrices(response.data.listedItems))
-
+          if(response.data.listedItems){
+            setcollectionfloorPrice(floorPrices(response.data.listedItems))
+          }else{
+            setcollectionfloorPrice(0)
+          }
           function collectionVolumes(purchasedItems: Array<{ amount: number }>) {
             // @ts-nocheck
             let price: number = 0;
@@ -79,8 +82,11 @@ const ViewCollection = () => {
             return price;
           }
           console.log("Trading volume", collectionVolumes(response.data.purchasedItems))
-          setTradingVolume(collectionVolumes(response.data.purchasedItems))
-         
+          if(response.data.purchasedItems){
+            setTradingVolume(collectionVolumes(response.data.purchasedItems))
+          }else{_
+            setTradingVolume(0)
+          }      
           setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
@@ -110,8 +116,8 @@ const ViewCollection = () => {
   }
 
   const collectionPriceInfo = [
-    { label: "floor", price: "0", type: "coin" },
-    { label: "volume", price: "0", type: "coin" }, 
+    { label: "floor", price: collectionfloorPrice, type: "coin" },
+    { label: "volume", price: tradingVolume, type: "coin" }, 
     { label: "items", price: singleCollectionsListedItemsData ? singleCollectionsListedItemsData.length : 0, type: "quantity" },
 // >>>>>>> dev/ebuka
     { label: "owners", price: owners, type: "quantity" },
