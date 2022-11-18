@@ -57,8 +57,29 @@ const ViewCollection = () => {
           setSingleCollectionDetail(response.data.collection);
           setSingleCollectionActivities(response.data.activities);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
-          setcollectionfloorPrice(floorPrice(response.data.listedItems))
-          setTradingVolume(collectionVolume(response.data.purchasedItems))
+          function floorPrices(purchasedItems: Array<{ listing_price: number }>) {
+            // @ts-nocheck
+            let price: number = purchasedItems[0].listing_price;
+            for (let i = 0; i < purchasedItems.length; i++) {
+              if (purchasedItems[i].listing_price < price) {
+                price = purchasedItems[i].listing_price;
+              }
+            }
+            return price;
+          }
+          console.log("Floor Price", floorPrices(response.data.listedItems))
+          setcollectionfloorPrice(floorPrices(response.data.listedItems))
+
+          function collectionVolumes(purchasedItems: Array<{ amount: number }>) {
+            // @ts-nocheck
+            let price: number = 0;
+            for (let i = 0; i < purchasedItems.length; i++) {
+              price = price + purchasedItems[i].amount;
+            }
+            return price;
+          }
+          console.log("Trading volume", collectionVolumes(response.data.purchasedItems))
+          setTradingVolume(collectionVolumes(response.data.purchasedItems))
          
           setIsLoading(false);
         } else {
@@ -89,8 +110,8 @@ const ViewCollection = () => {
   }
 
   const collectionPriceInfo = [
-    { label: "floor", price: collectionfloorPrice, type: "coin" },
-    { label: "volume", price: tradingVolume, type: "coin" }, 
+    { label: "floor", price: "0", type: "coin" },
+    { label: "volume", price: "0", type: "coin" }, 
     { label: "items", price: singleCollectionsListedItemsData ? singleCollectionsListedItemsData.length : 0, type: "quantity" },
 // >>>>>>> dev/ebuka
     { label: "owners", price: owners, type: "quantity" },
