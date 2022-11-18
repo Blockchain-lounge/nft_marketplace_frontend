@@ -2,8 +2,12 @@
 import { Heading2, Input, Select } from "@/src/components/atoms";
 import {
   CaretDown,
+  DiscordIcon,
   FilterIcon,
+  InstagramIcon,
+  ProfileLinkIcon,
   SendIcon,
+  TwitterIcon,
 } from "@/src/components/atoms/vectors";
 import {
   CollectionActivityCard,
@@ -71,8 +75,8 @@ const ViewCollection = () => {
           setSingleCollectionDetail(response.data.collection);
           setSingleCollectionActivities(response.data.activities);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
-          console.log("data", response.data)
-            if(response.data.listedItems.length != 0){
+          // console.log("data", response.data);
+          if (response.data.listedItems.length != 0) {
             function floorPrices(
               purchasedItems: Array<{ listing_price: number }>
             ) {
@@ -85,15 +89,17 @@ const ViewCollection = () => {
               }
               return price;
             }
-            setcollectionfloorPrice(floorPrices(response.data.listedItems))
-            console.log("Floor Price", floorPrices(response.data.listedItems))
-            console.log("Floor Price", "0.2")
-          }else{
-            setcollectionfloorPrice("0")
+            setcollectionfloorPrice(floorPrices(response.data.listedItems));
+            // console.log("Floor Price", floorPrices(response.data.listedItems));
+            // console.log("Floor Price", "0.2");
+          } else {
+            setcollectionfloorPrice("0");
           }
-          
-          if(response.data.purchasedItems.length != 0){
-            function collectionVolumes(purchasedItems: Array<{ amount: number }>) {
+
+          if (response.data.purchasedItems.length != 0) {
+            function collectionVolumes(
+              purchasedItems: Array<{ amount: number }>
+            ) {
               // @ts-nocheck
               let price: number = 0;
               for (let i = 0; i < purchasedItems.length; i++) {
@@ -101,11 +107,11 @@ const ViewCollection = () => {
               }
               return price;
             }
-            setTradingVolume(collectionVolumes(response.data.purchasedItems))
-            console.log("Trading volume", collectionVolumes(response.data.purchasedItems))
-          }else{
-            setTradingVolume("0")
-          }      
+            setTradingVolume(collectionVolumes(response.data.purchasedItems));
+            // console.log("Trading volume", collectionVolumes(response.data.purchasedItems))
+          } else {
+            setTradingVolume("0");
+          }
           setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
@@ -137,16 +143,22 @@ const ViewCollection = () => {
 
   const collectionPriceInfo = [
     { label: "floor", price: collectionfloorPrice, type: "coin" },
-    { label: "volume", price: tradingVolume, type: "coin" }, 
-    { label: "items", price: singleCollectionsListedItemsData ? singleCollectionsListedItemsData.length : 0, type: "quantity" },
-// >>>>>>> dev/ebuka
+    { label: "volume", price: tradingVolume, type: "coin" },
+    {
+      label: "items",
+      price: singleCollectionsListedItemsData
+        ? singleCollectionsListedItemsData.length
+        : 0,
+      type: "quantity",
+    },
+    // >>>>>>> dev/ebuka
     { label: "owners", price: owners, type: "quantity" },
   ];
   useEffect(() => {
     fetchCollectionItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
-
+  // console.log({ singleCollectionDetail });
   return (
     <DashboardLayout isLoading={isLoading}>
       <ToastContainer />
@@ -232,87 +244,59 @@ const ViewCollection = () => {
                     objectFit="contain"
                   />
                 </span> */}
-                <div className="w-[60%] sm:w-[25%] lg:w-full my-4 lg:my-0 flex gap-x-4 items-center justify-center rounded-md border-border-1-line border p-2">
-                  <a
-                    href={
-                      singleCollectionDetail &&
-                      singleCollectionDetail.website !== undefined
-                        ? singleCollectionDetail.website
-                        : "#"
-                    }
-                    target="_blank"
-                    className="flex items-center gap-x-1"
-                    rel="noreferrer"
-                  >
-                    <div className="relative w-6 h-8">
-                      <Image
-                        src="/icon-svg/link.svg"
-                        alt="website-link"
-                        layout="fill"
-                        objectFit="contain"
-                      />
-                    </div>
-                    <span className="font-medium">
-                      {singleCollectionDetail &&
-                      singleCollectionDetail.website !== undefined
-                        ? singleCollectionDetail.website
-                        : ""}
-                    </span>
-                  </a>
-                  <a
-                    target="_blank"
-                    className="relative w-6 h-5"
-                    href={
-                      singleCollectionDetail &&
-                      singleCollectionDetail.discord !== undefined
-                        ? singleCollectionDetail.discord
-                        : "#"
-                    }
-                    rel="noreferrer"
-                  >
-                    <Image
-                      src="/icon-svg/discord.svg"
-                      alt="discord-link"
-                      layout="fill"
-                      objectFit="contain"
-                    />
-                  </a>
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    className="relative w-6 h-5"
-                    href={
-                      singleCollectionDetail &&
-                      singleCollectionDetail.twitter !== undefined
-                        ? singleCollectionDetail.twitter
-                        : "#"
-                    }
-                  >
-                    <Image
-                      src="/icon-svg/twitter.svg"
-                      alt="twitter-link"
-                      layout="fill"
-                      objectFit="contain"
-                    />
-                  </a>
-                  <a
-                    className="relative w-6 h-8"
-                    href={
-                      singleCollectionDetail &&
-                      singleCollectionDetail.instagram !== undefined
-                        ? singleCollectionDetail.instagram
-                        : "#"
-                    }
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <Image
-                      src="/icon-svg/instagram.svg"
-                      alt="instagram-link"
-                      layout="fill"
-                      objectFit="contain"
-                    />
-                  </a>
+                <div className="w-[80%] sm:w-[35%] lg:w-full my-4 lg:my-0 flex gap-x-4 items-center justify-center rounded-md border-border-1-line border p-2">
+                  {singleCollectionDetail &&
+                  singleCollectionDetail.website !== undefined ? (
+                    <a
+                      href={singleCollectionDetail.website}
+                      target="_blank"
+                      className="flex items-center gap-x-1"
+                      rel="noreferrer"
+                    >
+                      <ProfileLinkIcon />
+                      <span className="font-medium">
+                        {singleCollectionDetail.website}
+                      </span>
+                    </a>
+                  ) : (
+                    <ProfileLinkIcon color="#A2A3B8" />
+                  )}
+                  {singleCollectionDetail &&
+                  singleCollectionDetail.discord !== undefined ? (
+                    <a
+                      target="_blank"
+                      href={singleCollectionDetail.discord}
+                      rel="noreferrer"
+                    >
+                      <DiscordIcon />
+                    </a>
+                  ) : (
+                    <DiscordIcon color="#A2A3B8" />
+                  )}
+                  {singleCollectionDetail &&
+                  singleCollectionDetail.twitter !== undefined ? (
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href={singleCollectionDetail.twitter}
+                    >
+                      <TwitterIcon />
+                    </a>
+                  ) : (
+                    <TwitterIcon color="#A2A3B8" />
+                  )}
+                  {singleCollectionDetail &&
+                  singleCollectionDetail.instagram !== undefined ? (
+                    <a
+                      href={singleCollectionDetail.instagram}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <InstagramIcon />
+                    </a>
+                  ) : (
+                    <InstagramIcon color="#A2A3B8" />
+                  )}
                 </div>
               </div>
             </div>
