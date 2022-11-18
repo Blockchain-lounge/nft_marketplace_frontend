@@ -72,9 +72,9 @@ const ViewCollection = () => {
 
           function collectionVolume(purchasedItems: Array<{ amount: number }>) {
             // @ts-nocheck
-            let price: number = purchasedItems[0].amount;
+            let price: number = 0;
             for (let i = 0; i < purchasedItems.length; i++) {
-                price =+ purchasedItems[i].amount;
+                price = price + purchasedItems[i].amount;
             }
             return price;
           }
