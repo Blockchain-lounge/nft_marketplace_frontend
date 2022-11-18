@@ -72,20 +72,21 @@ const ViewCollection = () => {
           setSingleCollectionActivities(response.data.activities);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
             if(response.data.listedItems){
-            function floorPrices(
-              purchasedItems: Array<{ listing_price: number }>
-            ) {
-              // @ts-nocheck
-              let price: number = purchasedItems[0].listing_price;
-              for (let i = 0; i < purchasedItems.length; i++) {
-                if (purchasedItems[i].listing_price < price) {
-                  price = purchasedItems[i].listing_price;
-                }
-              }
-              return price;
-            }
-            setcollectionfloorPrice(floorPrices(response.data.listedItems))
-            console.log("Floor Price", floorPrices(response.data.listedItems))
+            // function floorPrices(
+            //   purchasedItems: Array<{ listing_price: number }>
+            // ) {
+            //   // @ts-nocheck
+            //   let price: number = purchasedItems[0].listing_price;
+            //   for (let i = 0; i < purchasedItems.length; i++) {
+            //     if (purchasedItems[i].listing_price < price) {
+            //       price = purchasedItems[i].listing_price;
+            //     }
+            //   }
+            //   return price;
+            // }
+            // setcollectionfloorPrice(floorPrices(response.data.listedItems))
+            // console.log("Floor Price", floorPrices(response.data.listedItems))
+            console.log("Floor Price", "0.2")
           }else{
             setcollectionfloorPrice("0")
           }
