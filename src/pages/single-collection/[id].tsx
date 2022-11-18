@@ -55,7 +55,6 @@ const ViewCollection = () => {
         } else if (response.status == 200) {
           setSingleCollectionsListedItemsData(response.data.listedItems);
           setSingleCollectionDetail(response.data.collection);
-          console.log(response.data)
           setSingleCollectionActivities(response.data.activities);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
           setcollectionfloorPrice(floorPrice(response.data.listedItems))
