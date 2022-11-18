@@ -71,7 +71,7 @@ const ViewCollection = () => {
           setSingleCollectionDetail(response.data.collection);
           setSingleCollectionActivities(response.data.activities);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
-          console.log("Listing data", response.data.listedItems)
+          console.log("data", response.data)
             if(response.data.listedItems.length != 0){
             function floorPrices(
               purchasedItems: Array<{ listing_price: number }>
