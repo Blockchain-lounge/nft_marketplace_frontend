@@ -32,6 +32,7 @@ const ViewCollection = () => {
   const activityList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const activityHeaders = ["Item", "Price", "From", "To"];
   const [singleCollectionsListedItemsData, setSingleCollectionsListedItemsData] = useState<string|number>("");
+  const [floorPrice, setfloorPrice] = useState<string|number>("");
   const [singleCollectionDetail, setSingleCollectionDetail] = useState("");
   const [singleCollectionActivities, setSingleCollectionActivities] = useState("");
   const [singleCollectionPurchasedItems, setSingleCollectionPurchasedItems] = useState<string|number>("");
@@ -68,7 +69,7 @@ const ViewCollection = () => {
             }
             return price;
           }
-
+          setfloorPrice(floorPrice(response.data.purchasedItems))
           console.log("Floor price", floorPrice(response.data.purchasedItems))
           // const items = [
           //   { amount: 0.71 },
@@ -104,7 +105,7 @@ const ViewCollection = () => {
 
   const collectionPriceInfo = [
     // { label: "floor", price: price, type: "coin" },
-    { label: "floor", price: "0", type: "coin" },
+    { label: "floor", price: floorPrice, type: "coin" },
     { label: "volume", price: "0", type: "coin" }, 
     { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
     { label: "owners", price: owners, type: "quantity" },
