@@ -72,27 +72,27 @@ const ViewCollection = () => {
           setSingleCollectionActivities(response.data.activities);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
           console.log("Listing data", response.data.listedItems)
-            if(response.data.listedItems){
-            // function floorPrices(
-            //   purchasedItems: Array<{ listing_price: number }>
-            // ) {
-            //   // @ts-nocheck
-            //   let price: number = purchasedItems[0].listing_price;
-            //   for (let i = 0; i < purchasedItems.length; i++) {
-            //     if (purchasedItems[i].listing_price < price) {
-            //       price = purchasedItems[i].listing_price;
-            //     }
-            //   }
-            //   return price;
-            // }
-            // setcollectionfloorPrice(floorPrices(response.data.listedItems))
-            // console.log("Floor Price", floorPrices(response.data.listedItems))
+            if(response.data.listedItems.length == 0){
+            function floorPrices(
+              purchasedItems: Array<{ listing_price: number }>
+            ) {
+              // @ts-nocheck
+              let price: number = purchasedItems[0].listing_price;
+              for (let i = 0; i < purchasedItems.length; i++) {
+                if (purchasedItems[i].listing_price < price) {
+                  price = purchasedItems[i].listing_price;
+                }
+              }
+              return price;
+            }
+            setcollectionfloorPrice(floorPrices(response.data.listedItems))
+            console.log("Floor Price", floorPrices(response.data.listedItems))
             console.log("Floor Price", "0.2")
           }else{
             setcollectionfloorPrice("0")
           }
           
-          if(response.data.purchasedItems){
+          if(response.data.purchasedItems.length == 0){
             function collectionVolumes(purchasedItems: Array<{ amount: number }>) {
               // @ts-nocheck
               let price: number = 0;
