@@ -76,12 +76,15 @@ const ViewCollection = () => {
   // } else{
   //   sampleFloorPrice = singleCollectionsListedItemsData[0].listing_price;
   // }
-  const owners = singleCollectionsListedItemsData.length + singleCollectionPurchasedItems.length;
+  var owners = 0;
+  if(singleCollectionsListedItemsData && singleCollectionPurchasedItems){
+      singleCollectionsListedItemsData.length + singleCollectionPurchasedItems.length;
+  }
 
   const collectionPriceInfo = [
     { label: "floor", price: "0", type: "coin" },
     { label: "volume", price: "0", type: "coin" }, 
-    { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
+    { label: "items", price: singleCollectionsListedItemsData ? singleCollectionsListedItemsData.length : 0, type: "quantity" },
     { label: "owners", price: owners, type: "quantity" },
     // { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
     // { label: "owners", price: singleCollectionsListedItemsData.length * 2, type: "quantity" },
