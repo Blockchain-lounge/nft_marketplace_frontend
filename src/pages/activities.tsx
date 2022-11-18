@@ -205,7 +205,9 @@ const Activities = () => {
             ))}
           </div>
           <div className="total-earnings-history-wrapper">
-            {activities && activities.length > 0
+            {activities && activities.length === 0
+              ?("No activities yet!")
+              : activities && activities.length > 0
               ? activities.map((txn, i) => <TransactionCard key={i} {...txn} />)
               : Array(8)
                   .fill(0)

@@ -69,12 +69,30 @@ const ViewCollection = () => {
       });
     }
   };
-  const owners = singleCollectionsListedItemsData.length + singleCollectionPurchasedItems.length;
+// <<<<<<< HEAD
+//   const owners = singleCollectionsListedItemsData.length + singleCollectionPurchasedItems.length;
+
+//   const collectionPriceInfo = [
+//     { label: "floor", price: collectionfloorPrice, type: "coin" },
+//     { label: "volume", price: tradingVolume, type: "coin" }, 
+//     { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
+// =======
+//   // const sampleFloorPrice = 0.02;
+//   // if(!singleCollectionsListedItemsData){
+//   //   sampleFloorPrice = 0.02;
+//   // } else{
+//   //   sampleFloorPrice = singleCollectionsListedItemsData[0].listing_price;
+//   // }
+  var owners = 0;
+  if(singleCollectionsListedItemsData && singleCollectionPurchasedItems){
+    owners = singleCollectionsListedItemsData.length + singleCollectionPurchasedItems.length;
+  }
 
   const collectionPriceInfo = [
-    { label: "floor", price: collectionfloorPrice, type: "coin" },
-    { label: "volume", price: tradingVolume, type: "coin" }, 
-    { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
+    { label: "floor", price: "0", type: "coin" },
+    { label: "volume", price: "0", type: "coin" }, 
+    { label: "items", price: singleCollectionsListedItemsData ? singleCollectionsListedItemsData.length : 0, type: "quantity" },
+// >>>>>>> dev/ebuka
     { label: "owners", price: owners, type: "quantity" },
   ];
   useEffect(() => {
