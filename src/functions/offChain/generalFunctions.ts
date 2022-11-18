@@ -26,7 +26,7 @@ interface PurchasedItem {
   amount: number;
 }
 // export function floorPrice(purchasedItems: Array<number|string>) {
-export function floorPrice(purchasedItems: Array<PurchasedItem>) {
+export function floorPrice(purchasedItems: Array<{ amount: number }>) {
   // @ts-nocheck
   let price: number = purchasedItems[0].amount;
   for (let i = 0; i < purchasedItems.length; i++) {
