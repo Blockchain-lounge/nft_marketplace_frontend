@@ -32,7 +32,7 @@ const ViewCollection = () => {
   const activityList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const activityHeaders = ["Item", "Price", "From", "To"];
   const [singleCollectionsListedItemsData, setSingleCollectionsListedItemsData] = useState<string|number>("");
-  const [floorPrice, setfloorPrice] = useState<string|number>("");
+  const [collectionfloorPrice, setcollectionfloorPrice] = useState<string|number>("");
   const [tradingVolume, setTradingVolume] = useState<string|number>("");
   const [singleCollectionDetail, setSingleCollectionDetail] = useState("");
   const [singleCollectionActivities, setSingleCollectionActivities] = useState("");
@@ -55,10 +55,12 @@ const ViewCollection = () => {
         } else if (response.status == 200) {
           setSingleCollectionsListedItemsData(response.data.listedItems);
           setSingleCollectionDetail(response.data.collection);
+          console.log(response.data)
           setSingleCollectionActivities(response.data.activities);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
-          setfloorPrice(floorPrice(response.data.listedItems))
+          setcollectionfloorPrice(floorPrice(response.data.listedItems))
           setTradingVolume(collectionVolume(response.data.purchasedItems))
+         
           setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
@@ -71,7 +73,7 @@ const ViewCollection = () => {
   const owners = singleCollectionsListedItemsData.length + singleCollectionPurchasedItems.length;
 
   const collectionPriceInfo = [
-    { label: "floor", price: floorPrice, type: "coin" },
+    { label: "floor", price: collectionfloorPrice, type: "coin" },
     { label: "volume", price: tradingVolume, type: "coin" }, 
     { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
     { label: "owners", price: owners, type: "quantity" },
