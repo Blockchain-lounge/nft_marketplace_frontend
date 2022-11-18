@@ -6,7 +6,6 @@ import { CoinIcon } from "@/src/components/atoms/vectors";
 import Image from "next/image";
 import APPCONFIG from "../../constants/Config";
 
-
 interface INftminicards {
   _id: string;
   name: string;
