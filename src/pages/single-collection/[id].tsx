@@ -70,16 +70,17 @@ const ViewCollection = () => {
           console.log("floorPrice", floorPrice(response.data.listedItems))
           setfloorPrice(floorPrice(response.data.listedItems))
 
-          // function collectionVolume(purchasedItems: Array<{ amount: number, buyer: string, item_token_id:number }>) {
-          //   // @ts-nocheck
-          //   let price: number = purchasedItems[0].amount;
-          //   for (let i = 0; i < purchasedItems.length; i++) {
-          //     if (purchasedItems[i].amount < price) {
-          //       price = purchasedItems[i].amount;
-          //     }
-          //   }
-          //   return price;
-          // }
+          function collectionVolume(purchasedItems: Array<{ amount: number }>) {
+            // @ts-nocheck
+            let price: number = purchasedItems[0].amount;
+            for (let i = 0; i < purchasedItems.length; i++) {
+              if (purchasedItems[i].amount < price) {
+                price =+ purchasedItems[i].amount;
+              }
+            }
+            return price;
+          }
+          console.log("Collection Volume", collectionVolume(response.data.purchasedItems))
           // setfloorPrice(floorPrice(response.data.purchasedItems))
          
           setIsLoading(false);
