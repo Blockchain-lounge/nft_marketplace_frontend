@@ -1,10 +1,12 @@
 //@ts-nocheck
+import Skeleton from "react-loading-skeleton";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Heading2, Select, Select2, SelectCheckBox } from "../components/atoms";
 import { ISelectCheckProps } from "../components/atoms/SelectCheckbox";
 import { CloseIcon } from "../components/atoms/vectors";
+import { NftCardSkeleton } from "../components/lazy-loaders";
 import { Tab2, TransactionCard } from "../components/molecules";
 import { Footer } from "../components/organisms";
 import { apiRequest } from "../functions/offChain/apiRequests";
@@ -203,9 +205,23 @@ const Activities = () => {
             ))}
           </div>
           <div className="total-earnings-history-wrapper">
-            {activities.map((txn, i) => (
-              <TransactionCard key={i} {...txn} />
-            ))}
+            {activities && activities.length > 0
+              ? activities.map((txn, i) => <TransactionCard key={i} {...txn} />)
+              : Array(8)
+                  .fill(0)
+                  .map((_, i) => (
+                    <div
+                      className="flex items-center gap-x-2 w-full bg-bg-2 p-4 rounded-xl"
+                      key={"navtab-loading" + i}
+                    >
+                      <Skeleton circle height="5rem" width="5rem" />
+                      <div className="w-full">
+                        <Skeleton height="1rem" />
+                        <Skeleton height="1rem" />
+                        <Skeleton height="1rem" />
+                      </div>
+                    </div>
+                  ))}
           </div>
         </div>
         <Footer />

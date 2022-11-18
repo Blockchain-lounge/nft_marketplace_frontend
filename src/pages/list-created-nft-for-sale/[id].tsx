@@ -26,9 +26,9 @@ const ListNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [isTransloading, setIsTransLoading] = useState(false);
   const [nftListingPayload, setNftListingPayload] = useState({
-    listing_quantity: "0",
-    listing_price: "0",
-    listing_royalty: "0",
+    listing_quantity: "",
+    listing_price: "",
+    listing_royalty: "",
   });
   const [itemDetail, setItemDetail] = useState<INftProps | null>(null);
   const {
@@ -167,7 +167,7 @@ const ListNft = () => {
               <div className="lg:w-[80%] space-y-8">
                 {/* <Select title="ETH" icon={<CoinIcon />} /> */}
                 <Input2
-                  label="Price"
+                  label="Price in (Eth)"
                   name="listing_price"
                   placeholder="0.00"
                   onChange={handleFieldChange}
@@ -177,9 +177,8 @@ const ListNft = () => {
                 <Input2
                   label="Royalty"
                   name="listing_royalty"
-                  maxLength={2}
-                  suffix="%"
-                  placeholder="0%"
+                  maxLength={4}
+                  placeholder="0.00"
                   onChange={handleFieldChange}
                   value={nftListingPayload.listing_royalty}
                 />
@@ -190,10 +189,13 @@ const ListNft = () => {
                   placeholder="0"
                   onChange={handleFieldChange}
                   value={
-                    nftListingPayload.listing_quantity !== itemDetail?.item_supply 
-                    && nftListingPayload.listing_quantity === "0"
-                    ? itemDetail?.item_supply : nftListingPayload.listing_quantity 
-                    }
+                    nftListingPayload.listing_quantity !==
+                      itemDetail?.item_supply &&
+                    nftListingPayload.listing_quantity === "0"
+                      ? itemDetail?.item_supply
+                      : nftListingPayload.listing_quantity
+                  }
+                  suffix={itemDetail !== null ? itemDetail?.item_supply : ""}
                 />
               </div>
             </div>

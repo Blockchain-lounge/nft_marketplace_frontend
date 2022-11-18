@@ -2,7 +2,6 @@ import React, { SetStateAction, useState } from "react";
 // import NextIndicator from "../vectors/next-icon";
 import clsx from "clsx";
 
-
 interface IHeroIndicator {
   arr: any;
   active: any;
@@ -23,10 +22,10 @@ const HeroIndicator = ({ arr, active, setActiveData }: IHeroIndicator) => {
     <div className="hero-indicator">
       {arr.map((data: any) => (
         <div
-          key={data.title}
+          key={data.name}
           className={clsx(
             "rounded-[50%]",
-            data.title === active.title
+            data.name === active.name
               ? "h-[1.125rem] w-[1.125rem] bg-white"
               : "h-[0.6875rem] w-[0.6875rem] bg-[#5c5c6c]"
           )}

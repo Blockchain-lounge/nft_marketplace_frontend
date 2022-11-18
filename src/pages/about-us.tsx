@@ -69,7 +69,7 @@ const AboutUs = () => {
               Making it easier to participate in the cloud-based economy
             </h1>
           </section>
-          <p className="text-xl bg-bg-3 rounded-3xl p-6 lg:p-12 leading-relaxed text-center">
+          <p className="text-xl bg-bg-3 rounded-3xl p-6 lg:p-12 leading-relaxed">
             We are focusing our innovation on &quot;ease of access&quot; - we
             want you to have the best experience collecting NFT - Non-Fungible
             Tokens. For whatever it is you are passionate about; our NFT

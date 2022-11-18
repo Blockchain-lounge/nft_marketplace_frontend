@@ -274,12 +274,13 @@
   @apply text-white leading-[1.3018rem];
 }
 
-.nmc-wrapper-img img,
+/* .nmc-wrapper-img img,
 .nmc-wrapper2-img img {
-  @apply w-full h-full rounded-t-[0.975rem] object-cover;
-}
+  @apply w-full h-full rounded-t-[0.975rem];
+} */
+
 .nmc-sub-wrapper {
-  @apply pt-[1.25rem] pb-[1.3rem] px-2;
+  @apply py-4 px-2;
 }
 .nmc-status {
   @apply inline-block h-[2.0625rem] leading-[1.139375rem] rounded-[0.375rem] text-white font-medium text-[0.875rem] py-[0.46875rem] px-[0.875rem];

@@ -83,7 +83,7 @@ const ViewUserNft = () => {
   return (
     <DashboardLayout>
       {itemDetail !== null ? (
-        <div className="sub-layout-wrapper">
+        <div className="sub-layout-wrapper scrollbar-hide">
           <div className="center space-y-8 h-screen lg:h-[80vh]">
             <div className="grid lg:gap-x-8 lg:grid-cols-[0.35fr_0.3fr_0.35fr]">
               <div>
