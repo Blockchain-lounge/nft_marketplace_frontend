@@ -138,7 +138,7 @@ const Activities = () => {
           <div className="collection-page-top">
             <div className="collection-page-sub-top">
               <Heading2 title="Activities" />
-              <Select2
+              {/* <Select2
                 title="Event type"
                 placeholder={
                   typeof currentEvent === "object" ? currentEvent.name : ""
@@ -151,7 +151,7 @@ const Activities = () => {
                 }
                 lists={events}
                 wt="w-[12rem]"
-              />
+              /> */}
               {/* <SelectCheckBox
                 lists={collections}
                 //@ts-ignore
