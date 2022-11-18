@@ -55,34 +55,10 @@ const ViewCollection = () => {
         } else if (response.status == 200) {
           setSingleCollectionsListedItemsData(response.data.listedItems);
           setSingleCollectionDetail(response.data.collection);
-          console.log(response.data)
           setSingleCollectionActivities(response.data.activities);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
-          console.log("PurchaseItem", response.data.purchasedItems)
-          // function floorPrice(purchasedItems: Array<{ listing_price: number }>) {
-          //   // @ts-nocheck
-          //   let price: number = purchasedItems[0].listing_price;
-          //   for (let i = 0; i < purchasedItems.length; i++) {
-          //     if (purchasedItems[i].listing_price < price) {
-          //       price = purchasedItems[i].listing_price;
-          //     }
-          //   }
-          //   return price;
-          // }
-          console.log("floorPrice", floorPrice(response.data.listedItems))
           setfloorPrice(floorPrice(response.data.listedItems))
-
-          // function collectionVolume(purchasedItems: Array<{ amount: number }>) {
-          //   // @ts-nocheck
-          //   let price: number = 0;
-          //   for (let i = 0; i < purchasedItems.length; i++) {
-          //       price = price + purchasedItems[i].amount;
-          //   }
-          //   return price;
-          // }
-          console.log("Collection Volume", collectionVolume(response.data.purchasedItems))
           setTradingVolume(collectionVolume(response.data.purchasedItems))
-         
           setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
