@@ -231,5 +231,4 @@ const Activities = () => {
     </DashboardLayout>
   );
 };
-
 export default Activities;
