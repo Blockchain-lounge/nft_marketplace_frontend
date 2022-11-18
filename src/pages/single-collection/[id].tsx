@@ -100,6 +100,7 @@ const ViewCollection = () => {
   // }
   const owners = singleCollectionsListedItemsData.length + singleCollectionPurchasedItems.length;
   // const price = floorPrice(singleCollectionsListedItemsData)
+  console.log("Floor price2", floorPrice(singleCollectionPurchasedItems))
 
   const collectionPriceInfo = [
     // { label: "floor", price: price, type: "coin" },
