@@ -14,6 +14,7 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { apiRequest } from "../../functions/offChain/apiRequests";
+import { floorPrice, collectionVolume } from "../../functions/offChain/generalFunctions";
 import APPCONFIG from "../../constants/Config";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -58,27 +59,27 @@ const ViewCollection = () => {
           setSingleCollectionActivities(response.data.activities);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
           console.log("PurchaseItem", response.data.purchasedItems)
-          function floorPrice(purchasedItems: Array<{ listing_price: number }>) {
-            // @ts-nocheck
-            let price: number = purchasedItems[0].listing_price;
-            for (let i = 0; i < purchasedItems.length; i++) {
-              if (purchasedItems[i].listing_price < price) {
-                price = purchasedItems[i].listing_price;
-              }
-            }
-            return price;
-          }
+          // function floorPrice(purchasedItems: Array<{ listing_price: number }>) {
+          //   // @ts-nocheck
+          //   let price: number = purchasedItems[0].listing_price;
+          //   for (let i = 0; i < purchasedItems.length; i++) {
+          //     if (purchasedItems[i].listing_price < price) {
+          //       price = purchasedItems[i].listing_price;
+          //     }
+          //   }
+          //   return price;
+          // }
           console.log("floorPrice", floorPrice(response.data.listedItems))
           setfloorPrice(floorPrice(response.data.listedItems))
 
-          function collectionVolume(purchasedItems: Array<{ amount: number }>) {
-            // @ts-nocheck
-            let price: number = 0;
-            for (let i = 0; i < purchasedItems.length; i++) {
-                price = price + purchasedItems[i].amount;
-            }
-            return price;
-          }
+          // function collectionVolume(purchasedItems: Array<{ amount: number }>) {
+          //   // @ts-nocheck
+          //   let price: number = 0;
+          //   for (let i = 0; i < purchasedItems.length; i++) {
+          //       price = price + purchasedItems[i].amount;
+          //   }
+          //   return price;
+          // }
           console.log("Collection Volume", collectionVolume(response.data.purchasedItems))
           setTradingVolume(collectionVolume(response.data.purchasedItems))
          
