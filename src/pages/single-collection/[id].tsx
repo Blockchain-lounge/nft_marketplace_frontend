@@ -57,15 +57,26 @@ const ViewCollection = () => {
           // console.log(response.data.items[0].item_price)
           setSingleCollectionActivities(response.data.activities);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
-          const items = [
-            { amount: 0.71 },
-            { amount: 0.01 },
-            { amount: 0.002 },
-            { amount: 0.0008 },
-            { amount: 0.71 },
-          ];
+          console.log("PurchaseItem", response.data.purchasedItems)
+          function floorPrice(purchasedItems: Array<{ amount: number }>) {
+            // @ts-nocheck
+            let price: number = purchasedItems[0].amount;
+            for (let i = 0; i < purchasedItems.length; i++) {
+              if (purchasedItems[i].amount < price) {
+                price = purchasedItems[i].amount;
+              }
+            }
+            return price;
+          }
+          // const items = [
+          //   { amount: 0.71 },
+          //   { amount: 0.01 },
+          //   { amount: 0.002 },
+          //   { amount: 0.0008 },
+          //   { amount: 0.71 },
+          // ];
           
-          console.log("Floor price", floorPrice(items))
+          // console.log("Floor price", floorPrice(items))
           // floorPrice(response.data.purchasedItems)
           // console.log("Floor price",floorPrice(response.data.purchasedItems))
 
@@ -86,10 +97,11 @@ const ViewCollection = () => {
   //   sampleFloorPrice = singleCollectionsListedItemsData[0].listing_price;
   // }
   const owners = singleCollectionsListedItemsData.length + singleCollectionPurchasedItems.length;
-  const price = floorPrice(singleCollectionsListedItemsData)
+  // const price = floorPrice(singleCollectionsListedItemsData)
 
   const collectionPriceInfo = [
-    { label: "floor", price: price, type: "coin" },
+    // { label: "floor", price: price, type: "coin" },
+    { label: "floor", price: "0", type: "coin" },
     { label: "volume", price: "0", type: "coin" }, 
     { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
     { label: "owners", price: owners, type: "quantity" },
