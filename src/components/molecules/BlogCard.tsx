@@ -22,6 +22,8 @@ const BlogCard = ({
           layout="fill"
           objectFit="cover"
           className="rounded-3xl"
+          placeholder="blur"
+          blurDataURL="/images/placeholder.png"
         />
       </div>
       <span className="text-xl font-bold">{name}</span>

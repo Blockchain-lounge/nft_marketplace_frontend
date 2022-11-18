@@ -86,7 +86,7 @@
 /* input */
 
 .input-wrapper {
-  @apply h-[3.3125rem] px-3 lg:px-[1.25rem] bg-transparent flex items-center flex-row-reverse lg:flex-row rounded-[0.56rem] gap-x-[0.625rem] w-full border-[#34364C] border-[0.0625rem] text-white;
+  @apply h-[3.625rem] px-3 lg:px-[1.25rem] bg-transparent flex items-center flex-row-reverse lg:flex-row rounded-[0.56rem] gap-x-[0.625rem] w-full border-[#34364C] border-[0.0625rem] text-white;
 }
 
 input {

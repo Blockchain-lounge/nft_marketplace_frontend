@@ -1,5 +1,5 @@
 .home-wrapper {
-  @apply h-screen overflow-auto pb-52 lg:pb-[6rem];
+  @apply h-screen overflow-auto pb-20 lg:pb-[6rem];
 }
 
 .home-wrapper .hero,

@@ -29,10 +29,12 @@ import {
   NftCardSkeleton,
   NftMiniCardSkeleton,
 } from "../components/lazy-loaders";
+import { ICollection } from "../utilities/types";
+import Skeleton from "react-loading-skeleton";
 
 const Home: NextPage = () => {
-  const [heroData, setHeroData] = useState(heroCards);
-  const [activeCard, setActiveCard] = useState(heroData[0]);
+  const [heroData, setHeroData] = useState<Array<ICollection>>([]);
+  const [activeCard, setActiveCard] = useState<ICollection | null>(null);
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const { push } = useRouter();
   const [items, setItems] = useState(null);
@@ -55,6 +57,11 @@ const Home: NextPage = () => {
           return;
         } else if (response.status == 200) {
           setCollections(response.data.data.collections);
+          setHeroData([
+            ...heroData,
+            ...response.data.data.collections.slice(0, 3),
+          ]);
+          setActiveCard(response.data.data.collections[0]);
           setFeaturedCollections(response.data.data.featured_collections);
           setItems(response.data.data.items);
         } else {
@@ -70,53 +77,74 @@ const Home: NextPage = () => {
   useEffect(() => {
     fetchHomePageData();
   }, []);
-  // console.log({ collections });
+  // console.log({ activeCard });
   return (
     <DashboardLayout>
       <div className="home-wrapper scrollbar-hide">
         <div className="space-y-[9rem] center mb-[10.125rem]">
-          <section className="hero">
-            <div>
-              {<Tag tag={activeCard?.tag} icon={<FeaturedIcon />} />}
-              <Heading title={activeCard.title} twClasses="mt-4" />
-              <p className="lg:max-w-xl">{activeCard.content}</p>
-              <Button title={activeCard.cta} onClick={() => push("/explore")} />
-            </div>
-            <div className="hero-img-cards">
-              <div className="hero-img">
-                <Image
-                  layout="fill"
-                  objectFit="cover"
-                  src={activeCard.img}
-                  alt={activeCard.title + "-img"}
-                  className="rounded-2xl"
-                  placeholder="blur"
-                  blurDataURL="/images/placeholder.png"
+          {heroData.length > 1 && activeCard ? (
+            <section className="hero">
+              <div>
+                {/* {<Tag tag={activeCard?.name} icon={<FeaturedIcon />} />} */}
+                <Heading title={activeCard.name} twClasses="mt-4" />
+                <p className="lg:max-w-xl">{activeCard.description}</p>
+                <Button
+                  title="Explore collection"
+                  onClick={() => push("/single-collection/" + activeCard._id)}
                 />
               </div>
-              <div className="hero-cards">
-                {heroData
-                  .filter((d, i) => d.title !== activeCard.title)
-                  .map((data, i) => (
-                    <HeroCard
-                      key={data.title}
-                      {...data}
-                      onClick={() => {
-                        setActiveCard(data);
-                      }}
-                    />
-                  ))}
-              </div>
+              <div className="hero-img-cards">
+                <div className="hero-img">
+                  <Image
+                    layout="fill"
+                    objectFit="cover"
+                    src={activeCard.collectionFeaturedImage}
+                    alt={activeCard.name}
+                    className="rounded-2xl"
+                    placeholder="blur"
+                    blurDataURL="/images/placeholder.png"
+                  />
+                </div>
+                <div className="hero-cards">
+                  {heroData
+                    .filter((d, i) => d.name !== activeCard.name)
+                    .map((data, i) => (
+                      <HeroCard
+                        key={data.name}
+                        {...data}
+                        onClick={() => {
+                          setActiveCard(data);
+                        }}
+                      />
+                    ))}
+                </div>
 
-              <div className="flex w-full mb-4 lg:mb-0 items-center justify-center lg:block">
-                <HeroIndicator
-                  arr={heroData}
-                  active={activeCard}
-                  setActiveData={setActiveCard}
-                />
+                <div className="flex w-full mb-4 lg:mb-0 items-center justify-center lg:block">
+                  <HeroIndicator
+                    arr={heroData.slice(0, 3)}
+                    active={activeCard}
+                    setActiveData={setActiveCard}
+                  />
+                </div>
+              </div>
+            </section>
+          ) : (
+            <div className="hero">
+              <div className="w-[50%]">
+                <div className="flex flex-col gap-y-2">
+                  <Skeleton height="3rem" width="40%" />
+                  <Skeleton height="3rem" width="40%" />
+                </div>
+                <div className="my-4">
+                  <Skeleton height="1rem" width="80%" count={10} />
+                </div>
+                <Skeleton height="3rem" width="40%" />
+              </div>
+              <div className="hero-img-cards">
+                <Skeleton height="100%" width="100%" />
               </div>
             </div>
-          </section>
+          )}
 
           <div className="hero-section-1">
             <section className="mb-20">

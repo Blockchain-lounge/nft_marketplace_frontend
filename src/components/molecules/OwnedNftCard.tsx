@@ -30,11 +30,7 @@ const OwnedNftCard = ({
       className="nmc-wrapper cursor-pointer"
       onClick={() => push(`/${to}/${item_id._id}`)}
     >
-      <div className="nmc-wrapper2-img">
-        <div className="nmc-wrapper-likes nmc-wrapper2-likes">
-          <LikeIcon />
-          {/* <span>298</span> */}
-        </div>
+      <div className="nmc-wrapper-img">
         <Image
           src={
             item_art_url === undefined ||
@@ -50,8 +46,9 @@ const OwnedNftCard = ({
           layout="fill"
           placeholder="blur"
           blurDataURL="/images/placeholder.png"
+          objectFit="cover"
+          className="rounded-t-[0.975rem]"
         />
-        {/* <img src={item_art_url} alt={item_title} /> */}
       </div>
       <div className="nmc-sub-wrapper flex justify-between">
         <div className="flex flex-col gap-y-[0.3rem] p-2">

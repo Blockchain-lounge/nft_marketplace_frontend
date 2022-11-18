@@ -21,6 +21,24 @@ export function redirectUrl(url: string) {
   window.location.href = url;
 }
 
-// export function floorPr(url: string) {
-//   window.location.href = url;
+// export function floorPrice(purchasedItems: Array<number|string>) {
+// export function floorPrice(purchasedItems: []) {
+//   let price: number | string = 0;
+//   for (var i = 0; i <= purchasedItems.length; i++) {
+//     if (purchasedItems[i].amount <= price) {
+//       price = purchasedItems[i].amount;
+//     }
+//     return price;
+//   }
+// }
+
+// export function tradingVolume(purchasedItems: []) {
+//   // purchasedItems.forEach(amount => {
+
+//   // });
+//   let price = ""
+//   for(var i = 0; i <= purchasedItems.length; i++)
+//       {
+//         purchasedItems[i].amount + price;
+//       }
 // }
