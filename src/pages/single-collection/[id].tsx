@@ -104,7 +104,7 @@ const ViewCollection = () => {
 
   const collectionPriceInfo = [
     // { label: "floor", price: price, type: "coin" },
-    { label: "floor", price: "0", type: "coin" },
+    { label: "floor", price: floorPrice(singleCollectionPurchasedItems), type: "coin" },
     { label: "volume", price: "0", type: "coin" }, 
     { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
     { label: "owners", price: owners, type: "quantity" },
