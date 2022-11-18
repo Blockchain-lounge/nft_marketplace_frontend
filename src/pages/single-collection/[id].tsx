@@ -14,7 +14,7 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { apiRequest } from "../../functions/offChain/apiRequests";
-import { floorPrice } from "../../functions/offChain/generalFunctions";
+// import { floorPrice } from "../../functions/offChain/generalFunctions";
 import APPCONFIG from "../../constants/Config";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -100,11 +100,11 @@ const ViewCollection = () => {
   // }
   const owners = singleCollectionsListedItemsData.length + singleCollectionPurchasedItems.length;
   // const price = floorPrice(singleCollectionsListedItemsData)
-  console.log("Floor price2", floorPrice(singleCollectionPurchasedItems))
+  // console.log("Floor price2", floorPrice(singleCollectionPurchasedItems))
 
   const collectionPriceInfo = [
     // { label: "floor", price: price, type: "coin" },
-    { label: "floor", price: floorPrice(singleCollectionPurchasedItems), type: "coin" },
+    { label: "floor", price: "0", type: "coin" },
     { label: "volume", price: "0", type: "coin" }, 
     { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
     { label: "owners", price: owners, type: "quantity" },
