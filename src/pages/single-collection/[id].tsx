@@ -83,9 +83,10 @@ const ViewCollection = () => {
             }
             return price;
           }
-          console.log("Floor Price", floorPrices(response.data.listedItems))
-          if(response.data.listedItems.listing_price){
+          
+          if(response.data.listedItems){
             setcollectionfloorPrice(floorPrices(response.data.listedItems))
+            console.log("Floor Price", floorPrices(response.data.listedItems))
           }else{
             setcollectionfloorPrice("0")
           }
@@ -97,9 +98,10 @@ const ViewCollection = () => {
             }
             return price;
           }
-          console.log("Trading volume", collectionVolumes(response.data.purchasedItems))
-          if(response.data.purchasedItems.amount){
+          
+          if(response.data.purchasedItems){
             setTradingVolume(collectionVolumes(response.data.purchasedItems))
+            console.log("Trading volume", collectionVolumes(response.data.purchasedItems))
           }else{_
             setTradingVolume("0")
           }      
