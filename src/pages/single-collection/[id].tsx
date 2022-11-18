@@ -136,7 +136,7 @@ const ViewCollection = () => {
   }
 
   const collectionPriceInfo = [
-    { label: "floor", price: "0", type: "coin" },
+    { label: "floor", price: collectionfloorPrice, type: "coin" },
     { label: "volume", price: tradingVolume, type: "coin" }, 
     { label: "items", price: singleCollectionsListedItemsData ? singleCollectionsListedItemsData.length : 0, type: "quantity" },
 // >>>>>>> dev/ebuka
