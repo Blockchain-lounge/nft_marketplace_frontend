@@ -103,7 +103,7 @@ const ViewCollection = () => {
             }
             setTradingVolume(collectionVolumes(response.data.purchasedItems))
             console.log("Trading volume", collectionVolumes(response.data.purchasedItems))
-          }else{_
+          }else{
             setTradingVolume("0")
           }      
           setIsLoading(false);
