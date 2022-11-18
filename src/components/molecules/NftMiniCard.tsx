@@ -74,6 +74,7 @@ const NftMiniCards = ({
         </div>
         <div className="">
           <span className="nft-mini-cards-title">{name}</span>
+          
           {/* <div className="nft-mini-cards-wrapper2">
             <span className="nft-mini-cards-sub">Floor</span> <CoinIcon />
             <span className="nft-mini-cards-val">floorPrice</span>
