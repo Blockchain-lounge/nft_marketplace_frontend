@@ -5,32 +5,16 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { uploadFile } from "../functions/offChain/apiRequests";
 
-import React, {
-  ChangeEvent,
-  Dispatch,
-  FC,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import { Button, Heading2, Input2, Select } from "../components/atoms";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { apiRequest } from "../functions/offChain/apiRequests";
 import EarningLayout from "../template/EarningLayout";
 import { ICategories } from "../utilities/types";
+import { CloseIcon } from "../components/atoms/vectors";
 
-// interface ICollectionProps {
-//   closeModal: Dispatch<SetStateAction<boolean>>;
-//   changeModalType?: Dispatch<SetStateAction<string>>;
-// }
-
-const CreateCollection: FC<ICollectionProps> = (
-  {
-    // closeModal,
-    // changeModalType,
-  }
-) => {
+const CreateCollection: FC<ICollectionProps> = () => {
   const [collectionBannerPreview, setCollectionBannerPreview] = useState("");
   const [collectionBanner, setCollectionBanner] = useState("");
 
@@ -51,6 +35,13 @@ const CreateCollection: FC<ICollectionProps> = (
     collection_description: "",
   });
 
+  const [socialLinksPayload, setSocialLinksPayload] = useState({
+    website: "",
+    discord: "",
+    twitter: "",
+    instagram: "",
+  });
+
   const { push } = useRouter();
 
   useEffect(() => {
@@ -63,6 +54,16 @@ const CreateCollection: FC<ICollectionProps> = (
     const { name, value } = e.target;
     setCollectionPayload({
       ...collectionPayload,
+      [name]: value,
+    });
+  };
+
+  const handleSocialLinksFieldChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setSocialLinksPayload({
+      ...socialLinksPayload,
       [name]: value,
     });
   };
@@ -183,7 +184,9 @@ const CreateCollection: FC<ICollectionProps> = (
       collectionFeaturedImage: collectionFeaturedArt,
       collectionLogoImage: collectionLogo,
       category_id: category._id || category.id,
+      ...socialLinksPayload,
     };
+    // console.log({ collectionData });
     setIsTransLoading(true);
     try {
       const HEADER = "authenticated_and_form_data";
@@ -192,6 +195,7 @@ const CreateCollection: FC<ICollectionProps> = (
       const DATA = collectionData;
 
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        // console.log({ response });
         if (response.status == 400 || response.status == 404) {
           var error = response.data.error;
           toast(error);
@@ -204,12 +208,18 @@ const CreateCollection: FC<ICollectionProps> = (
         } else if (response.status == 201) {
           toast(response.data.message);
           setIsTransLoading(false);
-
           push("/create-new-nft");
           setCollectionPayload({
             ...collectionPayload,
             collection_name: "",
             collection_description: "",
+          });
+          setSocialLinksPayload({
+            ...socialLinksPayload,
+            website: "",
+            discord: "",
+            instagram: "",
+            twitter: "",
           });
           setCollectionBanner(null);
           setCollectionFeaturedArt(null);
@@ -232,8 +242,53 @@ const CreateCollection: FC<ICollectionProps> = (
     <EarningLayout title="Create a Collection">
       <div className="create-new-nft-form max-w-[80%] 2xl:max-w-[60%]">
         <ToastContainer />
-        {/*Banner Image*/}
+        {/*Logo Image*/}
+        <div className="create-new-nft-wrapper-2">
+          <span className="create-new-nft-wrapper-2-label">Logo Image</span>
+          <span className="create-new-nft-wrapper-2-label-type">
+            File types supported: JPG, JPEG, PNG, SVG, WEBP and GIF. Max size:
+            20 MB
+          </span>
+          <div className="h-40 w-40 relative rounded-full">
+            <input
+              type="file"
+              id="logoCollection"
+              onChange={(e) => handleImageFieldChange(e)}
+              className="hidden"
+              name="collectionLogoImage"
+            />
 
+            {collectionLogoPreview && (
+              <Image
+                src={collectionLogoPreview || "/ape.png"}
+                alt="collection-cover-art"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-full"
+              />
+            )}
+
+            <label
+              htmlFor="logoCollection"
+              className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d7f] rounded-full"
+            >
+              <Image
+                src="/gallery-add.svg"
+                alt="add-img-svg"
+                width="24px"
+                height="24px"
+              />
+              {/* <span
+                className={clsx(
+                  collectionLogoPreview ? "hidden" : "block mt-2 text-sm"
+                )}
+              >
+                Click to change image
+              </span> */}
+            </label>
+          </div>
+        </div>
+        {/*Banner Image*/}
         <div className="create-new-nft-wrapper-2">
           <span className="create-new-nft-wrapper-2-label">Banner Image</span>
           <span className="create-new-nft-wrapper-2-label-type">
@@ -323,51 +378,7 @@ const CreateCollection: FC<ICollectionProps> = (
             </label>
           </div>
         </div>
-        {/*Logo Image*/}
-        <div className="create-new-nft-wrapper-2">
-          <span className="create-new-nft-wrapper-2-label">Logo Image</span>
-          <span className="create-new-nft-wrapper-2-label-type">
-            File types supported: JPG, JPEG, PNG, SVG, WEBP and GIF. Max size:
-            20 MB
-          </span>
-          <div className="h-40 w-40 relative">
-            <input
-              type="file"
-              id="logoCollection"
-              onChange={(e) => handleImageFieldChange(e)}
-              className="hidden"
-              name="collectionLogoImage"
-            />
 
-            {collectionLogoPreview && (
-              <Image
-                src={collectionLogoPreview || "/ape.png"}
-                alt="collection-cover-art"
-                layout="fill"
-                objectFit="cover"
-              />
-            )}
-
-            <label
-              htmlFor="logoCollection"
-              className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d7f]"
-            >
-              <Image
-                src="/gallery-add.svg"
-                alt="add-img-svg"
-                width="24px"
-                height="24px"
-              />
-              <span
-                className={clsx(
-                  collectionLogoPreview ? "hidden" : "block mt-2 text-sm"
-                )}
-              >
-                Click to change image
-              </span>
-            </label>
-          </div>
-        </div>
         {/*Input Fields*/}
         <Input2
           name="collection_name"
@@ -377,16 +388,7 @@ const CreateCollection: FC<ICollectionProps> = (
           value={collectionPayload.collection_name}
           required
         />
-        <div>
-          <span className="create-new-nft-wrapper-2-label mb-2">Category</span>
-          {category !== null ? (
-            <Select
-              title={category.name || category.label}
-              lists={categories}
-              onClick2={handleSelect}
-            />
-          ) : null}
-        </div>
+
         <div>
           <span className="create-new-nft-wrapper-2-label mb-2">
             Description
@@ -401,6 +403,137 @@ const CreateCollection: FC<ICollectionProps> = (
 
             // value={userDetailsPayload.bio}
           ></textarea>
+        </div>
+        <div>
+          <span className="create-new-nft-wrapper-2-label mb-2">Category</span>
+          {category !== null ? (
+            <Select
+              title={category.name || category.label}
+              lists={categories}
+              onClick2={handleSelect}
+            />
+          ) : null}
+        </div>
+        <div>
+          <span className="create-new-nft-wrapper-2-label mb-2">Links</span>
+          <div className="flex flex-col gap-y-5">
+            {/*Website-Link*/}
+            <div className="flex items-center gap-x-5">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
+                <div className="relative w-6 h-8">
+                  <Image
+                    src="/icon-svg/link.svg"
+                    alt="website-link"
+                    layout="fill"
+                    objectFit="contain"
+                  />
+                </div>
+                <span className="font-medium">Website</span>
+              </div>
+              <div className="w-[85%]">
+                <Input2
+                  onChange={handleSocialLinksFieldChange}
+                  name="website"
+                  placeholder="Enter your website link"
+                  value={socialLinksPayload.website}
+                  suffix={<CloseIcon />}
+                  onClickSuffix={() =>
+                    setSocialLinksPayload({
+                      ...socialLinksPayload,
+                      website: "",
+                    })
+                  }
+                />
+              </div>
+            </div>
+            {/*Discord-Link*/}
+            <div className="flex items-center gap-x-5">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
+                <div className="relative w-6 h-5">
+                  <Image
+                    src="/icon-svg/discord.svg"
+                    alt="discord-link"
+                    layout="fill"
+                    objectFit="contain"
+                  />
+                </div>
+                <span className="font-medium">Discord</span>
+              </div>
+              <div className="w-[85%]">
+                <Input2
+                  suffix={<CloseIcon />}
+                  onChange={handleSocialLinksFieldChange}
+                  name="discord"
+                  placeholder="Enter your discord link"
+                  value={socialLinksPayload.discord}
+                  onClickSuffix={() =>
+                    setSocialLinksPayload({
+                      ...socialLinksPayload,
+                      discord: "",
+                    })
+                  }
+                />
+              </div>
+            </div>
+            {/*Twitter-Link*/}
+            <div className="flex items-center gap-x-5">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
+                <div className="relative w-6 h-5">
+                  <Image
+                    src="/icon-svg/twitter.svg"
+                    alt="twitter-link"
+                    layout="fill"
+                    objectFit="contain"
+                  />
+                </div>
+                <span className="font-medium">Twitter</span>
+              </div>
+              <div className="w-[85%]">
+                <Input2
+                  suffix={<CloseIcon />}
+                  onChange={handleSocialLinksFieldChange}
+                  name="twitter"
+                  placeholder="Enter your twitter link"
+                  value={socialLinksPayload.twitter}
+                  onClickSuffix={() =>
+                    setSocialLinksPayload({
+                      ...socialLinksPayload,
+                      twitter: "",
+                    })
+                  }
+                />
+              </div>
+            </div>
+            {/*Instagram-Link*/}
+            <div className="flex items-center gap-x-5">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
+                <div className="relative w-6 h-8">
+                  <Image
+                    src="/icon-svg/instagram.svg"
+                    alt="instagram-link"
+                    layout="fill"
+                    objectFit="contain"
+                  />
+                </div>
+                <span className="font-medium">Instagram</span>
+              </div>
+              <div className="w-[85%]">
+                <Input2
+                  suffix={<CloseIcon />}
+                  onChange={handleSocialLinksFieldChange}
+                  name="instagram"
+                  placeholder="Enter your instagram link"
+                  value={socialLinksPayload.instagram}
+                  onClickSuffix={() =>
+                    setSocialLinksPayload({
+                      ...socialLinksPayload,
+                      instagram: "",
+                    })
+                  }
+                />
+              </div>
+            </div>
+          </div>
         </div>
         <Button
           title="Create collection"

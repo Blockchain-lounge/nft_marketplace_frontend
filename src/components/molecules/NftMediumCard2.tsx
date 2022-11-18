@@ -18,6 +18,8 @@ const NftCard2 = ({
   time,
   item_id,
   listing_price,
+  listing_quantity,
+  listing_remaining,
   to = "buy-view-nft",
 }: Partial<Pick<INftcard, "name" | "imgUrl" | "price">> & {
   time?: boolean;
@@ -71,7 +73,7 @@ const NftCard2 = ({
               item_id !== undefined &&
               item_id !== null &&
               item_id !== "")
-              ? item_id.item_supply + "/" + item_id.item_supply
+              ? listing_remaining + "/" + listing_quantity
               : item_supply + "/" + item_supply}
           </span>
         </div>

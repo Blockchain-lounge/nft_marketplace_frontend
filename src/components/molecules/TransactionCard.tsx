@@ -87,12 +87,10 @@ const TransactionCard = ({
               placeholder="blur"
               blurDataURL="/images/placeholder.png"
             />
-          ) : listed_item ? (
+          ) : created_item_listed ? (
             <img
               src={
-                listed_item &&
-                listed_item !== undefined &&
-                listed_item !== null &&
+                created_item_listed &&
                 created_item_listed !== undefined &&
                 created_item_listed !== null
                   ? created_item_listed.item_art_url
@@ -157,9 +155,7 @@ const TransactionCard = ({
                 {" "}
                 recently listed an item{" "}
                 <b>
-                  {listed_item &&
-                  listed_item !== undefined &&
-                  listed_item !== null &&
+                  {created_item_listed &&
                   created_item_listed !== undefined &&
                   created_item_listed !== null
                     ? created_item_listed.item_title
@@ -177,7 +173,7 @@ const TransactionCard = ({
                 : ""}
               <span className="transaction-card-span">
                 {" "}
-                recently updated a listed an item{" "}
+                recently updated an item{" "}
                 <b>
                   {listed_item &&
                   listed_item !== undefined &&
@@ -191,19 +187,17 @@ const TransactionCard = ({
             </p>
           ) : activity_type === "new_mint" ? (
             <p className="transaction-card-p">
-              {to_user_id &&
-              to_user_id !== undefined &&
-              to_user_id.username &&
-              to_user_id.username !== undefined
-                ? to_user_id.username
+              {from_user_id &&
+              from_user_id !== undefined &&
+              from_user_id.username &&
+              from_user_id.username !== undefined
+                ? from_user_id.username
                 : ""}
               <span className="transaction-card-span">
                 {" "}
-                recently minted a listed an item{" "}
+                recently minted an item{" "}
                 <b>
-                  {listed_item &&
-                  listed_item !== undefined &&
-                  listed_item !== null &&
+                  {created_item_listed &&
                   created_item_listed !== undefined &&
                   created_item_listed !== null
                     ? created_item_listed.item_title
@@ -213,19 +207,17 @@ const TransactionCard = ({
             </p>
           ) : activity_type === "new_sales" ? (
             <p className="transaction-card-p">
-              {to_user_id &&
-              to_user_id !== undefined &&
-              to_user_id.username &&
-              to_user_id.username !== undefined
-                ? to_user_id.username
+              {from_user_id &&
+              from_user_id !== undefined &&
+              from_user_id.username &&
+              from_user_id.username !== undefined
+                ? from_user_id.username
                 : ""}
               <span className="transaction-card-span">
                 {" "}
-                recently purchased a listed an item{" "}
+                recently purchased an item{" "}
                 <b>
-                  {listed_item &&
-                  listed_item !== undefined &&
-                  listed_item !== null &&
+                  {created_item_listed &&
                   created_item_listed !== undefined &&
                   created_item_listed !== null
                     ? created_item_listed.item_title
@@ -235,19 +227,17 @@ const TransactionCard = ({
             </p>
           ) : activity_type === "cancelled_listing" ? (
             <p className="transaction-card-p">
-              {to_user_id &&
-              to_user_id !== undefined &&
-              to_user_id.username &&
-              to_user_id.username !== undefined
-                ? to_user_id.username
+              {from_user_id &&
+              from_user_id !== undefined &&
+              from_user_id.username &&
+              from_user_id.username !== undefined
+                ? from_user_id.username
                 : ""}
               <span className="transaction-card-span">
                 {" "}
-                recently cancelled a listed an item{" "}
+                recently cancelled an item{" "}
                 <b>
-                  {listed_item &&
-                  listed_item !== undefined &&
-                  listed_item !== null &&
+                  {created_item_listed &&
                   created_item_listed !== undefined &&
                   created_item_listed !== null
                     ? created_item_listed.item_title

@@ -36,30 +36,30 @@ createdAt : string;
 
   switch (activity_type) {
     case "newly_created_item":
-      activityType = "item created";
+      activityType = "You created an item";
       break;
 
     case "updated_item":
-      activityType = "item updated";
+      activityType = "You updated an item";
       break;
 
     case "newly_listed_item":
-      activityType = "item listed";
+      activityType = "You listed an item";
       break;
 
     case "updated_listing":
-      activityType = "listing updated";
+      activityType = "You updated a listed item";
       break;
 
     case "new_mint":
-      activityType = "item minted";
+      activityType = "You minted an item";
       break;
 
     case "new_sales":
-      activityType = "item sold";
+      activityType = "You purchased an item";
       break;
     case "cancelled_listing":
-      activityType = "item cancelled";
+      activityType = "You cnacelled an item";
       break;
 
     default:
@@ -112,9 +112,7 @@ createdAt : string;
                 }
 
                 {
-                  listed_item
-                  && listed_item !== undefined
-                  && listed_item !== null
+                  created_item_listed
                   && created_item_listed !== undefined
                   && created_item_listed !== null
                   ?

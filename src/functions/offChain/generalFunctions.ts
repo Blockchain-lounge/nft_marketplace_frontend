@@ -1,3 +1,4 @@
+// @ts-nocheck
 export function signInMessage(
   username: string,
   nounce: number,
@@ -21,24 +22,22 @@ export function redirectUrl(url: string) {
   window.location.href = url;
 }
 
-// export function floorPrice(purchasedItems: Array<number|string>) {
-// export function floorPrice(purchasedItems: []) {
-//   let price: number | string = 0;
-//   for (var i = 0; i <= purchasedItems.length; i++) {
-//     if (purchasedItems[i].amount <= price) {
-//       price = purchasedItems[i].amount;
-//     }
-//     return price;
-//   }
-// }
+export function floorPrice(purchasedItems: Array<{ listing_price: number }>) {
+  // @ts-nocheck
+  let price: number = purchasedItems[0].listing_price;
+  for (let i = 0; i < purchasedItems.length; i++) {
+    if (purchasedItems[i].listing_price < price) {
+      price = purchasedItems[i].listing_price;
+    }
+  }
+  return price;
+}
 
-// export function tradingVolume(purchasedItems: []) {
-//   // purchasedItems.forEach(amount => {
-
-//   // });
-//   let price = ""
-//   for(var i = 0; i <= purchasedItems.length; i++)
-//       {
-//         purchasedItems[i].amount + price;
-//       }
-// }
+export function collectionVolume(purchasedItems: Array<{ amount: number }>) {
+  // @ts-nocheck
+  let price: number = 0;
+  for (let i = 0; i < purchasedItems.length; i++) {
+    price = price + purchasedItems[i].amount;
+  }
+  return price;
+}
