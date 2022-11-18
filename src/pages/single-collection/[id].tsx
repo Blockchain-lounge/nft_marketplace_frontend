@@ -74,9 +74,7 @@ const ViewCollection = () => {
             // @ts-nocheck
             let price: number = purchasedItems[0].amount;
             for (let i = 0; i < purchasedItems.length; i++) {
-              if (purchasedItems[i].amount < price) {
                 price =+ purchasedItems[i].amount;
-              }
             }
             return price;
           }
