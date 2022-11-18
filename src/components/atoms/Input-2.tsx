@@ -6,8 +6,9 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   type?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onClickSuffix?: () => void;
   belowDesc?: string;
-  suffix?: string;
+  suffix?: any;
 }
 
 const Input2: FC<InputProps> = ({
@@ -18,6 +19,7 @@ const Input2: FC<InputProps> = ({
   belowDesc,
   required,
   suffix,
+  onClickSuffix,
   onChange,
   ...rest
 }) => {
@@ -43,7 +45,12 @@ const Input2: FC<InputProps> = ({
           {...rest}
         />
         {suffix && (
-          <span className="text-txt-2 w-[30%] text-right">{suffix}</span>
+          <span
+            className="text-white text-right cursor-pointer"
+            onClick={onClickSuffix}
+          >
+            {suffix}
+          </span>
         )}
       </div>
       {belowDesc && (
