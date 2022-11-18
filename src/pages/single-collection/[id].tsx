@@ -71,35 +71,36 @@ const ViewCollection = () => {
           setSingleCollectionDetail(response.data.collection);
           setSingleCollectionActivities(response.data.activities);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
-          function floorPrices(
-            purchasedItems: Array<{ listing_price: number }>
-          ) {
-            // @ts-nocheck
-            let price: number = purchasedItems[0].listing_price;
-            for (let i = 0; i < purchasedItems.length; i++) {
-              if (purchasedItems[i].listing_price < price) {
-                price = purchasedItems[i].listing_price;
-              }
-            }
-            return price;
-          }
+          
           
           if(response.data.listedItems){
+            function floorPrices(
+              purchasedItems: Array<{ listing_price: number }>
+            ) {
+              // @ts-nocheck
+              let price: number = purchasedItems[0].listing_price;
+              for (let i = 0; i < purchasedItems.length; i++) {
+                if (purchasedItems[i].listing_price < price) {
+                  price = purchasedItems[i].listing_price;
+                }
+              }
+              return price;
+            }
             setcollectionfloorPrice(floorPrices(response.data.listedItems))
             console.log("Floor Price", floorPrices(response.data.listedItems))
           }else{
             setcollectionfloorPrice("0")
           }
-          function collectionVolumes(purchasedItems: Array<{ amount: number }>) {
-            // @ts-nocheck
-            let price: number = 0;
-            for (let i = 0; i < purchasedItems.length; i++) {
-              price = price + purchasedItems[i].amount;
-            }
-            return price;
-          }
           
           if(response.data.purchasedItems){
+            function collectionVolumes(purchasedItems: Array<{ amount: number }>) {
+              // @ts-nocheck
+              let price: number = 0;
+              for (let i = 0; i < purchasedItems.length; i++) {
+                price = price + purchasedItems[i].amount;
+              }
+              return price;
+            }
             setTradingVolume(collectionVolumes(response.data.purchasedItems))
             console.log("Trading volume", collectionVolumes(response.data.purchasedItems))
           }else{_
