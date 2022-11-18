@@ -67,8 +67,8 @@ const ViewCollection = () => {
             }
             return price;
           }
-          console.log("floorPrice", floorPrice(response.data.purchasedItems))
-          setfloorPrice(floorPrice(response.data.purchasedItems))
+          console.log("floorPrice", floorPrice(response.data.listedItems))
+          setfloorPrice(floorPrice(response.data.listedItems))
 
           // function collectionVolume(purchasedItems: Array<{ amount: number, buyer: string, item_token_id:number }>) {
           //   // @ts-nocheck
