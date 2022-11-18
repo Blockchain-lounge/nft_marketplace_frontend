@@ -14,7 +14,6 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { apiRequest } from "../../functions/offChain/apiRequests";
-// import { floorPrice } from "../../functions/offChain/generalFunctions";
 import APPCONFIG from "../../constants/Config";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -55,7 +54,6 @@ const ViewCollection = () => {
           setSingleCollectionsListedItemsData(response.data.listedItems);
           setSingleCollectionDetail(response.data.collection);
           console.log(response.data)
-          // console.log(response.data.items[0].item_price)
           setSingleCollectionActivities(response.data.activities);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
           console.log("PurchaseItem", response.data.purchasedItems)
@@ -70,21 +68,7 @@ const ViewCollection = () => {
             return price;
           }
           setfloorPrice(floorPrice(response.data.purchasedItems))
-          console.log("Floor price", floorPrice(response.data.purchasedItems))
-          // const items = [
-          //   { amount: 0.71 },
-          //   { amount: 0.01 },
-          //   { amount: 0.002 },
-          //   { amount: 0.0008 },
-          //   { amount: 0.71 },
-          // ];
-          
-          // console.log("Floor price", floorPrice(items))
-          // floorPrice(response.data.purchasedItems)
-          // console.log("Floor price",floorPrice(response.data.purchasedItems))
-
-          // console.log("Item Length".response.data.items.length)
-          // console.log(response.data.items[0].item_price)
+         
           setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
@@ -93,24 +77,13 @@ const ViewCollection = () => {
       });
     }
   };
-  // const sampleFloorPrice = 0.02;
-  // if(!singleCollectionsListedItemsData){
-  //   sampleFloorPrice = 0.02;
-  // } else{
-  //   sampleFloorPrice = singleCollectionsListedItemsData[0].listing_price;
-  // }
   const owners = singleCollectionsListedItemsData.length + singleCollectionPurchasedItems.length;
-  // const price = floorPrice(singleCollectionsListedItemsData)
-  // console.log("Floor price2", floorPrice(singleCollectionPurchasedItems))
 
   const collectionPriceInfo = [
-    // { label: "floor", price: price, type: "coin" },
     { label: "floor", price: floorPrice, type: "coin" },
     { label: "volume", price: "0", type: "coin" }, 
     { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
     { label: "owners", price: owners, type: "quantity" },
-    // { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
-    // { label: "owners", price: singleCollectionsListedItemsData.length * 2, type: "quantity" },
   ];
   useEffect(() => {
     fetchCollectionItems();
