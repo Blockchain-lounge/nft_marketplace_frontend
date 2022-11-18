@@ -58,7 +58,7 @@ const ViewCollection = () => {
           setSingleCollectionActivities(response.data.activities);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
           console.log("PurchaseItem", response.data.purchasedItems)
-          function floorPrice(purchasedItems: Array<{ amount: number }>) {
+          function floorPrice(purchasedItems: Array<{ amount: number, buyer: string, item_token_id:number }>) {
             // @ts-nocheck
             let price: number = purchasedItems[0].amount;
             for (let i = 0; i < purchasedItems.length; i++) {
@@ -68,6 +68,8 @@ const ViewCollection = () => {
             }
             return price;
           }
+
+          console.log("Floor price", floorPrice(response.data.purchasedItems))
           // const items = [
           //   { amount: 0.71 },
           //   { amount: 0.01 },
