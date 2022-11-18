@@ -1,7 +1,7 @@
+import React from "react";
 import { Button, Heading2, Input } from "@/src/components/atoms";
 import { Footer } from "@/src/components/organisms";
 import DashboardLayout from "@/src/template/DashboardLayout";
-import React from "react";
 
 const Blog = () => {
   return (

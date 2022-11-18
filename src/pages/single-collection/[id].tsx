@@ -5,7 +5,11 @@ import {
   FilterIcon,
   SendIcon,
 } from "@/src/components/atoms/vectors";
-import { CollectionActivityCard, NftMediumCard2, Tab } from "@/src/components/molecules";
+import {
+  CollectionActivityCard,
+  NftMediumCard2,
+  Tab,
+} from "@/src/components/molecules";
 import { BannerImg, Footer } from "@/src/components/organisms";
 // import { singleCollectionsListedItemsDatas } from "@/src/store/data";
 import DashboardLayout from "@/src/template/DashboardLayout";
@@ -14,7 +18,10 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { apiRequest } from "../../functions/offChain/apiRequests";
-import { floorPrice, collectionVolume } from "../../functions/offChain/generalFunctions";
+import {
+  floorPrice,
+  collectionVolume,
+} from "../../functions/offChain/generalFunctions";
 import APPCONFIG from "../../constants/Config";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -25,18 +32,25 @@ const ViewCollection = () => {
   const [filter, setFilter] = useState(false);
   const info =
     "CryptoPunks launched as a fixed set of 10,000 items in mid-2017 and became one of the inspirations for the ERC-721 standard. They have been featured in places like The New York Times, Christie’s of London, Art|Basel Miami, and The PBS NewsHour.";
-  
+
   const { query, push } = useRouter();
   const { id } = query;
   const collectionStages = ["items", "activity"];
   const activityList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const activityHeaders = ["Item", "Price", "From", "To"];
-  const [singleCollectionsListedItemsData, setSingleCollectionsListedItemsData] = useState<string|number>("");
-  const [collectionfloorPrice, setcollectionfloorPrice] = useState<string|number>("");
-  const [tradingVolume, setTradingVolume] = useState<string|number>("");
+  const [
+    singleCollectionsListedItemsData,
+    setSingleCollectionsListedItemsData,
+  ] = useState<string | number>("");
+  const [collectionfloorPrice, setcollectionfloorPrice] = useState<
+    string | number
+  >("");
+  const [tradingVolume, setTradingVolume] = useState<string | number>("");
   const [singleCollectionDetail, setSingleCollectionDetail] = useState("");
-  const [singleCollectionActivities, setSingleCollectionActivities] = useState("");
-  const [singleCollectionPurchasedItems, setSingleCollectionPurchasedItems] = useState<string|number>("");
+  const [singleCollectionActivities, setSingleCollectionActivities] =
+    useState("");
+  const [singleCollectionPurchasedItems, setSingleCollectionPurchasedItems] =
+    useState<string | number>("");
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchCollectionItems = async () => {
@@ -57,7 +71,9 @@ const ViewCollection = () => {
           setSingleCollectionDetail(response.data.collection);
           setSingleCollectionActivities(response.data.activities);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
-          function floorPrices(purchasedItems: Array<{ listing_price: number }>) {
+          function floorPrices(
+            purchasedItems: Array<{ listing_price: number }>
+          ) {
             // @ts-nocheck
             let price: number = purchasedItems[0].listing_price;
             for (let i = 0; i < purchasedItems.length; i++) {
@@ -91,28 +107,29 @@ const ViewCollection = () => {
         } else {
           toast("Something went wrong, please try again!");
           return;
-          
         }
       });
     }
   };
-// <<<<<<< HEAD
-//   const owners = singleCollectionsListedItemsData.length + singleCollectionPurchasedItems.length;
+  // <<<<<<< HEAD
+  //   const owners = singleCollectionsListedItemsData.length + singleCollectionPurchasedItems.length;
 
-//   const collectionPriceInfo = [
-//     { label: "floor", price: collectionfloorPrice, type: "coin" },
-//     { label: "volume", price: tradingVolume, type: "coin" }, 
-//     { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
-// =======
-//   // const sampleFloorPrice = 0.02;
-//   // if(!singleCollectionsListedItemsData){
-//   //   sampleFloorPrice = 0.02;
-//   // } else{
-//   //   sampleFloorPrice = singleCollectionsListedItemsData[0].listing_price;
-//   // }
+  //   const collectionPriceInfo = [
+  //     { label: "floor", price: collectionfloorPrice, type: "coin" },
+  //     { label: "volume", price: tradingVolume, type: "coin" },
+  //     { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
+  // =======
+  //   // const sampleFloorPrice = 0.02;
+  //   // if(!singleCollectionsListedItemsData){
+  //   //   sampleFloorPrice = 0.02;
+  //   // } else{
+  //   //   sampleFloorPrice = singleCollectionsListedItemsData[0].listing_price;
+  //   // }
   var owners = 0;
-  if(singleCollectionsListedItemsData && singleCollectionPurchasedItems){
-    owners = singleCollectionsListedItemsData.length + singleCollectionPurchasedItems.length;
+  if (singleCollectionsListedItemsData && singleCollectionPurchasedItems) {
+    owners =
+      singleCollectionsListedItemsData.length +
+      singleCollectionPurchasedItems.length;
   }
 
   const collectionPriceInfo = [
@@ -127,13 +144,10 @@ const ViewCollection = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  // console.log({ singleCollectionsListedItemsData });
-  
-
   return (
     <DashboardLayout isLoading={isLoading}>
       <ToastContainer />
-      <div className="sub-layout-wrapper">
+      <div className="sub-layout-wrapper scrollbar-hide">
         <div className="center">
           <div className="single-collection-banner-img">
             <div className="h-[20rem] relative flex">
@@ -187,7 +201,7 @@ const ViewCollection = () => {
           </div>
           <div className="single-collection-info">
             <div className="flex flex-col lg:gap-y-3">
-              <div className="flex mb-4">
+              <div className="flex">
                 <span className="text-3xl font-bold mr-1">
                   {singleCollectionDetail.name}
                 </span>
@@ -202,22 +216,102 @@ const ViewCollection = () => {
                 </div>
               </div>
               <p className="max-w-2xl">{singleCollectionDetail.description}</p>
-              {/* <span className="flex font-bold">
-                See more <CaretDown />
-              </span> */}
-              {/* <div className="flex gap-x-6 mt-4 items-center">
-                <span className="border border-border-3-line p-1 rounded-md">
+
+              <div className="">
+                {/* <span className="border border-border-3-line p-1 rounded-md">
                   <SendIcon />
-                </span>
-                <span className="view-hero-nft-link border border-border-3-line p-5 rounded-md">
+                </span> */}
+                {/* <span className="view-hero-nft-link border border-border-3-line p-5 rounded-md">
                   <Image
                     src="/icon-svg/options.svg"
                     alt="view-nft-links"
                     layout="fill"
                     objectFit="contain"
                   />
-                </span>
-              </div> */}
+                </span> */}
+                <div className="w-[60%] sm:w-[25%] lg:w-full my-4 lg:my-0 flex gap-x-4 items-center justify-center rounded-md border-border-1-line border p-2">
+                  <a
+                    href={
+                      singleCollectionDetail &&
+                      singleCollectionDetail.website !== undefined
+                        ? singleCollectionDetail.website
+                        : "#"
+                    }
+                    target="_blank"
+                    className="flex items-center gap-x-1"
+                    rel="noreferrer"
+                  >
+                    <div className="relative w-6 h-8">
+                      <Image
+                        src="/icon-svg/link.svg"
+                        alt="website-link"
+                        layout="fill"
+                        objectFit="contain"
+                      />
+                    </div>
+                    <span className="font-medium">
+                      {singleCollectionDetail &&
+                      singleCollectionDetail.website !== undefined
+                        ? singleCollectionDetail.website
+                        : ""}
+                    </span>
+                  </a>
+                  <a
+                    target="_blank"
+                    className="relative w-6 h-5"
+                    href={
+                      singleCollectionDetail &&
+                      singleCollectionDetail.discord !== undefined
+                        ? singleCollectionDetail.discord
+                        : "#"
+                    }
+                    rel="noreferrer"
+                  >
+                    <Image
+                      src="/icon-svg/discord.svg"
+                      alt="discord-link"
+                      layout="fill"
+                      objectFit="contain"
+                    />
+                  </a>
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    className="relative w-6 h-5"
+                    href={
+                      singleCollectionDetail &&
+                      singleCollectionDetail.twitter !== undefined
+                        ? singleCollectionDetail.twitter
+                        : "#"
+                    }
+                  >
+                    <Image
+                      src="/icon-svg/twitter.svg"
+                      alt="twitter-link"
+                      layout="fill"
+                      objectFit="contain"
+                    />
+                  </a>
+                  <a
+                    className="relative w-6 h-8"
+                    href={
+                      singleCollectionDetail &&
+                      singleCollectionDetail.instagram !== undefined
+                        ? singleCollectionDetail.instagram
+                        : "#"
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Image
+                      src="/icon-svg/instagram.svg"
+                      alt="instagram-link"
+                      layout="fill"
+                      objectFit="contain"
+                    />
+                  </a>
+                </div>
+              </div>
             </div>
             <div className="mt-4 flex-wrap justify-around lg:flex-nowrap lg:mt-0 lg:max-w-[20%] w-full flex lg:flex-col gap-3 lg:gap-y-3 lg:border border-border-1-line lg:p-3 rounded-xl">
               {collectionPriceInfo.map((info) => (
@@ -288,7 +382,8 @@ const ViewCollection = () => {
               <div className="single-collection-lists">
                 {/* <div>hello</div> */}
                 <div className="">
-                  {singleCollectionsListedItemsData && singleCollectionsListedItemsData.length > 0 ? (
+                  {singleCollectionsListedItemsData &&
+                  singleCollectionsListedItemsData.length > 0 ? (
                     <div className="grid lg:grid-cols-3 2xl:grid-cols-4 gap-8">
                       {singleCollectionsListedItemsData.map((val, i) => (
                         <NftMediumCard2 {...val} key={val._id} />
@@ -312,15 +407,13 @@ const ViewCollection = () => {
                 ))}
               </div>
               <div className="profile-activities-wrapper">
-                {
-                  singleCollectionActivities.length === 0
-                  ? ("No activities yet!")
-                  : singleCollectionActivities.length > 0 
+                {singleCollectionActivities.length === 0
+                  ? "No activities yet!"
+                  : singleCollectionActivities.length > 0
                   ? singleCollectionActivities.map((activity, i) => (
-                  <CollectionActivityCard 
-                    {...activity} key={i} />
-                )): ("No activities yet!")
-                  }
+                      <CollectionActivityCard {...activity} key={i} />
+                    ))
+                  : "No activities yet!"}
                 {}
               </div>
             </>
