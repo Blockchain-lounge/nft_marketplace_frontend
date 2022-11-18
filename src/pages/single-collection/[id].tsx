@@ -71,9 +71,7 @@ const ViewCollection = () => {
           setSingleCollectionDetail(response.data.collection);
           setSingleCollectionActivities(response.data.activities);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
-          
-          
-          if(response.data.listedItems){
+            if(response.data.listedItems){
             function floorPrices(
               purchasedItems: Array<{ listing_price: number }>
             ) {
@@ -136,7 +134,7 @@ const ViewCollection = () => {
   }
 
   const collectionPriceInfo = [
-    { label: "floor", price: collectionfloorPrice, type: "coin" },
+    { label: "floor", price: "0", type: "coin" },
     { label: "volume", price: tradingVolume, type: "coin" }, 
     { label: "items", price: singleCollectionsListedItemsData ? singleCollectionsListedItemsData.length : 0, type: "quantity" },
 // >>>>>>> dev/ebuka
