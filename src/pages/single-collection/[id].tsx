@@ -32,6 +32,7 @@ const ViewCollection = () => {
   const activityHeaders = ["Item", "Price", "From", "To"];
   const [singleCollectionsListedItemsData, setSingleCollectionsListedItemsData] = useState<string|number>("");
   const [floorPrice, setfloorPrice] = useState<string|number>("");
+  const [tradingVolume, setTradingVolume] = useState<string|number>("");
   const [singleCollectionDetail, setSingleCollectionDetail] = useState("");
   const [singleCollectionActivities, setSingleCollectionActivities] = useState("");
   const [singleCollectionPurchasedItems, setSingleCollectionPurchasedItems] = useState<string|number>("");
@@ -79,7 +80,7 @@ const ViewCollection = () => {
             return price;
           }
           console.log("Collection Volume", collectionVolume(response.data.purchasedItems))
-          // setfloorPrice(floorPrice(response.data.purchasedItems))
+          setTradingVolume(collectionVolume(response.data.purchasedItems))
          
           setIsLoading(false);
         } else {
@@ -94,7 +95,7 @@ const ViewCollection = () => {
 
   const collectionPriceInfo = [
     { label: "floor", price: floorPrice, type: "coin" },
-    { label: "volume", price: "0", type: "coin" }, 
+    { label: "volume", price: tradingVolume, type: "coin" }, 
     { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
     { label: "owners", price: owners, type: "quantity" },
   ];
