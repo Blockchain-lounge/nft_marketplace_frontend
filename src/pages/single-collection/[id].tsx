@@ -72,7 +72,7 @@ const ViewCollection = () => {
           setSingleCollectionActivities(response.data.activities);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
           console.log("Listing data", response.data.listedItems)
-            if(response.data.listedItems.length = 0){
+            if(response.data.listedItems.length != 0){
             function floorPrices(
               purchasedItems: Array<{ listing_price: number }>
             ) {
@@ -92,7 +92,7 @@ const ViewCollection = () => {
             setcollectionfloorPrice("0")
           }
           
-          if(response.data.purchasedItems.length = 0){
+          if(response.data.purchasedItems.length != 0){
             function collectionVolumes(purchasedItems: Array<{ amount: number }>) {
               // @ts-nocheck
               let price: number = 0;
