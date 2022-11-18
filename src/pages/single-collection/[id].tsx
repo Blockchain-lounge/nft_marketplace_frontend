@@ -57,6 +57,15 @@ const ViewCollection = () => {
           // console.log(response.data.items[0].item_price)
           setSingleCollectionActivities(response.data.activities);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
+          const items = [
+            { amount: 0.71 },
+            { amount: 0.01 },
+            { amount: 0.002 },
+            { amount: 0.0008 },
+            { amount: 0.71 },
+          ];
+          
+          console.log("Floor price", floorPrice(items))
           // floorPrice(response.data.purchasedItems)
           // console.log("Floor price",floorPrice(response.data.purchasedItems))
 
@@ -77,9 +86,10 @@ const ViewCollection = () => {
   //   sampleFloorPrice = singleCollectionsListedItemsData[0].listing_price;
   // }
   const owners = singleCollectionsListedItemsData.length + singleCollectionPurchasedItems.length;
+  const price = floorPrice(singleCollectionsListedItemsData)
 
   const collectionPriceInfo = [
-    { label: "floor", price: "0", type: "coin" },
+    { label: "floor", price: price, type: "coin" },
     { label: "volume", price: "0", type: "coin" }, 
     { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
     { label: "owners", price: owners, type: "quantity" },
