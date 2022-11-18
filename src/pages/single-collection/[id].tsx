@@ -85,6 +85,7 @@ const ViewCollection = () => {
         } else {
           toast("Something went wrong, please try again!");
           return;
+          
         }
       });
     }
