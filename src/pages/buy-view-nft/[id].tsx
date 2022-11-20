@@ -600,9 +600,7 @@ const ViewNft = () => {
                             ) : listed_item ? (
                               <Image
                                 src={
-                                  listed_item &&
-                                  listed_item !== undefined &&
-                                  listed_item !== null &&
+                                  created_item_listed &&
                                   created_item_listed !== undefined &&
                                   created_item_listed !== null
                                     ? created_item_listed.item_art_url
@@ -629,23 +627,32 @@ const ViewNft = () => {
                               </span>
                               <span className="text-xl font-bold text-txt-2">
                                 {activity_type === "newly_created_item"
-                                  ? "item created"
+                                  ? "created"
                                   : activity_type === "updated_item"
-                                  ? "item updated"
+                                  ? "updated"
                                   : activity_type === "newly_listed_item"
-                                  ? "item listed"
+                                  ? "listed"
                                   : activity_type === "updated_listing"
-                                  ? "listed item updated"
+                                  ? "bupdated a listed"
                                   : activity_type === "new_mint"
-                                  ? "item minted"
+                                  ? "minted"
                                   : activity_type === "new_sales"
-                                  ? "item sold"
+                                  ? "purchased"
                                   : activity_type === "new_mint"
-                                  ? "item minted"
+                                  ? "minted"
                                   : activity_type === "cancelled_listing"
-                                  ? "item listing cancelled"
+                                  ? "delisted"
                                   : ""}
                               </span>
+                              <span className="transaction-card-span">
+                <b>
+                  {created_item_listed &&
+                  created_item_listed !== undefined &&
+                  created_item_listed !== null
+                    ? created_item_listed.item_title
+                    : ""}
+                </b>
+              </span>
                               {to_user_id && (
                                 <span className="text-xl font-bold">
                                   {to_user_id &&
