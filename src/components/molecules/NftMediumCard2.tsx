@@ -18,6 +18,8 @@ const NftCard2 = ({
   time,
   item_id,
   listing_price,
+  listing_quantity,
+  listing_remaining,
   to = "buy-view-nft",
 }: Partial<Pick<INftcard, "name" | "imgUrl" | "price">> & {
   time?: boolean;
@@ -29,11 +31,7 @@ const NftCard2 = ({
       className="nmc-wrapper cursor-pointer"
       onClick={() => push(`/${to}/${_id}`)}
     >
-      <div className="nmc-wrapper2-img">
-        <div className="nmc-wrapper-likes nmc-wrapper2-likes">
-          <LikeIcon />
-          {/* <span>298</span> */}
-        </div>
+      <div className="nmc-wrapper-img">
         <Image
           src={
             item_art_url === undefined ||
@@ -49,6 +47,7 @@ const NftCard2 = ({
           layout="fill"
           placeholder="blur"
           blurDataURL="/images/placeholder.png"
+          className="rounded-t-xl"
         />
         {/* <img src={item_art_url} alt={item_title} /> */}
       </div>
@@ -71,7 +70,7 @@ const NftCard2 = ({
               item_id !== undefined &&
               item_id !== null &&
               item_id !== "")
-              ? item_id.item_supply + "/" + item_id.item_supply
+              ? listing_remaining + "/" + listing_quantity
               : item_supply + "/" + item_supply}
           </span>
         </div>
