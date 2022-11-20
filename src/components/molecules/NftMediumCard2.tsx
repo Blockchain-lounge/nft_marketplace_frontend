@@ -71,7 +71,7 @@ const NftCard2 = ({
               item_id !== null &&
               item_id !== "")
               ? listing_remaining + "/" + listing_quantity
-              : item_supply + "/" + item_supply}
+              : item_remaining + "/" + item_supply}
           </span>
         </div>
         {time ? (

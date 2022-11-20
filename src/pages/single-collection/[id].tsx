@@ -52,7 +52,9 @@ const ViewCollection = () => {
   const [tradingVolume, setTradingVolume] = useState<string | number>("");
   const [singleCollectionDetail, setSingleCollectionDetail] = useState("");
   const [singleCollectionActivities, setSingleCollectionActivities] =
-    useState("");
+    useState([]);
+    const [singleCollectionItemsActivities, setSingleCollectionItemsActivities] =
+    useState([]);
   const [singleCollectionPurchasedItems, setSingleCollectionPurchasedItems] =
     useState<string | number>("");
   const [isLoading, setIsLoading] = useState(true);
@@ -73,7 +75,8 @@ const ViewCollection = () => {
         } else if (response.status == 200) {
           setSingleCollectionsListedItemsData(response.data.listedItems);
           setSingleCollectionDetail(response.data.collection);
-          setSingleCollectionActivities(response.data.activities);
+          setSingleCollectionActivities(response.data.activities.collection);
+          setSingleCollectionItemsActivities(response.data.activities.items);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
           // console.log("data", response.data);
           if (response.data.listedItems.length != 0) {
@@ -394,14 +397,20 @@ const ViewCollection = () => {
                 ))}
               </div>
               <div className="profile-activities-wrapper">
-                {singleCollectionActivities.length === 0
+                {singleCollectionActivities.length === 0 && singleCollectionItemsActivities.length === 0
                   ? "No activities yet!"
                   : singleCollectionActivities.length > 0
                   ? singleCollectionActivities.map((activity, i) => (
                       <CollectionActivityCard {...activity} key={i} />
                     ))
-                  : "No activities yet!"}
+                  : ""}
                 {}
+                { 
+                  singleCollectionItemsActivities && singleCollectionItemsActivities.length > 0
+                  ? singleCollectionItemsActivities.map((activity, i) => (
+                      <CollectionActivityCard {...activity} key={i} />
+                    ))
+                  : ""}
               </div>
             </>
           ) : null}
