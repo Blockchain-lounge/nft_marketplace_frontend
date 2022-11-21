@@ -1,7 +1,17 @@
 // @ts-nocheck
+import React, { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+
+import clsx from "clsx";
+
 import { Heading2, Input, Select } from "@/src/components/atoms";
 import {
   CaretDown,
+  CopyIcon,
   DiscordIcon,
   EditIcon,
   FilterIcon,
@@ -17,32 +27,30 @@ import {
   NftMediumCard2,
   Tab,
 } from "@/src/components/molecules";
+
 import { BannerImg, Footer } from "@/src/components/organisms";
-// import { singleCollectionsListedItemsDatas } from "@/src/store/data";
+
 import DashboardLayout from "@/src/template/DashboardLayout";
-import clsx from "clsx";
-import Image from "next/image";
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+
 import { apiRequest } from "../../functions/offChain/apiRequests";
 import {
   floorPrice,
   collectionVolume,
 } from "../../functions/offChain/generalFunctions";
 import APPCONFIG from "../../constants/Config";
-import { ToastContainer, toast } from "react-toastify";
 
 const ViewCollection = () => {
   // const [collectionImg, setCollectionImg] = useState("");
   // const [collectionBannerImg, setCollectionBannerImg] = useState("");
   const [activeStage, setActiveStage] = useState("items");
-  // const [showOption, setShowOption] = useState(false);
+  const [showEditIcon, setShowEditIcon] = useState(true);
   // const [filter, setFilter] = useState(false);
   // const info =
   //   "CryptoPunks launched as a fixed set of 10,000 items in mid-2017 and became one of the inspirations for the ERC-721 standard. They have been featured in places like The New York Times, Christie’s of London, Art|Basel Miami, and The PBS NewsHour.";
 
-  const { query, push } = useRouter();
+  const { query, push, asPath } = useRouter();
   const { id } = query;
+
   const collectionStages = ["items", "activity"];
   // const activityList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const activityHeaders = ["Item", "Price", "From", "To"];
@@ -175,9 +183,19 @@ const ViewCollection = () => {
     push("/update-collection/" + id);
   };
   const handleCopyToClipBoard = () => {
-    // document.execCommand("")
+    toast.success("Collection link copied to your clip board successfully");
   };
-  // console.log({ singleCollectionDetail });
+
+  const CopyToClipboard = dynamic(
+    import("../../components/atoms/vectors/copy-icon"),
+    { ssr: false }
+  );
+
+  const baseUrl =
+    typeof window !== "undefined" && window.location.origin
+      ? window.location.origin
+      : "";
+
   return (
     <DashboardLayout isLoading={isLoading}>
       <ToastContainer />
@@ -314,6 +332,16 @@ const ViewCollection = () => {
                 )}
                 <span
                   className="border border-border-1-line p-2 rounded-md cursor-pointer h-12 flex items-center"
+                  onClick={handleCopyToClipBoard}
+                >
+                  <CopyToClipboard content={baseUrl + asPath} />
+                </span>
+                {/*You will write a logic to hide this icon if the current user is not the creator of the collection, i have a state to hide it or make it visible*/}
+                <span
+                  className={clsx(
+                    "border border-border-1-line p-2 rounded-md cursor-pointer h-12",
+                    showEditIcon ? "flex items-center" : "hidden"
+                  )}
                   onClick={handleCollectionUpdate}
                 >
                   <EditIcon />
