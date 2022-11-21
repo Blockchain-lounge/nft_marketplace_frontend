@@ -36,7 +36,7 @@ const ViewCollection = () => {
   // const [collectionImg, setCollectionImg] = useState("");
   // const [collectionBannerImg, setCollectionBannerImg] = useState("");
   const [activeStage, setActiveStage] = useState("items");
-  const [showOption, setShowOption] = useState(false);
+  // const [showOption, setShowOption] = useState(false);
   // const [filter, setFilter] = useState(false);
   // const info =
   //   "CryptoPunks launched as a fixed set of 10,000 items in mid-2017 and became one of the inspirations for the ERC-721 standard. They have been featured in places like The New York Times, Christie’s of London, Art|Basel Miami, and The PBS NewsHour.";
@@ -50,6 +50,7 @@ const ViewCollection = () => {
     singleCollectionsListedItemsData,
     setSingleCollectionsListedItemsData,
   ] = useState<string | number>("");
+  const [copySuccess, setCopySuccess] = useState("");
   const [collectionfloorPrice, setcollectionfloorPrice] = useState<
     string | number
   >("");
@@ -166,12 +167,15 @@ const ViewCollection = () => {
     fetchCollectionItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
-  const handleShowOption = () => {
-    setShowOption((prev) => !prev);
-  };
+  // const handleShowOption = () => {
+  //   setShowOption((prev) => !prev);
+  // };
   const handleCollectionUpdate = () => {
-    setShowOption((prev) => !prev);
+    // setShowOption((prev) => !prev);
     push("/update-collection/" + id);
+  };
+  const handleCopyToClipBoard = () => {
+    // document.execCommand("")
   };
   // console.log({ singleCollectionDetail });
   return (
@@ -247,93 +251,76 @@ const ViewCollection = () => {
               </div>
               <p className="max-w-2xl">{singleCollectionDetail.description}</p>
 
-              <div className="flex items-center gap-x-2 relative">
-                {/* <span className="border border-border-3-line p-1 rounded-md">
-                  <SendIcon />
-                </span> */}
-                <div className="w-[80%] sm:w-[35%] lg:w-full my-4 lg:my-0 flex gap-x-4 items-center justify-center rounded-md border-border-1-line border p-2">
-                  {singleCollectionDetail &&
-                  singleCollectionDetail.website !== undefined ? (
-                    <a
-                      href={singleCollectionDetail.website}
-                      target="_blank"
-                      className="flex items-center gap-x-1"
-                      rel="noreferrer"
-                    >
-                      <ProfileLinkIcon />
-                      <span className="font-medium">
-                        {singleCollectionDetail.website}
-                      </span>
-                    </a>
-                  ) : (
+              <div className="w-[80%] sm:w-[35%] lg:w-full my-4 lg:my-0 flex gap-x-4 items-center justify-center">
+                {singleCollectionDetail &&
+                singleCollectionDetail.website !== undefined ? (
+                  <a
+                    href={singleCollectionDetail.website}
+                    target="_blank"
+                    className="flex items-center rounded-md border-border-1-line border p-2 h-12"
+                    rel="noreferrer"
+                  >
+                    <ProfileLinkIcon />
+                  </a>
+                ) : (
+                  <span className="rounded-md border-border-1-line border p-2 h-12">
                     <ProfileLinkIcon color="#A2A3B8" />
-                  )}
-                  {singleCollectionDetail &&
-                  singleCollectionDetail.discord !== undefined ? (
-                    <a
-                      target="_blank"
-                      href={singleCollectionDetail.discord}
-                      rel="noreferrer"
-                    >
-                      <DiscordIcon />
-                    </a>
-                  ) : (
-                    <DiscordIcon color="#A2A3B8" />
-                  )}
-                  {singleCollectionDetail &&
-                  singleCollectionDetail.twitter !== undefined ? (
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href={singleCollectionDetail.twitter}
-                    >
-                      <TwitterIcon />
-                    </a>
-                  ) : (
-                    <TwitterIcon color="#A2A3B8" />
-                  )}
-                  {singleCollectionDetail &&
-                  singleCollectionDetail.instagram !== undefined ? (
-                    <a
-                      href={singleCollectionDetail.instagram}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <InstagramIcon />
-                    </a>
-                  ) : (
-                    <InstagramIcon color="#A2A3B8" />
-                  )}
-                </div>
-                <div
-                  className="border border-border-1-line p-[0.7rem] rounded-md cursor-pointer"
-                  onClick={handleShowOption}
-                >
-                  <OptionIcon />
-                </div>
-                <div
-                  className={clsx(
-                    "absolute right-0 -bottom-[5rem] flex-col p-2 border border-border-1-line bg-bg-1 rounded-md",
-                    showOption ? "flex" : "hidden"
-                  )}
-                >
-                  {/* <span
-                    className="flex items-center gap-x-5 py-2 px-3 hover:bg-bg-3 hover:cursor-pointer"
-                    onClick={handleShowOption}
-                  >
-                    <ReportIcon />
-                    <span className="font-medium">Report</span>
-                  </span> */}
-                  <span
-                    className="flex items-center gap-x-5 p-3 hover:bg-bg-3 hover:cursor-pointer"
-                    onClick={handleCollectionUpdate}
-                  >
-                    <EditIcon />
-                    <span className="font-medium">Edit Collection</span>
                   </span>
-                </div>
+                )}
+                {singleCollectionDetail &&
+                singleCollectionDetail.discord !== undefined ? (
+                  <a
+                    target="_blank"
+                    href={singleCollectionDetail.discord}
+                    rel="noreferrer"
+                    className="rounded-md border-border-1-line border p-2 h-12 flex items-center"
+                  >
+                    <DiscordIcon />
+                  </a>
+                ) : (
+                  <span className="rounded-md border-border-1-line border p-2 h-12 flex items-center">
+                    <DiscordIcon color="#A2A3B8" />
+                  </span>
+                )}
+                {singleCollectionDetail &&
+                singleCollectionDetail.twitter !== undefined ? (
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={singleCollectionDetail.twitter}
+                    className="rounded-md border-border-1-line border p-1 h-12  flex items-center"
+                  >
+                    <TwitterIcon />
+                  </a>
+                ) : (
+                  <span className="rounded-md border-border-1-line border p-2 h-12 flex items-center">
+                    <TwitterIcon color="#A2A3B8" />
+                  </span>
+                )}
+                {singleCollectionDetail &&
+                singleCollectionDetail.instagram !== undefined ? (
+                  <a
+                    href={singleCollectionDetail.instagram}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-md border-border-1-line border p-2 h-12 flex items-center"
+                  >
+                    <InstagramIcon />
+                  </a>
+                ) : (
+                  <span className="rounded-md border-border-1-line border p-2 h-12 flex items-center">
+                    <InstagramIcon color="#A2A3B8" />
+                  </span>
+                )}
+                <span
+                  className="border border-border-1-line p-2 rounded-md cursor-pointer h-12 flex items-center"
+                  onClick={handleCollectionUpdate}
+                >
+                  <EditIcon />
+                </span>
               </div>
             </div>
+
             <div className="mt-4 flex-wrap justify-around lg:flex-nowrap lg:mt-0 lg:max-w-[20%] w-full flex lg:flex-col gap-3 lg:gap-y-3 lg:border border-border-1-line lg:p-3 rounded-xl">
               {collectionPriceInfo.map((info) => (
                 <div
