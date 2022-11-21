@@ -204,9 +204,9 @@ const Activities = () => {
               </div>
             ))}
           </div>
-          <div className="total-earnings-history-wrapper">
+          <div className="total-earnings-history-wrapper h-screen">
             {activities && activities.length === 0
-              ?("No activities yet!")
+              ? "No activities yet!"
               : activities && activities.length > 0
               ? activities.map((txn, i) => <TransactionCard key={i} {...txn} />)
               : Array(8)

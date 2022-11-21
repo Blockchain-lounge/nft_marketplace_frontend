@@ -3,9 +3,12 @@ import { Heading2, Input, Select } from "@/src/components/atoms";
 import {
   CaretDown,
   DiscordIcon,
+  EditIcon,
   FilterIcon,
   InstagramIcon,
+  OptionIcon,
   ProfileLinkIcon,
+  ReportIcon,
   SendIcon,
   TwitterIcon,
 } from "@/src/components/atoms/vectors";
@@ -30,17 +33,18 @@ import APPCONFIG from "../../constants/Config";
 import { ToastContainer, toast } from "react-toastify";
 
 const ViewCollection = () => {
-  const [collectionImg, setCollectionImg] = useState("");
-  const [collectionBannerImg, setCollectionBannerImg] = useState("");
+  // const [collectionImg, setCollectionImg] = useState("");
+  // const [collectionBannerImg, setCollectionBannerImg] = useState("");
   const [activeStage, setActiveStage] = useState("items");
-  const [filter, setFilter] = useState(false);
-  const info =
-    "CryptoPunks launched as a fixed set of 10,000 items in mid-2017 and became one of the inspirations for the ERC-721 standard. They have been featured in places like The New York Times, Christie’s of London, Art|Basel Miami, and The PBS NewsHour.";
+  const [showOption, setShowOption] = useState(false);
+  // const [filter, setFilter] = useState(false);
+  // const info =
+  //   "CryptoPunks launched as a fixed set of 10,000 items in mid-2017 and became one of the inspirations for the ERC-721 standard. They have been featured in places like The New York Times, Christie’s of London, Art|Basel Miami, and The PBS NewsHour.";
 
   const { query, push } = useRouter();
   const { id } = query;
   const collectionStages = ["items", "activity"];
-  const activityList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  // const activityList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const activityHeaders = ["Item", "Price", "From", "To"];
   const [
     singleCollectionsListedItemsData,
@@ -51,9 +55,10 @@ const ViewCollection = () => {
   >("");
   const [tradingVolume, setTradingVolume] = useState<string | number>("");
   const [singleCollectionDetail, setSingleCollectionDetail] = useState("");
-  const [singleCollectionActivities, setSingleCollectionActivities] =
-    useState([]);
-    const [singleCollectionItemsActivities, setSingleCollectionItemsActivities] =
+  const [singleCollectionActivities, setSingleCollectionActivities] = useState(
+    []
+  );
+  const [singleCollectionItemsActivities, setSingleCollectionItemsActivities] =
     useState([]);
   const [singleCollectionPurchasedItems, setSingleCollectionPurchasedItems] =
     useState<string | number>("");
@@ -161,6 +166,13 @@ const ViewCollection = () => {
     fetchCollectionItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+  const handleShowOption = () => {
+    setShowOption((prev) => !prev);
+  };
+  const handleCollectionUpdate = () => {
+    setShowOption((prev) => !prev);
+    push("/update-collection/" + id);
+  };
   // console.log({ singleCollectionDetail });
   return (
     <DashboardLayout isLoading={isLoading}>
@@ -235,17 +247,9 @@ const ViewCollection = () => {
               </div>
               <p className="max-w-2xl">{singleCollectionDetail.description}</p>
 
-              <div className="">
+              <div className="flex items-center gap-x-2 relative">
                 {/* <span className="border border-border-3-line p-1 rounded-md">
                   <SendIcon />
-                </span> */}
-                {/* <span className="view-hero-nft-link border border-border-3-line p-5 rounded-md">
-                  <Image
-                    src="/icon-svg/options.svg"
-                    alt="view-nft-links"
-                    layout="fill"
-                    objectFit="contain"
-                  />
                 </span> */}
                 <div className="w-[80%] sm:w-[35%] lg:w-full my-4 lg:my-0 flex gap-x-4 items-center justify-center rounded-md border-border-1-line border p-2">
                   {singleCollectionDetail &&
@@ -300,6 +304,33 @@ const ViewCollection = () => {
                   ) : (
                     <InstagramIcon color="#A2A3B8" />
                   )}
+                </div>
+                <div
+                  className="border border-border-1-line p-[0.7rem] rounded-md cursor-pointer"
+                  onClick={handleShowOption}
+                >
+                  <OptionIcon />
+                </div>
+                <div
+                  className={clsx(
+                    "absolute right-0 -bottom-[5rem] flex-col p-2 border border-border-1-line bg-bg-1 rounded-md",
+                    showOption ? "flex" : "hidden"
+                  )}
+                >
+                  {/* <span
+                    className="flex items-center gap-x-5 py-2 px-3 hover:bg-bg-3 hover:cursor-pointer"
+                    onClick={handleShowOption}
+                  >
+                    <ReportIcon />
+                    <span className="font-medium">Report</span>
+                  </span> */}
+                  <span
+                    className="flex items-center gap-x-5 p-3 hover:bg-bg-3 hover:cursor-pointer"
+                    onClick={handleCollectionUpdate}
+                  >
+                    <EditIcon />
+                    <span className="font-medium">Edit Collection</span>
+                  </span>
                 </div>
               </div>
             </div>
@@ -397,7 +428,8 @@ const ViewCollection = () => {
                 ))}
               </div>
               <div className="profile-activities-wrapper">
-                {singleCollectionActivities.length === 0 && singleCollectionItemsActivities.length === 0
+                {singleCollectionActivities.length === 0 &&
+                singleCollectionItemsActivities.length === 0
                   ? "No activities yet!"
                   : singleCollectionActivities.length > 0
                   ? singleCollectionActivities.map((activity, i) => (
@@ -405,8 +437,8 @@ const ViewCollection = () => {
                     ))
                   : ""}
                 {}
-                { 
-                  singleCollectionItemsActivities && singleCollectionItemsActivities.length > 0
+                {singleCollectionItemsActivities &&
+                singleCollectionItemsActivities.length > 0
                   ? singleCollectionItemsActivities.map((activity, i) => (
                       <CollectionActivityCard {...activity} key={i} />
                     ))
