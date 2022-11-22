@@ -1,11 +1,24 @@
 // @ts-nocheck
+import React, { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+
+import clsx from "clsx";
+
 import { Heading2, Input, Select } from "@/src/components/atoms";
 import {
   CaretDown,
+  CopyIcon,
   DiscordIcon,
+  EditIcon,
   FilterIcon,
   InstagramIcon,
+  OptionIcon,
   ProfileLinkIcon,
+  ReportIcon,
   SendIcon,
   TwitterIcon,
 } from "@/src/components/atoms/vectors";
@@ -14,46 +27,47 @@ import {
   NftMediumCard2,
   Tab,
 } from "@/src/components/molecules";
+
 import { BannerImg, Footer } from "@/src/components/organisms";
-// import { singleCollectionsListedItemsDatas } from "@/src/store/data";
+
 import DashboardLayout from "@/src/template/DashboardLayout";
-import clsx from "clsx";
-import Image from "next/image";
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+
 import { apiRequest } from "../../functions/offChain/apiRequests";
 import {
   floorPrice,
   collectionVolume,
 } from "../../functions/offChain/generalFunctions";
 import APPCONFIG from "../../constants/Config";
-import { ToastContainer, toast } from "react-toastify";
 
 const ViewCollection = () => {
-  const [collectionImg, setCollectionImg] = useState("");
-  const [collectionBannerImg, setCollectionBannerImg] = useState("");
+  // const [collectionImg, setCollectionImg] = useState("");
+  // const [collectionBannerImg, setCollectionBannerImg] = useState("");
   const [activeStage, setActiveStage] = useState("items");
-  const [filter, setFilter] = useState(false);
-  const info =
-    "CryptoPunks launched as a fixed set of 10,000 items in mid-2017 and became one of the inspirations for the ERC-721 standard. They have been featured in places like The New York Times, Christie’s of London, Art|Basel Miami, and The PBS NewsHour.";
+  const [showEditIcon, setShowEditIcon] = useState(true);
+  // const [filter, setFilter] = useState(false);
+  // const info =
+  //   "CryptoPunks launched as a fixed set of 10,000 items in mid-2017 and became one of the inspirations for the ERC-721 standard. They have been featured in places like The New York Times, Christie’s of London, Art|Basel Miami, and The PBS NewsHour.";
 
-  const { query, push } = useRouter();
+  const { query, push, asPath } = useRouter();
   const { id } = query;
+
   const collectionStages = ["items", "activity"];
-  const activityList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  // const activityList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const activityHeaders = ["Item", "Price", "From", "To"];
   const [
     singleCollectionsListedItemsData,
     setSingleCollectionsListedItemsData,
   ] = useState<string | number>("");
+  const [copySuccess, setCopySuccess] = useState("");
   const [collectionfloorPrice, setcollectionfloorPrice] = useState<
     string | number
   >("");
   const [tradingVolume, setTradingVolume] = useState<string | number>("");
   const [singleCollectionDetail, setSingleCollectionDetail] = useState("");
-  const [singleCollectionActivities, setSingleCollectionActivities] =
-    useState([]);
-    const [singleCollectionItemsActivities, setSingleCollectionItemsActivities] =
+  const [singleCollectionActivities, setSingleCollectionActivities] = useState(
+    []
+  );
+  const [singleCollectionItemsActivities, setSingleCollectionItemsActivities] =
     useState([]);
   const [singleCollectionPurchasedItems, setSingleCollectionPurchasedItems] =
     useState<string | number>("");
@@ -161,7 +175,27 @@ const ViewCollection = () => {
     fetchCollectionItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
-  // console.log({ singleCollectionDetail });
+  // const handleShowOption = () => {
+  //   setShowOption((prev) => !prev);
+  // };
+  const handleCollectionUpdate = () => {
+    // setShowOption((prev) => !prev);
+    push("/update-collection/" + id);
+  };
+  const handleCopyToClipBoard = () => {
+    toast.success("Collection link copied to your clip board successfully");
+  };
+
+  const CopyToClipboard = dynamic(
+    import("../../components/atoms/vectors/copy-icon"),
+    { ssr: false }
+  );
+
+  const baseUrl =
+    typeof window !== "undefined" && window.location.origin
+      ? window.location.origin
+      : "";
+
   return (
     <DashboardLayout isLoading={isLoading}>
       <ToastContainer />
@@ -235,74 +269,86 @@ const ViewCollection = () => {
               </div>
               <p className="max-w-2xl">{singleCollectionDetail.description}</p>
 
-              <div className="">
-                {/* <span className="border border-border-3-line p-1 rounded-md">
-                  <SendIcon />
-                </span> */}
-                {/* <span className="view-hero-nft-link border border-border-3-line p-5 rounded-md">
-                  <Image
-                    src="/icon-svg/options.svg"
-                    alt="view-nft-links"
-                    layout="fill"
-                    objectFit="contain"
-                  />
-                </span> */}
-                <div className="w-[80%] sm:w-[35%] lg:w-full my-4 lg:my-0 flex gap-x-4 items-center justify-center rounded-md border-border-1-line border p-2">
-                  {singleCollectionDetail &&
-                  singleCollectionDetail.website !== undefined ? (
-                    <a
-                      href={singleCollectionDetail.website}
-                      target="_blank"
-                      className="flex items-center gap-x-1"
-                      rel="noreferrer"
-                    >
-                      <ProfileLinkIcon />
-                      <span className="font-medium">
-                        {singleCollectionDetail.website}
-                      </span>
-                    </a>
-                  ) : (
+              <div className="w-[80%] sm:w-[35%] lg:w-full my-4 lg:my-0 flex gap-x-4 items-center justify-center">
+                {singleCollectionDetail &&
+                singleCollectionDetail.website !== undefined ? (
+                  <a
+                    href={singleCollectionDetail.website}
+                    target="_blank"
+                    className="flex items-center rounded-md border-border-1-line border p-2 h-12"
+                    rel="noreferrer"
+                  >
+                    <ProfileLinkIcon />
+                  </a>
+                ) : (
+                  <span className="rounded-md border-border-1-line border p-2 h-12">
                     <ProfileLinkIcon color="#A2A3B8" />
-                  )}
-                  {singleCollectionDetail &&
-                  singleCollectionDetail.discord !== undefined ? (
-                    <a
-                      target="_blank"
-                      href={singleCollectionDetail.discord}
-                      rel="noreferrer"
-                    >
-                      <DiscordIcon />
-                    </a>
-                  ) : (
+                  </span>
+                )}
+                {singleCollectionDetail &&
+                singleCollectionDetail.discord !== undefined ? (
+                  <a
+                    target="_blank"
+                    href={singleCollectionDetail.discord}
+                    rel="noreferrer"
+                    className="rounded-md border-border-1-line border p-2 h-12 flex items-center"
+                  >
+                    <DiscordIcon />
+                  </a>
+                ) : (
+                  <span className="rounded-md border-border-1-line border p-2 h-12 flex items-center">
                     <DiscordIcon color="#A2A3B8" />
-                  )}
-                  {singleCollectionDetail &&
-                  singleCollectionDetail.twitter !== undefined ? (
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href={singleCollectionDetail.twitter}
-                    >
-                      <TwitterIcon />
-                    </a>
-                  ) : (
+                  </span>
+                )}
+                {singleCollectionDetail &&
+                singleCollectionDetail.twitter !== undefined ? (
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={singleCollectionDetail.twitter}
+                    className="rounded-md border-border-1-line border p-1 h-12  flex items-center"
+                  >
+                    <TwitterIcon />
+                  </a>
+                ) : (
+                  <span className="rounded-md border-border-1-line border p-2 h-12 flex items-center">
                     <TwitterIcon color="#A2A3B8" />
-                  )}
-                  {singleCollectionDetail &&
-                  singleCollectionDetail.instagram !== undefined ? (
-                    <a
-                      href={singleCollectionDetail.instagram}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <InstagramIcon />
-                    </a>
-                  ) : (
+                  </span>
+                )}
+                {singleCollectionDetail &&
+                singleCollectionDetail.instagram !== undefined ? (
+                  <a
+                    href={singleCollectionDetail.instagram}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-md border-border-1-line border p-2 h-12 flex items-center"
+                  >
+                    <InstagramIcon />
+                  </a>
+                ) : (
+                  <span className="rounded-md border-border-1-line border p-2 h-12 flex items-center">
                     <InstagramIcon color="#A2A3B8" />
+                  </span>
+                )}
+                <span
+                  className="border border-border-1-line p-2 rounded-md cursor-pointer h-12 flex items-center"
+                  onClick={handleCopyToClipBoard}
+                >
+                  <CopyToClipboard content={baseUrl + asPath} />
+                </span>
+                {/*You will write a logic to hide this icon if the current user is not the creator of the collection, i have a state to hide it or make it visible*/}
+                <span
+                  className={clsx(
+                    "border border-border-1-line p-2 rounded-md cursor-pointer h-12",
+                    showEditIcon ? "flex items-center" : "hidden"
                   )}
-                </div>
+                  onClick={handleCollectionUpdate}
+                >
+                  <EditIcon />
+                </span>
               </div>
             </div>
+
             <div className="mt-4 flex-wrap justify-around lg:flex-nowrap lg:mt-0 lg:max-w-[20%] w-full flex lg:flex-col gap-3 lg:gap-y-3 lg:border border-border-1-line lg:p-3 rounded-xl">
               {collectionPriceInfo.map((info) => (
                 <div
@@ -397,7 +443,8 @@ const ViewCollection = () => {
                 ))}
               </div>
               <div className="profile-activities-wrapper">
-                {singleCollectionActivities.length === 0 && singleCollectionItemsActivities.length === 0
+                {singleCollectionActivities.length === 0 &&
+                singleCollectionItemsActivities.length === 0
                   ? "No activities yet!"
                   : singleCollectionActivities.length > 0
                   ? singleCollectionActivities.map((activity, i) => (
@@ -405,8 +452,8 @@ const ViewCollection = () => {
                     ))
                   : ""}
                 {}
-                { 
-                  singleCollectionItemsActivities && singleCollectionItemsActivities.length > 0
+                {singleCollectionItemsActivities &&
+                singleCollectionItemsActivities.length > 0
                   ? singleCollectionItemsActivities.map((activity, i) => (
                       <CollectionActivityCard {...activity} key={i} />
                     ))

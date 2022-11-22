@@ -1,13 +1,14 @@
 import * as React from "react";
 import { SVGProps } from "react";
 
-const CopyIcon = (props: SVGProps<SVGSVGElement>) => (
+const CopyIcon = (props: SVGProps<SVGSVGElement> & { content?: string }) => (
   <svg
     width={24}
     height={24}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     {...props}
+    onClick={() => navigator.clipboard.writeText(props.content as string)}
   >
     <path
       d="M17 13.4v3c0 4-1.6 5.6-5.6 5.6H7.6c-4 0-5.6-1.6-5.6-5.6v-3.8C2 8.6 3.6 7 7.6 7h3"
