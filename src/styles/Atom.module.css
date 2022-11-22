@@ -90,7 +90,7 @@
 }
 
 input {
-  @apply text-[1.125rem] focus:outline-0 bg-transparent lg:w-full;
+  @apply text-[1.125rem] focus:outline-0 bg-transparent w-full;
 }
 
 input::-webkit-outer-spin-button,
