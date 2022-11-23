@@ -38,6 +38,7 @@ import {
   collectionVolume,
 } from "../../functions/offChain/generalFunctions";
 import APPCONFIG from "../../constants/Config";
+import { connectedAccount } from "../../functions/onChain/authFunction";
 
 const ViewCollection = () => {
   // const [collectionImg, setCollectionImg] = useState("");
@@ -141,31 +142,25 @@ const ViewCollection = () => {
   };
   
   const isUserLoggedIn = async ()=>{
-try {
+// try {
       var REQUEST_URL = "/user/auth/loggedIn";
       const HEADER = "authenticated";
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-        if (response.status == 400) {
-          var error = response.data.error;
-          toast(error);
-          return;
-        } else if (response.status == 401) {
-          toast("Unauthorized request!");
+        if (response.status == 401) {
           return;
         } else if (response.status == 200) {
           setIsLoggedIn(response.data.isLoggedIn);
           setLoggedId(response.data.user._id);
         } else {
-          toast("Something went wrong, please try again!");
           return;
         }
       });
-    } catch (error) {
-      toast("Something went wrong, please try again!");
-      return;
-    }
+    // } catch (error) {
+    //   toast("Something went wrong, please try again!");
+    //   return;
+    // }
   }
 
   var owners = 0;
@@ -189,8 +184,13 @@ try {
     { label: "owners", price: owners, type: "quantity" },
   ];
   useEffect(() => {
+    connectedAccount().then((response) => {
+      if (response !== null) {
+         isUserLoggedIn()
+      }
+    });
     fetchCollectionItems();
-    isUserLoggedIn()    // es()lint-disable-next-line react-hooks/exhaustive-deps
+       // es()lint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   // const handleShowOption = () => {
   //   setShowOption((prev) => !prev);
