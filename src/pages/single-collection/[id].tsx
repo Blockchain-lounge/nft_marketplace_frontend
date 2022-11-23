@@ -72,6 +72,8 @@ const ViewCollection = () => {
   const [singleCollectionPurchasedItems, setSingleCollectionPurchasedItems] =
     useState<string | number>("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loggedId, setLoggedId] = useState('');
 
   const fetchCollectionItems = async () => {
     if (id !== undefined) {
@@ -137,20 +139,35 @@ const ViewCollection = () => {
       });
     }
   };
-  // <<<<<<< HEAD
-  //   const owners = singleCollectionsListedItemsData.length + singleCollectionPurchasedItems.length;
+  
+  const isUserLoggedIn = async ()=>{
+try {
+      var REQUEST_URL = "/user/auth/loggedIn";
+      const HEADER = "authenticated";
+      const METHOD = "GET";
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          return;
+        } else if (response.status == 401) {
+          toast("Unauthorized request!");
+          return;
+        } else if (response.status == 200) {
+          setIsLoggedIn(response.data.isLoggedIn);
+          setLoggedId(response.data.user._id);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    } catch (error) {
+      toast("Something went wrong, please try again!");
+      return;
+    }
+  }
 
-  //   const collectionPriceInfo = [
-  //     { label: "floor", price: collectionfloorPrice, type: "coin" },
-  //     { label: "volume", price: tradingVolume, type: "coin" },
-  //     { label: "items", price: singleCollectionsListedItemsData.length, type: "quantity" },
-  // =======
-  //   // const sampleFloorPrice = 0.02;
-  //   // if(!singleCollectionsListedItemsData){
-  //   //   sampleFloorPrice = 0.02;
-  //   // } else{
-  //   //   sampleFloorPrice = singleCollectionsListedItemsData[0].listing_price;
-  //   // }
   var owners = 0;
   if (singleCollectionsListedItemsData && singleCollectionPurchasedItems) {
     owners =
@@ -173,7 +190,7 @@ const ViewCollection = () => {
   ];
   useEffect(() => {
     fetchCollectionItems();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    isUserLoggedIn()    // es()lint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   // const handleShowOption = () => {
   //   setShowOption((prev) => !prev);
@@ -337,6 +354,11 @@ const ViewCollection = () => {
                   <CopyToClipboard content={baseUrl + asPath} />
                 </span>
                 {/*You will write a logic to hide this icon if the current user is not the creator of the collection, i have a state to hide it or make it visible*/}
+                {
+                  isLoggedIn === true
+                  && loggedId !== null
+                  && loggedId === singleCollectionDetail.user_id
+                  ? 
                 <span
                   className={clsx(
                     "border border-border-1-line p-2 rounded-md cursor-pointer h-12",
@@ -344,8 +366,12 @@ const ViewCollection = () => {
                   )}
                   onClick={handleCollectionUpdate}
                 >
+                
                   <EditIcon />
                 </span>
+                  :
+                  ""
+                }
               </div>
             </div>
 
