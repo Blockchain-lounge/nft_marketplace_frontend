@@ -46,9 +46,6 @@ const UpdateCollection: FC<ICollectionProps> = () => {
   const { push, query } = useRouter();
   const { id } = query;
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
 
   const handleFieldChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -163,6 +160,44 @@ const UpdateCollection: FC<ICollectionProps> = () => {
     }
   };
 
+  const fetchCollectionDetails = async (id) => {
+    if (id !== undefined) {
+      const HEADER = {};
+      const REQUEST_URL = "nft-collection/show/" + id;
+      const METHOD = "GET";
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        // console.log({ response });
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          push("/");
+          return;
+        } else if (response.status == 200) {
+          setCollectionPayload({
+            collection_name: response.data.data.name,
+            collection_description: response.data.data.description
+          });
+           setSocialLinksPayload({
+            website: response.data.data.website,
+            discord: response.data.data.discord,
+            instagram: response.data.data.instagram,
+            twitter: response.data.data.twitter,
+          });
+          setCollectionBannerPreview(response.data.data.cover_image_id);
+          setCollectionFeaturedArtPreview(response.data.data.collectionFeaturedImage);
+          setCollectionLogoPreview(response.data.data.collectionLogoImage);
+          setCollectionBanner(response.data.data.cover_image_id);
+          setCollectionFeaturedArt(response.data.data.collectionFeaturedImage);
+          setCollectionLogo(response.data.data.collectionLogoImage);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    }
+  };
+
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -192,7 +227,7 @@ const UpdateCollection: FC<ICollectionProps> = () => {
     setIsTransLoading(true);
     try {
       const HEADER = "authenticated_and_form_data";
-      const REQUEST_URL = "nft-collection/store";
+      const REQUEST_URL = "nft-collection/update/"+id;
       const METHOD = "POST";
       const DATA = collectionData;
 
@@ -207,7 +242,7 @@ const UpdateCollection: FC<ICollectionProps> = () => {
         if (response.status == 401) {
           toast("Unauthorized request!");
           return;
-        } else if (response.status == 201) {
+        } else if (response.status == 200) {
           toast(response.data.message);
           setIsTransLoading(false);
           push("/create-new-nft");
@@ -240,6 +275,10 @@ const UpdateCollection: FC<ICollectionProps> = () => {
     }
   };
 
+ useEffect(() => {
+    fetchCollectionDetails(id);   
+     fetchCategories();   
+  }, [id]);
   return (
     <EarningLayout title="Update a Collection">
       <div className="create-new-nft-form max-w-[80%] 2xl:max-w-[60%]">
@@ -396,7 +435,7 @@ const UpdateCollection: FC<ICollectionProps> = () => {
             maxLength={250}
             onChange={handleFieldChange}
 
-            // value={userDetailsPayload.bio}
+            value={collectionPayload.collection_description}
           ></textarea>
         </div>
         <div>

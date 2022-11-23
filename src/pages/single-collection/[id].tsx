@@ -33,10 +33,7 @@ import {
   collectionVolume,
 } from "../../functions/offChain/generalFunctions";
 import APPCONFIG from "../../constants/Config";
-import { getNFTOwners } from "../../functions/onChain/generalFunction";
-import { connectedAccount } from "../functions/onChain/authFunction";
-
-
+import { connectedAccount } from "../../functions/onChain/authFunction";
 
 const ViewCollection = () => {
   // const [collectionImg, setCollectionImg] = useState("");
@@ -71,6 +68,8 @@ const ViewCollection = () => {
   const [singleCollectionPurchasedItems, setSingleCollectionPurchasedItems] =
     useState<string | number>("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loggedId, setLoggedId] = useState('');
 
   const fetchCollectionItems = async () => {
     if (id !== undefined) {
@@ -120,7 +119,6 @@ const ViewCollection = () => {
               return price;
             }
             setTradingVolume(collectionVolumes(response.data.purchasedItems));
-            console.log("Purchase", response.data.purchasedItems)
 
             function ownersCount(
               purchasedItems: Array<{ buyer: string, amount: number, item_token_id: number }>
@@ -152,14 +150,42 @@ const ViewCollection = () => {
     }
   };
 
+  const isUserLoggedIn = async () => {
+    // try {
+    var REQUEST_URL = "/user/auth/loggedIn";
+    const HEADER = "authenticated";
+    const METHOD = "GET";
+    const DATA = {};
+    apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+      if (response.status == 401) {
+        return;
+      } else if (response.status == 200) {
+        setIsLoggedIn(response.data.isLoggedIn);
+        setLoggedId(response.data.user._id);
+      } else {
+        return;
+      }
+    });
+    // } catch (error) {
+    //   toast("Something went wrong, please try again!");
+    //   return;
+    // }
+  }
+
+
   const roundTo = function (num: number, places: number) {
     const factor = 10 ** places;
     return Math.round(num * factor) / factor;
   };
 
+  var owners = 0;
+  if (singleCollectionPurchasedItems) {
+    owners = roundTo(tradingVolume, 2)
+  }
+
   const collectionPriceInfo = [
     { label: "floor", price: collectionfloorPrice, type: "coin" },
-    { label: "volume", price: roundTo(tradingVolume, 2), type: "coin" },
+    { label: "volume", price: owners, type: "coin" },
     {
       label: "items",
       price: singleCollectionsListedItemsData
@@ -170,8 +196,13 @@ const ViewCollection = () => {
     { label: "owners", price: ownerCount, type: "quantity" },
   ];
   useEffect(() => {
+    connectedAccount().then((response) => {
+      if (response !== null) {
+        isUserLoggedIn()
+      }
+    });
     fetchCollectionItems();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // es()lint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   // const handleShowOption = () => {
   //   setShowOption((prev) => !prev);
@@ -335,15 +366,24 @@ const ViewCollection = () => {
                   <CopyToClipboard content={baseUrl + asPath} />
                 </span>
                 {/*You will write a logic to hide this icon if the current user is not the creator of the collection, i have a state to hide it or make it visible*/}
-                <span
-                  className={clsx(
-                    "border border-border-1-line p-2 rounded-md cursor-pointer h-12",
-                    showEditIcon ? "flex items-center" : "hidden"
-                  )}
-                  onClick={handleCollectionUpdate}
-                >
-                  <EditIcon />
-                </span>
+                {
+                  isLoggedIn === true
+                    && loggedId !== null
+                    && loggedId === singleCollectionDetail.user_id
+                    ?
+                    <span
+                      className={clsx(
+                        "border border-border-1-line p-2 rounded-md cursor-pointer h-12",
+                        showEditIcon ? "flex items-center" : "hidden"
+                      )}
+                      onClick={handleCollectionUpdate}
+                    >
+
+                      <EditIcon />
+                    </span>
+                    :
+                    ""
+                }
               </div>
             </div>
 

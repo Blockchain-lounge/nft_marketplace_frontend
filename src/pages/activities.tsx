@@ -3,7 +3,7 @@ import Skeleton from "react-loading-skeleton";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Heading2, Select, Select2, SelectCheckBox } from "../components/atoms";
+import { Heading2, ActivitiesSelect, Select2, SelectCheckBox } from "../components/atoms";
 import { ISelectCheckProps } from "../components/atoms/SelectCheckbox";
 import { CloseIcon } from "../components/atoms/vectors";
 import { NftCardSkeleton } from "../components/lazy-loaders";
@@ -12,6 +12,7 @@ import { Footer } from "../components/organisms";
 import { apiRequest } from "../functions/offChain/apiRequests";
 import DashboardLayout from "../template/DashboardLayout";
 import { ITransactionCard } from "../utilities/types";
+import { useRouter } from "next/router";
 
 const Activities = () => {
   const [currentTab, setCurrentTab] = useState("1 h");
@@ -65,7 +66,8 @@ const Activities = () => {
   ];
 
   const sorting = [{ name: "Ascending", value: "asc" }];
-
+  const router = useRouter()
+  const { activity_type } = router.query
   const fetchActivities = async (activityType) => {
     var REQUEST_URL = "/activities";
     switch (activityType) {
@@ -125,9 +127,9 @@ const Activities = () => {
   };
 
   useEffect(() => {
-    fetchActivities("all");
+    fetchActivities(activity_type && activity_type !=='' && activity_type !== null ? activity_type : "all");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [activity_type]);
 
   // console.log({ activities });
 
@@ -138,7 +140,7 @@ const Activities = () => {
           <div className="collection-page-top">
             <div className="collection-page-sub-top">
               <Heading2 title="Activities" />
-              {/* <Select2
+              <ActivitiesSelect
                 title="Event type"
                 placeholder={
                   typeof currentEvent === "object" ? currentEvent.name : ""
@@ -151,7 +153,7 @@ const Activities = () => {
                 }
                 lists={events}
                 wt="w-[12rem]"
-              /> */}
+              />
               {/* <SelectCheckBox
                 lists={collections}
                 //@ts-ignore
