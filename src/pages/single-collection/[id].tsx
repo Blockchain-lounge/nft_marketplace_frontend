@@ -74,7 +74,7 @@ const ViewCollection = () => {
     useState<string | number>("");
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loggedId, setLoggedId] = useState('');
+  const [loggedId, setLoggedId] = useState("");
 
   const fetchCollectionItems = async () => {
     if (id !== undefined) {
@@ -140,28 +140,28 @@ const ViewCollection = () => {
       });
     }
   };
-  
-  const isUserLoggedIn = async ()=>{
-// try {
-      var REQUEST_URL = "/user/auth/loggedIn";
-      const HEADER = "authenticated";
-      const METHOD = "GET";
-      const DATA = {};
-      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-        if (response.status == 401) {
-          return;
-        } else if (response.status == 200) {
-          setIsLoggedIn(response.data.isLoggedIn);
-          setLoggedId(response.data.user._id);
-        } else {
-          return;
-        }
-      });
+
+  const isUserLoggedIn = async () => {
+    // try {
+    var REQUEST_URL = "/user/auth/loggedIn";
+    const HEADER = "authenticated";
+    const METHOD = "GET";
+    const DATA = {};
+    apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+      if (response.status == 401) {
+        return;
+      } else if (response.status == 200) {
+        setIsLoggedIn(response.data.isLoggedIn);
+        setLoggedId(response.data.user._id);
+      } else {
+        return;
+      }
+    });
     // } catch (error) {
     //   toast("Something went wrong, please try again!");
     //   return;
     // }
-  }
+  };
 
   var owners = 0;
   if (singleCollectionsListedItemsData && singleCollectionPurchasedItems) {
@@ -186,11 +186,11 @@ const ViewCollection = () => {
   useEffect(() => {
     connectedAccount().then((response) => {
       if (response !== null) {
-         isUserLoggedIn()
+        isUserLoggedIn();
       }
     });
     fetchCollectionItems();
-       // es()lint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   // const handleShowOption = () => {
   //   setShowOption((prev) => !prev);
@@ -216,7 +216,7 @@ const ViewCollection = () => {
   return (
     <DashboardLayout isLoading={isLoading}>
       <ToastContainer />
-      <div className="sub-layout-wrapper scrollbar-hide">
+      <div className="sub-layout-wrapper scrollbar-hide flex flex-col justify-between">
         <div className="center">
           <div className="single-collection-banner-img">
             <div className="h-[20rem] relative flex">
@@ -284,9 +284,9 @@ const ViewCollection = () => {
                   />
                 </div>
               </div>
-              <p className="max-w-2xl">{singleCollectionDetail.description}</p>
+              <p className="max-w-xl">{singleCollectionDetail.description}</p>
 
-              <div className="w-[80%] sm:w-[35%] lg:w-full my-4 lg:my-0 flex gap-x-4 items-center justify-center">
+              <div className="w-[80%] sm:w-[35%] lg:w-full my-4 lg:my-0 flex gap-x-4 items-center">
                 {singleCollectionDetail &&
                 singleCollectionDetail.website !== undefined ? (
                   <a
@@ -354,24 +354,20 @@ const ViewCollection = () => {
                   <CopyToClipboard content={baseUrl + asPath} />
                 </span>
                 {/*You will write a logic to hide this icon if the current user is not the creator of the collection, i have a state to hide it or make it visible*/}
-                {
-                  isLoggedIn === true
-                  && loggedId !== null
-                  && loggedId === singleCollectionDetail.user_id
-                  ? 
-                <span
-                  className={clsx(
-                    "border border-border-1-line p-2 rounded-md cursor-pointer h-12",
-                    showEditIcon ? "flex items-center" : "hidden"
-                  )}
-                  onClick={handleCollectionUpdate}
-                >
-                
-                  <EditIcon />
-                </span>
-                  :
+                {isLoggedIn === true &&
+                loggedId !== null &&
+                loggedId === singleCollectionDetail.user_id ? (
+                  <span
+                    className={clsx(
+                      "border border-border-1-line p-2 rounded-md cursor-pointer h-12 flex items-center"
+                    )}
+                    onClick={handleCollectionUpdate}
+                  >
+                    <EditIcon />
+                  </span>
+                ) : (
                   ""
-                }
+                )}
               </div>
             </div>
 
@@ -468,7 +464,7 @@ const ViewCollection = () => {
                   </span>
                 ))}
               </div>
-              <div className="profile-activities-wrapper">
+              <div className="">
                 {singleCollectionActivities.length === 0 &&
                 singleCollectionItemsActivities.length === 0
                   ? "No activities yet!"
@@ -477,7 +473,7 @@ const ViewCollection = () => {
                       <CollectionActivityCard {...activity} key={i} />
                     ))
                   : ""}
-                {}
+                {/* {} */}
                 {singleCollectionItemsActivities &&
                 singleCollectionItemsActivities.length > 0
                   ? singleCollectionItemsActivities.map((activity, i) => (

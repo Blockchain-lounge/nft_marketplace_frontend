@@ -645,14 +645,14 @@ const ViewNft = () => {
                                   : ""}
                               </span>
                               <span className="transaction-card-span">
-                <b>
-                  {created_item_listed &&
-                  created_item_listed !== undefined &&
-                  created_item_listed !== null
-                    ? created_item_listed.item_title
-                    : ""}
-                </b>
-              </span>
+                                <b>
+                                  {created_item_listed &&
+                                  created_item_listed !== undefined &&
+                                  created_item_listed !== null
+                                    ? created_item_listed.item_title
+                                    : ""}
+                                </b>
+                              </span>
                               {to_user_id && (
                                 <span className="text-xl font-bold">
                                   {to_user_id &&
