@@ -1,11 +1,11 @@
 import { Button, Heading, Heading2 } from "@/src/components/atoms";
-import { CategoryHeroCard } from "@/src/components/molecules";
+import { NftAcadCard, NftSlider } from "@/src/components/molecules";
 import { Footer } from "@/src/components/organisms";
 import DashboardLayout from "@/src/template/DashboardLayout";
 import Image from "next/image";
 
 const Index = () => {
-  const nftAcadsRow = [
+  const nftAcadData = [
     {
       imgUrl: "/images/blog-img.svg",
       name: "Get Comfortable With The Basics",
@@ -13,6 +13,14 @@ const Index = () => {
     {
       imgUrl: "/images/blog-presale.svg",
       name: "What is a crypto wallet?",
+    },
+    {
+      imgUrl: "/images/blog-stake.svg",
+      name: "What are blockchain gas fees?",
+    },
+    {
+      imgUrl: "/images/blog-img.svg",
+      name: "  Get Comfortable With The Basic",
     },
     {
       imgUrl: "/images/blog-stake.svg",
@@ -53,23 +61,26 @@ const Index = () => {
                 </div>
               </div>
             </section>
-            <section className="">
-              <Heading2 title="NFT 101" />
-              <span className="text-xl font-medium text-txt-2">
-                Get Comfortable With The Basics
-              </span>
+            <section>
               <div>
-                <div className="nft-card">
-                  <span className="h-[19rem] w-[26.25rem] relative">
-                    <Image
-                      src="/images/blog-img.svg"
-                      alt="blog"
-                      layout="fill"
-                      objectFit="cover"
-                    />
-                  </span>
-                  <span>What is an NFT?</span>
-                </div>
+                <Heading2 title="NFT 101" />
+                <span className="text-xl font-medium text-txt-2 block mb-10">
+                  Get Comfortable With The Basics
+                </span>
+              </div>
+              <NftSlider
+                /*@ts-ignore*/
+                Card={NftAcadCard}
+                data={nftAcadData}
+                pos="top-[35%]"
+              />
+            </section>
+            <section>
+              <div>
+                <Heading2 title="Watch and learn" />
+                <span className="text-xl font-medium text-txt-2 block mb-10">
+                  Hear from the NFT community on a variety of topics.
+                </span>
               </div>
             </section>
           </div>

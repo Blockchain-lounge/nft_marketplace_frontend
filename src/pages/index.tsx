@@ -12,6 +12,7 @@ import {
   HeroCard,
   NftSlider,
   CategoryHeroCard,
+  NftMediumCard,
 } from "@/src/components/molecules";
 
 import DashboardLayout from "@/src/template/DashboardLayout";
@@ -167,7 +168,7 @@ const Home: NextPage = () => {
             <section>
               <NftHeaderCard heading="Featured Drops" to="/explore" />
               {items ? (
-                <NftSlider data={items} />
+                <NftSlider Card={NftMediumCard} data={items} />
               ) : (
                 // <div className="grid justify-between gap-y-8 sm:grid-cols-2 md:grid-cols-3  2xl:grid-cols-4">
                 <div className="flex flex-wrap justify-evenly lg:justify-between gap-y-12">

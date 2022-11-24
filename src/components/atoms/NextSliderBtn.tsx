@@ -1,10 +1,14 @@
 import ShortNextArrowIcon from "./vectors/short-next-arrow";
-
-const NextSliderBtn = (onClickProps: { onClick?: any }) => {
-  const { onClick } = onClickProps;
+import clsx from "clsx";
+//@ts-ignore
+const NextSliderBtn = (props: { onClick?: () => void; pos?: string }) => {
+  const { onClick, pos } = props;
 
   return (
-    <div className="next-slider" onClick={onClick}>
+    <div
+      className={clsx("next-slider flex right-0", pos ? pos : "top-[12rem]")}
+      onClick={onClick}
+    >
       <ShortNextArrowIcon color="#2F79F9" />
     </div>
   );

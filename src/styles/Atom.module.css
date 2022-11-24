@@ -167,7 +167,7 @@ input[type="number"] {
 /*Nft slider*/
 
 .next-slider {
-  @apply h-[4.375rem] w-[4.375rem] rounded-[50%] flex items-center justify-center bg-white absolute top-[12rem] right-0;
+  @apply h-[4.375rem] w-[4.375rem] rounded-[50%] items-center justify-center bg-white absolute;
 }
 
 /*Select*/
