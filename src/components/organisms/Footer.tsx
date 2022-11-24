@@ -24,10 +24,14 @@ const Footer = () => {
     { label: "Privacy policy", to: "" },
   ];
   const supportLinks = [
-    { label: "Support", to: "" },
-    { label: "Help center", to: "" },
-    { label: "NFT academy", to: "" },
-    { label: "Blog", to: "https://spotlight.cloudax.io/topics/nft/" },
+    { label: "Support", to: "", type: "external" },
+    { label: "Help center", to: "", type: "external" },
+    { label: "NFT academy", to: "/nft-academy", type: "internal" },
+    {
+      label: "Blog",
+      to: "https://spotlight.cloudax.io/topics/nft/",
+      type: "external",
+    },
   ];
   return (
     <footer className="footer center">
@@ -74,15 +78,25 @@ const Footer = () => {
         ))}
       </div>
       <div className="about-links">
-        {supportLinks.map((link, i) => (
-          <a
-            key={link.label}
-            className={clsx(i === 0 ? "footer-link-title" : "footer-links")}
-            href={link.to}
-          >
-            {link.label}
-          </a>
-        ))}
+        {supportLinks.map((link, i) =>
+          link.type === "internal" ? (
+            <span
+              key={link.label}
+              className={clsx(i === 0 ? "footer-link-title" : "footer-links")}
+              onClick={() => push(link.to)}
+            >
+              {link.label}
+            </span>
+          ) : (
+            <a
+              key={link.label}
+              className={clsx(i === 0 ? "footer-link-title" : "footer-links")}
+              href={link.to}
+            >
+              {link.label}
+            </a>
+          )
+        )}
       </div>
     </footer>
   );
