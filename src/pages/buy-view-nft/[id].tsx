@@ -227,11 +227,11 @@ const ViewNft = () => {
         if (response.status == 400) {
           var error = response.data.error;
           toast(error);
-          push("/");
+          // push("/");
           return;
         } else if (response.status == 200) {
           if (response.data.listing == -null) {
-            push("/");
+            // push("/");
           }
           setItemDetail(response.data.listing);
         } else {
@@ -246,11 +246,12 @@ const ViewNft = () => {
       if (response !== null) {
         setConnectedAddress(response);
         fetchUser();
-        fetchItemDetail(id as string);
       } else {
-        push("/");
+        // push("/");
       }
     });
+
+    fetchItemDetail(id as string);
     fetchActivities();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
@@ -364,14 +365,23 @@ const ViewNft = () => {
                   </span> */}
                   <div className="flex flex-col gap-y-4 w-full">
                     <div className="flex gap-x-5 w-full">
-                      <Button
-                        title="Buy now"
-                        wt="w-full"
-                        onClick={() => {
-                          setModaltype("buy");
-                          setShowModal((prev) => !prev);
-                        }}
-                      />
+                      {
+                        connectedAddress
+                        ?
+                        <Button
+                          title="Buy now"
+                          wt="w-full"
+                          onClick={() => {
+                            setModaltype("buy");
+                            setShowModal((prev) => !prev);
+                          }}
+                        />
+                        :
+                        <Button
+                          title="You need to connect your wallet to continue"
+                          wt="w-full"
+                        />
+                      }
                       {/* <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
                         <CartIcon />
                       </span> */}
