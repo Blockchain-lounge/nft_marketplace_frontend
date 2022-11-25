@@ -30,7 +30,7 @@ const ActivitiesSelect = ({
   const handleSelect = (params: Record<string, string>) => {
     onClick(params);
     setOpenSubmenu((prev) => !prev);
-    push("/activities?activity_type=" + params.value)
+    push("/activities?activity_type=" + params.value);
   };
 
   return (

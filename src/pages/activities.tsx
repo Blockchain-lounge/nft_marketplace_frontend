@@ -3,7 +3,12 @@ import Skeleton from "react-loading-skeleton";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Heading2, ActivitiesSelect, Select2, SelectCheckBox } from "../components/atoms";
+import {
+  Heading2,
+  ActivitiesSelect,
+  Select2,
+  SelectCheckBox,
+} from "../components/atoms";
 import { ISelectCheckProps } from "../components/atoms/SelectCheckbox";
 import { CloseIcon } from "../components/atoms/vectors";
 import { NftCardSkeleton } from "../components/lazy-loaders";
@@ -66,8 +71,8 @@ const Activities = () => {
   ];
 
   const sorting = [{ name: "Ascending", value: "asc" }];
-  const router = useRouter()
-  const { activity_type } = router.query
+  const router = useRouter();
+  const { activity_type } = router.query;
   const fetchActivities = async (activityType) => {
     var REQUEST_URL = "/activities";
     switch (activityType) {
@@ -127,15 +132,17 @@ const Activities = () => {
   };
 
   useEffect(() => {
-    fetchActivities(activity_type && activity_type !=='' && activity_type !== null ? activity_type : "all");
+    fetchActivities(
+      activity_type && activity_type !== "" && activity_type !== null
+        ? activity_type
+        : "all"
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activity_type]);
 
-  // console.log({ activities });
-
   return (
     <DashboardLayout>
-      <div className="sub-layout-wrapper scrollbar-hide">
+      <div className="sub-layout-wrapper scrollbar-hide flex flex-col justify-between">
         <div className="center">
           <div className="collection-page-top">
             <div className="collection-page-sub-top">
@@ -152,7 +159,7 @@ const Activities = () => {
                   >
                 }
                 lists={events}
-                wt="w-[12rem]"
+                wt="w-[13.5rem]"
               />
               {/* <SelectCheckBox
                 lists={collections}
@@ -206,7 +213,7 @@ const Activities = () => {
               </div>
             ))}
           </div>
-          <div className="total-earnings-history-wrapper h-screen">
+          <div className="total-earnings-history-wrapper ">
             {activities && activities.length === 0
               ? "No activities yet!"
               : activities && activities.length > 0

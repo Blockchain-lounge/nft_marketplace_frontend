@@ -4,17 +4,27 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import NftMediumCard from "../molecules/NftMediumCard";
-import { NextSliderBtn } from "@/src/components/atoms";
+import { NextSliderBtn, PrevSliderBtn } from "@/src/components/atoms";
+import React, { Component } from "react";
 
-const NftSlider = ({ data = [], Card }: { data?: any; Card?: any }) => {
+interface INftSlider<T> {
+  data: T[];
+  Card: React.FC;
+  pos?: string;
+}
+
+const NftSlider = <T extends { id?: number; name: string; imgUrl: string }>(
+  props: INftSlider<T>
+) => {
+  const { data, Card, pos } = props;
   const settings = {
     infinite: false,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
     dots: false,
-    nextArrow: <NextSliderBtn />,
-    prevArrow: <NextSliderBtn />,
+    nextArrow: <NextSliderBtn pos={pos} />,
+    prevArrow: <PrevSliderBtn pos={pos} />,
     responsive: [
       {
         breakpoint: 1540,
@@ -64,7 +74,7 @@ const NftSlider = ({ data = [], Card }: { data?: any; Card?: any }) => {
     <div className="relative grid grid-cols-1">
       <Slider {...settings}>
         {data.map((value: any, i: any) => (
-          <NftMediumCard key={i} {...value} />
+          <Card key={i} {...value} />
         ))}
       </Slider>
     </div>

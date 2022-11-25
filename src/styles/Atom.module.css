@@ -90,7 +90,7 @@
 }
 
 input {
-  @apply text-[1.125rem] focus:outline-0 bg-transparent lg:w-full;
+  @apply text-[1.125rem] focus:outline-0 bg-transparent w-full;
 }
 
 input::-webkit-outer-spin-button,
@@ -167,7 +167,7 @@ input[type="number"] {
 /*Nft slider*/
 
 .next-slider {
-  @apply h-[4.375rem] w-[4.375rem] rounded-[50%] flex items-center justify-center bg-white absolute top-[12rem] right-0;
+  @apply h-[4.375rem] w-[4.375rem] rounded-[50%] items-center justify-center bg-white absolute;
 }
 
 /*Select*/

@@ -1,14 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      "localhost",
-      "cloudax.infura-ipfs.io",
-      "cloudax-nft-marketplace.io",
-      "market-api-staging.cloudax.finance",
-      "cloudax-api.herokuapp.com",
-      "cloudaxnftmarketplace.s3.amazonaws.com",
-      "cloudaxnftmarketplace.s3.us-east-2.amazonaws.com",
+    // domains: [
+    //   "localhost",
+    //   "cloudax.infura-ipfs.io",
+    //   "cloudax-nft-marketplace.io",
+    //   "market-api-staging.cloudax.finance",
+    //   "cloudax-api.herokuapp.com",
+    //   "cloudaxnftmarketplace.s3.amazonaws.com",
+    //   "cloudaxnftmarketplace.s3.us-east-2.amazonaws.com",
+    //   "*"
+    // ],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
     ],
   },
   reactStrictMode: true,

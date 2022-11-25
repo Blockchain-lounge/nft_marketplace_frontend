@@ -37,6 +37,7 @@ import { apiRequest } from "../../functions/offChain/apiRequests";
 
 import { connectedAccount } from "../../functions/onChain/authFunction";
 import { INftProps } from "@/src/utilities/types";
+import EarningLayout from "@/src/template/EarningLayout";
 const CreateNewNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [file, setFile] = useState<FileList | null>(null);
@@ -44,7 +45,7 @@ const CreateNewNft = () => {
   const [nftListingPayload, setNftListingPayload] = useState<INftProps>({
     listing_royalty: "",
     listing_price: "",
-    listing_quantity: ""
+    listing_quantity: "",
   });
 
   const [nftPayloadselect, setNftPayloadSelect] = useState({
@@ -66,7 +67,6 @@ const CreateNewNft = () => {
     push,
     query: { id },
   } = useRouter();
-
 
   const fetchCollections = async () => {
     try {
@@ -154,7 +154,6 @@ const CreateNewNft = () => {
       const METHOD = "GET";
       const DATA = {};
       await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-        
         if (response.status == 400) {
           var error = response.data.error;
           toast(error);
@@ -185,9 +184,11 @@ const CreateNewNft = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     var msg = "";
-    if (nftListingPayload.listing_quantity 
-        && nftListingPayload.listing_quantity.length === 0
-        || nftListingPayload.listing_quantity === 0) {
+    if (
+      (nftListingPayload.listing_quantity &&
+        nftListingPayload.listing_quantity.length === 0) ||
+      nftListingPayload.listing_quantity === 0
+    ) {
       msg = "quantity listed is required";
       toast(msg);
       return;
@@ -203,9 +204,11 @@ const CreateNewNft = () => {
       toast(msg);
       return;
     }
-    if (nftListingPayload.listing_royalty 
-        && nftListingPayload.listing_royalty.length === 0
-        || nftListingPayload.listing_royalty === 0) {
+    if (
+      (nftListingPayload.listing_royalty &&
+        nftListingPayload.listing_royalty.length === 0) ||
+      nftListingPayload.listing_royalty === 0
+    ) {
       msg = "listed royalty is required";
       toast(msg);
       return;
@@ -214,9 +217,11 @@ const CreateNewNft = () => {
       toast(msg);
       return;
     }
-    if (nftListingPayload.listing_price 
-        && nftListingPayload.listing_price.length === 0
-        || nftListingPayload.listing_price === 0) {
+    if (
+      (nftListingPayload.listing_price &&
+        nftListingPayload.listing_price.length === 0) ||
+      nftListingPayload.listing_price === 0
+    ) {
       msg = "listed price is required";
       toast(msg);
       return;
@@ -225,22 +230,22 @@ const CreateNewNft = () => {
       toast(msg);
       return;
     } else {
-        // console.log({ itemIPFSURL });
-        setIsTransLoading(true);
-        var formData = {
-          listing_price: nftListingPayload.listing_price,
-          listing_quantity: nftListingPayload.listing_quantity,
-          listing_royalty: nftListingPayload.listing_royalty
-        };
+      // console.log({ itemIPFSURL });
+      setIsTransLoading(true);
+      var formData = {
+        listing_price: nftListingPayload.listing_price,
+        listing_quantity: nftListingPayload.listing_quantity,
+        listing_royalty: nftListingPayload.listing_royalty,
+      };
 
-        const HEADER = "authenticated";
-        const REQUEST_URL = "nft-listing/update/" + id;
-        const METHOD = "POST";
-        const DATA = formData;
+      const HEADER = "authenticated";
+      const REQUEST_URL = "nft-listing/update/" + id;
+      const METHOD = "POST";
+      const DATA = formData;
 
       try {
         apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-          console.log(response)
+          console.log(response);
           if (response.status == 400) {
             var error = response.data.error;
             toast.error(error);
@@ -275,10 +280,10 @@ const CreateNewNft = () => {
         setConnectedAddress(response);
       }
     });
-        if(id){
-            fetchItemDetail(id);
-        }
-        fetchCollections();
+    if (id) {
+      fetchItemDetail(id);
+    }
+    fetchCollections();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   // console.log({ nftImage });
@@ -290,103 +295,96 @@ const CreateNewNft = () => {
     push("/create-collection");
   };
 
-  // console.log({ nftPayload });
+  // console.log({ nftListingPayload });
   return (
-    <DashboardLayout isLoading={isLoading}>
-      <div className="sub-layout-wrapper">
-        <div className="center">
+    <EarningLayout isLoading={isLoading} title="Update Item">
+      <div className="flex flex-col-reverse gap-y-20 lg:gap-0 lg:flex-row lg:h-[70vh]">
+        <div className="space-y-8 lg:w-[70%]">
           <ToastContainer />
-          <div className="earnings-title-btn">
-            <ArrowBack onClick={() => Router.back()} />
-            <h1>Update Item</h1>
-          </div>
-          <div className="create-new-nft-wrapper">
-            <form onSubmit={handleSubmit} className="create-new-nft-form">
-             <Input2
-                  label="Price"
-                  name="listing_price"
-                  placeholder="0.00"
-                  onChange={handleFieldChange}
-                  value={nftListingPayload.listing_price}
-                />
-              
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="lg:w-[80%] space-y-8">
               <Input2
-                  label="Royalty"
-                  name="listing_royalty"
-                  maxLength={2}
-                  suffix="%"
-                  placeholder="0%"
-                  onChange={handleFieldChange}
-                  value={nftListingPayload.listing_royalty}
-                />
+                label="Price"
+                name="listing_price"
+                placeholder="0.00"
+                onChange={handleFieldChange}
+                value={nftListingPayload.listing_price}
+              />
 
-                <Input2
-                  label="Quantity to be listed"
-                  name="listing_quantity"
-                  placeholder="0"
-                  onChange={handleFieldChange}
-                  value={nftListingPayload.listing_quantity}
-                />
+              <Input2
+                label="Royalty"
+                name="listing_royalty"
+                maxLength={4}
+                placeholder="0.00"
+                onChange={handleFieldChange}
+                value={nftListingPayload.listing_royalty}
+              />
 
-              <Button title="Update" isDisabled={isTransloading} />
-            </form>
-            <div className="create-new-nft-wrapper-preview max-w-[50%] hidden lg:block">
-              <div className="create-new-nft-wrapper-2">
-                <span className="create-new-nft-wrapper-2-label">Preview</span>
-                <span className="create-new-nft-wrapper-2-label-type">
-                  This is how your item will be displayed
-                </span>
-              </div>
-              <div className="w-[25rem] h-[27rem] mt-4">
-                <div className="h-[100%] relative">
-                  {file && (
-                    <div className="nmc-wrapper-likes nmc-wrapper2-likes z-10">
-                      <LikeIcon />
-                      <span>298</span>
-                    </div>
-                  )}
-                  <span
-                    className={clsx(
-                      !file
-                        ? "absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d7f] rounded-t-2xl"
-                        : "hidden"
-                    )}
-                  >
-                    {nftCoverImage ? (
-                      <Image
-                        src={nftCoverImage ? nftCoverImage : ""}
-                        layout="fill"
-                        alt=""
-                        objectFit="cover"
-                        className={`rounded-t-2xl ${
-                          !nftCoverImage ? "hidden" : "block"
-                        }`}
-                      />
-                    ) : (
-                      <ImgUploadIcon />
-                    )}
-                  </span>
+              <Input2
+                label="Quantity to be listed"
+                name="listing_quantity"
+                placeholder="0"
+                onChange={handleFieldChange}
+                value={nftListingPayload.listing_quantity}
+              />
+            </div>
+            <Button title="Update" isDisabled={isTransloading} />
+          </form>
+        </div>
+        <div className="mb-8 max-w-[80%] mx-auto w-full lg:mx-0 lg:max-w-[40%]">
+          <div className="create-new-nft-wrapper-2 mt-2">
+            <span className="create-new-nft-wrapper-2-label">Preview</span>
+            <span className="create-new-nft-wrapper-2-label-type">
+              This is how your item will be displayed
+            </span>
+          </div>
+          <div className="w-[25rem] h-[27rem] mt-4">
+            <div className="h-[100%] relative">
+              {file && (
+                <div className="nmc-wrapper-likes nmc-wrapper2-likes z-10">
+                  <LikeIcon />
+                  <span>298</span>
                 </div>
-                <div className="w-full bg-white rounded-b-2xl p-4 flex flex-col ">
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-black text-[1.3rem]">
-                      {/* {nftPayload.item_title || "Untitled"} */}
-                    </span>
-                    {/* <span className="flex text-black text-[1.3rem] gap-x-1">
+              )}
+              <span
+                className={clsx(
+                  !file
+                    ? "absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d7f] rounded-t-2xl"
+                    : "hidden"
+                )}
+              >
+                {nftCoverImage ? (
+                  <Image
+                    src={nftCoverImage ? nftCoverImage : ""}
+                    layout="fill"
+                    alt=""
+                    objectFit="cover"
+                    className={`rounded-t-2xl ${
+                      !nftCoverImage ? "hidden" : "block"
+                    }`}
+                  />
+                ) : (
+                  <ImgUploadIcon />
+                )}
+              </span>
+            </div>
+            <div className="w-full bg-white rounded-b-2xl p-4 flex flex-col ">
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-black text-[1.3rem]">
+                  {/* {nftPayload.item_title || "Untitled"} */}
+                </span>
+                {/* <span className="flex text-black text-[1.3rem] gap-x-1">
                       <CoinIcon color="black" />
                       {nftPayload.coinPrice || "-"}
                     </span> */}
-                  </div>
-                  <span className="text-[1.1rem] text-black ">
-                    {/*replace with collection name*/}
-                    {nftPayloadselect.label || "Uncategorized"}
-                  </span>
-                </div>
               </div>
+              <span className="text-[1.1rem] text-black ">
+                {/*replace with collection name*/}
+                {nftPayloadselect.label || "Uncategorized"}
+              </span>
             </div>
           </div>
         </div>
-        <Footer />
       </div>
       <Modal openModal={showModal} closeModal={setShowModal}>
         {/* <div className="create-new-nft-success">
@@ -432,7 +430,7 @@ const CreateNewNft = () => {
           />
         </div> */}
       </Modal>
-    </DashboardLayout>
+    </EarningLayout>
   );
 };
 

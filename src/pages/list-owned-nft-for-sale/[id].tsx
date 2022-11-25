@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { toast, ToastContainer } from "react-toastify";
@@ -31,28 +32,29 @@ const ListNft = () => {
     listing_royalty: "0",
   });
   const [itemDetail, setItemDetail] = useState<INftProps | null>(null);
-  const {
-    push,
-    query: { id },
-  } = useRouter();
+  const { query, push } = useRouter();
+  const { id, tokenId } = query;
   const [priceListType, setPriceListType] = useState("Fixed price");
 
   const fetchItemDetail = async () => {
     if (id !== undefined) {
-      const HEADER = {};
-      const REQUEST_URL = "nft-item/detail/" + id;
+      const contractAddress = id;
+      const HEADER = "authenticated";
+      const REQUEST_URL = "nft-item/owned/detail/" + tokenId+"/"+contractAddress;
       const METHOD = "GET";
       const DATA = {};
-      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-        if (response.status == 400) {
+
+      await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 200) {
+          setItemDetail(response.data.data);
+        } 
+        else if (response.status !== 200 && response.data.error && response.data.error !== null) {
           var error = response.data.error;
           toast(error);
-          push("/");
           return;
-        } else if (response.status == 200) {
-          setItemDetail(response.data.data);
-        } else {
-          // toast("Something went wrong, please try again!");
+        }
+        else {
+          toast("Something went wrong, please try again!");
           return;
         }
       });
@@ -100,21 +102,13 @@ const ListNft = () => {
       return;
     } else if (
       Number(nftListingPayload.listing_quantity) >
-      Number(itemDetail?.item_supply)
+      Number(itemDetail?.amount)
     ) {
       msg = "quantity is greater than your item total supply";
       toast(msg);
       return;
     }
-    if (!nftListingPayload.listing_royalty.trim()) {
-      msg = "listed royalty is empty";
-      toast(msg);
-      return;
-    } else if (isNaN(parseFloat(nftListingPayload.listing_royalty)) === true) {
-      msg = "royalty must be a valid positive number";
-      toast(msg);
-      return;
-    }
+    
     if (!nftListingPayload.listing_price.trim()) {
       msg = "listed price is empty";
       toast(msg);
@@ -173,16 +167,6 @@ const ListNft = () => {
                   onChange={handleFieldChange}
                   value={nftListingPayload.listing_price}
                 />
-
-                <Input2
-                  label="Royalty"
-                  name="listing_royalty"
-                  maxLength={4}
-                  placeholder="0.00"
-                  onChange={handleFieldChange}
-                  value={nftListingPayload.listing_royalty}
-                />
-
                 <Input2
                   label="Quantity to be listed"
                   name="listing_quantity"
@@ -230,8 +214,8 @@ const ListNft = () => {
               </div> */}
 
                 <Image
-                  src={itemDetail.item_art_url}
-                  alt={itemDetail.item_title}
+                  src={itemDetail.metadata && itemDetail.metadata.image ? itemDetail.metadata.image : ""}
+                  alt={itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : ""}
                   layout="fill"
                   objectFit="cover"
                   className="rounded-t-2xl"
@@ -243,16 +227,9 @@ const ListNft = () => {
               <div className="w-full bg-white rounded-b-2xl p-4 flex flex-col">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-black text-[1.3rem]">
-                    {itemDetail.item_title}
-                  </span>
-                  <span className="flex text-black text-[1.3rem]">
-                    <CoinIcon color="black" />
-                    {itemDetail.item_price}
+                    {itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : itemDetail.name+" - "+itemDetail.tokenId}
                   </span>
                 </div>
-                <span className="text-[1.1rem] text-black ">
-                  {itemDetail.collection_id.name}
-                </span>
               </div>
             </div>
           </div>
@@ -268,8 +245,8 @@ const ListNft = () => {
           <div className="create-new-nft-success">
             <div className="mt-4 h-40 w-40 relative">
               <Image
-                src={itemDetail.item_art_url}
-                alt={itemDetail.item_title}
+                src={itemDetail.metadata && itemDetail.metadata.image ? itemDetail.metadata.image : ""}
+                alt={itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : ""}
                 layout="fill"
                 objectFit="cover"
                 className="rounded-2xl"
