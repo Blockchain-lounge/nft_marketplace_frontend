@@ -7,7 +7,8 @@ import DashboardLayout from "@/src/template/DashboardLayout";
 import Image from "next/image";
 
 const Index = () => {
-  const [show, setShow] = useState("");
+  const [slideShow, setSlideShow] = useState("");
+  const [showSlide, setShowSlide] = useState(0);
   const parentRef = useRef(null);
   const nftAcadData = [
     {
@@ -43,9 +44,7 @@ const Index = () => {
     { label: "NFTs changed life", img: "/images/cloudax-acad.svg" },
   ];
 
-  const [cardRef] = useState(
-    Array(nftAcadVid.length).fill(useRef(<div></div>))
-  );
+  const cardRef = Array(nftAcadVid.length).fill(useRef(null));
 
   useEffect(() => {
     const options = {
@@ -53,21 +52,26 @@ const Index = () => {
       threshold: 0.8,
     };
 
-    const major = [...cardRef];
-
     const observer = new IntersectionObserver((entries) => {
       const entry = entries[0].isIntersecting;
-      entry && setShow(entries[0].target.id);
-      console.log(entries[0]);
+      entry && setSlideShow(entries[0].target.id);
     }, options);
 
-    major.forEach((item) => {
-      // console.log({ item });
-      //@ts-ignore
-      observer.observe(item);
+    cardRef.forEach((item) => {
+      observer.observe(item.current);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleSlide = (i: number) => {
+    if (i === showSlide) {
+      cardRef[i].current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "start",
+      });
+    }
+  };
 
   return (
     <DashboardLayout>
@@ -155,9 +159,15 @@ const Index = () => {
                   {nftAcadVid.map((_, i) => (
                     <span
                       key={i}
-                      // className={` transition-all delay-500 h-3 rounded-3xl ${
-                      //   show === i ? "bg-white w-28" : "bg-[#99a0ff5b] w-14"
-                      // }`}
+                      onClick={() => {
+                        setShowSlide(i);
+                        handleSlide(i);
+                      }}
+                      className={` transition-all delay-200 h-3 rounded-3xl ${
+                        showSlide === i
+                          ? "bg-white w-28"
+                          : "bg-[#99a0ff5b] w-14"
+                      }`}
                     ></span>
                   ))}
                 </div>
