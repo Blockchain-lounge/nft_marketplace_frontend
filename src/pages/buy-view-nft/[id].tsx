@@ -122,6 +122,7 @@ const ViewNft = () => {
         itemDetail.listing_price.toString(),
         "ether"
       );
+      console.log(itemDetail)
 
       // const decimals = 18;
       // const input = 0.005;
@@ -132,7 +133,7 @@ const ViewNft = () => {
       // const price = ethers.utils.parseUnits(input, decimals).toString()
 
       toast("Please approve this transaction!");
-      const item_base_uri = `${APPCONFIG.ITEM_BASE_URL}/${userId}/${itemDetail.item._id}`;
+      const item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail.item._id}`;
 
       const transaction = await contract.buyItemCopy(
         itemDetail.listed_by.address,
@@ -167,7 +168,7 @@ const ViewNft = () => {
               tnx.events[3].args[0].toNumber()
             );
             // console.log("buyer", tnx.events[3].args[3]);
-            // console.log("buytrackCopyBaseUrl", tnx.events[3].args[5]);
+            console.log("buytrackCopyBaseUrl", tnx.events[3].args[5]);
           } else {
             soldItemCopyId = tnx.events[1].args[0].toNumber();
             buyer = tnx.events[1].args[3];
@@ -177,7 +178,7 @@ const ViewNft = () => {
             //   tnx.events[1].args[0].toNumber()
             // );
             // console.log("buyer", tnx.events[1].args[3]);
-            // console.log("buytrackCopyBaseUrl", tnx.events[1].args[5]);
+            console.log("buytrackCopyBaseUrl-2", tnx.events[1].args[5]);
           }
         } else {
           toast("We were unable to complete your transaction!");
@@ -367,20 +368,20 @@ const ViewNft = () => {
                     <div className="flex gap-x-5 w-full">
                       {
                         connectedAddress
-                        ?
-                        <Button
-                          title="Buy now"
-                          wt="w-full"
-                          onClick={() => {
-                            setModaltype("buy");
-                            setShowModal((prev) => !prev);
-                          }}
-                        />
-                        :
-                        <Button
-                          title="You need to connect your wallet to continue"
-                          wt="w-full"
-                        />
+                          ?
+                          <Button
+                            title="Buy now"
+                            wt="w-full"
+                            onClick={() => {
+                              setModaltype("buy");
+                              setShowModal((prev) => !prev);
+                            }}
+                          />
+                          :
+                          <Button
+                            title="You need to connect your wallet to continue"
+                            wt="w-full"
+                          />
                       }
                       {/* <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
                         <CartIcon />
@@ -597,8 +598,8 @@ const ViewNft = () => {
                               <Image
                                 src={
                                   created_item &&
-                                  created_item !== undefined &&
-                                  created_item !== null
+                                    created_item !== undefined &&
+                                    created_item !== null
                                     ? created_item.item_art_url
                                     : ""
                                 }
@@ -611,8 +612,8 @@ const ViewNft = () => {
                               <Image
                                 src={
                                   created_item_listed &&
-                                  created_item_listed !== undefined &&
-                                  created_item_listed !== null
+                                    created_item_listed !== undefined &&
+                                    created_item_listed !== null
                                     ? created_item_listed.item_art_url
                                     : ""
                                 }
@@ -629,9 +630,9 @@ const ViewNft = () => {
                             <div className="flex items-center gap-x-2">
                               <span className="text-xl font-bold">
                                 {from_user_id &&
-                                from_user_id !== undefined &&
-                                from_user_id.username &&
-                                from_user_id.username !== undefined
+                                  from_user_id !== undefined &&
+                                  from_user_id.username &&
+                                  from_user_id.username !== undefined
                                   ? from_user_id.username
                                   : "----"}
                               </span>
@@ -639,26 +640,26 @@ const ViewNft = () => {
                                 {activity_type === "newly_created_item"
                                   ? "created"
                                   : activity_type === "updated_item"
-                                  ? "updated"
-                                  : activity_type === "newly_listed_item"
-                                  ? "listed"
-                                  : activity_type === "updated_listing"
-                                  ? "bupdated a listed"
-                                  : activity_type === "new_mint"
-                                  ? "minted"
-                                  : activity_type === "new_sales"
-                                  ? "purchased"
-                                  : activity_type === "new_mint"
-                                  ? "minted"
-                                  : activity_type === "cancelled_listing"
-                                  ? "delisted"
-                                  : ""}
+                                    ? "updated"
+                                    : activity_type === "newly_listed_item"
+                                      ? "listed"
+                                      : activity_type === "updated_listing"
+                                        ? "bupdated a listed"
+                                        : activity_type === "new_mint"
+                                          ? "minted"
+                                          : activity_type === "new_sales"
+                                            ? "purchased"
+                                            : activity_type === "new_mint"
+                                              ? "minted"
+                                              : activity_type === "cancelled_listing"
+                                                ? "delisted"
+                                                : ""}
                               </span>
                               <span className="transaction-card-span">
                                 <b>
                                   {created_item_listed &&
-                                  created_item_listed !== undefined &&
-                                  created_item_listed !== null
+                                    created_item_listed !== undefined &&
+                                    created_item_listed !== null
                                     ? created_item_listed.item_title
                                     : ""}
                                 </b>
@@ -666,9 +667,9 @@ const ViewNft = () => {
                               {to_user_id && (
                                 <span className="text-xl font-bold">
                                   {to_user_id &&
-                                  to_user_id !== undefined &&
-                                  to_user_id.username &&
-                                  to_user_id.username !== undefined
+                                    to_user_id !== undefined &&
+                                    to_user_id.username &&
+                                    to_user_id.username !== undefined
                                     ? to_user_id.username
                                     : "----"}
                                 </span>
@@ -756,8 +757,8 @@ const ViewNft = () => {
                 <Input2
                   name="coinPrice"
                   placeholder="0.00"
-                  // onChange={handleFieldChange}
-                  // value={nftPayload.coinPrice}
+                // onChange={handleFieldChange}
+                // value={nftPayload.coinPrice}
                 />
               </div>
             </div>
@@ -772,8 +773,8 @@ const ViewNft = () => {
                 label="Quantity"
                 name="quantity"
                 placeholder="1"
-                // onChange={handleFieldChange}
-                // value={nftPayload.coinPrice}
+              // onChange={handleFieldChange}
+              // value={nftPayload.coinPrice}
               />
             </div>
             <div className="flex justify-between items-center w-full">

@@ -5,9 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-
 import clsx from "clsx";
-
 import { Heading2, Input, Select } from "@/src/components/atoms";
 import {
   CaretDown,
@@ -27,11 +25,8 @@ import {
   NftMediumCard2,
   Tab,
 } from "@/src/components/molecules";
-
 import { BannerImg, Footer } from "@/src/components/organisms";
-
 import DashboardLayout from "@/src/template/DashboardLayout";
-
 import { apiRequest } from "../../functions/offChain/apiRequests";
 import {
   floorPrice,
@@ -53,7 +48,6 @@ const ViewCollection = () => {
   const { id } = query;
 
   const collectionStages = ["items", "activity"];
-  // const activityList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const activityHeaders = ["Item", "Price", "From", "To"];
   const [
     singleCollectionsListedItemsData,
@@ -64,6 +58,7 @@ const ViewCollection = () => {
     string | number
   >("");
   const [tradingVolume, setTradingVolume] = useState<string | number>("");
+  const [ownerCount, setOwnerCount] = useState<string | number>("");
   const [singleCollectionDetail, setSingleCollectionDetail] = useState("");
   const [singleCollectionActivities, setSingleCollectionActivities] = useState(
     []
@@ -83,7 +78,6 @@ const ViewCollection = () => {
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-        // console.log({ response });
         if (response.status == 400) {
           var error = response.data.error;
           toast(error);
@@ -95,7 +89,6 @@ const ViewCollection = () => {
           setSingleCollectionActivities(response.data.activities.collection);
           setSingleCollectionItemsActivities(response.data.activities.items);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
-          // console.log("data", response.data);
           if (response.data.listedItems.length != 0) {
             function floorPrices(
               purchasedItems: Array<{ listing_price: number }>
@@ -110,8 +103,6 @@ const ViewCollection = () => {
               return price;
             }
             setcollectionfloorPrice(floorPrices(response.data.listedItems));
-            // console.log("Floor Price", floorPrices(response.data.listedItems));
-            // console.log("Floor Price", "0.2");
           } else {
             setcollectionfloorPrice("0");
           }
@@ -128,7 +119,25 @@ const ViewCollection = () => {
               return price;
             }
             setTradingVolume(collectionVolumes(response.data.purchasedItems));
-            // console.log("Trading volume", collectionVolumes(response.data.purchasedItems))
+
+            function ownersCount(
+              purchasedItems: Array<{ buyer: string, amount: number, item_token_id: number }>
+            ) {
+              // @ts-nocheck
+              let multipleOwned: number = 0;
+              for (let i = 0; i < purchasedItems.length; i++) {
+                if (purchasedItems[i].buyer === purchasedItems[i++].buyer) {
+                  multipleOwned = multipleOwned + 1
+                }
+              }
+              if (multipleOwned != 1) {
+                multipleOwned = multipleOwned - 1
+                multipleOwned = purchasedItems.length - multipleOwned
+              }
+              return multipleOwned;
+            }
+            setOwnerCount(ownersCount(response.data.purchasedItems))
+
           } else {
             setTradingVolume("0");
           }
@@ -161,18 +170,21 @@ const ViewCollection = () => {
     //   toast("Something went wrong, please try again!");
     //   return;
     // }
+  }
+
+  const roundTo = function (num: number, places: number) {
+    const factor = 10 ** places;
+    return Math.round(num * factor) / factor;
   };
 
   var owners = 0;
-  if (singleCollectionsListedItemsData && singleCollectionPurchasedItems) {
-    owners =
-      singleCollectionsListedItemsData.length +
-      singleCollectionPurchasedItems.length;
+  if (singleCollectionPurchasedItems) {
+    owners = roundTo(tradingVolume, 2)
   }
 
   const collectionPriceInfo = [
     { label: "floor", price: collectionfloorPrice, type: "coin" },
-    { label: "volume", price: tradingVolume, type: "coin" },
+    { label: "volume", price: owners, type: "coin" },
     {
       label: "items",
       price: singleCollectionsListedItemsData
@@ -180,8 +192,7 @@ const ViewCollection = () => {
         : 0,
       type: "quantity",
     },
-    // >>>>>>> dev/ebuka
-    { label: "owners", price: owners, type: "quantity" },
+    { label: "owners", price: ownerCount, type: "quantity" },
   ];
   useEffect(() => {
     connectedAccount().then((response) => {
@@ -225,10 +236,10 @@ const ViewCollection = () => {
                   <Image
                     src={
                       singleCollectionDetail &&
-                      singleCollectionDetail.collectionLogoImage !==
+                        singleCollectionDetail.collectionLogoImage !==
                         undefined &&
-                      singleCollectionDetail.collectionLogoImage !== "" &&
-                      singleCollectionDetail.collectionLogoImage !== null
+                        singleCollectionDetail.collectionLogoImage !== "" &&
+                        singleCollectionDetail.collectionLogoImage !== null
                         ? singleCollectionDetail.collectionLogoImage
                         : "/images/avatar.png"
                     }
@@ -243,9 +254,9 @@ const ViewCollection = () => {
               </div>
 
               {singleCollectionDetail &&
-              singleCollectionDetail.cover_image_id !== undefined &&
-              singleCollectionDetail.cover_image_id !== "" &&
-              singleCollectionDetail.cover_image_id !== null ? (
+                singleCollectionDetail.cover_image_id !== undefined &&
+                singleCollectionDetail.cover_image_id !== "" &&
+                singleCollectionDetail.cover_image_id !== null ? (
                 <Image
                   priority
                   src={singleCollectionDetail.cover_image_id}
@@ -288,7 +299,7 @@ const ViewCollection = () => {
 
               <div className="w-[80%] sm:w-[35%] lg:w-full my-4 lg:my-0 flex gap-x-4 items-center">
                 {singleCollectionDetail &&
-                singleCollectionDetail.website !== undefined ? (
+                  singleCollectionDetail.website !== undefined ? (
                   <a
                     href={singleCollectionDetail.website}
                     target="_blank"
@@ -303,7 +314,7 @@ const ViewCollection = () => {
                   </span>
                 )}
                 {singleCollectionDetail &&
-                singleCollectionDetail.discord !== undefined ? (
+                  singleCollectionDetail.discord !== undefined ? (
                   <a
                     target="_blank"
                     href={singleCollectionDetail.discord}
@@ -318,7 +329,7 @@ const ViewCollection = () => {
                   </span>
                 )}
                 {singleCollectionDetail &&
-                singleCollectionDetail.twitter !== undefined ? (
+                  singleCollectionDetail.twitter !== undefined ? (
                   <a
                     target="_blank"
                     rel="noreferrer"
@@ -333,7 +344,7 @@ const ViewCollection = () => {
                   </span>
                 )}
                 {singleCollectionDetail &&
-                singleCollectionDetail.instagram !== undefined ? (
+                  singleCollectionDetail.instagram !== undefined ? (
                   <a
                     href={singleCollectionDetail.instagram}
                     target="_blank"
@@ -355,8 +366,8 @@ const ViewCollection = () => {
                 </span>
                 {/*You will write a logic to hide this icon if the current user is not the creator of the collection, i have a state to hide it or make it visible*/}
                 {isLoggedIn === true &&
-                loggedId !== null &&
-                loggedId === singleCollectionDetail.user_id ? (
+                  loggedId !== null &&
+                  loggedId === singleCollectionDetail.user_id ? (
                   <span
                     className={clsx(
                       "border border-border-1-line p-2 rounded-md cursor-pointer h-12 flex items-center"
@@ -441,7 +452,7 @@ const ViewCollection = () => {
                 {/* <div>hello</div> */}
                 <div className="">
                   {singleCollectionsListedItemsData &&
-                  singleCollectionsListedItemsData.length > 0 ? (
+                    singleCollectionsListedItemsData.length > 0 ? (
                     <div className="grid lg:grid-cols-3 2xl:grid-cols-4 gap-8">
                       {singleCollectionsListedItemsData.map((val, i) => (
                         <NftMediumCard2 {...val} key={val._id} />
@@ -466,19 +477,19 @@ const ViewCollection = () => {
               </div>
               <div className="">
                 {singleCollectionActivities.length === 0 &&
-                singleCollectionItemsActivities.length === 0
+                  singleCollectionItemsActivities.length === 0
                   ? "No activities yet!"
                   : singleCollectionActivities.length > 0
-                  ? singleCollectionActivities.map((activity, i) => (
+                    ? singleCollectionActivities.map((activity, i) => (
                       <CollectionActivityCard {...activity} key={i} />
                     ))
-                  : ""}
+                    : ""}
                 {/* {} */}
                 {singleCollectionItemsActivities &&
-                singleCollectionItemsActivities.length > 0
+                  singleCollectionItemsActivities.length > 0
                   ? singleCollectionItemsActivities.map((activity, i) => (
-                      <CollectionActivityCard {...activity} key={i} />
-                    ))
+                    <CollectionActivityCard {...activity} key={i} />
+                  ))
                   : ""}
               </div>
             </>
