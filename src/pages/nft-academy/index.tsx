@@ -96,9 +96,9 @@ const Index = () => {
 
   return (
     <DashboardLayout>
-      <div className="sub-layout-wrapper scrollbar-hide flex flex-col justify-between">
+      <div className="sub-layout-wrapper scrollbar-hide">
         <div className="center">
-          <div className="space-y-[6rem] center">
+          <div className="space-y-[6rem]">
             <section className="category-hero">
               <div className="w-[30%]">
                 <span className="uppercase font-bold tracking-widest earnings-card-history">
