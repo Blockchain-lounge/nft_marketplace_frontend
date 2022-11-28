@@ -214,7 +214,7 @@ const ViewUserNft = () => {
                     </div>
                     <div className="flex items-center justify-between gap-x-4 mt-4">
                       <Button
-                        title="Approve & Sell"
+                        title="Sell"
                         wt="w-full"
                         onClick={handleSellNft}
                       />
