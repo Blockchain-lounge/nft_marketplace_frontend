@@ -1,28 +1,56 @@
-/* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { ExternalLinkIcon } from "../components/atoms/vectors";
 import { Footer } from "../components/organisms";
 
 const ProgressTemplate = ({ children }: { children: ReactNode }) => {
-  return (
-    <div className="sub-layout-wrapper-2 scrollbar-hide">
-      <nav className="h-20 flex items-center justify-between px-5 flex-shrink">
-        <img
-          src="/images/cloudax1.svg"
-          alt="nav-logo"
-          className="w-[11.6875rem] lg:max-w-full cursor-pointer"
-          //   onClick={() => push("/")}
-        />
+  const [complete, setComplete] = useState(0);
 
-        <div className="flex gap-x-4">
+  useEffect(() => {
+    const scrollContent: HTMLElement = document.getElementById(
+      "scroll-content"
+    ) as HTMLElement;
+
+    const updateScroll = () => {
+      const height = scrollContent.scrollHeight - scrollContent.clientHeight;
+      const scrollTop = scrollContent.scrollTop;
+      if (scrollTop) {
+        setComplete(Number(((scrollTop / height) * 100).toFixed(1)));
+      }
+    };
+
+    scrollContent.addEventListener("scroll", updateScroll);
+    return () => {
+      scrollContent.removeEventListener("scroll", updateScroll);
+    };
+  }, []);
+
+  return (
+    <div className="progress-height">
+      <nav className="progress-nav">
+        <span className="progress-nav-img-wrapper">
+          <Image
+            priority
+            src="/images/cloudax1.svg"
+            alt="nav-logo"
+            layout="fill"
+            // className=""
+            //   onClick={() => push("/")}
+          />
+        </span>
+
+        <div className="flex gap-x-2">
           <ExternalLinkIcon color="white" />
           <span className="font-medium">Go Home</span>
         </div>
       </nav>
+      <span
+        style={{ transform: `translateX(${complete - 100}%)` }}
+        className="progress-loader"
+      ></span>
 
-      <div className="flex flex-col justify-between h-full">
-        {children}
+      <div className="progress-children  scrollbar-hide" id="scroll-content">
+        <div>{children}</div>
         <Footer />
       </div>
     </div>

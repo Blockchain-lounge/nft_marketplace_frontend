@@ -1,0 +1,19 @@
+.progress-height {
+  @apply h-screen flex flex-col justify-between;
+}
+
+.progress-nav {
+  @apply flex items-center justify-between h-[7rem] px-6 relative;
+}
+
+.progress-loader {
+  @apply h-[0.625rem] w-full bg-[#5B68E8];
+}
+
+.progress-nav-img-wrapper {
+  @apply relative w-44 h-12 lg:max-w-full cursor-pointer;
+}
+
+.progress-children {
+  @apply h-full flex flex-col justify-between overflow-auto;
+}
