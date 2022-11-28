@@ -74,6 +74,16 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  .slick-dots {
+    @apply bg-slate-700 flex;
+  }
+
+  .slick-thumb {
+    @apply w-4 h-4 bg-slate-50;
+  }
+  /* .slick-dots .slick-thumb {
+    @apply h-3 rounded-3xl bg-[#fff] w-14;
+  } */
 }
 
 @layer components {

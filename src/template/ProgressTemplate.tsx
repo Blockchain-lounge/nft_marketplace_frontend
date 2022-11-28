@@ -50,7 +50,7 @@ const ProgressTemplate = ({ children }: { children: ReactNode }) => {
       ></span>
 
       <div className="progress-children  scrollbar-hide" id="scroll-content">
-        <div>{children}</div>
+        <div className="children-content">{children}</div>
         <Footer />
       </div>
     </div>

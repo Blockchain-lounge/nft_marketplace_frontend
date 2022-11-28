@@ -1,5 +1,5 @@
 .progress-height {
-  @apply h-screen flex flex-col justify-between;
+  @apply h-screen flex flex-col;
 }
 
 .progress-nav {
@@ -15,5 +15,34 @@
 }
 
 .progress-children {
-  @apply h-full flex flex-col justify-between overflow-auto;
+  @apply flex-grow flex flex-col overflow-auto;
+}
+.children-content {
+  @apply flex-1;
+}
+ul.progress-dots {
+  display: flex;
+  width: max-content;
+  margin: 1rem auto;
+}
+.progress-dots li {
+  list-style: none;
+  margin: 0 15px;
+  width: max-content;
+  display: inline-block;
+  height: 12px;
+  outline: none;
+}
+.progress-dots li button {
+  height: 12px;
+  width: 60px;
+  opacity: 0.3;
+  background-color: #999fff;
+  border-radius: 20px;
+}
+.progress-dots li.slick-active button {
+  background-color: white;
+  height: 12px;
+  width: 120px;
+  opacity: 1;
 }

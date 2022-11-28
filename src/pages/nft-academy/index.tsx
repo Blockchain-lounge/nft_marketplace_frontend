@@ -1,16 +1,17 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useState } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { Button, Heading, Heading2 } from "@/src/components/atoms";
 import { PlayIcon } from "@/src/components/atoms/vectors";
 import { NftAcadCard, NftSlider } from "@/src/components/molecules";
 import { Footer } from "@/src/components/organisms";
 import DashboardLayout from "@/src/template/DashboardLayout";
 import Image from "next/image";
-import clsx from "clsx";
 
 const Index = () => {
   const [slideShow, setSlideShow] = useState("");
-  // const [showSlide, setShowSlide] = useState(0);
-  const parentRef = useRef(null);
+
   const nftAcadData = [
     {
       imgUrl: "/images/blog-img.svg",
@@ -57,43 +58,17 @@ const Index = () => {
     },
   ];
 
-  const cardRef = Array(nftAcadVid.length).fill(useRef());
-  console.log({ cardRef });
-  useEffect(() => {
-    const options = {
-      root: parentRef.current,
-      threshold: 0.8,
-    };
-    //@ts-ignore
-    console.log(parentRef.current?.scrollY);
-
-    const observer = new IntersectionObserver((entries) => {
-      const entry = entries[0].isIntersecting;
-      // entry && setSlideShow(entries[0].target.id);
-      // console.log({ ent: entries[0] });
-    }, options);
-    // console.log(cardRef);
-    const major = cardRef;
-    // .map((item) => ({ ref: item.current }));
-    // console.log({ major });
-    cardRef.forEach((item) => {
-      // console.log(item.current);
-      observer.observe(item.current);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleSlide = (i: number) => {
-    // console.log({ i, slideShow });
-    if (i.toString() === slideShow) {
-      cardRef[i].current.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "start",
-      });
-    }
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    dotsClass: "progress-dots",
+    customPaging: function CustomPaging(index: any) {
+      return <button></button>;
+    },
   };
-
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper scrollbar-hide">
@@ -145,17 +120,14 @@ const Index = () => {
                   Hear from the NFT community on a variety of topics.
                 </span>
               </div>
-              <div className="">
-                <div
-                  ref={parentRef}
-                  className="w-full flex overflow-x-auto snap-x"
-                >
+              <div className="grid grid-cols-1">
+                <Slider {...sliderSettings} arrows={false}>
                   {nftAcadVid.map((val, i) => (
                     <div
                       className="relative h-[35rem] w-full shrink-0 snap-end"
                       key={val.label + i}
                       id={i.toString()}
-                      ref={cardRef[i]}
+                      // ref={cardRef[i]}
                     >
                       <Image
                         src={val.img}
@@ -175,92 +147,7 @@ const Index = () => {
                       </div>
                     </div>
                   ))}
-                  {/* <div
-                    className="relative h-[35rem] w-full shrink-0 snap-end"
-                    // key={nftAcadVid[0].label}
-                    id={nftAcadVid[0].val}
-                    ref={cardRef[0]}
-                  >
-                    <Image
-                      src={nftAcadVid[0].img}
-                      alt={"acad-video"}
-                      placeholder="blur"
-                      blurDataURL="/images/placeholder.png"
-                      objectFit="cover"
-                      layout="fill"
-                      className="rounded-xl"
-                    />
-                    <div className="absolute bottom-[10%] flex justify-between items-center w-full px-12">
-                      <Heading2 title={nftAcadVid[0].label} />
-                      <span className="text-xl text-black font-bold flex items-center gap-x-2 bg-white rounded-xl py-4 px-6">
-                        <PlayIcon />
-                        Play
-                      </span>
-                    </div>
-                  </div>
-                  <div
-                    className="relative h-[35rem] w-full shrink-0 snap-end"
-                    // key={nftAcadVid[0].label}
-                    id={nftAcadVid[1].val}
-                    ref={cardRef[1]}
-                  >
-                    <Image
-                      src={nftAcadVid[1].img}
-                      alt={"acad-video"}
-                      placeholder="blur"
-                      blurDataURL="/images/placeholder.png"
-                      objectFit="cover"
-                      layout="fill"
-                      className="rounded-xl"
-                    />
-                    <div className="absolute bottom-[10%] flex justify-between items-center w-full px-12">
-                      <Heading2 title={nftAcadVid[1].label} />
-                      <span className="text-xl text-black font-bold flex items-center gap-x-2 bg-white rounded-xl py-4 px-6">
-                        <PlayIcon />
-                        Play
-                      </span>
-                    </div>
-                  </div>
-                  <div
-                    className="relative h-[35rem] w-full shrink-0 snap-end"
-                    // key={nftAcadVid[0].label}
-                    id={nftAcadVid[2].val}
-                    ref={cardRef[2]}
-                  >
-                    <Image
-                      src={nftAcadVid[2].img}
-                      alt={"acad-video"}
-                      placeholder="blur"
-                      blurDataURL="/images/placeholder.png"
-                      objectFit="cover"
-                      layout="fill"
-                      className="rounded-xl"
-                    />
-                    <div className="absolute bottom-[10%] flex justify-between items-center w-full px-12">
-                      <Heading2 title={nftAcadVid[2].label} />
-                      <span className="text-xl text-black font-bold flex items-center gap-x-2 bg-white rounded-xl py-4 px-6">
-                        <PlayIcon />
-                        Play
-                      </span>
-                    </div>
-                  </div> */}
-                </div>
-                <div className="flex gap-5 justify-center mt-[5rem]">
-                  {nftAcadVid.map((_, i) => (
-                    <span
-                      key={i}
-                      onClick={() => {
-                        // setShowSlide(i);
-                        handleSlide(i);
-                      }}
-                      className={`transition-all delay-200 h-3 rounded-3xl ${
-                        Number(slideShow) === i
-                          ? "bg-white w-28"
-                          : "bg-[#99a0ff5b] w-14"
-                      }`}
-                    ></span>
-                  ))}
-                </div>
+                </Slider>
               </div>
             </section>
           </div>
