@@ -23,6 +23,7 @@
 @import "./CloudaxGames.module.css";
 @import "./Explore.module.css";
 @import "./Ranking.module.css";
+@import "./ProgressBar.module.css";
 
 @layer base {
   @font-face {
@@ -45,10 +46,10 @@
     background-image: url("/images/bg-3.png");
     background-size: cover;
     background-repeat: no-repeat;
-    overflow: hidden;
     margin: 0;
     padding: 0;
     height: 100vh;
+    overflow: hidden;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;

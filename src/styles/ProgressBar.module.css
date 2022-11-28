@@ -1,0 +1,48 @@
+.progress-height {
+  @apply h-screen flex flex-col;
+}
+
+.progress-nav {
+  @apply flex items-center justify-between h-[7rem] px-6 relative;
+}
+
+.progress-loader {
+  @apply h-[0.625rem] w-full bg-[#5B68E8];
+}
+
+.progress-nav-img-wrapper {
+  @apply relative w-44 h-12 lg:max-w-full cursor-pointer;
+}
+
+.progress-children {
+  @apply flex-grow flex flex-col overflow-auto;
+}
+.children-content {
+  @apply flex-1;
+}
+ul.progress-dots {
+  display: flex;
+  width: max-content;
+  margin: 1rem auto;
+}
+.progress-dots li {
+  list-style: none;
+  margin: 0 15px;
+  width: max-content;
+  display: inline-block;
+  height: 12px;
+  outline: none;
+}
+.progress-dots li button {
+  height: 12px;
+  width: 60px;
+  opacity: 0.3;
+  background-color: #999fff;
+  border-radius: 20px;
+}
+.progress-dots li.slick-active button {
+  background-color: white;
+  height: 12px;
+  width: 120px;
+  opacity: 1;
+}
