@@ -95,6 +95,8 @@ const ListNft = () => {
       toast("Please approve this transaction!");
       const tnx = await transaction.wait();
       toast("Proceed to listing")
+
+      // Continue with calling the method for list on the smartcontract
     }
 
     useEffect(() => {
