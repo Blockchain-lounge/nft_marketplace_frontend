@@ -14,9 +14,10 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { apiRequest } from "../../functions/offChain/apiRequests";
-import { toast } from "react-toastify";
-// import APPCONFIG from "@/src/constants/Config";
-// import { ethers } from "ethers";
+import { toast,ToastContainer } from "react-toastify";
+import APPCONFIG from "@/src/constants/Config";
+import { ethers } from "ethers";
+import "react-toastify/dist/ReactToastify.css";
 
 const ViewUserNft = () => {
   const { query, push } = useRouter();
@@ -24,9 +25,80 @@ const ViewUserNft = () => {
   const [owner, setOwner] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [itemDetail, setItemDetail] = useState(null);
-  const handleSellNft = () => {
+  const [isTransloading, setIsTransLoading] = useState(false);
+  const nftAbi = [
+    "function approve(address to, uint256 tokenId) external",
+    "function setApprovalForAll(address operator, bool _approved) external",
+    "function getApproved(uint256 tokenId) external view returns (address operator)",
+    "function isApprovedForAll(address owner, address operator) external view returns (bool)",
+    "function safeTransferFrom(address from, address to, uint256 tokenId) external",
+    "function ownerOf(uint256 tokenId) external view returns (address owner)",
+    "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)",
+    "event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId)",
+    "event ApprovalForAll(address indexed owner, address indexed operator, bool approved)"
+  ];
+
+  const handleSellNft = async () => {
     if (itemDetail) {
-      push(`/list-owned-nft-for-sale/${itemDetail.tokenAddress}?tokenId=${itemDetail.tokenId}`);
+      if (itemDetail && itemDetail.tokenAddress && itemDetail.tokenId) {
+        const contractAddress = itemDetail.tokenAddress;
+        const tokenId = itemDetail.tokenId;
+
+      var formData = {
+        contract_address: itemDetail.tokenAddress,
+        token_id: itemDetail.tokenId
+      };
+      const HEADER = "authenticated";
+      const REQUEST_URL = "nft-resell/approve-listing";
+      const METHOD = "POST";
+      const DATA = formData;
+      setIsTransLoading(true);
+
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then( async function (response) {
+        if (response.status == 201) {
+          toast("Please approve this transaction!");
+
+          const provider = new ethers.providers.Web3Provider(
+            (window as any).ethereum
+          );
+          const signer = provider.getSigner();
+          const contract = new ethers.Contract(
+            contractAddress,
+            nftAbi,
+            signer
+          );
+          var tnx = null;
+          try{
+            const transaction = await contract.approve(
+              APPCONFIG.SmartContractAddress,
+              tokenId
+            );
+            tnx = await transaction.wait();
+          }
+          catch(err){
+             toast("Transaction cancelled!");
+          }
+          if(tnx.events[0].event === "Approval"){
+              push(`/list-owned-nft-for-sale/${itemDetail.tokenAddress}?tokenId=${itemDetail.tokenId}`);
+          }
+          else{
+            toast("The approval process failed!");
+          }
+          setIsTransLoading(false);
+        }
+        else if(response.status == 200){
+          toast("The approval already granted!");
+          push(`/list-owned-nft-for-sale/${itemDetail.tokenAddress}?tokenId=${itemDetail.tokenId}`);
+          
+        } else {
+          toast(response.data.error);
+        }
+      });
+
+      }
+      else{
+        toast("Unable to verify the token details...")
+      }
     }
     return;
   };
@@ -91,6 +163,7 @@ const ViewUserNft = () => {
   // console.log({ itemDetail });
   return (
     <DashboardLayout>
+        <ToastContainer />
       {itemDetail !== null ? (
         <div className="sub-layout-wrapper">
           <div className="center space-y-8 h-screen lg:h-[80vh]">
@@ -214,9 +287,10 @@ const ViewUserNft = () => {
                     </div>
                     <div className="flex items-center justify-between gap-x-4 mt-4">
                       <Button
-                        title="Sell"
+                        title="Approve & Sell"
                         wt="w-full"
                         onClick={handleSellNft}
+                        isDisabled={isTransloading}
                       />
                     </div>
                   </div>

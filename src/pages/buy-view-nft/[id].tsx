@@ -122,8 +122,6 @@ const ViewNft = () => {
         itemDetail.listing_price.toString(),
         "ether"
       );
-      console.log(itemDetail)
-
       // const decimals = 18;
       // const input = 0.005;
       // const price = BigNumber.from(input).mul(BigNumber.from(10).pow(decimals)).toString();
@@ -168,7 +166,7 @@ const ViewNft = () => {
               tnx.events[3].args[0].toNumber()
             );
             // console.log("buyer", tnx.events[3].args[3]);
-            console.log("buytrackCopyBaseUrl", tnx.events[3].args[5]);
+            // console.log("buytrackCopyBaseUrl", tnx.events[3].args[5]);
           } else {
             soldItemCopyId = tnx.events[1].args[0].toNumber();
             buyer = tnx.events[1].args[3];

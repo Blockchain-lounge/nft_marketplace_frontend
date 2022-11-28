@@ -24,7 +24,8 @@ import { apiRequest } from "@/src/functions/offChain/apiRequests";
 import { INftProps } from "@/src/utilities/types";
 import APPCONFIG from "@/src/constants/Config";
 import { ethers } from "ethers";
-
+import abi from "../../artifacts/abi.json";
+import { connectedAccount } from "../../functions/onChain/authFunction";
 
 const ListNft = () => {
   const [showModal, setShowModal] = useState(false);
@@ -34,6 +35,7 @@ const ListNft = () => {
     listing_price: "0",
     listing_royalty: "0",
   });
+  const [connectedAddress, setConnectedAddress] = useState(null);
   const [itemDetail, setItemDetail] = useState<INftProps | null>(null);
   const { query, push } = useRouter();
   const { id, tokenId } = query;
@@ -64,43 +66,17 @@ const ListNft = () => {
     }
   };
 
-  const approve = async () => {
-    const provider = new ethers.providers.Web3Provider(
-      (window as any).ethereum
-    );
-    const signer = provider.getSigner();
-    const nftAbi = [
-      "function approve(address to, uint256 tokenId) external",
-      "function setApprovalForAll(address operator, bool _approved) external",
-      "function getApproved(uint256 tokenId) external view returns (address operator)",
-      "function isApprovedForAll(address owner, address operator) external view returns (bool)",
-      "function safeTransferFrom(address from, address to, uint256 tokenId) external",
-      "function ownerOf(uint256 tokenId) external view returns (address owner)",
-      "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)",
-      "event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId)",
-      "event ApprovalForAll(address indexed owner, address indexed operator, bool approved)"
-    ]
-    if (id !== undefined) {
-      const contractAddress = id;
-      const contract = new ethers.Contract(
-        contractAddress,
-        nftAbi,
-        signer
-      );
 
-      const transaction = await contract.approve(
-        APPCONFIG.SmartContractAddress,
-        tokenId
-      );
-      toast("Please approve this transaction!");
-      const tnx = await transaction.wait();
-      toast("Proceed to listing")
-
-      // Continue with calling the method for list on the smartcontract
-    }
-  }
 
   useEffect(() => {
+    connectedAccount().then((response) => {
+      if (response !== null) {
+        setConnectedAddress(response);
+      } else {
+        push("/");
+      }
+    });
+
     fetchItemDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
@@ -130,8 +106,8 @@ const ListNft = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let msg = "";
-
-    if (!nftListingPayload.listing_quantity.trim()) {
+    if (!nftListingPayload.listing_quantity.trim() 
+        || parseInt(nftListingPayload.listing_quantity) === 0) {
       msg = "quantity listed is empty";
       toast(msg);
       return;
@@ -147,8 +123,7 @@ const ListNft = () => {
       toast(msg);
       return;
     }
-
-    if (!nftListingPayload.listing_price.trim()) {
+    else if (!nftListingPayload.listing_price.trim() || parseFloat(nftListingPayload.listing_price) === 0) {
       msg = "listed price is empty";
       toast(msg);
       return;
@@ -157,11 +132,47 @@ const ListNft = () => {
       toast(msg);
       return;
     } else {
+      setIsTransLoading(true);
       try {
+
+        const provider = new ethers.providers.Web3Provider(
+              (window as any).ethereum
+            );
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+                              APPCONFIG.SmartContractAddress,
+                              abi,
+                              signer
+                            );
+        const tokenAddress = id;
+        const listing_price = ethers.utils.parseUnits(
+          nftListingPayload.listing_price.toString()
+        );
+        try{
+          toast("Please approve this transaction!");
+        const transaction = await contract.listToken(
+          tokenAddress,
+          tokenId,
+          listing_price,
+          connectedAddress
+        );
+        const tnx = await transaction.wait();
+        }
+        catch(err){
+          toast("Transaction cancelled!");
+        }
+
+        var formData = {
+          listing_price: nftListingPayload.listing_price,
+          listing_quantity: nftListingPayload.listing_quantity,
+          token_address: tokenAddress,
+          token_id: tokenId
+        };
+
         const HEADER = "authenticated";
-        const REQUEST_URL = "nft-listing/store/" + id;
+        const REQUEST_URL = "nft-resell/list-token";
         const METHOD = "POST";
-        const DATA = nftListingPayload;
+        const DATA = formData;
 
         apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
           if (response.status == 400) {
@@ -183,10 +194,10 @@ const ListNft = () => {
             return;
           }
         });
-      } catch (error) {
-        toast("Something went wrong, please try again!");
-        return;
-      }
+       } catch (error) {
+         toast("Something went wrong, please try again!");
+         return;
+       }
     }
   };
 
@@ -195,7 +206,9 @@ const ListNft = () => {
       <div className="flex flex-col-reverse gap-y-20 lg:gap-0 lg:flex-row lg:h-[70vh]">
         <div className="space-y-8 lg:w-[70%]">
           <ToastContainer />
-          <form className="space-y-8" onSubmit={handleSubmit}>
+          <form className="space-y-8" 
+          onSubmit={handleSubmit}
+          >
             <div className="space-y-2">
               <div className="lg:w-[80%] space-y-8">
                 {/* <Select title="ETH" icon={<CoinIcon />} /> */}
@@ -231,8 +244,8 @@ const ListNft = () => {
             </div>
             <Button
               isDisabled={isTransloading}
-              title="Approve & Complete listing"
-              onClick={async () => await approve()}
+              title="Complete listing"
+              onClick={async (e) => await handleSubmit(e)}
             // onClick={() => setShowModal((prev) => !prev)}
             />
           </form>
