@@ -212,7 +212,7 @@ const ListNft = () => {
             <Button
               isDisabled={isTransloading}
               title="Complete listing"
-              // onClick={() => setShowModal((prev) => !prev)}
+            // onClick={() => setShowModal((prev) => !prev)}
             />
           </form>
         </div>

@@ -22,6 +22,9 @@ import EarningLayout from "@/src/template/EarningLayout";
 import Image from "next/image";
 import { apiRequest } from "@/src/functions/offChain/apiRequests";
 import { INftProps } from "@/src/utilities/types";
+import APPCONFIG from "@/src/constants/Config";
+import { ethers } from "ethers";
+
 
 const ListNft = () => {
   const [showModal, setShowModal] = useState(false);
@@ -40,14 +43,14 @@ const ListNft = () => {
     if (id !== undefined) {
       const contractAddress = id;
       const HEADER = "authenticated";
-      const REQUEST_URL = "nft-item/owned/detail/" + tokenId+"/"+contractAddress;
+      const REQUEST_URL = "nft-item/owned/detail/" + tokenId + "/" + contractAddress;
       const METHOD = "GET";
       const DATA = {};
 
       await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
         if (response.status == 200) {
           setItemDetail(response.data.data);
-        } 
+        }
         else if (response.status !== 200 && response.data.error && response.data.error !== null) {
           var error = response.data.error;
           toast(error);
@@ -60,6 +63,40 @@ const ListNft = () => {
       });
     }
   };
+
+  const approve = async () => {
+    const provider = new ethers.providers.Web3Provider(
+      (window as any).ethereum
+    );
+    const signer = provider.getSigner();
+    const nftAbi = [
+      "function approve(address to, uint256 tokenId) external",
+      "function setApprovalForAll(address operator, bool _approved) external",
+      "function getApproved(uint256 tokenId) external view returns (address operator)",
+      "function isApprovedForAll(address owner, address operator) external view returns (bool)",
+      "function safeTransferFrom(address from, address to, uint256 tokenId) external",
+      "function ownerOf(uint256 tokenId) external view returns (address owner)",
+      "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)",
+      "event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId)",
+      "event ApprovalForAll(address indexed owner, address indexed operator, bool approved)"
+    ]
+    if (id !== undefined) {
+      const contractAddress = id;
+      const contract = new ethers.Contract(
+        contractAddress,
+        nftAbi,
+        signer
+      );
+
+      const transaction = await contract.approve(
+        APPCONFIG.SmartContractAddress,
+        tokenId
+      );
+      toast("Please approve this transaction!");
+      const tnx = await transaction.wait();
+
+    }
+  }
 
   useEffect(() => {
     fetchItemDetail();
@@ -108,7 +145,7 @@ const ListNft = () => {
       toast(msg);
       return;
     }
-    
+
     if (!nftListingPayload.listing_price.trim()) {
       msg = "listed price is empty";
       toast(msg);
@@ -192,8 +229,9 @@ const ListNft = () => {
             </div>
             <Button
               isDisabled={isTransloading}
-              title="Complete listing"
-              // onClick={() => setShowModal((prev) => !prev)}
+              title="Approve & Complete listing"
+              onClick={async () => await approve()}
+            // onClick={() => setShowModal((prev) => !prev)}
             />
           </form>
         </div>
@@ -227,7 +265,7 @@ const ListNft = () => {
               <div className="w-full bg-white rounded-b-2xl p-4 flex flex-col">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-black text-[1.3rem]">
-                    {itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : itemDetail.name+" - "+itemDetail.tokenId}
+                    {itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : itemDetail.name + " - " + itemDetail.tokenId}
                   </span>
                 </div>
               </div>
