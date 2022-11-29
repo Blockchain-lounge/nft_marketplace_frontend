@@ -20,7 +20,7 @@ const NftSlider = <T extends { id?: number; name: string; imgUrl: string }>(
   const settings = {
     infinite: false,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 3,
     slidesToScroll: 1,
     dots: false,
     nextArrow: <NextSliderBtn pos={pos} />,

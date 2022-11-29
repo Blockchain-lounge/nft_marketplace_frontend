@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 export interface INftAcadsProps {
   imgUrl: string;
@@ -6,10 +7,17 @@ export interface INftAcadsProps {
 }
 
 const NftAcadCard: React.FC<INftAcadsProps> = ({ imgUrl, name }) => {
+  const { push } = useRouter();
+  const handleNavigate = () => {
+    push("/nft-academy/" + 1);
+  };
   return (
     <>
-      <div className="flex flex-col gap-y-8">
-        <span className="h-[19rem] w-[26.25rem] relative">
+      <div
+        className="flex flex-col gap-y-8 cursor-pointer"
+        onClick={handleNavigate}
+      >
+        <span className="h-[19rem] w-[95%] relative">
           <Image
             src={imgUrl || ""}
             alt={name + "image"}
