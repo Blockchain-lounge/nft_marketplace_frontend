@@ -15,6 +15,9 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { apiRequest } from "../../functions/offChain/apiRequests";
 import { toast } from "react-toastify";
+import APPCONFIG from "../../constants/Config";
+import abi from "../../artifacts/abi.json";
+import { ethers } from "ethers";
 
 const ViewUserNft = () => {
   const { query, push } = useRouter();
@@ -22,14 +25,47 @@ const ViewUserNft = () => {
   const [owner, setOwner] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [itemDetail, setItemDetail] = useState(null);
+  const [isTransloading, setIsTransLoading] = useState(false);
 
   const handleCancelNftListing = async () => {
     if (id !== undefined) {
+      setIsTransLoading(true);
+      if(itemDetail.relisted 
+        && itemDetail.relisted === true
+        && itemDetail.item.token_address
+        && itemDetail.item.token_address !== null
+        ){
+          const provider = new ethers.providers.Web3Provider(
+            (window as any).ethereum
+          );
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(
+                            APPCONFIG.SmartContractAddress,
+                            abi,
+                            signer
+                          );
+      const tokenAddress = itemDetail.item.token_address;
+      const tokenId = itemDetail.item.token_id;
+      
+      try{
+        toast("Please approve this transaction!");
+      const transaction = await contract.cancelListing(
+        tokenAddress,
+        tokenId
+      );
+      const tnx = await transaction.wait();
+      }
+      catch(err){
+        toast("Transaction cancelled!");
+          setIsTransLoading(false);
+        return;
+      }
+        }
+
       const HEADER = "authenticated";
       const REQUEST_URL = "nft-listing/cancel/" + id;
       const METHOD = "DELETE";
       const DATA = {};
-
       await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
         if (response.status == 400) {
           var error = response.data.error;
@@ -162,7 +198,10 @@ const ViewUserNft = () => {
               </div>
               <div className="space-y-8 py-4">
                 <div>
-                  <div className="flex items-center mb-5">
+                  {
+                    itemDetail.item.collection
+                    ?
+<div className="flex items-center mb-5">
                     {/*collection-logo*/}
                     <div className="flex items-center mb-4">
                       <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
@@ -194,6 +233,10 @@ const ViewUserNft = () => {
                       </div>
                     </div>
                   </div>
+                    :
+                    ""
+                  }
+                  
                   <span className="text-4xl font-bold capitalize">
                     {itemDetail.item.item_title}
                   </span>
@@ -243,6 +286,7 @@ const ViewUserNft = () => {
                       <Button
                         title="Cancel listing"
                         wt="w-full"
+                        isDisabled={isTransloading}
                         onClick={() => handleCancelNftListing()}
                       />
                     </div>

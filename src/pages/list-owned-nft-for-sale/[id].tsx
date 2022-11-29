@@ -26,7 +26,6 @@ import APPCONFIG from "@/src/constants/Config";
 import { ethers } from "ethers";
 import abi from "../../artifacts/abi.json";
 import { connectedAccount } from "../../functions/onChain/authFunction";
-
 const ListNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [isTransloading, setIsTransLoading] = useState(false);
@@ -40,7 +39,6 @@ const ListNft = () => {
   const { query, push } = useRouter();
   const { id, tokenId } = query;
   const [priceListType, setPriceListType] = useState("Fixed price");
-
   const fetchItemDetail = async () => {
     if (id !== undefined) {
       const contractAddress = id;

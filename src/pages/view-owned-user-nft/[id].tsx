@@ -48,6 +48,7 @@ const ViewUserNft = () => {
         contract_address: itemDetail.tokenAddress,
         token_id: itemDetail.tokenId
       };
+      
       const HEADER = "authenticated";
       const REQUEST_URL = "nft-resell/approve-listing";
       const METHOD = "POST";
