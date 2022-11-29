@@ -3,11 +3,11 @@
 }
 
 .progress-nav {
-  @apply flex items-center justify-between h-[7rem] px-6 relative;
+  @apply flex items-center justify-between px-6 py-11 relative;
 }
 
 .progress-loader {
-  @apply h-[0.625rem] w-full bg-[#5B68E8];
+  @apply block h-8 w-full bg-[#5B68E8];
 }
 
 .progress-nav-img-wrapper {
