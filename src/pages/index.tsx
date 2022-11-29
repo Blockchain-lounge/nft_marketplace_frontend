@@ -80,7 +80,7 @@ const Home: NextPage = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // console.log({ activeCard });
+
   return (
     <DashboardLayout>
       <div className="home-wrapper scrollbar-hide">

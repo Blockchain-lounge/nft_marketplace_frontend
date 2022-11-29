@@ -5,21 +5,14 @@ import { useRouter } from "next/router";
 import { SidebarLink, Button } from "@/src/components/atoms";
 import {
   CollectionsIcon,
-  ExploreIcon,
-  TrendingIcon,
   GamesIcon,
   ActivityIcon,
-  SupportIcon,
-  DiscordIcon,
-  SnapchatIcon,
-  TiktokIcon,
-  YoutubeIcon,
   TwitterIcon,
-  InstagramIcon,
   WalletIcon,
   TelegramIcon,
   MediumIcon,
   BlogIcon,
+  NftAcademyIcon,
 } from "@/src/components/atoms/vectors";
 
 import { useDispatch } from "react-redux";
@@ -76,6 +69,11 @@ const SideBar = () => {
       icon: <GamesIcon />,
       link: "/cloudax-games",
       tag: "coming",
+    },
+    {
+      label: "NFT Academy",
+      icon: <NftAcademyIcon />,
+      link: "/nft-academy",
     },
 
     {

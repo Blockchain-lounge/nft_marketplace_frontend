@@ -1,10 +1,15 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { ReactNode, useEffect, useState } from "react";
 import { ExternalLinkIcon } from "../components/atoms/vectors";
 import { Footer } from "../components/organisms";
 
 const ProgressTemplate = ({ children }: { children: ReactNode }) => {
   const [complete, setComplete] = useState(0);
+  const { push } = useRouter();
+  const handleHomeRoute = () => {
+    push("/");
+  };
 
   useEffect(() => {
     const scrollContent: HTMLElement = document.getElementById(
@@ -28,18 +33,16 @@ const ProgressTemplate = ({ children }: { children: ReactNode }) => {
   return (
     <div className="progress-height">
       <nav className="progress-nav">
-        <span className="progress-nav-img-wrapper">
+        <span className="progress-nav-img-wrapper" onClick={() => push("/")}>
           <Image
             priority
             src="/images/cloudax1.svg"
             alt="nav-logo"
             layout="fill"
-            // className=""
-            //   onClick={() => push("/")}
           />
         </span>
 
-        <div className="flex gap-x-2">
+        <div className="flex gap-x-2 cursor-pointer" onClick={() => push("/")}>
           <ExternalLinkIcon color="white" />
           <span className="font-medium">Go Home</span>
         </div>

@@ -1,4 +1,3 @@
-import { useRef, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -8,9 +7,16 @@ import { NftAcadCard, NftSlider } from "@/src/components/molecules";
 import { Footer } from "@/src/components/organisms";
 import DashboardLayout from "@/src/template/DashboardLayout";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 const Index = () => {
-  const [slideShow, setSlideShow] = useState("");
+  const { push } = useRouter();
+
+  const handleScrollToView = () => {
+    // const tutsVal = document
+    //   .getElementById("nft-tutorial-section")
+    //   ?.scrollIntoView();
+  };
 
   const nftAcadData = [
     {
@@ -100,7 +106,7 @@ const Index = () => {
               </div>
             </section>
             <section>
-              <div>
+              <div id="nft-tutorial-section">
                 <Heading2 title="NFT 101" />
                 <span className="text-xl font-medium text-txt-2 block mb-10">
                   Get Comfortable With The Basics
@@ -124,10 +130,9 @@ const Index = () => {
                 <Slider {...sliderSettings} arrows={false}>
                   {nftAcadVid.map((val, i) => (
                     <div
-                      className="relative h-[35rem] w-full shrink-0 snap-end"
+                      className="relative h-[35rem] w-full cursor-pointer"
                       key={val.label + i}
-                      id={i.toString()}
-                      // ref={cardRef[i]}
+                      onClick={() => push("/nft-academy/" + i + 1)}
                     >
                       <Image
                         src={val.img}
