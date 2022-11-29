@@ -12,6 +12,7 @@ module.exports = {
         "bg-3": "#1A1C38",
         "bg-4": "#15152E",
         "bg-5": "#1d1e38",
+        "bg-6": "#99a0ff1a",
         "txt-1": "#399CE1",
         "txt-2": "#A5A5B2",
         "txt-3": "#bcbbbb",
