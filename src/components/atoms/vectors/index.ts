@@ -57,6 +57,7 @@ export { default as SearchIcon } from "./search-icon";
 export { default as SecureIcon } from "./secure-icon";
 export { default as SettingsIcon } from "./settings-icon";
 export { default as SendIcon } from "./send-icon";
+export { default as ShareIcon } from "./share-icon";
 export { default as ShortNextArrow } from "./short-next-arrow";
 export { default as ShortPrevArrow } from "./short-prev-arrow";
 export { default as SignOutIcon } from "./sign-out-icon";
