@@ -17,6 +17,7 @@ const NftCard2 = ({
   item_supply,
   time,
   item_id,
+  resell_item_id,
   listing_price,
   listing_quantity,
   listing_remaining,
@@ -32,7 +33,11 @@ const NftCard2 = ({
       onClick={() => push(`/${to}/${_id}`)}
     >
       <div className="nmc-wrapper-img">
-        <Image
+        {
+          item_id
+          ?
+          (
+            <Image
           src={
             item_art_url === undefined ||
             item_art_url === null ||
@@ -49,23 +54,41 @@ const NftCard2 = ({
           blurDataURL="/images/placeholder.png"
           className="rounded-t-xl"
         />
+          )
+          :resell_item_id 
+          ?
+          (<Image
+          src={
+            resell_item_id !== undefined ||
+            resell_item_id !== null
+              ? resell_item_id.item_art_url
+              : ""
+          }
+          alt={resell_item_id.item_title}
+          layout="fill"
+          placeholder="blur"
+          blurDataURL="/images/placeholder.png"
+          className="rounded-t-xl"
+        />)
+        :
+          ""
+        }
+        
         {/* <img src={item_art_url} alt={item_title} /> */}
       </div>
       <div className="nmc-sub-wrapper flex justify-between">
         <div className="flex flex-col gap-y-[0.3rem] p-2">
           <span className="font-bold text-black text-xl">
-            {item_title === undefined ||
-            item_title === null ||
-            (item_title === "" &&
-              item_id !== undefined &&
-              item_id !== null &&
-              item_id !== "")
+            { item_id 
               ? item_id.item_title
-              : item_title}
+              : resell_item_id
+              ? resell_item_id.item_title
+              : ""
+              }
           </span>
           <span className="nmc-sub-wrapper-2-owner">
             {item_supply === undefined ||
-            item_title === null ||
+            item_supply === null ||
             (item_title === "" &&
               item_id !== undefined &&
               item_id !== null &&
