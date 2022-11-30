@@ -90,10 +90,10 @@ const SingleNftAcademy = () => {
             </div>
           </div>
           {/*Content-div*/}
-          <section className="mb-12">
+          <article className="mb-12">
             <div className="mt-4 mb-8 flex flex-col gap-y-7">
               <Heading2 title="What is NFT?" />
-              <div className="relative h-[35rem] w-full">
+              <div className="relative h-[30rem] w-2/3">
                 <Image
                   src="/images/cloudax-acad.svg"
                   alt="Acad-img"
@@ -105,7 +105,7 @@ const SingleNftAcademy = () => {
                 />
               </div>
             </div>
-            <article className="space-y-12">
+            <section className="space-y-12">
               <p className="text-2xl text-white p-8 bg-bg-2 rounded-2xl leading-10">
                 {AcadContents[0].content}
               </p>
@@ -147,8 +147,8 @@ const SingleNftAcademy = () => {
                   {AcadContents[3].content}
                 </p>
               </div>
-            </article>
-          </section>
+            </section>
+          </article>
         </div>
       </section>
       {/*Slider*/}

@@ -11,8 +11,10 @@ import {
   SupportSellIcon,
 } from "@/src/components/atoms/vectors";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
-const index = () => {
+const SupportPage = () => {
+  const { push } = useRouter();
   const supportLists = [
     {
       label: "Getting started",
@@ -62,8 +64,9 @@ const index = () => {
         <div className="flex flex-col gap-y-12 mt-12">
           {supportLists.map((support, i) => (
             <div
-              className="flex items-center justify-between bg-bg-3 py-8 px-10 rounded-2xl"
+              className="flex items-center justify-between bg-bg-3 py-8 px-10 rounded-2xl cursor-pointer"
               key={support.label + i}
+              onClick={() => push("/support/" + (i + 1))}
             >
               <div className="flex items-center gap-x-8">
                 <span className="bg-bg-6 rounded-full h-32 w-32 flex justify-center items-center">
@@ -121,4 +124,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default SupportPage;
