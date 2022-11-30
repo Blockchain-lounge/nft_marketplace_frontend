@@ -118,6 +118,8 @@ const SingleSupportPage = () => {
                       layout="fill"
                       objectFit="cover"
                       className="rounded-xl"
+                      placeholder="blur"
+                      blurDataURL="/images/placeholder.png"
                     />
                   </span>
                   <div className="flex flex-col gap-y-3">
@@ -131,6 +133,8 @@ const SingleSupportPage = () => {
                           src="/images/support-author.webp"
                           alt="support-author"
                           layout="fill"
+                          placeholder="blur"
+                          blurDataURL="/images/placeholder.png"
                           objectFit="contain"
                           className="rounded-full"
                         />

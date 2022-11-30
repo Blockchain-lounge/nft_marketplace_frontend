@@ -13,6 +13,7 @@ import {
   MediumIcon,
   BlogIcon,
   NftAcademyIcon,
+  SupportIcon,
 } from "@/src/components/atoms/vectors";
 
 import { useDispatch } from "react-redux";
@@ -75,17 +76,16 @@ const SideBar = () => {
       icon: <NftAcademyIcon />,
       link: "/nft-academy",
     },
-
     {
       label: "Blog",
       icon: <BlogIcon />,
       to: "https://spotlight.cloudax.io/topics/nft/",
     },
-    // {
-    //   label: "Support",
-    //   icon: <SupportIcon />,
-    //   link: "/support",
-    // },
+    {
+      label: "Support",
+      icon: <SupportIcon />,
+      link: "/support",
+    },
   ];
 
   const socialLinks = [
@@ -163,7 +163,7 @@ const SideBar = () => {
         </span>
       </div>
       {sidebarLinks.map((item) =>
-        item.label === "Blog" || item.label === "Support" ? (
+        item.label === "Blog" ? (
           <a className="sidebar-menu" href={item.to} key={item.label}>
             <div className="sidebar-title-wrapper">
               <div className="sidebar-title">
