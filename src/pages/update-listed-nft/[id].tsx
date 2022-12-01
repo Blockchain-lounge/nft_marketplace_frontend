@@ -43,13 +43,13 @@ const CreateNewNft = () => {
   const [file, setFile] = useState<FileList | null>(null);
 
   const [nftListingPayload, setNftListingPayload] = useState<INftProps>({
-    listing_royalty: "",
+    listing_royalty: 0,
     listing_price: "",
-    listing_quantity: "",
+    listing_quantity: 0,
   });
 
   const [nftPayloadselect, setNftPayloadSelect] = useState({
-    label: "",
+    label: "Select a collection",
     id: "",
   });
 
@@ -187,20 +187,22 @@ const CreateNewNft = () => {
     e.preventDefault();
     var msg = "";
     
-    if (
-      (nftListingPayload.listing_quantity &&
-        nftListingPayload.listing_quantity.length === 0) ||
-      nftListingPayload.listing_quantity === 0
-    ) {
-      msg = "quantity listed is required";
-      toast(msg);
-      return;
-    } else if (isNaN(parseFloat(nftListingPayload.listing_quantity)) === true) {
-      msg = "quantity to be listed must be a valid positive number";
-      toast(msg);
-      return;
-    } else if(itemDetail.relisted && itemDetail.relisted === true)
+   if(itemDetail.relisted && itemDetail.relisted === true)
     {
+      if (
+        (nftListingPayload.listing_quantity &&
+          nftListingPayload.listing_quantity.length === 0) ||
+        nftListingPayload.listing_quantity === 0
+      ) {
+        msg = "quantity listed is required";
+        toast(msg);
+        return;
+      } else if (isNaN(parseFloat(nftListingPayload.listing_quantity)) === true) {
+        msg = "quantity to be listed must be a valid positive number";
+        toast(msg);
+        return;
+      }
+
       if (
         Number(nftListingPayload.listing_quantity) >
         Number(itemDetail?.listing_quantity)
@@ -210,7 +212,7 @@ const CreateNewNft = () => {
         return;
       }
     }
-    else if(!itemDetail.relisted || itemDetail.relisted === false)
+    else if(!itemDetail.relisted || itemDetail.relisted === false || !itemDetail.relisted)
     {
       if (
         Number(nftListingPayload.listing_quantity) >
@@ -221,7 +223,7 @@ const CreateNewNft = () => {
         return;
       }
     }
-    if(itemDetail.relisted && itemDetail.relisted === false){
+    if(itemDetail.relisted && itemDetail.relisted === false || !itemDetail.relisted){
       if (
         (nftListingPayload.listing_royalty &&
           nftListingPayload.listing_royalty.length === 0) ||
@@ -255,6 +257,7 @@ const CreateNewNft = () => {
         listing_price: nftListingPayload.listing_price,
         listing_quantity: nftListingPayload.listing_quantity,
         listing_royalty: itemDetail && itemDetail.relisted === false ? nftListingPayload.listing_royalty : 0,
+        collection_id: nftPayloadselect.id ? nftPayloadselect.id : null
       };
 
       if(itemDetail.relisted 
@@ -369,7 +372,8 @@ const CreateNewNft = () => {
             {
               itemDetail && itemDetail.relisted === false
               ?
-<Input2
+                <>
+                <Input2
                 label="Royalty"
                 name="listing_royalty"
                 maxLength={4}
@@ -377,9 +381,6 @@ const CreateNewNft = () => {
                 onChange={handleFieldChange}
                 value={nftListingPayload.listing_royalty}
               />
-              :
-              ""
-            }
               <Input2
                 label="Quantity to be listed"
                 name="listing_quantity"
@@ -387,6 +388,21 @@ const CreateNewNft = () => {
                 onChange={handleFieldChange}
                 value={nftListingPayload.listing_quantity}
               />
+              </>
+              :
+              ""
+            }
+            {
+              itemDetail && itemDetail.relisted === true
+              ?
+              <Select
+              title={nftPayloadselect.label}
+              lists={collections}
+              onClick2={handleSelect}
+            />
+            :
+            ""
+            }
             </div>
             <Button title="Update" isDisabled={isTransloading} />
           </form>
