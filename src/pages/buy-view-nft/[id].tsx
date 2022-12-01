@@ -131,7 +131,7 @@ const ViewNft = () => {
       // const price = ethers.utils.parseUnits(input, decimals).toString()
 
       toast("Please approve this transaction!");
-      const item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail.item._id}`;
+      const item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail._id}`;
 
       const transaction = await contract.buyItemCopy(
         itemDetail.listed_by.address,
