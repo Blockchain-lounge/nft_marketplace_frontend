@@ -24,7 +24,6 @@ const NftCard = ({
 Partial<INftcard>) => {
   const { push } = useRouter();
   // console.log({ item_title, item_art_url, item_price, item_quantity, status });
-  // console.log({ item_id });
   return (
     <div className="nmc-wrapper" onClick={() => push(`/buy-view-nft/${_id}`)}>
       <div className="nmc-wrapper-img">
@@ -67,12 +66,8 @@ Partial<INftcard>) => {
           <div className="h-14 w-14 relative">
             {item_id ? (
               <Image
-                src={
-                  item_id !== null
-                    ? item_id.item_art_url
-                    : "/images/placeholder.png"
-                }
-                alt={item_id !== null ? item_id.item_title : ""}
+                src={item_id.item_art_url}
+                alt={item_id.item_title}
                 layout="fill"
                 placeholder="blur"
                 blurDataURL="/images/placeholder.png"
