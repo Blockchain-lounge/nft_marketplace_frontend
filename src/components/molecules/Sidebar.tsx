@@ -10,7 +10,7 @@ import {
   TwitterIcon,
   WalletIcon,
   TelegramIcon,
-  MediumIcon,
+  GithubIcon,
   BlogIcon,
   NftAcademyIcon,
   SupportIcon,
@@ -100,7 +100,7 @@ const SideBar = () => {
       to: "https://t.me/cloudaxofficial",
     },
     {
-      icon: <MediumIcon />,
+      icon: <GithubIcon />,
       label: "Medium",
       to: "http://cloudax.medium.com/",
     },
