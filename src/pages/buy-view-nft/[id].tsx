@@ -106,6 +106,9 @@ const ViewNft = () => {
 
   const handleBuy = async () => {
     setIsTransLoading((prev) => !prev);
+
+    var itemSupply = null;
+    var listingRoyalty = null;
     {
       /*write your payment info here*/
       const provider = new ethers.providers.Web3Provider(
@@ -118,77 +121,93 @@ const ViewNft = () => {
         signer
       );
 
+      const priceListed = ethers.utils.parseUnits(
+        itemDetail.listing_price.toString(),
+      );
+
       const price = ethers.utils.parseUnits(
         itemDetail.listing_price.toString(),
         "ether"
       );
-      // const decimals = 18;
-      // const input = 0.005;
-      // const price = BigNumber.from(input).mul(BigNumber.from(10).pow(decimals)).toString();
 
-      // const decimals = 18;
-      // const input = "0.005"; // Note: this is a string, e.g. user input
-      // const price = ethers.utils.parseUnits(input, decimals).toString()
-
-      toast("Please approve this transaction!");
-      const item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail.item._id}`;
-
-      const transaction = await contract.buyItemCopy(
-        itemDetail.listed_by.address,
-        price,
-        itemDetail.item.item_supply,
-        itemDetail.listing_royalty,
-        itemDetail.item._id,
-        item_base_uri,
-        {
-          value: price,
-        }
-      );
-      var tnx = await transaction.wait();
-      toast("Please approve this transaction!");
-
-      // var token_id = itemDetail.token_id;
-      //@ts-ignore
-      var amount = itemDetail.listing_price as string;
-      // var amount = price;
+      var tnx = null;
       var buyer = connectedAddress;
-      var trackCopyBaseUrl = "";
-      var soldItemCopyId = "";
+       var trackCopyBaseUrl = "";
+       var soldItemCopyId = "";
+       var amount = itemDetail.listing_price as string;
+ 
+      if(itemDetail.relisted && itemDetail.relisted === true){
+        toast("Please approve this transaction!");
+        const transaction = await contract.buyNft(
+          itemDetail.item.token_address,
+          itemDetail.item.token_id,
+          {
+            value: price,
+            gasPrice: 20000000
+          },
+        );
+        tnx = await transaction.wait();
 
-      try {
-        if (tnx.events[0]) {
-          if (tnx.events[4]) {
-            soldItemCopyId = tnx.events[3].args[0].toNumber();
-            buyer = tnx.events[3].args[3];
-            trackCopyBaseUrl = tnx.events[3].args[5];
-            console.log(
-              "Log 5: soldItemCopyIdTop",
-              tnx.events[3].args[0].toNumber()
-            );
-            // console.log("buyer", tnx.events[3].args[3]);
-            // console.log("buytrackCopyBaseUrl", tnx.events[3].args[5]);
-          } else {
-            soldItemCopyId = tnx.events[1].args[0].toNumber();
-            buyer = tnx.events[1].args[3];
-            trackCopyBaseUrl = tnx.events[1].args[5];
-            // console.log(
-            //   "Log 3: soldItemCopyIdTop",
-            //   tnx.events[1].args[0].toNumber()
-            // );
-            // console.log("buyer", tnx.events[1].args[3]);
-            console.log("buytrackCopyBaseUrl-2", tnx.events[1].args[5]);
-          }
-        } else {
-          toast("We were unable to complete your transaction!");
-          setIsTransLoading((prev) => !prev);
-          return;
-        }
-      } catch (error) {
-        setIsTransLoading((prev) => !prev);
-        // console.log("Event error", error);
-        return;
+       buyer = connectedAddress;
+       trackCopyBaseUrl = "null";
+       soldItemCopyId = itemDetail.item.token_id;
       }
 
+      else if(!itemDetail.relisted || itemDetail.relisted === false){
+        toast("Please approve this transaction!");
+
+        const item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail.item._id}`;
+        const transaction = await contract.buyItemCopy(
+          itemDetail.listed_by.address,
+          priceListed,
+          itemDetail.item.item_supply,
+          itemDetail.listing_royalty,
+          itemDetail.item._id,
+          item_base_uri,
+          {
+            value: price,
+            gasPrice: 20000000
+          },
+        );
+       tnx = await transaction.wait();
+       // var amount = price;
+       
+       try {
+         if (tnx.events[0]) {
+           if (tnx.events[4]) {
+             soldItemCopyId = tnx.events[3].args[0].toNumber();
+             buyer = tnx.events[3].args[3];
+             trackCopyBaseUrl = tnx.events[3].args[5];
+             // console.log(
+             //   "Log 5: soldItemCopyIdTop",
+             //   tnx.events[3].args[0].toNumber()
+             // );
+             // console.log("buyer", tnx.events[3].args[3]);
+             // console.log("buytrackCopyBaseUrl", tnx.events[3].args[5]);
+           } else {
+             soldItemCopyId = tnx.events[1].args[0].toNumber();
+             buyer = tnx.events[1].args[3];
+             trackCopyBaseUrl = tnx.events[1].args[5];
+             // console.log(
+             //   "Log 3: soldItemCopyIdTop",
+             //   tnx.events[1].args[0].toNumber()
+             // );
+             // console.log("buyer", tnx.events[1].args[3]);
+             console.log("buytrackCopyBaseUrl-2", tnx.events[1].args[5]);
+           }
+         } else {
+           toast("We were unable to complete your transaction!");
+           setIsTransLoading((prev) => !prev);
+           return;
+         }
+       } catch (error) {
+         setIsTransLoading((prev) => !prev);
+         // console.log("Event error", error);
+         return;
+       }
+      }
+      
+      //@ts-ignore
       var formData = {
         listing_id: itemDetail._id,
         item_copy_id: soldItemCopyId,
@@ -614,6 +633,7 @@ const ViewNft = () => {
                       to_user_id,
                       from_user_id,
                       created_item,
+                      resell_item_id,
                       activity_type,
                       createdAt,
                       created_item_listed,
@@ -624,7 +644,23 @@ const ViewNft = () => {
                       >
                         <div className="flex items-center gap-x-4">
                           <div className="h-16 w-16 relative">
-                            {created_item ? (
+                            {
+                            resell_item_id ? (
+                              <Image
+                                src={
+                                  resell_item_id &&
+                                    resell_item_id !== undefined &&
+                                    resell_item_id !== null
+                                    ? resell_item_id.item_art_url
+                                    : ""
+                                }
+                                alt=""
+                                layout="fill"
+                                objectFit="contain"
+                                className="rounded-full"
+                              />
+                            )
+                            : created_item ? (
                               <Image
                                 src={
                                   created_item &&
@@ -687,11 +723,18 @@ const ViewNft = () => {
                               </span>
                               <span className="transaction-card-span">
                                 <b>
-                                  {created_item_listed &&
+                                  {
+                                  resell_item_id &&
+                                  resell_item_id !== undefined &&
+                                  resell_item_id !== null
+                                  ? resell_item_id.item_title
+
+                                  : created_item_listed &&
                                     created_item_listed !== undefined &&
                                     created_item_listed !== null
                                     ? created_item_listed.item_title
-                                    : ""}
+                                    : ""
+                                    }
                                 </b>
                               </span>
                               {to_user_id && (
