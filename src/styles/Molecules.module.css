@@ -253,7 +253,7 @@
 /*Nft Medium Card */
 
 .nmc-wrapper {
-  @apply rounded-[0.975rem] bg-white max-w-[27rem] w-full lg:max-w-[95%] 2xl:max-w-[95%];
+  @apply rounded-[0.975rem] bg-white max-w-[27rem] w-full lg:max-w-full;
 }
 
 .nmc-wrapper-img {

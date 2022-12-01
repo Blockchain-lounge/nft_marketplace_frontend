@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SupportLayout from "@/src/template/SupportLayout";
 import { Button, Heading2, Input } from "@/src/components/atoms";
 import { SupportGettingStartedIcon } from "@/src/components/atoms/vectors";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { UseInterCom } from "@/src/hooks/useInterCom";
 
 const SingleSupportPage = () => {
+  const { bootIntercom, loadIntercom } = UseInterCom();
+
+  useEffect(() => {
+    loadIntercom();
+    bootIntercom();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const singleSupportLists = [
     {
       label: "How do i make a wishlist?",
