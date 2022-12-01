@@ -11,6 +11,7 @@ export interface INftcard {
   status: string;
   time?: string;
   item_id: {};
+  resell_item_id: {};
 }
 
 const NftCard = ({
@@ -18,6 +19,7 @@ const NftCard = ({
   listing_price,
   status,
   item_id,
+  resell_item_id,
 }: //@ts-ignore
 Partial<INftcard>) => {
   const { push } = useRouter();
@@ -27,16 +29,32 @@ Partial<INftcard>) => {
     <div className="nmc-wrapper" onClick={() => push(`/buy-view-nft/${_id}`)}>
       <div className="nmc-wrapper-img">
         <Image
-          src={
-            item_id !== null ? item_id.item_art_url : "/images/placeholder.png"
-          }
-          alt={item_id !== null ? item_id.item_title : ""}
+          src={item_id.item_art_url ? item_id.item_art_url : ""}
+          alt={item_id.item_title}
           objectFit="cover"
           layout="fill"
           placeholder="blur"
           blurDataURL="/images/placeholder.png"
           className="rounded-t-[0.975rem]"
         />
+        )
+        :
+        resell_item_id
+        ?(
+          <Image
+          src={resell_item_id.item_art_url ? resell_item_id.item_art_url : ""}
+          alt={resell_item_id.item_title}
+          objectFit="cover"
+          layout="fill"
+          placeholder="blur"
+          blurDataURL="/images/placeholder.png"
+          className="rounded-t-[0.975rem]"
+        />
+        )
+        :
+        ""
+      }
+        
       </div>
       <div className="nmc-sub-wrapper">
         {status && (
@@ -52,22 +70,36 @@ Partial<INftcard>) => {
         <div className="nmc-wrapper-3">
           <div className="h-14 w-14 relative">
             <Image
-              src={
-                item_id !== null
-                  ? item_id.item_art_url
-                  : "/images/placeholder.png"
-              }
-              alt={item_id !== null ? item_id.item_title : ""}
+              src={item_id.item_art_url}
+              alt={item_id.item_title}
               layout="fill"
               placeholder="blur"
               blurDataURL="/images/placeholder.png"
               className="rounded-full"
-            />
+            />)
+            : 
+            resell_item_id
+            ?(
+              <Image
+              src={resell_item_id.item_art_url ? resell_item_id.item_art_url : ""}
+              alt={resell_item_id.item_title}
+                layout="fill"
+                placeholder="blur"
+                blurDataURL="/images/placeholder.png"
+                className="rounded-full"
+              />)
+              :
+            ""
+        }
           </div>
           {/* <div className="nmc-wrapper-4"> */}
           <div className="flex flex-col">
             <span className="text-2xl font-bold text-black">
-              {item_id !== null ? item_id.item_title : ""}
+              {item_id
+                ? item_id.item_title
+                : resell_item_id
+                ? resell_item_id.item_title
+                : ""}
             </span>
             {/* <span className="owner">{owner}</span> */}
           </div>

@@ -11,13 +11,17 @@ const UserActivityCard = ({
   created_item,
   activity_type,
   createdAt,
+  collection_id,
   created_item_listed,
+  resell_item_id,
 }: {
   to_user_id: string;
   from_user_id: string;
   listed_item: string;
   created_item: string;
   created_item_listed: string;
+  resell_item_id: string;
+  collection_id: string;
   activity_type: string;
   createdAt: string;
 }) => {
@@ -59,9 +63,14 @@ const UserActivityCard = ({
       activityType = "You purchased an item";
       break;
     case "cancelled_listing":
-      activityType = "You cnacelled an item";
+      activityType = "You cancelled an item";
       break;
-
+    case "newly_updated_collection":
+      activityType = "You updated a collection";
+      break;
+    case "newly_created_collection":
+      activityType = "You created a collection";
+      break;
     default:
     // code block
   }
@@ -75,6 +84,21 @@ const UserActivityCard = ({
               created_item !== undefined &&
               created_item !== null
                 ? created_item.item_art_url
+                : "/images/profile-nft.png"
+            }
+            alt=""
+          />
+        ) : (
+          ""
+        )}
+
+        {resell_item_id ? (
+          <img
+            src={
+              resell_item_id &&
+              resell_item_id !== undefined &&
+              resell_item_id !== null
+                ? resell_item_id.item_art_url
                 : "/images/profile-nft.png"
             }
             alt=""
@@ -97,6 +121,21 @@ const UserActivityCard = ({
         ) : (
           ""
         )}
+        {
+          collection_id ?
+          (<img
+              src={
+                collection_id &&
+                collection_id !== undefined &&
+                collection_id !== null
+                  ? collection_id.collectionLogoImage
+                  : "/images/profile-nft.png"
+              }
+              alt=""
+            />)
+            :
+            ("")
+        }
         <div className="profile-activity-coin-info-wrapper">
           <span className="text-[1.375rem] font-bold">
             {created_item && created_item !== undefined && created_item !== null
@@ -108,6 +147,12 @@ const UserActivityCard = ({
             created_item_listed !== null
               ? created_item_listed.item_title
               : ""}
+
+          {collection_id &&
+            collection_id !== undefined &&
+            collection_id !== null
+              ? collection_id.name
+              : ""}
           </span>
           <span className="profile-activity-coin-tx-type text-txt-2">
             {activityType}
@@ -116,9 +161,13 @@ const UserActivityCard = ({
       </div>
 
       <div className="profile-activity-price-wrapper">
-        <span className="profile-activity-coin-price">
-          <CoinIcon /> {item_price} ETH
-        </span>
+        {item_price ? (
+          <span className="profile-activity-coin-price">
+            <CoinIcon /> {item_price}
+          </span>
+        ) : (
+          "----"
+        )}
         {/* <span className="profile-activity-amount text-txt-2">$5,954,532</span> */}
       </div>
 
