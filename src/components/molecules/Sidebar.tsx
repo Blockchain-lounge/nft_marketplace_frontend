@@ -102,7 +102,7 @@ const SideBar = () => {
     {
       icon: <GithubIcon />,
       label: "Medium",
-      to: "http://cloudax.medium.com/",
+      to: "http://github.com/cloudaxglobal",
     },
     // { icon: <DiscordIcon />, label: "Discord" },
     // { icon: <InstagramIcon />, label: "Instagram" },
