@@ -20,6 +20,11 @@
       "@/src/*": ["src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/hooks/useInterCom.ts"
+  ],
   "exclude": ["node_modules"]
 }

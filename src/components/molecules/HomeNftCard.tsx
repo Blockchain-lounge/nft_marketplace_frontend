@@ -4,17 +4,9 @@ import { useRouter } from "next/router";
 import clsx from "clsx";
 import { CoinIcon, OutlineLikesIcon } from "@/src/components/atoms/vectors";
 import Image from "next/image";
+import { INftcard } from "./NftMediumCard";
 
-export interface INftcard {
-  _id: string;
-  listing_price: string;
-  status: string;
-  time?: string;
-  item_id: {};
-  resell_item_id: {};
-}
-
-const NftCard = ({
+const HomeNftCard = ({
   _id,
   listing_price,
   status,
@@ -23,9 +15,12 @@ const NftCard = ({
 }: //@ts-ignore
 Partial<INftcard>) => {
   const { push } = useRouter();
-  // console.log({ item_title, item_art_url, item_price, item_quantity, status });
+
   return (
-    <div className="nmc-wrapper" onClick={() => push(`/buy-view-nft/${_id}`)}>
+    <div
+      className="rounded-[0.975rem] bg-white max-w-[27rem] w-full lg:max-w-[95%] 2xl:max-w-[95%]"
+      onClick={() => push(`/buy-view-nft/${_id}`)}
+    >
       <div className="nmc-wrapper-img">
         {item_id ? (
           <Image
@@ -119,4 +114,4 @@ Partial<INftcard>) => {
   );
 };
 
-export default NftCard;
+export default HomeNftCard;

@@ -1,10 +1,52 @@
 import { Heading2 } from "@/src/components/atoms";
 import { ShareIcon } from "@/src/components/atoms/vectors";
+import { apiRequest } from "@/src/functions/offChain/apiRequests";
+import { UseInterCom } from "@/src/hooks/useInterCom";
 import ProgressTemplate from "@/src/template/ProgressTemplate";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const SingleSupportSubPage = () => {
+  const [myProfile, setMyProfile] = useState<{
+    username: string;
+    userEmail: string;
+  } | null>(null);
+  const { bootIntercom, loadIntercom } = UseInterCom();
+
+  const fetchUser = async () => {
+    const HEADER = "authenticated";
+    const REQUEST_URL = "user/my_profile";
+    const METHOD = "GET";
+    const DATA = {};
+    apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+      if (response.status == 400) {
+        var error = response.data.error;
+        return;
+      } else if (response.status == 401) {
+        return;
+      } else if (response.status == 200) {
+        // bootIntercom({
+        //   email: response.data.data.email,
+        // });
+        // setMyProfile({
+        //   username: response.data.data.username,
+        //   userEmail: response.data.data.email,
+        // });
+      } else {
+        return;
+      }
+    });
+  };
+
+  useEffect(() => {
+    loadIntercom();
+    bootIntercom();
+    // fetchUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const {
     query: { slug },
   } = useRouter();

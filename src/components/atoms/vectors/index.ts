@@ -34,6 +34,7 @@ export { default as FooterTwitterIcon } from "./footer-twitter-icon";
 export { default as FooterYoutubeIcon } from "./footer-youtube-icon";
 export { default as GamesIcon } from "./games-icon";
 export { default as GlobalIcon } from "./global-icon";
+export { default as GithubIcon } from "./github-icon";
 export { default as ImgUploadIcon } from "./img-upload-icon";
 export { default as InstagramIcon } from "./instagram-icon";
 export { default as IntroIcon } from "./intro-icon";

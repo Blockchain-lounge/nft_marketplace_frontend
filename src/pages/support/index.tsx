@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SupportLayout from "@/src/template/SupportLayout";
 import { Button, Heading2, Input } from "@/src/components/atoms";
 import {
@@ -12,9 +12,17 @@ import {
 } from "@/src/components/atoms/vectors";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { UseInterCom } from "@/src/hooks/useInterCom";
 
 const SupportPage = () => {
   const { push } = useRouter();
+  const { bootIntercom, loadIntercom } = UseInterCom();
+
+  useEffect(() => {
+    loadIntercom();
+    bootIntercom();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const supportLists = [
     {
       label: "Getting started",

@@ -106,9 +106,6 @@ const ViewNft = () => {
 
   const handleBuy = async () => {
     setIsTransLoading((prev) => !prev);
-
-    var itemSupply = null;
-    var listingRoyalty = null;
     {
       /*write your payment info here*/
       const provider = new ethers.providers.Web3Provider(
@@ -123,12 +120,7 @@ const ViewNft = () => {
 
       const priceListed = ethers.utils.parseUnits(
         itemDetail.listing_price.toString(),
-      );
-
-      const price = ethers.utils.parseUnits(
-        itemDetail.listing_price.toString(),
-        "ether"
-      );
+      )
 
       var tnx = null;
       var buyer = connectedAddress;
