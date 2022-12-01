@@ -23,14 +23,16 @@ const NftHeader = ({ heading, selectTitle, to }: INftheader) => {
           {/* {selectTitle && <Select title={selectTitle} />} */}
         </div>
       </div>
-      <div className="hidden lg:block">
-        <span
-          className="nft-tail cursor-pointer"
-          onClick={() => push(to as string)}
-        >
-          See All <ShortNextArrow />
-        </span>
-      </div>
+      {to ? (
+        <div className="hidden lg:block">
+          <span
+            className="nft-tail cursor-pointer"
+            onClick={() => push(to as string)}
+          >
+            See All <ShortNextArrow />
+          </span>
+        </div>
+      ) : null}
     </div>
   );
 };
