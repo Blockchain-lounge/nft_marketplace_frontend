@@ -121,23 +121,26 @@ const ViewCollection = () => {
             setTradingVolume(collectionVolumes(response.data.purchasedItems));
 
             function ownersCount(
-              purchasedItems: Array<{ buyer: string, amount: number, item_token_id: number }>
+              purchasedItems: Array<{
+                buyer: string;
+                amount: number;
+                item_token_id: number;
+              }>
             ) {
               // @ts-nocheck
               let multipleOwned: number = 0;
               for (let i = 0; i < purchasedItems.length; i++) {
                 if (purchasedItems[i].buyer === purchasedItems[i++].buyer) {
-                  multipleOwned = multipleOwned + 1
+                  multipleOwned = multipleOwned + 1;
                 }
               }
               if (multipleOwned != 1) {
-                multipleOwned = multipleOwned - 1
-                multipleOwned = purchasedItems.length - multipleOwned
+                multipleOwned = multipleOwned - 1;
+                multipleOwned = purchasedItems.length - multipleOwned;
               }
               return multipleOwned;
             }
-            setOwnerCount(ownersCount(response.data.purchasedItems))
-
+            setOwnerCount(ownersCount(response.data.purchasedItems));
           } else {
             setTradingVolume("0");
           }
@@ -170,7 +173,7 @@ const ViewCollection = () => {
     //   toast("Something went wrong, please try again!");
     //   return;
     // }
-  }
+  };
 
   const roundTo = function (num: number, places: number) {
     const factor = 10 ** places;
@@ -179,7 +182,7 @@ const ViewCollection = () => {
 
   var owners = 0;
   if (singleCollectionPurchasedItems) {
-    owners = roundTo(tradingVolume, 2)
+    owners = roundTo(tradingVolume, 2);
   }
 
   const collectionPriceInfo = [
@@ -223,7 +226,10 @@ const ViewCollection = () => {
     typeof window !== "undefined" && window.location.origin
       ? window.location.origin
       : "";
-
+  console.log({
+    singleCollectionActivities,
+    singleCollectionItemsActivities,
+  });
   return (
     <DashboardLayout isLoading={isLoading}>
       <ToastContainer />
@@ -236,10 +242,10 @@ const ViewCollection = () => {
                   <Image
                     src={
                       singleCollectionDetail &&
-                        singleCollectionDetail.collectionLogoImage !==
+                      singleCollectionDetail.collectionLogoImage !==
                         undefined &&
-                        singleCollectionDetail.collectionLogoImage !== "" &&
-                        singleCollectionDetail.collectionLogoImage !== null
+                      singleCollectionDetail.collectionLogoImage !== "" &&
+                      singleCollectionDetail.collectionLogoImage !== null
                         ? singleCollectionDetail.collectionLogoImage
                         : "/images/avatar.png"
                     }
@@ -254,9 +260,9 @@ const ViewCollection = () => {
               </div>
 
               {singleCollectionDetail &&
-                singleCollectionDetail.cover_image_id !== undefined &&
-                singleCollectionDetail.cover_image_id !== "" &&
-                singleCollectionDetail.cover_image_id !== null ? (
+              singleCollectionDetail.cover_image_id !== undefined &&
+              singleCollectionDetail.cover_image_id !== "" &&
+              singleCollectionDetail.cover_image_id !== null ? (
                 <Image
                   priority
                   src={singleCollectionDetail.cover_image_id}
@@ -299,7 +305,7 @@ const ViewCollection = () => {
 
               <div className="w-[80%] sm:w-[35%] lg:w-full my-4 lg:my-0 flex gap-x-4 items-center">
                 {singleCollectionDetail &&
-                  singleCollectionDetail.website !== undefined ? (
+                singleCollectionDetail.website !== undefined ? (
                   <a
                     href={singleCollectionDetail.website}
                     target="_blank"
@@ -314,7 +320,7 @@ const ViewCollection = () => {
                   </span>
                 )}
                 {singleCollectionDetail &&
-                  singleCollectionDetail.discord !== undefined ? (
+                singleCollectionDetail.discord !== undefined ? (
                   <a
                     target="_blank"
                     href={singleCollectionDetail.discord}
@@ -329,7 +335,7 @@ const ViewCollection = () => {
                   </span>
                 )}
                 {singleCollectionDetail &&
-                  singleCollectionDetail.twitter !== undefined ? (
+                singleCollectionDetail.twitter !== undefined ? (
                   <a
                     target="_blank"
                     rel="noreferrer"
@@ -344,7 +350,7 @@ const ViewCollection = () => {
                   </span>
                 )}
                 {singleCollectionDetail &&
-                  singleCollectionDetail.instagram !== undefined ? (
+                singleCollectionDetail.instagram !== undefined ? (
                   <a
                     href={singleCollectionDetail.instagram}
                     target="_blank"
@@ -366,8 +372,8 @@ const ViewCollection = () => {
                 </span>
                 {/*You will write a logic to hide this icon if the current user is not the creator of the collection, i have a state to hide it or make it visible*/}
                 {isLoggedIn === true &&
-                  loggedId !== null &&
-                  loggedId === singleCollectionDetail.user_id ? (
+                loggedId !== null &&
+                loggedId === singleCollectionDetail.user_id ? (
                   <span
                     className={clsx(
                       "border border-border-1-line p-2 rounded-md cursor-pointer h-12 flex items-center"
@@ -452,7 +458,7 @@ const ViewCollection = () => {
                 {/* <div>hello</div> */}
                 <div className="">
                   {singleCollectionsListedItemsData &&
-                    singleCollectionsListedItemsData.length > 0 ? (
+                  singleCollectionsListedItemsData.length > 0 ? (
                     <div className="grid lg:grid-cols-3 2xl:grid-cols-4 gap-8">
                       {singleCollectionsListedItemsData.map((val, i) => (
                         <NftMediumCard2 {...val} key={val._id} />
@@ -477,19 +483,20 @@ const ViewCollection = () => {
               </div>
               <div className="">
                 {singleCollectionActivities.length === 0 &&
-                  singleCollectionItemsActivities.length === 0
+                singleCollectionItemsActivities.length === 0
                   ? "No activities yet!"
                   : singleCollectionActivities.length > 0
-                    ? singleCollectionActivities.map((activity, i) => (
+                  ? singleCollectionActivities.map((activity, i) => (
                       <CollectionActivityCard {...activity} key={i} />
                     ))
-                    : ""}
-                {/* {} */}
-                {singleCollectionItemsActivities &&
-                  singleCollectionItemsActivities.length > 0
+                  : ""}
+
+                {singleCollectionItemsActivities.length === 0
+                  ? ""
+                  : singleCollectionItemsActivities.length >= 1
                   ? singleCollectionItemsActivities.map((activity, i) => (
-                    <CollectionActivityCard {...activity} key={i} />
-                  ))
+                      <CollectionActivityCard {...activity} key={i} />
+                    ))
                   : ""}
               </div>
             </>
