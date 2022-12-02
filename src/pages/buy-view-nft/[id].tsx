@@ -217,11 +217,10 @@ const ViewNft = () => {
       const DATA = formData;
       toast("Finalizing the transaction...");
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
-        console.log({ response });
         if (response.status == 200 || response.status == 201) {
           toast(response.data.message);
           setIsTransLoading(false);
-          // push("/profile");
+          push("/profile");
         } else {
           toast(response.data.error);
           setIsTransLoading(false);
