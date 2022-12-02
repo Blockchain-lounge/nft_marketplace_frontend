@@ -122,6 +122,10 @@ const ViewNft = () => {
         itemDetail.listing_price.toString(),
       )
 
+      const price = ethers.utils.parseUnits(
+        itemDetail.listing_price.toString(),'ether'
+      )
+
       var tnx = null;
       var buyer = connectedAddress;
        var trackCopyBaseUrl = "";
