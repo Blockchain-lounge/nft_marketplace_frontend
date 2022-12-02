@@ -48,57 +48,19 @@ const ViewUserNft = () => {
         contract_address: itemDetail.tokenAddress,
         token_id: itemDetail.tokenId
       };
-      
-      const HEADER = "authenticated";
-      const REQUEST_URL = "nft-resell/approve-listing";
-      const METHOD = "POST";
-      const DATA = formData;
-      setIsTransLoading(true);
-
-      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then( async function (response) {
-        if (response.status == 201) {
-          toast("Please approve this transaction!");
-
-          const provider = new ethers.providers.Web3Provider(
-            (window as any).ethereum
-          );
-          const signer = provider.getSigner();
-          const contract = new ethers.Contract(
-            contractAddress,
-            nftAbi,
-            signer
-          );
-          var tnx = null;
-          try{
-            const transaction = await contract.approve(
-              APPCONFIG.SmartContractAddress,
-              tokenId
-            );
-            tnx = await transaction.wait();
-          }
-          catch(err){
-             toast("Transaction cancelled!");
-          }
-          if(tnx.events[0].event === "Approval"){
-              push(`/list-owned-nft-for-sale/${itemDetail.tokenAddress}?tokenId=${itemDetail.tokenId}`);
-          }
-          else{
-            toast("The approval process failed!");
-          }
-          setIsTransLoading(false);
-        }
-        else if(response.status == 200){
-          toast("The approval already granted!");
-          push(`/list-owned-nft-for-sale/${itemDetail.tokenAddress}?tokenId=${itemDetail.tokenId}`);
-          
-        } else {
-          toast(response.data.error);
-        }
-      });
-
+      var tnx = null;
+      try{
+        const transaction = await contract.approve(
+          APPCONFIG.SmartContractAddress,
+          tokenId
+        );
+        tnx = await transaction.wait();
       }
-      else{
-        toast("Unable to verify the token details...")
+      catch(err){
+         toast("Transaction cancelled!");
+      }
+      if(tnx.events[0].event === "Approval"){
+          push(`/list-owned-nft-for-sale/${itemDetail.tokenAddress}?tokenId=${itemDetail.tokenId}`);
       }
     }
     return;
