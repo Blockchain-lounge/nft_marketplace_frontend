@@ -43,24 +43,37 @@ const ViewUserNft = () => {
       if (itemDetail && itemDetail.tokenAddress && itemDetail.tokenId) {
         const contractAddress = itemDetail.tokenAddress;
         const tokenId = itemDetail.tokenId;
-
-      var formData = {
-        contract_address: itemDetail.tokenAddress,
-        token_id: itemDetail.tokenId
-      };
-      var tnx = null;
-      try{
-        const transaction = await contract.approve(
-          APPCONFIG.SmartContractAddress,
-          tokenId
+        const provider = new ethers.providers.Web3Provider(
+          (window as any).ethereum
         );
-        tnx = await transaction.wait();
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+          contractAddress,
+          nftAbi,
+          signer
+        );
+        
+        var tnx = null;
+        try{
+          const transaction = await contract.approve(
+            APPCONFIG.SmartContractAddress,
+            tokenId
+          );
+          tnx = await transaction.wait();
+        }
+        catch(err){
+           toast("Transaction cancelled!");
+        }
+        if(tnx.events[0].event === "Approval"){
+            push(`/list-owned-nft-for-sale/${itemDetail.tokenAddress}?tokenId=${itemDetail.tokenId}`);
+        }
+        else{
+          toast("The approval process failed!");
+        }
+        setIsTransLoading(false);
       }
-      catch(err){
-         toast("Transaction cancelled!");
-      }
-      if(tnx.events[0].event === "Approval"){
-          push(`/list-owned-nft-for-sale/${itemDetail.tokenAddress}?tokenId=${itemDetail.tokenId}`);
+      else{
+        toast("Unable to verify the token details...")
       }
     }
     return;
