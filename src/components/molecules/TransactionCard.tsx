@@ -13,6 +13,7 @@ const TransactionCard = ({
   activity_type,
   createdAt,
   created_item_listed,
+  resell_item_id
 }: // activity_type,
 // ITransactionCard &
 {
@@ -21,6 +22,7 @@ const TransactionCard = ({
   listed_item: string;
   created_item: string;
   created_item_listed: string;
+  resell_item_id: string;
   activity_type: string;
   createdAt: string;
 }) => {
@@ -86,8 +88,24 @@ const TransactionCard = ({
               className="rounded-full"
               placeholder="blur"
               blurDataURL="/images/placeholder.png"
+            />)
+          : resell_item_id ?(
+            <Image
+              src={
+                resell_item_id &&
+                resell_item_id !== undefined &&
+                resell_item_id !== null
+                  ? resell_item_id.item_art_url
+                  : ""
+              }
+              alt=""
+              layout="fill"
+              className="rounded-full"
+              placeholder="blur"
+              blurDataURL="/images/placeholder.png"
             />
-          ) : created_item_listed ? (
+          )
+          : created_item_listed ? (
             <img
               src={
                 created_item_listed &&

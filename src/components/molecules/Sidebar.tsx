@@ -5,21 +5,15 @@ import { useRouter } from "next/router";
 import { SidebarLink, Button } from "@/src/components/atoms";
 import {
   CollectionsIcon,
-  ExploreIcon,
-  TrendingIcon,
   GamesIcon,
   ActivityIcon,
-  SupportIcon,
-  DiscordIcon,
-  SnapchatIcon,
-  TiktokIcon,
-  YoutubeIcon,
   TwitterIcon,
-  InstagramIcon,
   WalletIcon,
   TelegramIcon,
-  MediumIcon,
+  GithubIcon,
   BlogIcon,
+  NftAcademyIcon,
+  SupportIcon,
 } from "@/src/components/atoms/vectors";
 
 import { useDispatch } from "react-redux";
@@ -77,17 +71,21 @@ const SideBar = () => {
       link: "/cloudax-games",
       tag: "coming",
     },
-
+    {
+      label: "NFT Academy",
+      icon: <NftAcademyIcon />,
+      link: "/nft-academy",
+    },
     {
       label: "Blog",
       icon: <BlogIcon />,
       to: "https://spotlight.cloudax.io/topics/nft/",
     },
-    // {
-    //   label: "Support",
-    //   icon: <SupportIcon />,
-    //   link: "/support",
-    // },
+    {
+      label: "Support",
+      icon: <SupportIcon />,
+      link: "/support",
+    },
   ];
 
   const socialLinks = [
@@ -102,9 +100,9 @@ const SideBar = () => {
       to: "https://t.me/cloudaxofficial",
     },
     {
-      icon: <MediumIcon />,
+      icon: <GithubIcon />,
       label: "Medium",
-      to: "http://cloudax.medium.com/",
+      to: "http://github.com/cloudaxglobal",
     },
     // { icon: <DiscordIcon />, label: "Discord" },
     // { icon: <InstagramIcon />, label: "Instagram" },
@@ -165,7 +163,7 @@ const SideBar = () => {
         </span>
       </div>
       {sidebarLinks.map((item) =>
-        item.label === "Blog" || item.label === "Support" ? (
+        item.label === "Blog" ? (
           <a className="sidebar-menu" href={item.to} key={item.label}>
             <div className="sidebar-title-wrapper">
               <div className="sidebar-title">

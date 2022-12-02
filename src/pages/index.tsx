@@ -11,8 +11,7 @@ import {
   NftMiniCard,
   HeroCard,
   NftSlider,
-  CategoryHeroCard,
-  NftMediumCard,
+  HomeNftCard,
 } from "@/src/components/molecules";
 
 import DashboardLayout from "@/src/template/DashboardLayout";
@@ -80,7 +79,7 @@ const Home: NextPage = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // console.log({ activeCard });
+
   return (
     <DashboardLayout>
       <div className="home-wrapper scrollbar-hide">
@@ -88,7 +87,6 @@ const Home: NextPage = () => {
           {heroData.length > 1 && activeCard ? (
             <section className="hero">
               <div>
-                {/* {<Tag tag={activeCard?.name} icon={<FeaturedIcon />} />} */}
                 <Heading title={activeCard.name} twClasses="mt-4" />
                 <p className="lg:max-w-xl">{activeCard.description}</p>
                 <Button
@@ -168,11 +166,10 @@ const Home: NextPage = () => {
             </section>
 
             <section>
-              <NftHeaderCard heading="Featured Drops" to="/explore" />
+              <NftHeaderCard heading="Featured Drops" />
               {items ? (
-                <NftSlider Card={NftMediumCard} data={items} />
+                <NftSlider Card={HomeNftCard} data={items} />
               ) : (
-                // <div className="grid justify-between gap-y-8 sm:grid-cols-2 md:grid-cols-3  2xl:grid-cols-4">
                 <div className="flex flex-wrap justify-evenly lg:justify-between gap-y-12">
                   {Array(12)
                     .fill(0)

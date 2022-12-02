@@ -3,7 +3,8 @@ import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Button, Input2 } from "@/src/components/atoms";
+import { Button, Input2, Select } from "../../components/atoms";
+
 import {
   AuctionIcon,
   BidIcon,
@@ -22,7 +23,10 @@ import EarningLayout from "@/src/template/EarningLayout";
 import Image from "next/image";
 import { apiRequest } from "@/src/functions/offChain/apiRequests";
 import { INftProps } from "@/src/utilities/types";
-
+import APPCONFIG from "@/src/constants/Config";
+import { ethers } from "ethers";
+import abi from "../../artifacts/abi.json";
+import { connectedAccount } from "../../functions/onChain/authFunction";
 const ListNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [isTransloading, setIsTransLoading] = useState(false);
@@ -31,23 +35,28 @@ const ListNft = () => {
     listing_price: "0",
     listing_royalty: "0",
   });
+  const [connectedAddress, setConnectedAddress] = useState(null);
   const [itemDetail, setItemDetail] = useState<INftProps | null>(null);
   const { query, push } = useRouter();
   const { id, tokenId } = query;
   const [priceListType, setPriceListType] = useState("Fixed price");
-
+  const [collections, setCollections] = useState([]);
+  const [nftPayloadselect, setNftPayloadSelect] = useState({
+    label: "Select a collection",
+    id: "",
+  });
   const fetchItemDetail = async () => {
-    if (id !== undefined) {
+    if (id !== undefined && !itemDetail) {
       const contractAddress = id;
       const HEADER = "authenticated";
-      const REQUEST_URL = "nft-item/owned/detail/" + tokenId+"/"+contractAddress;
+      const REQUEST_URL = "nft-item/owned/detail/" + tokenId + "/" + contractAddress;
       const METHOD = "GET";
       const DATA = {};
 
       await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
         if (response.status == 200) {
           setItemDetail(response.data.data);
-        } 
+        }
         else if (response.status !== 200 && response.data.error && response.data.error !== null) {
           var error = response.data.error;
           toast(error);
@@ -61,10 +70,54 @@ const ListNft = () => {
     }
   };
 
+  const fetchCollections = async () => {
+    if(!collections || collections === [] || collections.length ===0){
+      try {
+        const HEADER = "authenticated";
+        const REQUEST_URL = "nft-collection/mine";
+        const METHOD = "GET";
+        const DATA = {};
+        apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+          if (response.status == 400) {
+            var error = response.data.error;
+            toast(error);
+            return;
+          } else if (response.status == 401) {
+            toast("Unauthorized request!");
+            return;
+          } else if (response.status == 200) {
+            setCollections(response.data.data);
+          } else {
+            toast("Something went wrong, please try again!");
+            return;
+          }
+        });
+      } catch (error) {
+        toast("Something went wrong, please try again!");
+        return;
+      }
+
+    }
+  };
+
+  const handleSelect = (file) => {
+    setNftPayloadSelect({ ...nftPayloadselect, ...file });
+  };
+
   useEffect(() => {
+    if(!connectedAddress){
+      connectedAccount().then((response) => {
+        if (response !== null) {
+          setConnectedAddress(response);
+        } else {
+          push("/");
+        }
+      });
+    }
+    fetchCollections();
     fetchItemDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id,collections]);
 
   const priceListingTypes = [
     { type: "Fixed price", icon: <FixedPriceIcon /> },
@@ -91,26 +144,13 @@ const ListNft = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let msg = "";
-
-    if (!nftListingPayload.listing_quantity.trim()) {
-      msg = "quantity listed is empty";
-      toast(msg);
-      return;
-    } else if (isNaN(parseFloat(nftListingPayload.listing_quantity)) === true) {
-      msg = "quantity to be listed must be a valid positive number";
-      toast(msg);
-      return;
-    } else if (
-      Number(nftListingPayload.listing_quantity) >
-      Number(itemDetail?.amount)
-    ) {
-      msg = "quantity is greater than your item total supply";
+   if (!nftListingPayload.listing_price.trim() || parseFloat(nftListingPayload.listing_price) === 0) {
+      msg = "listed price is empty";
       toast(msg);
       return;
     }
-    
-    if (!nftListingPayload.listing_price.trim()) {
-      msg = "listed price is empty";
+    else if (!nftPayloadselect.id || nftPayloadselect.id.length === 0) {
+      msg = "listed collection is empty";
       toast(msg);
       return;
     } else if (isNaN(parseFloat(nftListingPayload.listing_price)) === true) {
@@ -118,11 +158,49 @@ const ListNft = () => {
       toast(msg);
       return;
     } else {
+      setIsTransLoading(true);
       try {
+
+        const provider = new ethers.providers.Web3Provider(
+              (window as any).ethereum
+            );
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+                              APPCONFIG.SmartContractAddress,
+                              abi,
+                              signer
+                            );
+        const tokenAddress = id;
+        const listing_price = ethers.utils.parseUnits(
+          nftListingPayload.listing_price.toString()
+        );
+        try{
+          toast("Please approve this transaction!");
+        const transaction = await contract.listToken(
+          tokenAddress,
+          tokenId,
+          listing_price,
+          connectedAddress
+        );
+        const tnx = await transaction.wait();
+        }
+        catch(err){
+          setIsTransLoading(false);
+          toast("Transaction cancelled!");
+        }
+
+        var formData = {
+          listing_price: nftListingPayload.listing_price,
+          listing_quantity: 1,
+          token_address: tokenAddress,
+          token_id: tokenId,
+          collection_id: nftPayloadselect.id
+        };
+
         const HEADER = "authenticated";
-        const REQUEST_URL = "nft-listing/store/" + id;
+        const REQUEST_URL = "nft-resell/list-token";
         const METHOD = "POST";
-        const DATA = nftListingPayload;
+        const DATA = formData;
 
         apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
           if (response.status == 400) {
@@ -134,6 +212,10 @@ const ListNft = () => {
             toast("Unauthorized request!");
             setIsTransLoading(false);
             return;
+          }
+          else if (response.status == 200) {
+            setIsTransLoading(false);
+            toast(response.data.message);
           } else if (response.status == 201) {
             setIsTransLoading(false);
             toast(response.data.message);
@@ -144,10 +226,11 @@ const ListNft = () => {
             return;
           }
         });
-      } catch (error) {
-        toast("Something went wrong, please try again!");
-        return;
-      }
+       } catch (error) {
+        setIsTransLoading(false);
+         toast("Something went wrong, please try again!");
+         return;
+       }
     }
   };
 
@@ -156,7 +239,9 @@ const ListNft = () => {
       <div className="flex flex-col-reverse gap-y-20 lg:gap-0 lg:flex-row lg:h-[70vh]">
         <div className="space-y-8 lg:w-[70%]">
           <ToastContainer />
-          <form className="space-y-8" onSubmit={handleSubmit}>
+          <form className="space-y-8" 
+          onSubmit={handleSubmit}
+          >
             <div className="space-y-2">
               <div className="lg:w-[80%] space-y-8">
                 {/* <Select title="ETH" icon={<CoinIcon />} /> */}
@@ -167,12 +252,10 @@ const ListNft = () => {
                   onChange={handleFieldChange}
                   value={nftListingPayload.listing_price}
                 />
-                <Input2
-                  label="Quantity to be listed"
-                  name="listing_quantity"
-                  placeholder="0"
-                  onChange={handleFieldChange}
-                  value={nftListingPayload.listing_quantity}
+                <Select
+                  title={nftPayloadselect.label}
+                  lists={collections}
+                  onClick2={handleSelect}
                 />
               </div>
             </div>
@@ -193,7 +276,8 @@ const ListNft = () => {
             <Button
               isDisabled={isTransloading}
               title="Complete listing"
-              // onClick={() => setShowModal((prev) => !prev)}
+              onClick={async (e) => await handleSubmit(e)}
+            // onClick={() => setShowModal((prev) => !prev)}
             />
           </form>
         </div>
@@ -227,7 +311,7 @@ const ListNft = () => {
               <div className="w-full bg-white rounded-b-2xl p-4 flex flex-col">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-black text-[1.3rem]">
-                    {itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : itemDetail.name+" - "+itemDetail.tokenId}
+                    {itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : itemDetail.name + " - " + itemDetail.tokenId}
                   </span>
                 </div>
               </div>

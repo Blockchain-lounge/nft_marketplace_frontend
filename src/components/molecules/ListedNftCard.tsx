@@ -20,6 +20,7 @@ const ListedNftCard = ({
   listing_price,
   listing_remaining,
   listing_quantity,
+  resell_item_id,
   to = "buy-view-nft",
 }: Partial<Pick<INftcard, "name" | "imgUrl" | "price">> & {
   time?: boolean;
@@ -33,7 +34,27 @@ const ListedNftCard = ({
       onClick={() => push(`/${to}/${_id}`)}
     >
       <div className="nmc-wrapper-img">
-        <Image
+        {
+          resell_item_id 
+          && resell_item_id.item_art_url
+          ?(
+            <Image
+          src={
+              resell_item_id.item_art_url !== undefined &&
+              resell_item_id.item_art_url !== null &&
+              resell_item_id.item_art_url !== ""
+              ? resell_item_id.item_art_url
+              : ""
+          }
+          alt={resell_item_id.item_title}
+          layout="fill"
+          placeholder="blur"
+          blurDataURL="/images/placeholder.png"
+          objectFit="cover"
+          className="rounded-t-[0.975rem]"
+        />
+          ):
+          <Image
           src={
             item_art_url === undefined ||
             item_art_url === null ||
@@ -51,18 +72,23 @@ const ListedNftCard = ({
           objectFit="cover"
           className="rounded-t-[0.975rem]"
         />
+        }
       </div>
       <div className="nmc-sub-wrapper flex justify-between">
         <div className="flex flex-col gap-y-[0.3rem] p-2">
           <span className="font-bold text-black text-xl">
-            {item_title === undefined ||
-            item_title === null ||
-            (item_title === "" &&
-              item_id !== undefined &&
-              item_id !== null &&
-              item_id !== "")
-              ? item_id.item_title
-              : item_title}
+            { resell_item_id && resell_item_id.item_title
+            ?(
+              resell_item_id.item_title
+              )
+              ? item_id !== undefined &&
+                item_id !== null &&
+                item_id !== ""
+                ? (item_id.item_title)
+                : item_title
+              : ""
+            :""
+            }
           </span>
           <span className="nmc-sub-wrapper-2-owner">
             {listing_quantity !== undefined

@@ -14,7 +14,10 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { apiRequest } from "../../functions/offChain/apiRequests";
-import { toast } from "react-toastify";
+import { toast,ToastContainer } from "react-toastify";
+import APPCONFIG from "@/src/constants/Config";
+import { ethers } from "ethers";
+import "react-toastify/dist/ReactToastify.css";
 
 const ViewUserNft = () => {
   const { query, push } = useRouter();
@@ -22,9 +25,56 @@ const ViewUserNft = () => {
   const [owner, setOwner] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [itemDetail, setItemDetail] = useState(null);
-  const handleSellNft = () => {
-    if(itemDetail){
-      push(`/list-owned-nft-for-sale/${itemDetail.tokenAddress}?tokenId=${itemDetail.tokenId}`);
+  const [isTransloading, setIsTransLoading] = useState(false);
+  const nftAbi = [
+    "function approve(address to, uint256 tokenId) external",
+    "function setApprovalForAll(address operator, bool _approved) external",
+    "function getApproved(uint256 tokenId) external view returns (address operator)",
+    "function isApprovedForAll(address owner, address operator) external view returns (bool)",
+    "function safeTransferFrom(address from, address to, uint256 tokenId) external",
+    "function ownerOf(uint256 tokenId) external view returns (address owner)",
+    "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)",
+    "event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId)",
+    "event ApprovalForAll(address indexed owner, address indexed operator, bool approved)"
+  ];
+
+  const handleSellNft = async () => {
+    if (itemDetail) {
+      if (itemDetail && itemDetail.tokenAddress && itemDetail.tokenId) {
+        const contractAddress = itemDetail.tokenAddress;
+        const tokenId = itemDetail.tokenId;
+        const provider = new ethers.providers.Web3Provider(
+          (window as any).ethereum
+        );
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+          contractAddress,
+          nftAbi,
+          signer
+        );
+        
+        var tnx = null;
+        try{
+          const transaction = await contract.approve(
+            APPCONFIG.SmartContractAddress,
+            tokenId
+          );
+          tnx = await transaction.wait();
+        }
+        catch(err){
+           toast("Transaction cancelled!");
+        }
+        if(tnx.events[0].event === "Approval"){
+            push(`/list-owned-nft-for-sale/${itemDetail.tokenAddress}?tokenId=${itemDetail.tokenId}`);
+        }
+        else{
+          toast("The approval process failed!");
+        }
+        setIsTransLoading(false);
+      }
+      else{
+        toast("Unable to verify the token details...")
+      }
     }
     return;
   };
@@ -58,14 +108,14 @@ const ViewUserNft = () => {
     if (id !== undefined) {
       const contractAddress = id;
       const HEADER = "authenticated";
-      const REQUEST_URL = "nft-item/owned/detail/" + tokenId+"/"+contractAddress;
+      const REQUEST_URL = "nft-item/owned/detail/" + tokenId + "/" + contractAddress;
       const METHOD = "GET";
       const DATA = {};
 
       await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
         if (response.status == 200) {
           setItemDetail(response.data.data);
-        } 
+        }
         else if (response.status !== 200 && response.data.error && response.data.error !== null) {
           var error = response.data.error;
           toast(error);
@@ -79,6 +129,8 @@ const ViewUserNft = () => {
     }
   };
 
+
+
   useEffect(() => {
     fetchItemDetail();
     fetchUser();
@@ -87,6 +139,7 @@ const ViewUserNft = () => {
   // console.log({ itemDetail });
   return (
     <DashboardLayout>
+        <ToastContainer />
       {itemDetail !== null ? (
         <div className="sub-layout-wrapper">
           <div className="center space-y-8 h-screen lg:h-[80vh]">
@@ -95,20 +148,20 @@ const ViewUserNft = () => {
                 <div className="relative h-[23rem] lg:h-[100%]">
                   {
                     itemDetail.metadata &&
-                    itemDetail.metadata.image
-                    && itemDetail.metadata.image !== null
-                    ?
-                    <Image
-                    src={ itemDetail.metadata && itemDetail.metadata.image}
-                    alt={itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : ""}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-xl"
-                    placeholder="blur"
-                    blurDataURL="/images/placeholder.png"
-                    />
-                    :
-                    ""
+                      itemDetail.metadata.image
+                      && itemDetail.metadata.image !== null
+                      ?
+                      <Image
+                        src={itemDetail.metadata && itemDetail.metadata.image}
+                        alt={itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : ""}
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded-xl"
+                        placeholder="blur"
+                        blurDataURL="/images/placeholder.png"
+                      />
+                      :
+                      ""
                   }
                 </div>
 
@@ -156,7 +209,7 @@ const ViewUserNft = () => {
                     {/*collection-logo*/}
                     <div className="flex items-center mb-4">
                       <span className="text-xl lg:mr-1">
-                        { itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : itemDetail.name+" - "+itemDetail.tokenId}
+                        {itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : itemDetail.name + " - " + itemDetail.tokenId}
                       </span>
                       <div className="h-6 w-6 relative">
                         <Image
@@ -170,7 +223,7 @@ const ViewUserNft = () => {
                     </div>
                   </div>
                   <span className="text-4xl font-bold capitalize">
-                    {itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : itemDetail.name+" - "+itemDetail.tokenId}
+                    {itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : itemDetail.name + " - " + itemDetail.tokenId}
                   </span>
                 </div>
                 <div className="view-hero-nft-owner">
@@ -210,11 +263,12 @@ const ViewUserNft = () => {
                     </div>
                     <div className="flex items-center justify-between gap-x-4 mt-4">
                       <Button
-                      title="Sell" 
-                      wt="w-full" 
-                      onClick={handleSellNft} 
-                    /> 
-                    </div> 
+                        title="Approve & Sell"
+                        wt="w-full"
+                        onClick={handleSellNft}
+                        isDisabled={isTransloading}
+                      />
+                    </div>
                   </div>
 
                   {/* <Button title="Edit" wt="w-full" outline2 /> */}
@@ -252,8 +306,8 @@ const ViewUserNft = () => {
             <div className=" space-y-3">
               <h2 className="text-2xl font-bold ">Description</h2>
               <div className="flex flex-col">
-                <p className="text-txt-2">{itemDetail.metadata && itemDetail.metadata.description 
-                ? itemDetail.metadata.description : itemDetail.name+" - "+itemDetail.tokenId}</p>
+                <p className="text-txt-2">{itemDetail.metadata && itemDetail.metadata.description
+                  ? itemDetail.metadata.description : itemDetail.name + " - " + itemDetail.tokenId}</p>
               </div>
               {/* <span className="flex items-center gap-x-2 text-txt-3 font-medium">
               See more
