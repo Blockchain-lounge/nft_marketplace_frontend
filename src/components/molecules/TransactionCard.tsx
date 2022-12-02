@@ -13,7 +13,7 @@ const TransactionCard = ({
   activity_type,
   createdAt,
   created_item_listed,
-  resell_item_id
+  resell_item_id,
 }: // activity_type,
 // ITransactionCard &
 {
@@ -72,8 +72,8 @@ const TransactionCard = ({
 
   return (
     <div className="total-earning-card-wrapper">
-      <div className="total-earning-details">
-        <div className="total-earning-details-img">
+      <div className="transaction-card-details">
+        <div className="transaction-card-img">
           {created_item ? (
             <Image
               src={
@@ -88,8 +88,8 @@ const TransactionCard = ({
               className="rounded-full"
               placeholder="blur"
               blurDataURL="/images/placeholder.png"
-            />)
-          : resell_item_id ?(
+            />
+          ) : resell_item_id ? (
             <Image
               src={
                 resell_item_id &&
@@ -104,9 +104,8 @@ const TransactionCard = ({
               placeholder="blur"
               blurDataURL="/images/placeholder.png"
             />
-          )
-          : created_item_listed ? (
-            <img
+          ) : created_item_listed ? (
+            <Image
               src={
                 created_item_listed &&
                 created_item_listed !== undefined &&
@@ -115,6 +114,11 @@ const TransactionCard = ({
                   : "/images/profile-nft.png"
               }
               alt=""
+              layout="fill"
+              // objectFit="contain"
+              className="rounded-full"
+              placeholder="blur"
+              blurDataURL="/images/placeholder.png"
             />
           ) : (
             ""

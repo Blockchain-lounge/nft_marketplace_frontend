@@ -3,5 +3,5 @@
 } */
 
 .explore-items-wrapper {
-  @apply grid max-w-[70%] mx-auto sm:grid-cols-2 md:grid-cols-3 sm:mx-0 sm:max-w-none lg:grid-cols-4 lg:gap-x-4 lg:justify-between gap-7 overflow-auto;
+  @apply grid max-w-[100%] mx-auto sm:grid-cols-2 md:grid-cols-3 sm:mx-0 sm:max-w-none 2xl:grid-cols-4 lg:gap-x-4 lg:justify-between gap-7 overflow-auto;
 }

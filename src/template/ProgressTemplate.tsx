@@ -3,11 +3,14 @@ import { useRouter } from "next/router";
 import React, { ReactNode, useEffect, useState } from "react";
 import { ExternalLinkIcon } from "../components/atoms/vectors";
 import { Footer } from "../components/organisms";
+import { UseInterCom } from "../hooks/useInterCom";
 
 const ProgressTemplate = ({ children }: { children: ReactNode }) => {
   const [complete, setComplete] = useState(0);
+  const { shutdownIntercom } = UseInterCom();
   const { push } = useRouter();
   const handleHomeRoute = () => {
+    shutdownIntercom();
     push("/");
   };
 
@@ -33,7 +36,7 @@ const ProgressTemplate = ({ children }: { children: ReactNode }) => {
   return (
     <div className="progress-height">
       <nav className="progress-nav">
-        <span className="progress-nav-img-wrapper" onClick={() => push("/")}>
+        <span className="progress-nav-img-wrapper" onClick={handleHomeRoute}>
           <Image
             priority
             src="/images/cloudax1.svg"
@@ -42,7 +45,7 @@ const ProgressTemplate = ({ children }: { children: ReactNode }) => {
           />
         </span>
 
-        <div className="flex gap-x-2 cursor-pointer" onClick={() => push("/")}>
+        <div className="flex gap-x-2 cursor-pointer" onClick={handleHomeRoute}>
           <ExternalLinkIcon color="white" />
           <span className="font-medium">Go Home</span>
         </div>

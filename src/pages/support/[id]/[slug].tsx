@@ -5,15 +5,14 @@ import { UseInterCom } from "@/src/hooks/useInterCom";
 import ProgressTemplate from "@/src/template/ProgressTemplate";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { useState } from "react";
+// import { toast } from "react-toastify";
 
 const SingleSupportSubPage = () => {
   const [myProfile, setMyProfile] = useState<{
     username: string;
     userEmail: string;
   } | null>(null);
-  const { bootIntercom, loadIntercom } = UseInterCom();
 
   const fetchUser = async () => {
     const HEADER = "authenticated";
@@ -39,13 +38,6 @@ const SingleSupportSubPage = () => {
       }
     });
   };
-
-  useEffect(() => {
-    loadIntercom();
-    bootIntercom();
-    // fetchUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const {
     query: { slug },

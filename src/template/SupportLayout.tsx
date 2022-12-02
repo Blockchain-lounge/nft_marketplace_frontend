@@ -3,11 +3,14 @@ import { useRouter } from "next/router";
 import React, { ReactNode, useEffect, useState } from "react";
 import { ExternalLinkIcon } from "../components/atoms/vectors";
 import { Footer } from "../components/organisms";
+import { UseInterCom } from "../hooks/useInterCom";
 
 const SupportLayout = ({ children }: { children: ReactNode }) => {
+  const { shutdownIntercom } = UseInterCom();
   const { push } = useRouter();
   const handleHomeRoute = () => {
     push("/");
+    shutdownIntercom();
   };
 
   return (

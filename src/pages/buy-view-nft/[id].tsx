@@ -34,6 +34,7 @@ import { connectedAccount } from "../../functions/onChain/authFunction";
 import { INftcard } from "@/src/components/molecules/NftMediumCard";
 import { BigNumber, ethers } from "ethers";
 import APPCONFIG from "@/src/constants/Config";
+import { ActivityLoader } from "@/src/components/lazy-loaders";
 const ViewNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModaltype] = useState("buy");
@@ -44,7 +45,7 @@ const ViewNft = () => {
   const [connectedAddress, setConnectedAddress] = useState(null);
   const [userId, setUserId] = useState<null | string>(null);
   const [isTransloading, setIsTransLoading] = useState(false);
-  const [activities, setActivities] = useState([]);
+  const [activities, setActivities] = useState(null);
 
   // const viewNftStages = ["overview", "properties", "bids", "history"];
   const viewNftStages = ["overview", "activities"];
@@ -119,37 +120,36 @@ const ViewNft = () => {
       );
 
       const priceListed = ethers.utils.parseUnits(
-        itemDetail.listing_price.toString(),
-      )
+        itemDetail.listing_price.toString()
+      );
 
       const price = ethers.utils.parseUnits(
-        itemDetail.listing_price.toString(),'ether'
-      )
+        itemDetail.listing_price.toString(),
+        "ether"
+      );
 
       var tnx = null;
       var buyer = connectedAddress;
-       var trackCopyBaseUrl = "";
-       var soldItemCopyId = "";
-       var amount = itemDetail.listing_price as string;
- 
-      if(itemDetail.relisted && itemDetail.relisted === true){
+      var trackCopyBaseUrl = "";
+      var soldItemCopyId = "";
+      var amount = itemDetail.listing_price as string;
+
+      if (itemDetail.relisted && itemDetail.relisted === true) {
         toast("Please approve this transaction!");
         const transaction = await contract.buyNft(
           itemDetail.item.token_address,
           itemDetail.item.token_id,
           {
             value: price,
-            gasPrice: 20000000
-          },
+            gasPrice: 20000000,
+          }
         );
         tnx = await transaction.wait();
 
-       buyer = connectedAddress;
-       trackCopyBaseUrl = "null";
-       soldItemCopyId = itemDetail.item.token_id;
-      }
-
-      else if(!itemDetail.relisted || itemDetail.relisted === false){
+        buyer = connectedAddress;
+        trackCopyBaseUrl = "null";
+        soldItemCopyId = itemDetail.item.token_id;
+      } else if (!itemDetail.relisted || itemDetail.relisted === false) {
         toast("Please approve this transaction!");
 
         const item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail.item._id}`;
@@ -162,47 +162,47 @@ const ViewNft = () => {
           item_base_uri,
           {
             value: price,
-            gasPrice: 20000000
-          },
+            gasPrice: 20000000,
+          }
         );
-       tnx = await transaction.wait();
-       // var amount = price;
-       
-       try {
-         if (tnx.events[0]) {
-           if (tnx.events[4]) {
-             soldItemCopyId = tnx.events[3].args[0].toNumber();
-             buyer = tnx.events[3].args[3];
-             trackCopyBaseUrl = tnx.events[3].args[5];
-             // console.log(
-             //   "Log 5: soldItemCopyIdTop",
-             //   tnx.events[3].args[0].toNumber()
-             // );
-             // console.log("buyer", tnx.events[3].args[3]);
-             // console.log("buytrackCopyBaseUrl", tnx.events[3].args[5]);
-           } else {
-             soldItemCopyId = tnx.events[1].args[0].toNumber();
-             buyer = tnx.events[1].args[3];
-             trackCopyBaseUrl = tnx.events[1].args[5];
-             // console.log(
-             //   "Log 3: soldItemCopyIdTop",
-             //   tnx.events[1].args[0].toNumber()
-             // );
-             // console.log("buyer", tnx.events[1].args[3]);
-             console.log("buytrackCopyBaseUrl-2", tnx.events[1].args[5]);
-           }
-         } else {
-           toast("We were unable to complete your transaction!");
-           setIsTransLoading((prev) => !prev);
-           return;
-         }
-       } catch (error) {
-         setIsTransLoading((prev) => !prev);
-         // console.log("Event error", error);
-         return;
-       }
+        tnx = await transaction.wait();
+        // var amount = price;
+
+        try {
+          if (tnx.events[0]) {
+            if (tnx.events[4]) {
+              soldItemCopyId = tnx.events[3].args[0].toNumber();
+              buyer = tnx.events[3].args[3];
+              trackCopyBaseUrl = tnx.events[3].args[5];
+              // console.log(
+              //   "Log 5: soldItemCopyIdTop",
+              //   tnx.events[3].args[0].toNumber()
+              // );
+              // console.log("buyer", tnx.events[3].args[3]);
+              // console.log("buytrackCopyBaseUrl", tnx.events[3].args[5]);
+            } else {
+              soldItemCopyId = tnx.events[1].args[0].toNumber();
+              buyer = tnx.events[1].args[3];
+              trackCopyBaseUrl = tnx.events[1].args[5];
+              // console.log(
+              //   "Log 3: soldItemCopyIdTop",
+              //   tnx.events[1].args[0].toNumber()
+              // );
+              // console.log("buyer", tnx.events[1].args[3]);
+              console.log("buytrackCopyBaseUrl-2", tnx.events[1].args[5]);
+            }
+          } else {
+            toast("We were unable to complete your transaction!");
+            setIsTransLoading((prev) => !prev);
+            return;
+          }
+        } catch (error) {
+          setIsTransLoading((prev) => !prev);
+          // console.log("Event error", error);
+          return;
+        }
       }
-      
+
       //@ts-ignore
       var formData = {
         listing_id: itemDetail._id,
@@ -259,9 +259,7 @@ const ViewNft = () => {
   //   var tnx = await transaction.wait();
   //   toast("Please approve this transaction!");
 
-
   // }
-
 
   const fetchItemDetail = async (id: string) => {
     if (id !== undefined) {
@@ -411,23 +409,21 @@ const ViewNft = () => {
                   </span> */}
                   <div className="flex flex-col gap-y-4 w-full">
                     <div className="flex gap-x-5 w-full">
-                      {
-                        connectedAddress
-                          ?
-                          <Button
-                            title="Buy now"
-                            wt="w-full"
-                            onClick={() => {
-                              setModaltype("buy");
-                              setShowModal((prev) => !prev);
-                            }}
-                          />
-                          :
-                          <Button
-                            title="You need to connect your wallet to continue"
-                            wt="w-full"
-                          />
-                      }
+                      {connectedAddress ? (
+                        <Button
+                          title="Buy now"
+                          wt="w-full"
+                          onClick={() => {
+                            setModaltype("buy");
+                            setShowModal((prev) => !prev);
+                          }}
+                        />
+                      ) : (
+                        <Button
+                          title="You need to connect your wallet to continue"
+                          wt="w-full"
+                        />
+                      )}
                       {/* <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
                         <CartIcon />
                       </span> */}
@@ -622,159 +618,166 @@ const ViewNft = () => {
                 </div>
               ) : viewNftStage === "activities" ? (
                 <div className="flex flex-col gap-y-6">
-                  {activities.map(
-                    ({
-                      _id,
-                      listed_item,
-                      to_user_id,
-                      from_user_id,
-                      created_item,
-                      resell_item_id,
-                      activity_type,
-                      createdAt,
-                      created_item_listed,
-                    }) => (
-                      <div
-                        key={_id}
-                        className="flex items-center justify-between bg-bg-5 py-4 pl-6 pr-8 rounded-xl"
-                      >
-                        <div className="flex items-center gap-x-4">
-                          <div className="h-16 w-16 relative">
-                            {
-                            resell_item_id ? (
-                              <Image
-                                src={
-                                  resell_item_id &&
+                  {activities === null ? (
+                    Array(6)
+                      .fill(0)
+                      .map((_, i) => (
+                        <ActivityLoader
+                          key={"buy-nft-activity-skeleton-key" + i}
+                        />
+                      ))
+                  ) : activities.length === 0 ? (
+                    <Heading2 title="No activities!!!" />
+                  ) : activities.length > 0 ? (
+                    activities.map(
+                      ({
+                        _id,
+                        listed_item,
+                        to_user_id,
+                        from_user_id,
+                        created_item,
+                        resell_item_id,
+                        activity_type,
+                        createdAt,
+                        created_item_listed,
+                      }) => (
+                        <div
+                          key={_id}
+                          className="flex items-center justify-between bg-bg-5 py-4 pl-6 pr-8 rounded-xl"
+                        >
+                          <div className="flex items-center gap-x-4">
+                            <div className="h-16 w-16 relative">
+                              {resell_item_id ? (
+                                <Image
+                                  src={
+                                    resell_item_id &&
                                     resell_item_id !== undefined &&
                                     resell_item_id !== null
-                                    ? resell_item_id.item_art_url
-                                    : ""
-                                }
-                                alt=""
-                                layout="fill"
-                                objectFit="contain"
-                                className="rounded-full"
-                              />
-                            )
-                            : created_item ? (
-                              <Image
-                                src={
-                                  created_item &&
+                                      ? resell_item_id.item_art_url
+                                      : ""
+                                  }
+                                  alt=""
+                                  layout="fill"
+                                  objectFit="contain"
+                                  className="rounded-full"
+                                />
+                              ) : created_item ? (
+                                <Image
+                                  src={
+                                    created_item &&
                                     created_item !== undefined &&
                                     created_item !== null
-                                    ? created_item.item_art_url
-                                    : ""
-                                }
-                                alt=""
-                                layout="fill"
-                                objectFit="contain"
-                                className="rounded-full"
-                              />
-                            ) : listed_item ? (
-                              <Image
-                                src={
-                                  created_item_listed &&
+                                      ? created_item.item_art_url
+                                      : ""
+                                  }
+                                  alt=""
+                                  layout="fill"
+                                  objectFit="contain"
+                                  className="rounded-full"
+                                />
+                              ) : listed_item ? (
+                                <Image
+                                  src={
+                                    created_item_listed &&
                                     created_item_listed !== undefined &&
                                     created_item_listed !== null
-                                    ? created_item_listed.item_art_url
-                                    : ""
-                                }
-                                alt=""
-                                layout="fill"
-                                objectFit="contain"
-                                className="rounded-full"
-                              />
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-x-2">
-                              <span className="text-xl font-bold">
-                                {from_user_id &&
+                                      ? created_item_listed.item_art_url
+                                      : ""
+                                  }
+                                  alt=""
+                                  layout="fill"
+                                  objectFit="contain"
+                                  className="rounded-full"
+                                />
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-x-2">
+                                <span className="text-xl font-bold">
+                                  {from_user_id &&
                                   from_user_id !== undefined &&
                                   from_user_id.username &&
                                   from_user_id.username !== undefined
-                                  ? from_user_id.username
-                                  : "----"}
-                              </span>
-                              <span className="text-xl font-bold text-txt-2">
-                                {activity_type === "newly_created_item"
-                                  ? "created"
-                                  : activity_type === "updated_item"
+                                    ? from_user_id.username
+                                    : "----"}
+                                </span>
+                                <span className="lg:text-xl font-bold text-txt-2">
+                                  {activity_type === "newly_created_item"
+                                    ? "created"
+                                    : activity_type === "updated_item"
                                     ? "updated"
                                     : activity_type === "newly_listed_item"
-                                      ? "listed"
-                                      : activity_type === "updated_listing"
-                                        ? "bupdated a listed"
-                                        : activity_type === "new_mint"
-                                          ? "minted"
-                                          : activity_type === "new_sales"
-                                            ? "purchased"
-                                            : activity_type === "new_mint"
-                                              ? "minted"
-                                              : activity_type === "cancelled_listing"
-                                                ? "delisted"
-                                                : ""}
-                              </span>
-                              <span className="transaction-card-span">
-                                <b>
-                                  {
-                                  resell_item_id &&
-                                  resell_item_id !== undefined &&
-                                  resell_item_id !== null
-                                  ? resell_item_id.item_title
-
-                                  : created_item_listed &&
-                                    created_item_listed !== undefined &&
-                                    created_item_listed !== null
-                                    ? created_item_listed.item_title
-                                    : ""
-                                    }
-                                </b>
-                              </span>
-                              {to_user_id && (
-                                <span className="text-xl font-bold">
-                                  {to_user_id &&
+                                    ? "listed"
+                                    : activity_type === "updated_listing"
+                                    ? "bupdated a listed"
+                                    : activity_type === "new_mint"
+                                    ? "minted"
+                                    : activity_type === "new_sales"
+                                    ? "purchased"
+                                    : activity_type === "new_mint"
+                                    ? "minted"
+                                    : activity_type === "cancelled_listing"
+                                    ? "delisted"
+                                    : ""}
+                                </span>
+                                <span className="transaction-card-span">
+                                  <b>
+                                    {resell_item_id &&
+                                    resell_item_id !== undefined &&
+                                    resell_item_id !== null
+                                      ? resell_item_id.item_title
+                                      : created_item_listed &&
+                                        created_item_listed !== undefined &&
+                                        created_item_listed !== null
+                                      ? created_item_listed.item_title
+                                      : ""}
+                                  </b>
+                                </span>
+                                {to_user_id && (
+                                  <span className="text-xl font-bold">
+                                    {to_user_id &&
                                     to_user_id !== undefined &&
                                     to_user_id.username &&
                                     to_user_id.username !== undefined
-                                    ? to_user_id.username
-                                    : "----"}
-                                </span>
-                              )}
-                            </div>
-                            <div className="flex items-center gap-x-2">
-                              <span className="font-medium text-txt-2">
-                                {moment(createdAt).format(
-                                  "ddd, MMM Do YYYY, hh:mm:ss"
+                                      ? to_user_id.username
+                                      : "----"}
+                                  </span>
                                 )}
-                              </span>
-                              <span className="font-medium text-txt-2">
-                                {/* {time} */}
-                              </span>
-                              {/* {icon && ( */}
-                              {/*   <span className="relative h-5 w-5 cursor-pointer"> */}
-                              {/*     <Image */}
-                              {/*       src={icon} */}
-                              {/*       alt={txn} */}
-                              {/*       layout="fill" */}
-                              {/*       objectFit="cover" */}
-                              {/*     /> */}
-                              {/*   </span> */}
-                              {/* )} */}
+                              </div>
+                              <div className="flex items-center gap-x-2">
+                                <span className="font-medium text-txt-2">
+                                  {moment(createdAt).format(
+                                    "ddd, MMM Do YYYY, hh:mm:ss"
+                                  )}
+                                </span>
+                                <span className="font-medium text-txt-2">
+                                  {/* {time} */}
+                                </span>
+                                {/* {icon && ( */}
+                                {/*   <span className="relative h-5 w-5 cursor-pointer"> */}
+                                {/*     <Image */}
+                                {/*       src={icon} */}
+                                {/*       alt={txn} */}
+                                {/*       layout="fill" */}
+                                {/*       objectFit="cover" */}
+                                {/*     /> */}
+                                {/*   </span> */}
+                                {/* )} */}
+                              </div>
                             </div>
                           </div>
+                          <div>
+                            {/* <span className="flex text-xl font-bold"> */}
+                            {/*   <CoinIcon /> 4.5k */}
+                            {/* </span> */}
+                            {/* <span className="text-txt-2">$5,954,532</span> */}
+                          </div>
                         </div>
-                        <div>
-                          {/* <span className="flex text-xl font-bold"> */}
-                          {/*   <CoinIcon /> 4.5k */}
-                          {/* </span> */}
-                          {/* <span className="text-txt-2">$5,954,532</span> */}
-                        </div>
-                      </div>
+                      )
                     )
-                  )}
+                  ) : null}
                 </div>
               ) : null}
             </div>
@@ -826,8 +829,8 @@ const ViewNft = () => {
                 <Input2
                   name="coinPrice"
                   placeholder="0.00"
-                // onChange={handleFieldChange}
-                // value={nftPayload.coinPrice}
+                  // onChange={handleFieldChange}
+                  // value={nftPayload.coinPrice}
                 />
               </div>
             </div>
@@ -842,8 +845,8 @@ const ViewNft = () => {
                 label="Quantity"
                 name="quantity"
                 placeholder="1"
-              // onChange={handleFieldChange}
-              // value={nftPayload.coinPrice}
+                // onChange={handleFieldChange}
+                // value={nftPayload.coinPrice}
               />
             </div>
             <div className="flex justify-between items-center w-full">
