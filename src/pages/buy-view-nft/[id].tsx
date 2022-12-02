@@ -152,7 +152,7 @@ const ViewNft = () => {
       } else if (!itemDetail.relisted || itemDetail.relisted === false) {
         toast("Please approve this transaction!");
 
-        const item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail.item._id}`;
+        const item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail._id}`;
         const transaction = await contract.buyItemCopy(
           itemDetail.listed_by.address,
           priceListed,
@@ -217,7 +217,6 @@ const ViewNft = () => {
       const DATA = formData;
       toast("Finalizing the transaction...");
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
-        console.log({ response });
         if (response.status == 200 || response.status == 201) {
           toast(response.data.message);
           setIsTransLoading(false);
