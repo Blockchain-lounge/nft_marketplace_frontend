@@ -12,6 +12,10 @@
   @apply text-[1.125rem] text-[#E0EEFF] leading-[2.125rem] tracking-[0.03rem] mt-[1rem] mb-[2.375rem] lg:max-w-md 2xl:max-w-lg;
 }
 
+.hero-desc {
+  @apply w-full lg:w-[50%] flex flex-col items-center lg:items-start;
+}
+
 .hero-img-cards {
   @apply h-[40vh] sm:h-[80vh] relative w-full lg:h-[70vh] lg:w-[60%] 2xl:w-[50%] justify-self-end;
 }
@@ -19,14 +23,6 @@
 .hero-img {
   @apply mb-4 w-full h-full rounded-2xl object-cover flex-1 relative;
 }
-
-/* .hero-img {
-  @apply relative flex max-w-[28rem] h-[25rem] lg:h-[60%] lg:max-w-[54.73rem];
-} */
-
-/* .hero-img > img {
-  @apply h-[25rem] lg:h-[44rem]  lg:max-w-[24.73rem];
-} */
 
 .hero-cards {
   @apply hidden lg:absolute lg:bottom-[-7.6rem] 2xl:bottom-[-7rem] right-[2.47125rem] lg:flex gap-x-[1.25rem];

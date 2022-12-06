@@ -18,7 +18,7 @@ Partial<INftcard>) => {
 
   return (
     <div
-      className="rounded-[0.975rem] bg-white max-w-[27rem] w-full lg:max-w-[95%] 2xl:max-w-[95%]"
+      className="rounded-[0.975rem] bg-white max-w-[27rem] w-full lg:max-w-[95%] 2xl:max-w-[95%] cursor-pointer"
       onClick={() => push(`/buy-view-nft/${_id}`)}
     >
       <div className="nmc-wrapper-img">

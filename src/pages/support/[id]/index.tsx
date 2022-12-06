@@ -7,13 +7,8 @@ import { useRouter } from "next/router";
 import { UseInterCom } from "@/src/hooks/useInterCom";
 
 const SingleSupportPage = () => {
-  const { bootIntercom, loadIntercom } = UseInterCom();
+  
 
-  useEffect(() => {
-    loadIntercom();
-    bootIntercom();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   const singleSupportLists = [
     {
       label: "How do i make a wishlist?",

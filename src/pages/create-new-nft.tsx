@@ -286,7 +286,7 @@ const CreateNewNft = () => {
 
   return (
     <DashboardLayout isLoading={isLoading}>
-      <div className="sub-layout-wrapper">
+      <div className="sub-layout-wrapper scrollbar-hide">
         <div className="center">
           <div className="earnings-title-btn">
             <ArrowBack onClick={() => Router.back()} />
@@ -428,7 +428,7 @@ const CreateNewNft = () => {
                   This is how your item will be displayed
                 </span>
               </div>
-              <div className="w-[25rem] h-[27rem] mt-4">
+              <div className="w-full h-[27rem] mt-4">
                 <div className="h-[100%] relative">
                   {file && (
                     <div className="nmc-wrapper-likes nmc-wrapper2-likes z-10">

@@ -22,7 +22,7 @@ const CollectionCard: NextPage<Partial<ICollectionCard>> = ({
 }) => {
   const { push } = useRouter();
   return (
-    <div className="max-w-[27rem] w-full h-[30rem] lg:h-[25rem] cursor-pointer">
+    <div className="max-w-[32rem] w-full h-[30rem] lg:h-[28rem] cursor-pointer">
       <div
         className="relative h-[80%] w-full"
         onClick={() => push(`/single-collection/${_id}`)}

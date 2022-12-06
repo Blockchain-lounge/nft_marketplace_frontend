@@ -30,10 +30,11 @@ const ViewUserNft = () => {
   const handleCancelNftListing = async () => {
     if (id !== undefined) {
       setIsTransLoading(true);
-      if (itemDetail.relisted
-        && itemDetail.relisted === true
-        && itemDetail.item.token_address
-        && itemDetail.item.token_address !== null
+      if (
+        itemDetail.relisted &&
+        itemDetail.relisted === true &&
+        itemDetail.item.token_address &&
+        itemDetail.item.token_address !== null
       ) {
         const provider = new ethers.providers.Web3Provider(
           (window as any).ethereum
@@ -54,8 +55,7 @@ const ViewUserNft = () => {
             tokenId
           );
           const tnx = await transaction.wait();
-        }
-        catch (err) {
+        } catch (err) {
           toast("Transaction cancelled!");
           setIsTransLoading(false);
           return;
@@ -142,7 +142,7 @@ const ViewUserNft = () => {
   return (
     <DashboardLayout>
       {itemDetail !== null ? (
-        <div className="sub-layout-wrapper">
+        <div className="sub-layout-wrapper scrollbar-hide">
           <div className="center space-y-8 h-screen lg:h-[80vh]">
             <div className="grid lg:gap-x-8 lg:grid-cols-[0.35fr_0.3fr_0.35fr]">
               <div>
@@ -198,44 +198,42 @@ const ViewUserNft = () => {
               </div>
               <div className="space-y-8 py-4">
                 <div>
-                  {
-                    itemDetail.item.collection
-                      ?
-                      <div className="flex items-center mb-5">
-                        {/*collection-logo*/}
-                        <div className="flex items-center mb-4">
-                          <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
-                            <Image
-                              src={
-                                itemDetail.item.collection
-                                  ? itemDetail.item.collection.logo_image
-                                  : "/images/placeholder.png"
-                              }
-                              alt="colx-img"
-                              layout="fill"
-                              objectFit="cover"
-                              className="rounded-full"
-                              placeholder="blur"
-                              blurDataURL="/images/placeholder.png"
-                            />
-                          </div>
-                          <span className="text-xl lg:mr-1">
-                            {itemDetail.item.collection.name}
-                          </span>
-                          <div className="h-6 w-6 relative">
-                            <Image
-                              src="/images/verify.svg"
-                              alt="colx-img"
-                              layout="fill"
-                              objectFit="contain"
-                              className="rounded-full"
-                            />
-                          </div>
+                  {itemDetail.item.collection ? (
+                    <div className="flex items-center mb-5">
+                      {/*collection-logo*/}
+                      <div className="flex items-center mb-4">
+                        <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
+                          <Image
+                            src={
+                              itemDetail.item.collection
+                                ? itemDetail.item.collection.logo_image
+                                : "/images/placeholder.png"
+                            }
+                            alt="colx-img"
+                            layout="fill"
+                            objectFit="cover"
+                            className="rounded-full"
+                            placeholder="blur"
+                            blurDataURL="/images/placeholder.png"
+                          />
+                        </div>
+                        <span className="text-xl lg:mr-1">
+                          {itemDetail.item.collection.name}
+                        </span>
+                        <div className="h-6 w-6 relative">
+                          <Image
+                            src="/images/verify.svg"
+                            alt="colx-img"
+                            layout="fill"
+                            objectFit="contain"
+                            className="rounded-full"
+                          />
                         </div>
                       </div>
-                      :
-                      ""
-                  }
+                    </div>
+                  ) : (
+                    ""
+                  )}
 
                   <span className="text-4xl font-bold capitalize">
                     {itemDetail.item.item_title}
@@ -272,7 +270,10 @@ const ViewUserNft = () => {
                           {itemDetail.listing_price || 0}
                         </span>
                         <span className="text-xl block mt-2">
-                          Item quantity: {itemDetail.listing_remaining + "/" + itemDetail.listing_quantity}
+                          Item quantity:{" "}
+                          {itemDetail.listing_remaining +
+                            "/" +
+                            itemDetail.listing_quantity}
                         </span>
                       </div>
                     </div>

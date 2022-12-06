@@ -76,7 +76,6 @@ const Home: NextPage = () => {
   };
   useEffect(() => {
     fetchHomePageData();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -86,12 +85,13 @@ const Home: NextPage = () => {
         <div className="space-y-[9rem] center mb-[10.125rem]">
           {heroData.length > 1 && activeCard ? (
             <section className="hero">
-              <div>
+              <div className="hero-desc">
                 <Heading title={activeCard.name} twClasses="mt-4" />
                 <p className="lg:max-w-xl">{activeCard.description}</p>
                 <Button
                   title="Explore collection"
                   onClick={() => push("/single-collection/" + activeCard._id)}
+                  wt="w-[90%] lg:w-[30%]"
                 />
               </div>
               <div className="hero-img-cards">
@@ -131,15 +131,15 @@ const Home: NextPage = () => {
             </section>
           ) : (
             <div className="hero">
-              <div className="w-[50%]">
+              <div className="w-[100%] lg:w-[50%]">
                 <div className="flex flex-col gap-y-2">
-                  <Skeleton height="3rem" width="40%" />
-                  <Skeleton height="3rem" width="40%" />
+                  <Skeleton height="3rem" width="65%" />
+                  <Skeleton height="3rem" width="65%" />
                 </div>
                 <div className="my-4">
-                  <Skeleton height="1rem" width="80%" count={10} />
+                  <Skeleton height="1rem" width="90%" count={10} />
                 </div>
-                <Skeleton height="3rem" width="40%" />
+                <Skeleton height="3rem" width="65%" />
               </div>
               <div className="hero-img-cards">
                 <Skeleton height="100%" width="100%" />
