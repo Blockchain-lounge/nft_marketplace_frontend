@@ -22,6 +22,7 @@ import {
   OwnedNftCard,
   CreatedNftCard,
   ListedNftCard,
+  CollectionCard,
 } from "@/src/components/molecules";
 
 import { apiRequest } from "../functions/offChain/apiRequests";
@@ -42,6 +43,7 @@ const Profile = () => {
     useState<Array<INftcard> | null>([]);
   const [userListedProfileData, setUserListedProfileData] =
     useState<Array<INftcard> | null>([]);
+  const [collections, setCollections] = useState<INftcard[]>([]);
   // const [user, setUser] = useState<null | Record<string, string>>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [myProfile, setMyProfile] = useState<{
@@ -63,6 +65,7 @@ const Profile = () => {
     { text: "Created", count: userCreatedProfileData.length },
     { text: "Listed", count: userListedProfileData.length },
     { text: "Activity" },
+    { text: "Collection", count: 0 },
   ];
 
   const profileActivityList = [0, 1, 2, 3];
@@ -374,24 +377,6 @@ const Profile = () => {
                   )
                 ) : profileActiveTab === 3 ? (
                   <div className="">
-                    {/* <div className="profile-user-nfts"> */}
-                    {/* <img
-                        src="/images/404-illustration.png"
-                        alt="empty-nfts"
-                      />
-                      <span className="profile-empty-nft-title">
-                        You do not have any activity.
-                      </span> */}
-                    {/* <p className="profile-empty-nft-description">
-                        There&apos;s lots of other NFTs to explore
-                      </p>
-
-                      <GradientButton
-                        title="Explore NFTs"
-                        onClick={handleNavigateToHome}
-                      /> */}
-                    {/* </div> */}
-                    {/*Activities Heading-*/}
                     <div className="profile-activity-headers-tab">
                       {profileActivityHeaders.map((header, i) => (
                         <span
@@ -404,13 +389,47 @@ const Profile = () => {
                     </div>
                     {/*list of activities*/}
                     <div className="profile-activities-wrappe">
-                       {activities !== []
-                        ?
-                        activities.map((activity, i) => (
-                        <UserActivityCard {...activity} key={i} />
-                      )) : ""}
+                      {activities !== []
+                        ? activities.map((activity, i) => (
+                            <UserActivityCard {...activity} key={i} />
+                          ))
+                        : ""}
                     </div>
                   </div>
+                ) : profileActiveTab === 4 ? (
+                  collections ? (
+                    collections.length > 0 ? (
+                      <div className="explore-items-wrapper">
+                        {collections.map((item) => (
+                          <CollectionCard key={item._id} {...item} />
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="profile-user-nfts">
+                        <img
+                          src="/images/404-illustration.png"
+                          alt="empty-nfts"
+                        />
+                        <span className="profile-empty-nft-title">
+                          You do not have any collection
+                        </span>
+                        <p className="profile-empty-nft-description">
+                          There&apos;s lots of other collections to explore
+                        </p>
+
+                        <GradientButton
+                          title="Explore Collections"
+                          onClick={() => push("/explore")}
+                        />
+                      </div>
+                    )
+                  ) : (
+                    Array(12)
+                      .fill(0)
+                      .map((_, i) => (
+                        <NftCardSkeleton key={i + "explore-skeleton-card"} />
+                      ))
+                  )
                 ) : null}
               </div>
             ) : (
