@@ -63,6 +63,7 @@ const CollectionActivityCard = ({
   }
 
   var item_price = "";
+  var item = "";
   if (listed_item && listed_item !== null) {
     item = listed_item;
     item_price = listed_item.listing_price + " ETH";
