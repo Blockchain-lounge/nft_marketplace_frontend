@@ -21,7 +21,7 @@
 }
 
 .connect-header-wrapper-count {
-  @apply text-[0.75rem] border-[#858585] border-[1px] h-[1.25rem] w-[1.25rem] p-[0.1562rem] rounded-full;
+  @apply text-[0.75rem] border-[#858585] border-[1px] px-2  rounded-full;
 }
 
 /* connect wallet stage 1 */
@@ -43,7 +43,7 @@
 
 /* connect wallet tab */
 .connect-header-tab {
-  @apply pb-3 flex justify-center gap-x-16 w-full border-[#33364D] border-b-[0.0625rem];
+  @apply pb-3 flex justify-center gap-x-16 w-max border-[#33364D] border-b-[0.0625rem];
 }
 
 /* display wallet */
