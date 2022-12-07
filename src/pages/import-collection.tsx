@@ -242,7 +242,7 @@ const ImportCollection: FC<ICollectionProps> = () => {
   };
 
   return (
-    <EarningLayout title="Create a Collection">
+    <EarningLayout title="Import Collection">
       <div className="create-new-nft-form max-w-[80%] 2xl:max-w-[60%]">
         <ToastContainer />
         {/*Logo Image*/}

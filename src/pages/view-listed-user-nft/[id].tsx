@@ -138,6 +138,10 @@ const ViewUserNft = () => {
     fetchUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  const handleNavigateToCollection = () => {
+    push(`/single-collection/${itemDetail.item.collection._id}`);
+  };
   // console.log({ itemDetail });
   return (
     <DashboardLayout>
@@ -201,7 +205,10 @@ const ViewUserNft = () => {
                   {itemDetail.item.collection ? (
                     <div className="flex items-center mb-5">
                       {/*collection-logo*/}
-                      <div className="flex items-center mb-4">
+                      <div
+                        className="flex items-center mb-4 cursor-pointer"
+                        onClick={handleNavigateToCollection}
+                      >
                         <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
                           <Image
                             src={

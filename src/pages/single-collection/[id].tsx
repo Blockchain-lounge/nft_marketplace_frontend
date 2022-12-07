@@ -226,10 +226,7 @@ const ViewCollection = () => {
     typeof window !== "undefined" && window.location.origin
       ? window.location.origin
       : "";
-  console.log({
-    singleCollectionActivities,
-    singleCollectionItemsActivities,
-  });
+
   return (
     <DashboardLayout isLoading={isLoading}>
       <ToastContainer />
