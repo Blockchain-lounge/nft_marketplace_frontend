@@ -269,7 +269,9 @@ const NavBar: FC<INav> = ({
           )}
         </div>
       </div>
-      <div className="mobile-tab center">{!isLoggedIn ? <NavTab /> : null}</div>
+      <div className="mobile-tab center">
+        <NavTab />
+      </div>
 
       <Modal
         openModal={openModal}

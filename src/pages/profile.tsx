@@ -27,7 +27,6 @@ import {
 
 import { apiRequest } from "../functions/offChain/apiRequests";
 import { toast } from "react-toastify";
-import UseFetch from "../hooks/useFetch";
 import Image from "next/image";
 import { INftcard } from "../components/molecules/NftMediumCard";
 import APPCONFIG from "../constants/Config";
@@ -61,7 +60,7 @@ const Profile = () => {
   const [activities, setActivities] = useState([]);
 
   const profileTab = [
-    { text: "Owned", count: userOwnedProfileData.length },
+    { text: "Collected", count: userOwnedProfileData.length },
     { text: "Created", count: userCreatedProfileData.length },
     { text: "Listed", count: userListedProfileData.length },
     { text: "Activity" },

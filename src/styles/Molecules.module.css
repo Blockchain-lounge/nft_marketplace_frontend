@@ -257,7 +257,7 @@
 }
 
 .nmc-wrapper-img {
-  @apply h-[22.375rem] lg:h-[25rem] w-full relative rounded-t-[0.975rem];
+  @apply h-[23rem] lg:h-[25rem] w-full relative rounded-t-[0.975rem];
 }
 
 .nmc-wrapper-likes {

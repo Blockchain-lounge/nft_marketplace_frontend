@@ -456,7 +456,7 @@ const ViewCollection = () => {
                 <div className="">
                   {singleCollectionsListedItemsData &&
                   singleCollectionsListedItemsData.length > 0 ? (
-                    <div className="grid lg:grid-cols-3 2xl:grid-cols-4 gap-8">
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
                       {singleCollectionsListedItemsData.map((val, i) => (
                         <NftMediumCard2 {...val} key={val._id} />
                       ))}
