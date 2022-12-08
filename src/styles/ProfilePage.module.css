@@ -55,11 +55,11 @@
 }
 
 .profile-activity-headers-tab {
-  @apply grid grid-cols-[0.45fr_0.15fr_0.2fr_0.3fr] px-6 mb-[1.875rem];
+  @apply grid grid-cols-4 px-6 mb-[1.875rem];
 }
 
 .profile-activity-list {
-  @apply grid grid-cols-[0.4fr_0.4fr_0.2fr_0.3fr] px-6 mb-[1.875rem];
+  @apply grid grid-cols-4 px-6 mb-[1.875rem];
 }
 
 .profile-activity-header {
@@ -95,7 +95,7 @@
 }
 
 .profile-activity-receiver-wrapper {
-  @apply space-x-24;
+  @apply space-x-20;
 }
 
 .profile-activity-sender-wrapper,

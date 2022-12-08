@@ -33,9 +33,9 @@ import { INftcard } from "../components/molecules/NftMediumCard";
 import APPCONFIG from "../constants/Config";
 import { connectedAccount } from "../functions/onChain/authFunction";
 import { NftCardSkeleton } from "../components/lazy-loaders";
+
 const Profile = () => {
   const [profileActiveTab, setProfileActiveTab] = useState(1);
-
   const [openTab, setData] = useState(true);
   const [userOwnedProfileData, setUserOwnedProfileData] =
     useState<Array<INftcard> | null>([]);
@@ -65,8 +65,11 @@ const Profile = () => {
     { text: "Collected", count: userOwnedProfileData.length },
     { text: "Created", count: userCreatedProfileData.length },
     { text: "Listed", count: userListedProfileData.length },
-    { text: "Activity", count: activities.length},
-    { text: "Collection", count: collections.length + onChainCollections.length },
+    { text: "Activity", count: activities.length },
+    {
+      text: "Collection",
+      count: collections.length + onChainCollections.length,
+    },
   ];
 
   const profileActivityList = [0, 1, 2, 3];
@@ -258,7 +261,6 @@ const Profile = () => {
     fetchCollections();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // console.log({ userListedProfileData });
 
   return (
     <DashboardLayout isLoading={isLoading}>
@@ -453,48 +455,59 @@ const Profile = () => {
                     </div>
                   </div>
                 ) : profileActiveTab === 4 ? (
-                  collections && onChainCollections
-                  && onChainCollections.length > 0
-                  && collections.length > 0 ? (
+                  collections &&
+                  onChainCollections &&
+                  onChainCollections.length > 0 &&
+                  collections.length > 0 ? (
                     collections.length > 0 ? (
                       <div className="explore-items-wrapper">
                         {collections.map((item) => (
                           <CollectionCard key={item._id} {...item} />
                         ))}
-                      
-                      {onChainCollections.map((item) => (
-                        <OnChainCollectionCard key={item.tokenAddress} {...item} />
-                      ))}
+
+                        {onChainCollections.map((item) => (
+                          <OnChainCollectionCard
+                            key={item.tokenAddress}
+                            {...item}
+                          />
+                        ))}
                       </div>
-                    ) : ""
-                  ) : collections && collections.length > 0
-                    && !onChainCollections
-                    || onChainCollections.length === 0
-                    ? (
-                      collections.length > 0 ? (
-                        <div className="explore-items-wrapper">
-                          {collections.map((item) => (
-                            <CollectionCard key={item._id} {...item} />
-                          ))}
-                        </div>
-                      ) : ""
+                    ) : (
+                      ""
                     )
-                    : onChainCollections
-                      && onChainCollections.length > 0
-                      && !collections && collections.length === 0
-                    ? (
-                      onChainCollections.length > 0 ? (
-                        <div className="explore-items-wrapper">
-                          {onChainCollections.map((item) => (
-                            <OnChainCollectionCard key={item.tokenAddress} {...item} />
-                          ))}
-                        </div>
-                      ) : ""
+                  ) : (collections &&
+                      collections.length > 0 &&
+                      !onChainCollections) ||
+                    onChainCollections.length === 0 ? (
+                    collections.length > 0 ? (
+                      <div className="explore-items-wrapper">
+                        {collections.map((item) => (
+                          <CollectionCard key={item._id} {...item} />
+                        ))}
+                      </div>
+                    ) : (
+                      ""
                     )
-                  :
-                  ""
-                ): null
-                }
+                  ) : onChainCollections &&
+                    onChainCollections.length > 0 &&
+                    !collections &&
+                    collections.length === 0 ? (
+                    onChainCollections.length > 0 ? (
+                      <div className="explore-items-wrapper">
+                        {onChainCollections.map((item) => (
+                          <OnChainCollectionCard
+                            key={item.tokenAddress}
+                            {...item}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      ""
+                    )
+                  ) : (
+                    ""
+                  )
+                ) : null}
               </div>
             ) : (
               <div className="profile-user-nfts">

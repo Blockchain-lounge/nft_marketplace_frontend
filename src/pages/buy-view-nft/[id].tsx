@@ -35,6 +35,7 @@ import { INftcard } from "@/src/components/molecules/NftMediumCard";
 import { BigNumber, ethers } from "ethers";
 import APPCONFIG from "@/src/constants/Config";
 import { ActivityLoader } from "@/src/components/lazy-loaders";
+import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 const ViewNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModaltype] = useState("buy");
@@ -46,7 +47,7 @@ const ViewNft = () => {
   const [userId, setUserId] = useState<null | string>(null);
   const [isTransloading, setIsTransLoading] = useState(false);
   const [activities, setActivities] = useState(null);
-
+  const [dollarRate] = UseConvertEthToDollar();
   // const viewNftStages = ["overview", "properties", "bids", "history"];
   const viewNftStages = ["overview", "activities"];
   // const nftProperties = [
@@ -378,11 +379,18 @@ const ViewNft = () => {
                         Price
                       </span>
                       <div className="">
-                        <span className="flex items-center text-[1.5rem] gap-x-1">
+                        <span className="flex items-center text-[1.75rem] gap-x-1">
                           <CoinIcon />
                           {itemDetail.listing_price}
                         </span>
-                        {/* <span className="text-lg block mt-2">$5,954,532</span> */}
+                        {dollarRate ? (
+                          <span className="text-xl font-medium block mt-2">
+                            $
+                            {(itemDetail.listing_price * dollarRate).toFixed(2)}
+                          </span>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </div>
                     {/* <div className="p-3 bg-bg-5 rounded-[1.25rem] w-full">
