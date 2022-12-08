@@ -23,6 +23,7 @@ import {
   CreatedNftCard,
   ListedNftCard,
   CollectionCard,
+  OnChainCollectionCard,
 } from "@/src/components/molecules";
 
 import { apiRequest } from "../functions/offChain/apiRequests";
@@ -43,6 +44,7 @@ const Profile = () => {
   const [userListedProfileData, setUserListedProfileData] =
     useState<Array<INftcard> | null>([]);
   const [collections, setCollections] = useState<INftcard[]>([]);
+  const [onChainCollections, setOnChainCollections] = useState<INftcard[]>([]);
   // const [user, setUser] = useState<null | Record<string, string>>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [myProfile, setMyProfile] = useState<{
@@ -63,8 +65,8 @@ const Profile = () => {
     { text: "Collected", count: userOwnedProfileData.length },
     { text: "Created", count: userCreatedProfileData.length },
     { text: "Listed", count: userListedProfileData.length },
-    { text: "Activity" },
-    { text: "Collection", count: 0 },
+    { text: "Activity", count: activities.length},
+    { text: "Collection", count: collections.length + onChainCollections.length },
   ];
 
   const profileActivityList = [0, 1, 2, 3];
@@ -158,6 +160,61 @@ const Profile = () => {
     });
   };
 
+  const fetchCollections = async () => {
+    try {
+      const HEADER = "authenticated";
+      const REQUEST_URL = "nft-collection/mine";
+      const METHOD = "GET";
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          return;
+        } else if (response.status == 401) {
+          toast("Unauthorized request!");
+          return;
+        } else if (response.status == 200) {
+          setCollections(response.data.data);
+          setIsLoading(false);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    } catch (error) {
+      toast("Something went wrong, please try again!");
+      return;
+    }
+
+    ////Onchain collections
+    try {
+      const HEADER = "authenticated";
+      const REQUEST_URL = "nft-collection/mine/on_chain";
+      const METHOD = "GET";
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          return;
+        } else if (response.status == 401) {
+          toast("Unauthorized request!");
+          return;
+        } else if (response.status == 200) {
+          setOnChainCollections(response.data.data);
+          setIsLoading(false);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    } catch (error) {
+      toast("Something went wrong, please try again!");
+      return;
+    }
+  };
+
   const fetchTokenCreated = async () => {
     const HEADER = "authenticated";
     const REQUEST_URL = "nft/tokens_listed";
@@ -198,7 +255,7 @@ const Profile = () => {
     });
     fetchTokenCreated();
     fetchUser();
-
+    fetchCollections();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // console.log({ userListedProfileData });
@@ -337,7 +394,7 @@ const Profile = () => {
                       ))
                   )
                 ) : profileActiveTab === 2 ? (
-                  userListedProfileData ? (
+                  userListedProfileData && userListedProfileData.length > 0 ? (
                     userListedProfileData.length > 0 ? (
                       <div className="user-profile-owned-nfts">
                         {userListedProfileData.map((val, i) => (
@@ -396,40 +453,48 @@ const Profile = () => {
                     </div>
                   </div>
                 ) : profileActiveTab === 4 ? (
-                  collections ? (
+                  collections && onChainCollections
+                  && onChainCollections.length > 0
+                  && collections.length > 0 ? (
                     collections.length > 0 ? (
                       <div className="explore-items-wrapper">
                         {collections.map((item) => (
                           <CollectionCard key={item._id} {...item} />
                         ))}
+                      
+                      {onChainCollections.map((item) => (
+                        <OnChainCollectionCard key={item.tokenAddress} {...item} />
+                      ))}
                       </div>
-                    ) : (
-                      <div className="profile-user-nfts">
-                        <img
-                          src="/images/404-illustration.png"
-                          alt="empty-nfts"
-                        />
-                        <span className="profile-empty-nft-title">
-                          You do not have any collection
-                        </span>
-                        <p className="profile-empty-nft-description">
-                          There&apos;s lots of other collections to explore
-                        </p>
-
-                        <GradientButton
-                          title="Explore Collections"
-                          onClick={() => push("/explore")}
-                        />
-                      </div>
+                    ) : ""
+                  ) : collections && collections.length > 0
+                    && !onChainCollections
+                    || onChainCollections.length === 0
+                    ? (
+                      collections.length > 0 ? (
+                        <div className="explore-items-wrapper">
+                          {collections.map((item) => (
+                            <CollectionCard key={item._id} {...item} />
+                          ))}
+                        </div>
+                      ) : ""
                     )
-                  ) : (
-                    Array(12)
-                      .fill(0)
-                      .map((_, i) => (
-                        <NftCardSkeleton key={i + "explore-skeleton-card"} />
-                      ))
-                  )
-                ) : null}
+                    : onChainCollections
+                      && onChainCollections.length > 0
+                      && !collections && collections.length === 0
+                    ? (
+                      onChainCollections.length > 0 ? (
+                        <div className="explore-items-wrapper">
+                          {onChainCollections.map((item) => (
+                            <OnChainCollectionCard key={item.tokenAddress} {...item} />
+                          ))}
+                        </div>
+                      ) : ""
+                    )
+                  :
+                  ""
+                ): null
+                }
               </div>
             ) : (
               <div className="profile-user-nfts">

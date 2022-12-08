@@ -5,6 +5,7 @@ export { default as UserActivityCard } from "./UserActivityCard";
 export { default as CollectionActivityCard } from "./CollectionActivityCard";
 export { default as CategoryHeroCard } from "./CategoryHeroCard";
 export { default as CollectionCard } from "./CollectionCard";
+export { default as OnChainCollectionCard } from "./OnChainCollectionCard";
 export { default as ConnectWalletStage1 } from "./ConnectWalletStage1";
 export { default as ConnectWalletTab } from "./ConnectWalletTab";
 export { default as CreateNftNavOptions } from "./CreateNftNavOptions";
