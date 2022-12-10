@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { LikeIcon } from "@/src/components/atoms/vectors";
 // import { Nftcard } from "./NftMediumCard";
 import Image from "next/image";
+import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 
 // Partial<Pick<INftcard, "name" | "imgUrl" | "price">> & {
 //   time?: boolean;
@@ -29,6 +30,7 @@ const NftCard2 = ({
   to?: string;
   maxWidth?: string;
 }) => {
+  const [dollarRate] = UseConvertEthToDollar();
   const { push } = useRouter();
   return (
     <div
@@ -76,7 +78,7 @@ const NftCard2 = ({
 
         {/* <img src={item_art_url} alt={item_title} /> */}
       </div>
-      <div className="nmc-sub-wrapper flex justify-between">
+      <div className="nmc-sub-wrapper flex justify-between items-center">
         <div className="flex flex-col gap-y-[0.3rem] p-2">
           <span className="font-bold text-black text-xl">
             {item_id
@@ -118,20 +120,36 @@ const NftCard2 = ({
             </div>
           </div>
         ) : (
-          <span className="text-black flex items-start justify-center text-lg p-2">
-            <span className="h-6 w-6 relative">
-              <Image
-                src="/icon-svg/eth-dark-icon.svg"
-                alt="ethereum coin"
-                layout="fill"
-              />
+          <div className="p-2">
+            <span className="text-black flex items-center text-lg">
+              <span className="h-6 w-3 relative">
+                <Image
+                  src="/icon-svg/eth-dark-icon.svg"
+                  alt="ethereum coin"
+                  layout="fill"
+                />
+              </span>
+              {item_price !== undefined
+                ? item_price
+                : listing_price !== undefined
+                ? listing_price
+                : 0}
             </span>
-            {item_price !== undefined
-              ? item_price
-              : listing_price !== undefined
-              ? listing_price
-              : 0}
-          </span>
+            {dollarRate ? (
+              <span className="text-black flex items-center text-lg ">
+                <span className="text-lg text-black font-bold">$</span>
+                {(
+                  (item_price !== undefined
+                    ? item_price
+                    : listing_price !== undefined
+                    ? listing_price
+                    : 0) * dollarRate
+                ).toFixed(2)}
+              </span>
+            ) : (
+              ""
+            )}
+          </div>
         )}
       </div>
     </div>
