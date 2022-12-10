@@ -49,7 +49,18 @@ const ViewNft = () => {
   const [activities, setActivities] = useState(null);
   const [dollarRate] = UseConvertEthToDollar();
   // const viewNftStages = ["overview", "properties", "bids", "history"];
+  const [bidingExpDates, setBidingExpDates] = useState("1 day");
   const viewNftStages = ["overview", "activities"];
+
+  const bidExpDates = [
+    "1 day",
+    "2 days",
+    "3 days",
+    "4 days",
+    "5 days",
+    "6 days",
+    "7 days",
+  ];
   // const nftProperties = [
   //   { label: "dna", value: "human", trait: 19 },
   //   { label: "eyewear", value: "cyber bindi", trait: 16 },
@@ -229,6 +240,10 @@ const ViewNft = () => {
       });
     }
     // setShowModal((prev) => !prev);
+  };
+
+  const handleBid = async () => {
+    //Write bid function here
   };
 
   // const approve = async () => {
@@ -417,14 +432,25 @@ const ViewNft = () => {
                   <div className="flex flex-col gap-y-4 w-full">
                     <div className="flex gap-x-5 w-full">
                       {connectedAddress ? (
-                        <Button
-                          title="Buy now"
-                          wt="w-full"
-                          onClick={() => {
-                            setModaltype("buy");
-                            setShowModal((prev) => !prev);
-                          }}
-                        />
+                        <div className="w-full space-y-4">
+                          <Button
+                            title="Buy now"
+                            wt="w-full"
+                            onClick={() => {
+                              setModaltype("buy");
+                              setShowModal((prev) => !prev);
+                            }}
+                          />
+                          <Button
+                            title="Place a bid"
+                            outline2
+                            wt="w-full"
+                            onClick={() => {
+                              setModaltype("bid");
+                              setShowModal((prev) => !prev);
+                            }}
+                          />
+                        </div>
                       ) : (
                         <Button
                           title="You need to connect your wallet to continue"
@@ -804,10 +830,14 @@ const ViewNft = () => {
           <div className="flex flex-col items-center max-w-[85%] mx-auto gap-y-5">
             <span className="font-bold text-txt-2 text-base max-w-[80%] text-center">
               You are about to place a bid for{" "}
-              <span className="text-txt-2">Express Depot </span>
-              from <span className="text-txt-2">Town Star collection.</span>
+              <span className="text-white">{itemDetail.item.item_title} </span>
+              from{" "}
+              <span className="text-white">
+                {itemDetail.item.collection.name}
+              </span>{" "}
+              collection
             </span>
-            <div className="flex items-center justify-between w-full bg-bg-5 py-4 px-6 rounded-[1.25rem]">
+            {/* <div className="flex items-center justify-between w-full bg-bg-5 py-4 px-6 rounded-[1.25rem]">
               <div className="flex gap-x-3 items-center">
                 <span className="block relative h-14 w-14">
                   <Image
@@ -827,15 +857,15 @@ const ViewNft = () => {
               <span className="text-positive-color bg-[#00800022] py-3 px-4 rounded-3xl">
                 Connected
               </span>
-            </div>
+            </div> */}
 
             <div className="create-new-nft-wrapper-2 w-full">
-              <span className="create-new-nft-wrapper-2-label">Your bid</span>
-              <div className="create-new-nft-price">
+              <div className="create-new-nft-wrapper-2 w-full">
                 {/* <Select title="ETH" icon={<CoinIcon />} /> */}
                 <Input2
                   name="coinPrice"
                   placeholder="0.00"
+                  label="Your bid"
                   // onChange={handleFieldChange}
                   // value={nftPayload.coinPrice}
                 />
@@ -845,7 +875,11 @@ const ViewNft = () => {
               <span className="create-new-nft-wrapper-2-label">
                 Bid expiration
               </span>
-              {/* <Select title="7 days" /> */}
+              <Select
+                title={bidingExpDates}
+                lists={bidExpDates}
+                onClick={setBidingExpDates}
+              />
             </div>
             <div className="create-new-nft-wrapper-2 w-full">
               <Input2
@@ -876,7 +910,12 @@ const ViewNft = () => {
                 6.95
               </span>
             </div>
-            <Button title="Place bid" onClick={handleBid} twClasses="w-full" />
+            <Button
+              title="Place bid"
+              onClick={handleBid}
+              twClasses="w-full"
+              isDisabled={isTransloading}
+            />
           </div>
         ) : (
           <div className="flex flex-col items-center max-w-[65%] mx-auto gap-y-5 text-clip">
