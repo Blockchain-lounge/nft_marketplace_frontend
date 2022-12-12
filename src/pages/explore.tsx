@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { Heading2, Loader } from "../components/atoms";
+import { Button, Heading2, Loader } from "../components/atoms";
 import { NftCardSkeleton } from "../components/lazy-loaders";
 import { CollectionCard, NftMediumCard, Tab } from "../components/molecules";
 import { INftcard } from "../components/molecules/NftMediumCard";
@@ -10,6 +10,8 @@ import DashboardLayout from "../template/DashboardLayout";
 
 const Explore = () => {
   // const [activeTab, setActiveTab] = useState("trending");
+  const [isFetching, setIsFetching] = useState(false);
+  const [dataNo, setDataNo] = useState(9);
   const [collections, setCollections] = useState<INftcard[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Recently Added");
@@ -74,6 +76,13 @@ const Explore = () => {
     // fetchLaunchPadDrops();
   }, []);
 
+  const fetchMore = () => {
+    setIsFetching((prev) => !prev);
+    setDataNo((value) => value + value);
+  };
+
+  // console.log({ dataNo, isFetching });
+
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper scrollbar-hide">
@@ -100,6 +109,9 @@ const Explore = () => {
                 ))}
             </div>
           )}
+          <div className="mt-8">
+            <Button title="Load More" onClick={fetchMore} />
+          </div>
         </div>
         <Footer />
       </div>
