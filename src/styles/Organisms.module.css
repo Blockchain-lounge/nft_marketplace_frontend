@@ -79,7 +79,7 @@ footer span {
 }
 
 .modal-box {
-  @apply mx-auto my-14 h-fit pb-7 rounded-[1.25rem];
+  @apply mx-auto pb-7 rounded-[1.25rem];
 }
 
 .modal-head {
