@@ -24,12 +24,25 @@ const Footer = () => {
     { label: "Privacy policy", to: "" },
   ];
   const supportLinks = [
-    { label: "Support", to: "", type: "external" },
-    { label: "Help center", to: "", type: "external" },
-    { label: "NFT academy", to: "/nft-academy", type: "internal" },
+    // { label: "Support", to: "", type: "external" },
+    {
+      label: "Help",
+      to: "",
+      type: "external",
+    },
+    {
+      label: "Help Center",
+      to: "https://help.cloudax.io/en/collections/3705615-nft-marketplace",
+      type: "external",
+    },
+    {
+      label: "NFT Academy",
+      to: "https://academy.cloudax.io/",
+      type: "external",
+    },
     {
       label: "Blog",
-      to: "https://spotlight.cloudax.io/topics/nft/",
+      to: "https://spotlight.cloudax.io/",
       type: "external",
     },
   ];
