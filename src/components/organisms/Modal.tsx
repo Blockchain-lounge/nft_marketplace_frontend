@@ -12,6 +12,7 @@ interface Imodal {
   closeModal: (val: boolean) => void;
   noTop?: boolean;
   modalWt?: string;
+  modalHt?: string;
   twClx?: string;
   active?: boolean;
 }
@@ -22,6 +23,7 @@ const Modal = ({
   title,
   closeModal,
   modalWt,
+  modalHt,
   twClx,
   noTop,
   active,
@@ -47,9 +49,10 @@ const Modal = ({
       <div className={clsx("modal-wrap", openModal && "modal-open")}>
         <div
           className={clsx(
-            "modal-box",
+            "modal-box scrollbar-hide",
             active ? "bg-transparent" : "bg-bg-4",
-            modalWt ?? "w-[48.125rem]"
+            modalWt ?? "w-[48.125rem]",
+            modalHt ?? "my-28 h-fit"
           )}
           ref={ref}
         >

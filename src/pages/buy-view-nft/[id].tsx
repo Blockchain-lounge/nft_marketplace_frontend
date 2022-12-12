@@ -244,6 +244,7 @@ const ViewNft = () => {
 
   const handleBid = async () => {
     //Write bid function here
+    setShowModal((prev) => !prev);
   };
 
   // const approve = async () => {
@@ -825,6 +826,11 @@ const ViewNft = () => {
         openModal={showModal}
         closeModal={setShowModal}
         modalWt="w-[40rem]"
+        modalHt={
+          modalType === "bid"
+            ? "h-full sm:h-[60%] my-auto md:h-fit overflow-y-auto"
+            : "h-fit mt-28"
+        }
       >
         {modalType === "bid" ? (
           <div className="flex flex-col items-center max-w-[85%] mx-auto gap-y-5">
@@ -890,32 +896,36 @@ const ViewNft = () => {
                 // value={nftPayload.coinPrice}
               />
             </div>
-            <div className="flex justify-between items-center w-full">
-              <span className="text-txt-2">Balance</span>
-              <span className="flex">
-                <CoinIcon />
-                47.8
-              </span>
+            <div className="space-y-5 w-full">
+              <div className="flex justify-between items-center w-full">
+                <span className="text-txt-2">Balance</span>
+                <span className="flex">
+                  <CoinIcon />
+                  47.8
+                </span>
+              </div>
+              <div className="flex justify-between items-center w-full">
+                <span className="text-txt-2">Service Fee (0%)</span>
+                <span className="flex">
+                  <CoinIcon />0
+                </span>
+              </div>
+              <div className="flex justify-between items-center w-full">
+                <span className="text-txt-2">You Will Pay</span>
+                <span className="flex">
+                  <CoinIcon />
+                  6.95
+                </span>
+              </div>
             </div>
-            <div className="flex justify-between items-center w-full">
-              <span className="text-txt-2">Service Fee (0%)</span>
-              <span className="flex">
-                <CoinIcon />0
-              </span>
+            <div className="mt-12 lg:mt-10 w-full">
+              <Button
+                title="Place bid"
+                onClick={handleBid}
+                wt="w-full"
+                isDisabled={isTransloading}
+              />
             </div>
-            <div className="flex justify-between items-center w-full">
-              <span className="text-txt-2">You Will Pay</span>
-              <span className="flex">
-                <CoinIcon />
-                6.95
-              </span>
-            </div>
-            <Button
-              title="Place bid"
-              onClick={handleBid}
-              twClasses="w-full"
-              isDisabled={isTransloading}
-            />
           </div>
         ) : (
           <div className="flex flex-col items-center max-w-[65%] mx-auto gap-y-5 text-clip">
