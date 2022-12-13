@@ -211,11 +211,11 @@
 /*Nav Tab*/
 
 .nav-tab-wrapper {
-  @apply h-[3.625rem] px-[1.5625rem] flex items-center justify-between bg-[#1D1F3E] rounded-[0.625rem] gap-x-4;
+  @apply h-[3.625rem] px-[1.5625rem] flex items-center justify-between overflow-x-auto bg-[#1D1F3E] rounded-[0.625rem] gap-x-4;
 }
 
 .tab {
-  @apply text-white cursor-pointer pb-[0.9rem];
+  @apply text-white cursor-pointer pb-[0.9rem] whitespace-nowrap;
 }
 /* .tab::before {
   @apply absolute content-[''] bg-white h-[0.3125rem] w-full rounded-t-[0.24rem] bottom-[-1rem];

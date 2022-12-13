@@ -335,7 +335,7 @@ const ViewNft = () => {
       <div className="sub-layout-wrapper scrollbar-hide">
         <ToastContainer />
         {itemDetail !== null ? (
-          <div className="center space-y-8">
+          <div className="center space-y-8 mb-16">
             <div className="view-wrapper-hero lg:grid-cols-[0.5fr_1fr]">
               <div className="relative h-[50vh] mb-6 lg:mb-0">
                 <Image
@@ -404,7 +404,7 @@ const ViewNft = () => {
                 </div> */}
                 <div className="view-hero-nft-cta-wrapper">
                   <div className="flex w-full gap-x-6">
-                    <div className="p-3 bg-bg-5 rounded-md w-full">
+                    <div className="p-4 bg-bg-5 rounded-md w-full">
                       <span className="text-txt-2 text-xl block mb-4">
                         Price
                       </span>
@@ -423,8 +423,8 @@ const ViewNft = () => {
                         )}
                       </div>
                     </div>
-                    {/* <div className="p-3 bg-bg-5 rounded-[1.25rem] w-full">
-                      <span className="text-txt-2 block mb-4">
+                    <div className="p-4 bg-bg-5 rounded-md w-full">
+                      <span className="text-txt-2 text-xl block mb-4">
                         Highest floor bid
                       </span>
                       <div>
@@ -432,18 +432,18 @@ const ViewNft = () => {
                           <CoinIcon />
                           51k
                         </span>
-                        <span className="text-lg flex items-center mt-2 text-txt-2 gap-x-2">
+                        <span className="text-xl font-medium flex items-center mt-2 text-txt-2 gap-x-2">
                           by
                           <span className="earnings-card-history">
                             0x7a20d...9257
                           </span>
                         </span>
                       </div>
-                    </div> */}
+                    </div>
                   </div>
-                  {/* <span className="text-lg font-medium">
+                  <span className="text-lg font-medium">
                     Last sale price 10.8 ETH
-                  </span> */}
+                  </span>
                   <div className="flex flex-col gap-y-4 w-full">
                     <div className="flex gap-x-5 w-full">
                       {connectedAddress ? (
@@ -839,9 +839,7 @@ const ViewNft = () => {
           </div>
             </div>
           </div>
-        ) : (
-          ""
-        )}
+        ) : null}
         <Footer />
       </div>
       <Modal

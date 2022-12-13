@@ -421,7 +421,7 @@ const CreateNewNft = () => {
               </div> */}
               <Button title="Create" isDisabled={isTransloading} />
             </form>
-            <div className="create-new-nft-wrapper-preview max-w-[50%] hidden lg:block">
+            <div className="create-new-nft-wrapper-preview max-w-[60%] hidden lg:block">
               <div className="create-new-nft-wrapper-2">
                 <span className="create-new-nft-wrapper-2-label">Preview</span>
                 <span className="create-new-nft-wrapper-2-label-type">

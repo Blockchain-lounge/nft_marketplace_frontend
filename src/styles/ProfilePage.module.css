@@ -40,7 +40,7 @@
 }
 
 .profile-tab {
-  @apply mx-auto max-w-[50%] 2xl:max-w-[37%] my-6;
+  @apply mx-auto max-w-max overflow-auto my-6;
 }
 
 .profile-user-nfts {
@@ -55,11 +55,11 @@
 }
 
 .profile-activity-headers-tab {
-  @apply grid grid-cols-4 px-6 mb-[1.875rem];
+  @apply hidden sm:grid sm:grid-cols-[0.3fr_0.15fr_0.2fr_0.35fr] lg:grid-cols-4 px-6 mb-[1.875rem];
 }
 
 .profile-activity-list {
-  @apply grid grid-cols-4 px-6 mb-[1.875rem];
+  @apply flex gap-x-4 sm:gap-x-0 justify-between sm:grid sm:grid-cols-[0.3fr_0.15fr_0.2fr_0.35fr] lg:grid-cols-4 px-6 mb-[1.875rem];
 }
 
 .profile-activity-header {
@@ -67,12 +67,15 @@
 }
 
 .profile-activity-list {
-  @apply bg-bg-5 items-center py-6 rounded-[1.25rem];
+  @apply bg-bg-5 items-center py-6 rounded-[1.25rem] overflow-auto;
 }
 
-.profile-activity-coin-info-wrapper,
-.profile-activity-price-wrapper {
+.profile-activity-coin-info-wrapper {
   @apply flex flex-col gap-y-2;
+}
+
+.profile-activity-price-wrapper {
+  @apply hidden sm:flex flex-col gap-y-2;
 }
 
 .profile-activity-coin-price {
@@ -83,7 +86,16 @@
 .profile-activity-sender-wrapper,
 .profile-activity-receiver,
 .profile-activity-receiver-wrapper {
-  @apply flex items-center;
+  @apply flex items-center w-full sm:w-max;
+}
+
+.profile-activity-sender-wrapper,
+.profile-activity-receiver-wrapper {
+  @apply hidden sm:flex items-center;
+}
+
+.profile-activity-receiver {
+  @apply hidden sm:flex items-center;
 }
 
 .profile-activity-item {
@@ -95,7 +107,7 @@
 }
 
 .profile-activity-receiver-wrapper {
-  @apply space-x-20;
+  @apply sm:space-x-10 lg:space-x-20;
 }
 
 .profile-activity-sender-wrapper,

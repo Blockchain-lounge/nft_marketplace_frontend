@@ -1,6 +1,7 @@
 .sub-layout-wrapper {
   @apply h-[90vh] lg:h-screen overflow-auto flex flex-col pt-4 lg:pb-28;
 }
+
 /* 
 .sub-layout-wrapper-2 {
   @apply h-[90vh] lg:h-screen overflow-auto flex flex-col justify-between;
@@ -15,5 +16,5 @@
 }
 
 .earnings-title-btn h1 {
-  @apply text-[2.5rem] font-dm-sans font-bold;
+  @apply text-[1.75rem] lg:text-[2.5rem] font-dm-sans font-bold;
 }

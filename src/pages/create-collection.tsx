@@ -240,7 +240,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
 
   return (
     <EarningLayout title="Create a Collection">
-      <div className="create-new-nft-form max-w-[80%] 2xl:max-w-[60%]">
+      <div className="create-new-nft-form sm:max-w-[80%] 2xl:max-w-[60%]">
         <ToastContainer />
         {/*Logo Image*/}
         <div className="create-new-nft-wrapper-2">
@@ -419,7 +419,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
           <div className="flex flex-col gap-y-5">
             {/*Website-Link*/}
             <div className="flex items-center gap-x-5">
-              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] px-3 sm:w-[15%] bg-bg-2 rounded-lg">
                 <div className="relative w-6 h-8">
                   <Image
                     src="/icon-svg/link.svg"
@@ -448,7 +448,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
             </div>
             {/*Discord-Link*/}
             <div className="flex items-center gap-x-5">
-              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] px-3 sm:w-[15%] bg-bg-2 rounded-lg">
                 <div className="relative w-6 h-5">
                   <Image
                     src="/icon-svg/discord.svg"
@@ -477,7 +477,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
             </div>
             {/*Twitter-Link*/}
             <div className="flex items-center gap-x-5">
-              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] px-3 sm:w-[15%] bg-bg-2 rounded-lg">
                 <div className="relative w-6 h-5">
                   <Image
                     src="/icon-svg/twitter.svg"
@@ -506,7 +506,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
             </div>
             {/*Instagram-Link*/}
             <div className="flex items-center gap-x-5">
-              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] px-3 sm:w-[15%] bg-bg-2 rounded-lg">
                 <div className="relative w-6 h-8">
                   <Image
                     src="/icon-svg/instagram.svg"
