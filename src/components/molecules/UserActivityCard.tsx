@@ -75,7 +75,7 @@ const UserActivityCard = ({
     // code block
   }
   return (
-    <div className="profile-activity-list">
+    <div className="profile-activity-list scrollbar-hide">
       <div className="profile-activity-item">
         {created_item ? (
           <img
@@ -121,21 +121,20 @@ const UserActivityCard = ({
         ) : (
           ""
         )}
-        {
-          collection_id ?
-          (<img
-              src={
-                collection_id &&
-                collection_id !== undefined &&
-                collection_id !== null
-                  ? collection_id.collectionLogoImage
-                  : "/images/profile-nft.png"
-              }
-              alt=""
-            />)
-            :
-            ("")
-        }
+        {collection_id ? (
+          <img
+            src={
+              collection_id &&
+              collection_id !== undefined &&
+              collection_id !== null
+                ? collection_id.collectionLogoImage
+                : "/images/profile-nft.png"
+            }
+            alt=""
+          />
+        ) : (
+          ""
+        )}
         <div className="profile-activity-coin-info-wrapper">
           <span className="text-[1.375rem] font-bold">
             {created_item && created_item !== undefined && created_item !== null
@@ -148,7 +147,7 @@ const UserActivityCard = ({
               ? created_item_listed.item_title
               : ""}
 
-          {collection_id &&
+            {collection_id &&
             collection_id !== undefined &&
             collection_id !== null
               ? collection_id.name
@@ -158,6 +157,22 @@ const UserActivityCard = ({
             {activityType}
           </span>
         </div>
+      </div>
+
+      <div className="flex flex-col gap-y-4 sm:hidden">
+        <div className="">
+          {item_price ? (
+            <span className="profile-activity-coin-price">
+              <CoinIcon /> {item_price}
+            </span>
+          ) : (
+            "----"
+          )}
+          {/* <span className="profile-activity-amount text-txt-2">$5,954,532</span> */}
+        </div>
+        <span className="profile-activity-receiver-time text-txt-1">
+          {moment(createdAt).format("ddd, MMM Do YYYY, hh:mm:ss")}
+        </span>
       </div>
 
       <div className="profile-activity-price-wrapper">
