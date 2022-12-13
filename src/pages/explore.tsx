@@ -94,12 +94,11 @@ const Explore = () => {
           toast("Unauthorized request!");
           return;
         } else if (response?.status == 200) {
-          if(collections.length > 0){
+          if (collections.length > 0) {
             for (let index = 0; index < response.data.data.length; index++) {
-              setCollections(prev => [...prev, response.data.data[index]]);
+              setCollections((prev) => [...prev, response.data.data[index]]);
             }
-          }
-          else{
+          } else {
             setCollections(response.data.data);
           }
           setTotalPages(response.data.totalPages);
@@ -116,6 +115,18 @@ const Explore = () => {
       return;
     }
   };
+  useEffect(() => {
+    fetchCollections();
+    // fetchLaunchPadDrops();
+  }, []);
+
+  // const fetchMore = () => {
+  //   setIsFetching((prev) => !prev);
+  //   setDataNo((value) => value + value);
+  // };
+
+  // console.log({ dataNo, isFetching });
+
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper scrollbar-hide">
@@ -127,7 +138,7 @@ const Explore = () => {
             setStage={setActiveTab}
             stages={exploreTabs}
           />
-          {console.log('sss',collections)}
+          {console.log("sss", collections)}
           {collections ? (
             <div className="explore-items-wrapper">
               {collections.map((item) => (
@@ -144,13 +155,14 @@ const Explore = () => {
             </div>
           )}
           <div className="mt-8">
-            {
-              nextPage < totalPages
-              ?
-              <Button title="Load More" onClick={() => setCurrentPage(currentPage+1)} />
-              :
+            {nextPage < totalPages ? (
+              <Button
+                title="Load More"
+                onClick={() => setCurrentPage(currentPage + 1)}
+              />
+            ) : (
               ""
-            }
+            )}
           </div>
         </div>
         <Footer />
