@@ -8,6 +8,7 @@ import {
   ActivitiesSelect,
   Select2,
   SelectCheckBox,
+  Button
 } from "../components/atoms";
 import { ISelectCheckProps } from "../components/atoms/SelectCheckbox";
 import { CloseIcon } from "../components/atoms/vectors";
@@ -21,7 +22,10 @@ import { useRouter } from "next/router";
 
 const Activities = () => {
   const [currentTab, setCurrentTab] = useState("1 h");
-  const [activities, setActivities] = useState(null);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [nextPage, setNextPage] = useState(1);
+  const [activities, setActivities] = useState([]);
   const [currentEvent, setCurrentEvent] = useState<{
     name: string;
     value: string;
@@ -79,34 +83,34 @@ const Activities = () => {
     var REQUEST_URL = "/activities";
     switch (activityType) {
       case "newly_created_item":
-        REQUEST_URL = "/activities?activity_type=" + activityType;
+        REQUEST_URL = "/activities?activity_type=" + activityType+"&&page="+currentPage;
         break;
 
       case "updated_item":
-        REQUEST_URL = "/activities?activity_type=" + activityType;
+        REQUEST_URL = "/activities?activity_type=" + activityType+"&&page="+currentPage;
         break;
 
       case "newly_listed_item":
-        REQUEST_URL = "/activities?activity_type=" + activityType;
+        REQUEST_URL = "/activities?activity_type=" + activityType+"&&page="+currentPage;
         break;
 
       case "updated_listing":
-        REQUEST_URL = "/activities?activity_type=" + activityType;
+        REQUEST_URL = "/activities?activity_type=" + activityType+"&&page="+currentPage;
         break;
 
       case "new_mint":
-        REQUEST_URL = "/activities?activity_type=" + activityType;
+        REQUEST_URL = "/activities?activity_type=" + activityType+"&&page="+currentPage;
         break;
 
       case "new_sales":
-        REQUEST_URL = "/activities?activity_type=" + activityType;
+        REQUEST_URL = "/activities?activity_type=" + activityType+"&&page="+currentPage;
         break;
       case "cancelled_listing":
-        REQUEST_URL = "/activities?activity_type=" + activityType;
+        REQUEST_URL = "/activities?activity_type=" + activityType+"&&page="+currentPage;
         break;
 
       default:
-        var REQUEST_URL = "/activities";
+        var REQUEST_URL = "/activities?page="+currentPage;
     }
     try {
       const HEADER = {};
@@ -121,7 +125,17 @@ const Activities = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
-          setActivities(response.data.data);
+          if(activities.length > 0){
+            for (let index = 0; index < response.data.data.activities.length; index++) {
+              setActivities(prev => [...prev, response.data.data.activities[index]]);
+            }
+          }
+          else{
+            setActivities(response.data.data.activities);
+          }
+          setTotalPages(response.data.data.totalPages);
+          setCurrentPage(response.data.data.currentPage);
+          setNextPage(response.data.data.nextPage);
         } else {
           toast("Something went wrong, please try again!");
           return;
@@ -140,7 +154,7 @@ const Activities = () => {
         : "all"
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activity_type]);
+  }, [activity_type,currentPage]);
 
   return (
     <DashboardLayout>
@@ -227,6 +241,15 @@ const Activities = () => {
                     <ActivityLoader key={"activity-skeleton-key" + i} />
                   ))
               : null}
+          </div>
+          <div className="mt-8">
+            {
+              nextPage < totalPages
+              ?
+              <Button title="Load More" onClick={() => setCurrentPage(currentPage+1)} />
+              :
+              ""
+            }
           </div>
         </div>
         <Footer />

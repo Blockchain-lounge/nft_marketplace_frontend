@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import clsx from "clsx";
-import { Heading2, Input, Select } from "@/src/components/atoms";
+import { Heading2, Input, Select, Button } from "@/src/components/atoms";
 import {
   CaretDown,
   CopyIcon,
@@ -70,6 +70,9 @@ const ViewCollection = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedId, setLoggedId] = useState("");
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [nextPage, setNextPage] = useState(1);
 
   const fetchCollectionItems = async () => {
     if (id !== undefined) {
@@ -84,7 +87,17 @@ const ViewCollection = () => {
           push("/");
           return;
         } else if (response.status == 200) {
-          setSingleCollectionsListedItemsData(response.data.listedItems);
+          if(singleCollectionsListedItemsData.length > 0){
+            for (let index = 0; index < response.data.listedItems.length; index++) {
+              setSingleCollectionsListedItemsData(prev => [...prev, response.data.listedItems[index]]);
+            }
+          }
+          else{
+            setSingleCollectionsListedItemsData(response.data.listedItems);
+          }
+          setTotalPages(response.data.totalPages);
+          setCurrentPage(response.data.currentPage);
+          setNextPage(response.data.nextPage);
           setSingleCollectionDetail(response.data.collection);
           setSingleCollectionActivities(response.data.activities.collection);
           setSingleCollectionItemsActivities(response.data.activities.items);
@@ -205,7 +218,7 @@ const ViewCollection = () => {
     });
     fetchCollectionItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id,currentPage]);
   // const handleShowOption = () => {
   //   setShowOption((prev) => !prev);
   // };
@@ -498,6 +511,16 @@ const ViewCollection = () => {
               </div>
             </>
           ) : null}
+
+          <div className="mt-8">
+            {
+              nextPage < totalPages
+              ?
+              <Button title="Load More" onClick={() => setCurrentPage(currentPage+1)} />
+              :
+              ""
+            }
+          </div>
         </div>
 
         <Footer />

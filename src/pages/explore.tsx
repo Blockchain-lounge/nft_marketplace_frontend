@@ -11,8 +11,10 @@ import DashboardLayout from "../template/DashboardLayout";
 const Explore = () => {
   // const [activeTab, setActiveTab] = useState("trending");
   const [isFetching, setIsFetching] = useState(false);
-  const [dataNo, setDataNo] = useState(9);
-  const [collections, setCollections] = useState<INftcard[] | null>(null);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [nextPage, setNextPage] = useState(1);
+  const [collections, setCollections] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Recently Added");
   const exploreTabs = ["Recently Added"];
@@ -44,10 +46,43 @@ const Explore = () => {
   //     return;
   //   }
   // };
-  const fetchCollections = async () => {
+  // const fetchCollections = async () => {
+  //   try {
+  //     const HEADER = {};
+  //     const REQUEST_URL = "nft-collection/index";
+  //     const METHOD = "GET";
+  //     const DATA = {};
+  //     apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+  //       if (response?.status == 400) {
+  //         var error = response.data.error;
+  //         toast(error);
+  //         return;
+  //       } else if (response?.status == 401) {
+  //         toast("Unauthorized request!");
+  //         return;
+  //       } else if (response?.status == 200) {
+  //         setCollections(response.data.data);
+  //         setIsLoading(false);
+  //       } else {
+  //         toast("Something went wrong, please try again!");
+  //         return;
+  //       }
+  //     });
+  //   } catch (error) {
+  //     toast("Something went wrong, please try again!");
+  //     return;
+  //   }
+  // };
+  useEffect(() => {
+    fetchMore();
+    // fetchLaunchPadDrops();
+  }, [currentPage]);
+
+  const fetchMore = () => {
+    setIsFetching((prev) => !prev);
     try {
       const HEADER = {};
-      const REQUEST_URL = "nft-collection/index";
+      const REQUEST_URL = `loadmore/collections?page=${currentPage}`;
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -59,7 +94,17 @@ const Explore = () => {
           toast("Unauthorized request!");
           return;
         } else if (response?.status == 200) {
-          setCollections(response.data.data);
+          if(collections.length > 0){
+            for (let index = 0; index < response.data.data.length; index++) {
+              setCollections(prev => [...prev, response.data.data[index]]);
+            }
+          }
+          else{
+            setCollections(response.data.data);
+          }
+          setTotalPages(response.data.totalPages);
+          setCurrentPage(response.data.currentPage);
+          setNextPage(response.data.nextPage);
           setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
@@ -71,18 +116,6 @@ const Explore = () => {
       return;
     }
   };
-  useEffect(() => {
-    fetchCollections();
-    // fetchLaunchPadDrops();
-  }, []);
-
-  const fetchMore = () => {
-    setIsFetching((prev) => !prev);
-    setDataNo((value) => value + value);
-  };
-
-  // console.log({ dataNo, isFetching });
-
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper scrollbar-hide">
@@ -94,6 +127,7 @@ const Explore = () => {
             setStage={setActiveTab}
             stages={exploreTabs}
           />
+          {console.log('sss',collections)}
           {collections ? (
             <div className="explore-items-wrapper">
               {collections.map((item) => (
@@ -110,7 +144,13 @@ const Explore = () => {
             </div>
           )}
           <div className="mt-8">
-            <Button title="Load More" onClick={fetchMore} />
+            {
+              nextPage < totalPages
+              ?
+              <Button title="Load More" onClick={() => setCurrentPage(currentPage+1)} />
+              :
+              ""
+            }
           </div>
         </div>
         <Footer />
