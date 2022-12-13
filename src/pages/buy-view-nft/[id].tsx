@@ -51,6 +51,9 @@ const ViewNft = () => {
   // const viewNftStages = ["overview", "properties", "bids", "history"];
   const [bidingExpDates, setBidingExpDates] = useState("1 day");
   const viewNftStages = ["overview", "activities"];
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [nextPage, setNextPage] = useState(1);
 
   const bidExpDates = [
     "1 day",
@@ -92,7 +95,7 @@ const ViewNft = () => {
 
   const fetchActivities = async () => {
     try {
-      var REQUEST_URL = "/activities?content_id=" + id;
+      var REQUEST_URL = "/activities?content_id=" + id+"&&page="+currentPage;
       const HEADER = {};
       const METHOD = "GET";
       const DATA = {};
@@ -105,7 +108,17 @@ const ViewNft = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
-          setActivities(response.data.data);
+          if(activities.length > 0){
+            for (let index = 0; index < response.data.data.activities.length; index++) {
+              setActivities(prev => [...prev, response.data.data.activities[index]]);
+            }
+          }
+          else{
+            setActivities(response.data.data.activities);
+          }
+          setTotalPages(response.data.totalPages);
+          setCurrentPage(response.data.currentPage);
+          setNextPage(response.data.nextPage);
         } else {
           toast("Something went wrong, please try again!");
           return;
@@ -310,11 +323,12 @@ const ViewNft = () => {
         // push("/");
       }
     });
-
-    fetchItemDetail(id as string);
-    fetchActivities();
+    if(id){
+      fetchItemDetail(id as string);
+      fetchActivities();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id,currentPage]);
 
   return (
     <DashboardLayout isLoading={!itemDetail}>
@@ -814,6 +828,15 @@ const ViewNft = () => {
                   ) : null}
                 </div>
               ) : null}
+              <div className="mt-8">
+            {
+              nextPage < totalPages
+              ?
+              <Button title="Load More" onClick={() => setCurrentPage(currentPage+1)} />
+              :
+              ""
+            }
+          </div>
             </div>
           </div>
         ) : (

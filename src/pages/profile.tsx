@@ -60,6 +60,9 @@ const Profile = () => {
   const [userProfileImg, setUserProfileImg] = useState("");
   const [userBannerImg, setUserBannerImg] = useState("");
   const [activities, setActivities] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [nextPage, setNextPage] = useState(1);
 
   const profileTab = [
     { text: "Collected", count: userOwnedProfileData.length },
@@ -116,7 +119,9 @@ const Profile = () => {
                 response.data.data.userProfileImg
             : ""
         );
-        fetchUserActivities(response.data.data._id);
+        if(currentPage && response.data.data._id){
+          fetchUserActivities(response.data.data._id,currentPage);
+        }
         setIsLoading(false);
         // setShowModal(true);
       } else {
@@ -148,14 +153,24 @@ const Profile = () => {
     });
   };
 
-  const fetchUserActivities = async (user_id) => {
+  const fetchUserActivities = async (user_id,currentPage) => {
     const HEADER = "authenticated";
-    const REQUEST_URL = "activities?user=" + user_id;
+    const REQUEST_URL = "activities?user=" + user_id+"&&page="+currentPage;
     const METHOD = "GET";
     const DATA = {};
     apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
       if (response.status == 200) {
-        setActivities(response.data.data);
+        if(activities.length > 0){
+          for (let index = 0; index < response.data.data.activities.length; index++) {
+            setActivities(prev => [...prev, response.data.data.activities[index]]);
+          }
+        }
+        else{
+          setActivities(response.data.data.activities);
+        }
+        setTotalPages(response.data.totalPages);
+        setCurrentPage(response.data.currentPage);
+        setNextPage(response.data.nextPage);
       } else {
         toast("Unable to fetch your activities, please reload this page!");
         return;
@@ -260,7 +275,7 @@ const Profile = () => {
     fetchUser();
     fetchCollections();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [currentPage]);
 
   return (
     <DashboardLayout isLoading={isLoading}>
@@ -452,6 +467,15 @@ const Profile = () => {
                             <UserActivityCard {...activity} key={i} />
                           ))
                         : ""}
+                        <div className="mt-8">
+                          {
+                            nextPage < totalPages
+                            ?
+                            <Button title="Load More" onClick={() => setCurrentPage(currentPage+1)} />
+                            :
+                            ""
+                          }
+                        </div>
                     </div>
                   </div>
                 ) : profileActiveTab === 4 ? (
