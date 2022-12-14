@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import clsx from "clsx";
-import { Heading2, Input, Select, Button } from "@/src/components/atoms";
+import { Heading2, Input, Select } from "@/src/components/atoms";
 import {
   CaretDown,
   CopyIcon,
@@ -35,7 +35,7 @@ import {
 import APPCONFIG from "../../constants/Config";
 import { connectedAccount } from "../../functions/onChain/authFunction";
 
-const ViewCollection = () => {
+const ViewOnchainCollection = () => {
   // const [collectionImg, setCollectionImg] = useState("");
   // const [collectionBannerImg, setCollectionBannerImg] = useState("");
   const [activeStage, setActiveStage] = useState("items");
@@ -70,14 +70,12 @@ const ViewCollection = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedId, setLoggedId] = useState("");
-  const [totalPages, setTotalPages] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [nextPage, setNextPage] = useState(1);
 
   const fetchCollectionItems = async () => {
     if (id !== undefined) {
+      const collectionAddress = id
       const HEADER = {};
-      const REQUEST_URL = "nft-listing/collection/" + id;
+      const REQUEST_URL = "nft-on-chain-items/collection/" + collectionAddress;
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -87,17 +85,7 @@ const ViewCollection = () => {
           push("/");
           return;
         } else if (response.status == 200) {
-          if(singleCollectionsListedItemsData.length > 0){
-            for (let index = 0; index < response.data.listedItems.length; index++) {
-              setSingleCollectionsListedItemsData(prev => [...prev, response.data.listedItems[index]]);
-            }
-          }
-          else{
-            setSingleCollectionsListedItemsData(response.data.listedItems);
-          }
-          setTotalPages(response.data.totalPages);
-          setCurrentPage(response.data.currentPage);
-          setNextPage(response.data.nextPage);
+          setSingleCollectionsListedItemsData(response.data.listedItems);
           setSingleCollectionDetail(response.data.collection);
           setSingleCollectionActivities(response.data.activities.collection);
           setSingleCollectionItemsActivities(response.data.activities.items);
@@ -218,7 +206,7 @@ const ViewCollection = () => {
     });
     fetchCollectionItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id,currentPage]);
+  }, [id]);
   // const handleShowOption = () => {
   //   setShowOption((prev) => !prev);
   // };
@@ -511,16 +499,6 @@ const ViewCollection = () => {
               </div>
             </>
           ) : null}
-
-          <div className="mt-8">
-            {
-              nextPage < totalPages
-              ?
-              <Button title="Load More" onClick={() => setCurrentPage(currentPage+1)} />
-              :
-              ""
-            }
-          </div>
         </div>
 
         <Footer />
@@ -529,4 +507,4 @@ const ViewCollection = () => {
   );
 };
 
-export default ViewCollection;
+export default ViewOnchainCollection;

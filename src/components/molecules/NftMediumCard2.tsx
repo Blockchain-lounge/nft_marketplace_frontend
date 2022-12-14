@@ -1,10 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 // @ts-nocheck
 import { useRouter } from "next/router";
+import clsx from "clsx";
 
 import { LikeIcon } from "@/src/components/atoms/vectors";
 // import { Nftcard } from "./NftMediumCard";
 import Image from "next/image";
+import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 
 // Partial<Pick<INftcard, "name" | "imgUrl" | "price">> & {
 //   time?: boolean;
@@ -21,70 +23,69 @@ const NftCard2 = ({
   listing_price,
   listing_quantity,
   listing_remaining,
+  maxWidth,
   to = "buy-view-nft",
 }: Partial<Pick<INftcard, "name" | "imgUrl" | "price">> & {
   time?: boolean;
   to?: string;
+  maxWidth?: string;
 }) => {
+  const [dollarRate] = UseConvertEthToDollar();
   const { push } = useRouter();
   return (
     <div
-      className="nmc-wrapper cursor-pointer"
+      className={clsx(
+        "rounded-[0.975rem] bg-white w-full lg:max-w-full cursor-pointer",
+        maxWidth
+      )}
       onClick={() => push(`/${to}/${_id}`)}
     >
       <div className="nmc-wrapper-img">
-        {
-          item_id
-          ?
-          (
-            <Image
-          src={
-            item_art_url === undefined ||
-            item_art_url === null ||
-            (item_art_url === "" &&
-              item_id !== undefined &&
-              item_id !== null &&
-              item_id !== "")
-              ? item_id.item_art_url
-              : item_art_url
-          }
-          alt={item_title}
-          layout="fill"
-          placeholder="blur"
-          blurDataURL="/images/placeholder.png"
-          className="rounded-t-xl"
-        />
-          )
-          :resell_item_id 
-          ?
-          (<Image
-          src={
-            resell_item_id !== undefined ||
-            resell_item_id !== null
-              ? resell_item_id.item_art_url
-              : ""
-          }
-          alt={resell_item_id.item_title}
-          layout="fill"
-          placeholder="blur"
-          blurDataURL="/images/placeholder.png"
-          className="rounded-t-xl"
-        />)
-        :
+        {item_id ? (
+          <Image
+            src={
+              item_art_url === undefined ||
+              item_art_url === null ||
+              (item_art_url === "" &&
+                item_id !== undefined &&
+                item_id !== null &&
+                item_id !== "")
+                ? item_id.item_art_url
+                : item_art_url
+            }
+            alt={item_title}
+            layout="fill"
+            placeholder="blur"
+            blurDataURL="/images/placeholder.png"
+            className="rounded-t-xl"
+          />
+        ) : resell_item_id ? (
+          <Image
+            src={
+              resell_item_id !== undefined || resell_item_id !== null
+                ? resell_item_id.item_art_url
+                : ""
+            }
+            alt={resell_item_id.item_title}
+            layout="fill"
+            placeholder="blur"
+            blurDataURL="/images/placeholder.png"
+            className="rounded-t-xl"
+          />
+        ) : (
           ""
-        }
-        
+        )}
+
         {/* <img src={item_art_url} alt={item_title} /> */}
       </div>
-      <div className="nmc-sub-wrapper flex justify-between">
+      <div className="nmc-sub-wrapper flex justify-between items-center">
         <div className="flex flex-col gap-y-[0.3rem] p-2">
           <span className="font-bold text-black text-xl">
-            { item_id 
+            {item_id
               ? item_id.item_title
               : resell_item_id
               ? resell_item_id.item_title
-              : ""
-              }
+              : ""}
           </span>
           <span className="nmc-sub-wrapper-2-owner">
             {item_supply === undefined ||
@@ -119,20 +120,36 @@ const NftCard2 = ({
             </div>
           </div>
         ) : (
-          <span className="text-black flex items-start justify-center text-lg p-2">
-            <span className="h-6 w-6 relative">
-              <Image
-                src="/icon-svg/eth-dark-icon.svg"
-                alt="ethereum coin"
-                layout="fill"
-              />
+          <div className="p-2">
+            <span className="text-black flex items-center text-lg">
+              <span className="h-6 w-3 relative">
+                <Image
+                  src="/icon-svg/eth-dark-icon.svg"
+                  alt="ethereum coin"
+                  layout="fill"
+                />
+              </span>
+              {item_price !== undefined
+                ? item_price
+                : listing_price !== undefined
+                ? listing_price
+                : 0}
             </span>
-            {item_price !== undefined
-              ? item_price
-              : listing_price !== undefined
-              ? listing_price
-              : 0}
-          </span>
+            {dollarRate ? (
+              <span className="text-black flex items-center text-lg ">
+                <span className="text-lg text-black font-bold">$</span>
+                {(
+                  (item_price !== undefined
+                    ? item_price
+                    : listing_price !== undefined
+                    ? listing_price
+                    : 0) * dollarRate
+                ).toFixed(2)}
+              </span>
+            ) : (
+              ""
+            )}
+          </div>
         )}
       </div>
     </div>

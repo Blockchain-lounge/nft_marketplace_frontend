@@ -21,8 +21,6 @@ import {
 import { Button, CheckBox, Heading2, Input2 } from "../components/atoms";
 import APPCONFIG from "../constants/Config";
 // import { apiPost } from "../utilities/requests/apiRequest";
-import UseAuth from "../hooks/useAuth";
-import axios from "axios";
 
 const Settings = () => {
   const { push } = useRouter();

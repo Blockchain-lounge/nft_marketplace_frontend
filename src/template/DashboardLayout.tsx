@@ -76,7 +76,7 @@ const DashboardLayout = ({
               <Loader2 />
             </div>
           ) : (
-            children
+            <div className="h-full overflow-hidden">{children}</div>
           )}
         </div>
       </div>

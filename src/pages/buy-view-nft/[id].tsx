@@ -35,6 +35,7 @@ import { INftcard } from "@/src/components/molecules/NftMediumCard";
 import { BigNumber, ethers } from "ethers";
 import APPCONFIG from "@/src/constants/Config";
 import { ActivityLoader } from "@/src/components/lazy-loaders";
+import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 const ViewNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModaltype] = useState("buy");
@@ -46,9 +47,23 @@ const ViewNft = () => {
   const [userId, setUserId] = useState<null | string>(null);
   const [isTransloading, setIsTransLoading] = useState(false);
   const [activities, setActivities] = useState(null);
-
+  const [dollarRate] = UseConvertEthToDollar();
   // const viewNftStages = ["overview", "properties", "bids", "history"];
+  const [bidingExpDates, setBidingExpDates] = useState("1 day");
   const viewNftStages = ["overview", "activities"];
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [nextPage, setNextPage] = useState(1);
+
+  const bidExpDates = [
+    "1 day",
+    "2 days",
+    "3 days",
+    "4 days",
+    "5 days",
+    "6 days",
+    "7 days",
+  ];
   // const nftProperties = [
   //   { label: "dna", value: "human", trait: 19 },
   //   { label: "eyewear", value: "cyber bindi", trait: 16 },
@@ -80,7 +95,7 @@ const ViewNft = () => {
 
   const fetchActivities = async () => {
     try {
-      var REQUEST_URL = "/activities?content_id=" + id;
+      var REQUEST_URL = "/activities?content_id=" + id+"&&page="+currentPage;
       const HEADER = {};
       const METHOD = "GET";
       const DATA = {};
@@ -93,7 +108,17 @@ const ViewNft = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
-          setActivities(response.data.data);
+          if(activities.length > 0){
+            for (let index = 0; index < response.data.data.activities.length; index++) {
+              setActivities(prev => [...prev, response.data.data.activities[index]]);
+            }
+          }
+          else{
+            setActivities(response.data.data.activities);
+          }
+          setTotalPages(response.data.totalPages);
+          setCurrentPage(response.data.currentPage);
+          setNextPage(response.data.nextPage);
         } else {
           toast("Something went wrong, please try again!");
           return;
@@ -230,6 +255,11 @@ const ViewNft = () => {
     // setShowModal((prev) => !prev);
   };
 
+  const handleBid = async () => {
+    //Write bid function here
+    setShowModal((prev) => !prev);
+  };
+
   // const approve = async () => {
   //   const provider = new ethers.providers.Web3Provider(
   //     (window as any).ethereum
@@ -293,18 +323,19 @@ const ViewNft = () => {
         // push("/");
       }
     });
-
-    fetchItemDetail(id as string);
-    fetchActivities();
+    if(id){
+      fetchItemDetail(id as string);
+      fetchActivities();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id,currentPage]);
 
   return (
     <DashboardLayout isLoading={!itemDetail}>
       <div className="sub-layout-wrapper scrollbar-hide">
         <ToastContainer />
         {itemDetail !== null ? (
-          <div className="center space-y-8">
+          <div className="center space-y-8 mb-16">
             <div className="view-wrapper-hero lg:grid-cols-[0.5fr_1fr]">
               <div className="relative h-[50vh] mb-6 lg:mb-0">
                 <Image
@@ -373,20 +404,27 @@ const ViewNft = () => {
                 </div> */}
                 <div className="view-hero-nft-cta-wrapper">
                   <div className="flex w-full gap-x-6">
-                    <div className="p-3 bg-bg-5 rounded-md w-full">
+                    <div className="p-4 bg-bg-5 rounded-md w-full">
                       <span className="text-txt-2 text-xl block mb-4">
                         Price
                       </span>
                       <div className="">
-                        <span className="flex items-center text-[1.5rem] gap-x-1">
+                        <span className="flex items-center text-[1.75rem] gap-x-1">
                           <CoinIcon />
                           {itemDetail.listing_price}
                         </span>
-                        {/* <span className="text-lg block mt-2">$5,954,532</span> */}
+                        {dollarRate ? (
+                          <span className="text-xl font-medium block mt-2">
+                            $
+                            {(itemDetail.listing_price * dollarRate).toFixed(2)}
+                          </span>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </div>
-                    {/* <div className="p-3 bg-bg-5 rounded-[1.25rem] w-full">
-                      <span className="text-txt-2 block mb-4">
+                    <div className="p-4 bg-bg-5 rounded-md w-full">
+                      <span className="text-txt-2 text-xl block mb-4">
                         Highest floor bid
                       </span>
                       <div>
@@ -394,29 +432,40 @@ const ViewNft = () => {
                           <CoinIcon />
                           51k
                         </span>
-                        <span className="text-lg flex items-center mt-2 text-txt-2 gap-x-2">
+                        <span className="text-xl font-medium flex items-center mt-2 text-txt-2 gap-x-2">
                           by
                           <span className="earnings-card-history">
                             0x7a20d...9257
                           </span>
                         </span>
                       </div>
-                    </div> */}
+                    </div>
                   </div>
-                  {/* <span className="text-lg font-medium">
+                  <span className="text-lg font-medium">
                     Last sale price 10.8 ETH
-                  </span> */}
+                  </span>
                   <div className="flex flex-col gap-y-4 w-full">
                     <div className="flex gap-x-5 w-full">
                       {connectedAddress ? (
-                        <Button
-                          title="Buy now"
-                          wt="w-full"
-                          onClick={() => {
-                            setModaltype("buy");
-                            setShowModal((prev) => !prev);
-                          }}
-                        />
+                        <div className="w-full space-y-4">
+                          <Button
+                            title="Buy now"
+                            wt="w-full"
+                            onClick={() => {
+                              setModaltype("buy");
+                              setShowModal((prev) => !prev);
+                            }}
+                          />
+                          <Button
+                            title="Place a bid"
+                            outline2
+                            wt="w-full"
+                            onClick={() => {
+                              setModaltype("bid");
+                              setShowModal((prev) => !prev);
+                            }}
+                          />
+                        </div>
                       ) : (
                         <Button
                           title="You need to connect your wallet to continue"
@@ -779,11 +828,18 @@ const ViewNft = () => {
                   ) : null}
                 </div>
               ) : null}
+              <div className="mt-8">
+            {
+              nextPage < totalPages
+              ?
+              <Button title="Load More" onClick={() => setCurrentPage(currentPage+1)} />
+              :
+              ""
+            }
+          </div>
             </div>
           </div>
-        ) : (
-          ""
-        )}
+        ) : null}
         <Footer />
       </div>
       <Modal
@@ -791,15 +847,24 @@ const ViewNft = () => {
         openModal={showModal}
         closeModal={setShowModal}
         modalWt="w-[40rem]"
+        modalHt={
+          modalType === "bid"
+            ? "h-full sm:h-[60%] my-auto md:h-fit overflow-y-auto"
+            : "h-fit mt-28"
+        }
       >
         {modalType === "bid" ? (
           <div className="flex flex-col items-center max-w-[85%] mx-auto gap-y-5">
             <span className="font-bold text-txt-2 text-base max-w-[80%] text-center">
               You are about to place a bid for{" "}
-              <span className="text-txt-2">Express Depot </span>
-              from <span className="text-txt-2">Town Star collection.</span>
+              <span className="text-white">{itemDetail.item.item_title} </span>
+              from{" "}
+              <span className="text-white">
+                {itemDetail.item.collection.name}
+              </span>{" "}
+              collection
             </span>
-            <div className="flex items-center justify-between w-full bg-bg-5 py-4 px-6 rounded-[1.25rem]">
+            {/* <div className="flex items-center justify-between w-full bg-bg-5 py-4 px-6 rounded-[1.25rem]">
               <div className="flex gap-x-3 items-center">
                 <span className="block relative h-14 w-14">
                   <Image
@@ -819,15 +884,15 @@ const ViewNft = () => {
               <span className="text-positive-color bg-[#00800022] py-3 px-4 rounded-3xl">
                 Connected
               </span>
-            </div>
+            </div> */}
 
             <div className="create-new-nft-wrapper-2 w-full">
-              <span className="create-new-nft-wrapper-2-label">Your bid</span>
-              <div className="create-new-nft-price">
+              <div className="create-new-nft-wrapper-2 w-full">
                 {/* <Select title="ETH" icon={<CoinIcon />} /> */}
                 <Input2
                   name="coinPrice"
                   placeholder="0.00"
+                  label="Your bid"
                   // onChange={handleFieldChange}
                   // value={nftPayload.coinPrice}
                 />
@@ -837,7 +902,11 @@ const ViewNft = () => {
               <span className="create-new-nft-wrapper-2-label">
                 Bid expiration
               </span>
-              {/* <Select title="7 days" /> */}
+              <Select
+                title={bidingExpDates}
+                lists={bidExpDates}
+                onClick={setBidingExpDates}
+              />
             </div>
             <div className="create-new-nft-wrapper-2 w-full">
               <Input2
@@ -848,27 +917,36 @@ const ViewNft = () => {
                 // value={nftPayload.coinPrice}
               />
             </div>
-            <div className="flex justify-between items-center w-full">
-              <span className="text-txt-2">Balance</span>
-              <span className="flex">
-                <CoinIcon />
-                47.8
-              </span>
+            <div className="space-y-5 w-full">
+              <div className="flex justify-between items-center w-full">
+                <span className="text-txt-2">Balance</span>
+                <span className="flex">
+                  <CoinIcon />
+                  47.8
+                </span>
+              </div>
+              <div className="flex justify-between items-center w-full">
+                <span className="text-txt-2">Service Fee (0%)</span>
+                <span className="flex">
+                  <CoinIcon />0
+                </span>
+              </div>
+              <div className="flex justify-between items-center w-full">
+                <span className="text-txt-2">You Will Pay</span>
+                <span className="flex">
+                  <CoinIcon />
+                  6.95
+                </span>
+              </div>
             </div>
-            <div className="flex justify-between items-center w-full">
-              <span className="text-txt-2">Service Fee (0%)</span>
-              <span className="flex">
-                <CoinIcon />0
-              </span>
+            <div className="mt-12 lg:mt-10 w-full">
+              <Button
+                title="Place bid"
+                onClick={handleBid}
+                wt="w-full"
+                isDisabled={isTransloading}
+              />
             </div>
-            <div className="flex justify-between items-center w-full">
-              <span className="text-txt-2">You Will Pay</span>
-              <span className="flex">
-                <CoinIcon />
-                6.95
-              </span>
-            </div>
-            <Button title="Place bid" onClick={handleBid} twClasses="w-full" />
           </div>
         ) : (
           <div className="flex flex-col items-center max-w-[65%] mx-auto gap-y-5 text-clip">

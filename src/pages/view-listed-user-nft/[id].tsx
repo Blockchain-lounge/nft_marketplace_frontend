@@ -18,8 +18,10 @@ import { toast } from "react-toastify";
 import APPCONFIG from "../../constants/Config";
 import abi from "../../artifacts/abi.json";
 import { ethers } from "ethers";
+import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 
 const ViewUserNft = () => {
+  const [dollarRate] = UseConvertEthToDollar();
   const { query, push } = useRouter();
   const { id } = query;
   const [owner, setOwner] = useState(null);
@@ -138,6 +140,10 @@ const ViewUserNft = () => {
     fetchUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  const handleNavigateToCollection = () => {
+    push(`/single-collection/${itemDetail.item.collection._id}`);
+  };
   // console.log({ itemDetail });
   return (
     <DashboardLayout>
@@ -201,7 +207,10 @@ const ViewUserNft = () => {
                   {itemDetail.item.collection ? (
                     <div className="flex items-center mb-5">
                       {/*collection-logo*/}
-                      <div className="flex items-center mb-4">
+                      <div
+                        className="flex items-center mb-4 cursor-pointer"
+                        onClick={handleNavigateToCollection}
+                      >
                         <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
                           <Image
                             src={
@@ -260,21 +269,37 @@ const ViewUserNft = () => {
                 </div>
                 <div className="view-hero-nft-cta-wrapper">
                   <div className="flex flex-col w-full gap-x-6">
-                    <div className="p-4 bg-bg-5 rounded-md w-full">
-                      <span className="text-txt-2 block mb-4 text-xl">
-                        Selling price
-                      </span>
-                      <div className="">
-                        <span className="flex items-center text-[1.5rem] gap-x-1">
-                          <CoinIcon />
-                          {itemDetail.listing_price || 0}
-                        </span>
-                        <span className="text-xl block mt-2">
-                          Item quantity:{" "}
-                          {itemDetail.listing_remaining +
-                            "/" +
-                            itemDetail.listing_quantity}
-                        </span>
+                    <div className="p-4 bg-bg-5 rounded-md w-full ">
+                      <div className="flex justify-between">
+                        <div className="">
+                          <span className="text-txt-2 block mb-4 text-xl">
+                            Selling price
+                          </span>
+                          <span className="flex items-center text-[1.5rem] gap-x-1">
+                            <CoinIcon />
+                            {itemDetail.listing_price || 0}
+                          </span>
+                          {dollarRate ? (
+                            <span className="flex items-center text-xl mt-2">
+                              <span className="text-xl font-bold">$</span>
+                              {(itemDetail.listing_price * dollarRate).toFixed(
+                                2
+                              )}
+                            </span>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                        <div className="">
+                          <span className="text-txt-2 block text-xl">
+                            Item quantity
+                          </span>
+                          <span className="text-xl">
+                            {itemDetail.listing_remaining +
+                              "/" +
+                              itemDetail.listing_quantity}
+                          </span>
+                        </div>
                       </div>
                     </div>
                     <div className="flex items-center justify-between gap-x-4 mt-4">

@@ -15,8 +15,10 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { apiRequest } from "../../functions/offChain/apiRequests";
 import { toast } from "react-toastify";
+import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 
 const ViewNft = () => {
+  const [dollarRate] = UseConvertEthToDollar();
   const { query, push } = useRouter();
   const { id } = query;
   const [showModal, setShowModal] = useState(false);

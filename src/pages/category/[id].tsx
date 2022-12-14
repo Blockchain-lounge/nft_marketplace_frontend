@@ -1,4 +1,5 @@
-import { Heading2 } from "@/src/components/atoms";
+//@ts-nocheck
+import { Heading2, Button } from "@/src/components/atoms";
 import { NftCardSkeleton } from "@/src/components/lazy-loaders";
 import {
   CategoryHeroCard,
@@ -18,7 +19,10 @@ import { toast } from "react-toastify";
 
 const CategoryPage = () => {
   const [categoryBannerImg, setCategoryBannerImg] = useState(true);
-  const [collections, setCollections] = useState<INftcard[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [nextPage, setNextPage] = useState(1);
+  const [collections, setCollections] = useState([]);
   const [category, setCategory] = useState<INftcard[]>([]);
   const [nfts, setNfts] = useState([]);
   const [activeTab, setActiveTab] = useState("Collections");
@@ -30,7 +34,7 @@ const CategoryPage = () => {
   const fetchCategoryDetail = async () => {
     if (id !== undefined) {
       const HEADER = {};
-      const REQUEST_URL = "category/collections/" + id;
+      const REQUEST_URL = "category/collections/" + id+"?page="+currentPage;
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -40,7 +44,18 @@ const CategoryPage = () => {
           push("/");
           return;
         } else if (response.status == 200) {
-          setCollections(response.data.createdCollections);
+          if(collections.length > 0){
+            for (let index = 0; index < response.data.createdCollections.length; index++) {
+              setCollections(prev => [...prev, response.data.createdCollections[index]]);
+            }
+          }
+          else{
+            setCollections(response.data.createdCollections);
+          }
+          setTotalPages(response.data.totalPages);
+          setCurrentPage(response.data.currentPage);
+          setNextPage(response.data.nextPage);
+
           setCategory(response.data.category);
         } else {
           // toast("Something went wrong, please try again!");
@@ -53,7 +68,7 @@ const CategoryPage = () => {
   useEffect(() => {
     fetchCategoryDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id,currentPage]);
   return (
     <DashboardLayout>
       <div className="sub-layout-wrapper scrollbar-hide">
@@ -82,6 +97,15 @@ const CategoryPage = () => {
                   ))}
               </div>
             )}
+          </div>
+          <div className="mt-8">
+            {
+              nextPage < totalPages
+              ?
+              <Button title="Load More" onClick={() => setCurrentPage(currentPage+1)} />
+              :
+              ""
+            }
           </div>
         </div>
         <Footer />

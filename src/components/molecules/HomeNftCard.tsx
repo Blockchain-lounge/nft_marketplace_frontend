@@ -1,9 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 // @ts-nocheck
-import { useRouter } from "next/router";
 import clsx from "clsx";
-import { CoinIcon, OutlineLikesIcon } from "@/src/components/atoms/vectors";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
+import { CoinIcon, OutlineLikesIcon } from "@/src/components/atoms/vectors";
 import { INftcard } from "./NftMediumCard";
 
 const HomeNftCard = ({
@@ -14,6 +15,7 @@ const HomeNftCard = ({
   resell_item_id,
 }: //@ts-ignore
 Partial<INftcard>) => {
+  const [dollarRate] = UseConvertEthToDollar();
   const { push } = useRouter();
 
   return (
@@ -94,9 +96,26 @@ Partial<INftcard>) => {
             </span>
             {/* <span className="owner">{owner}</span> */}
           </div>
-          <span className="flex items-center gap-x-1 text-black">
-            <CoinIcon color="#2B2E32" /> {listing_price}
-          </span>
+          <div className="flex flex-col">
+            <span className="grid grid-cols-[0.15fr_0.7fr] items-center w-max text-lg text-black font-bold">
+              <span className="relative h-6 w-3">
+                <Image
+                  src="/icon-svg/eth-dark-icon.svg"
+                  alt="coin-svg"
+                  layout="fill"
+                />
+              </span>
+              {listing_price}
+            </span>
+            {dollarRate ? (
+              <span className="grid grid-cols-[0.5fr_0.5fr] items-center w-max text-lg text-black font-bold">
+                <span className="text-lg text-black font-bold">$</span>
+                {(listing_price * dollarRate).toFixed(2)}
+              </span>
+            ) : (
+              ""
+            )}
+          </div>
           {/* {item_price && (
               <div className="price-wrapper">
                 <span className="flex items-center space-x-2 text-black">

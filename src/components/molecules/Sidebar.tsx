@@ -74,12 +74,12 @@ const SideBar = () => {
     {
       label: "NFT Academy",
       icon: <NftAcademyIcon />,
-      link: "/nft-academy",
+      to: "https://academy.cloudax.io/",
     },
     {
       label: "Blog",
       icon: <BlogIcon />,
-      to: "https://spotlight.cloudax.io/topics/nft/",
+      to: "https://spotlight.cloudax.io/",
     },
     {
       label: "Support",
@@ -164,6 +164,17 @@ const SideBar = () => {
       </div>
       {sidebarLinks.map((item) =>
         item.label === "Blog" ? (
+          <a className="sidebar-menu" href={item.to} key={item.label}>
+            <div className="sidebar-title-wrapper">
+              <div className="sidebar-title">
+                <span className="sidebar-icon">{item.icon}</span>
+                <span className="sidebar-label">{item.label}</span>
+              </div>
+              <span className={clsx("sidebar-toggle-btn")}></span>
+              {item.tag && <span className="sidebar-tag">{item.tag}</span>}
+            </div>
+          </a>
+        ) : item.label === "NFT Academy" ? (
           <a className="sidebar-menu" href={item.to} key={item.label}>
             <div className="sidebar-title-wrapper">
               <div className="sidebar-title">

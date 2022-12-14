@@ -14,7 +14,7 @@ import EarningLayout from "../template/EarningLayout";
 import { ICategories } from "../utilities/types";
 import { CloseIcon } from "../components/atoms/vectors";
 
-const CreateCollection: FC<ICollectionProps> = () => {
+const ImportCollection: FC<ICollectionProps> = () => {
   const [collectionBannerPreview, setCollectionBannerPreview] = useState("");
   const [collectionBanner, setCollectionBanner] = useState("");
 
@@ -33,6 +33,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
   const [collectionPayload, setCollectionPayload] = useState({
     collection_name: "",
     collection_description: "",
+    collection_address: "",
   });
 
   const [socialLinksPayload, setSocialLinksPayload] = useState({
@@ -167,7 +168,8 @@ const CreateCollection: FC<ICollectionProps> = () => {
     var msg = "";
     if (
       !collectionPayload.collection_name ||
-      !collectionPayload.collection_description
+      !collectionPayload.collection_description ||
+      !collectionPayload.collection_address
     ) {
       msg = "Collection name and decsription is required";
       toast(msg);
@@ -179,6 +181,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
     }
     var collectionData = {
       name: collectionPayload.collection_name,
+      collectionAddress: collectionPayload.collection_address,
       description: collectionPayload.collection_description,
       cover_image: collectionBanner,
       collectionFeaturedImage: collectionFeaturedArt,
@@ -239,8 +242,8 @@ const CreateCollection: FC<ICollectionProps> = () => {
   };
 
   return (
-    <EarningLayout title="Create a Collection">
-      <div className="create-new-nft-form sm:max-w-[80%] 2xl:max-w-[60%]">
+    <EarningLayout title="Import Collection">
+      <div className="create-new-nft-form max-w-[80%] 2xl:max-w-[60%]">
         <ToastContainer />
         {/*Logo Image*/}
         <div className="create-new-nft-wrapper-2">
@@ -389,6 +392,15 @@ const CreateCollection: FC<ICollectionProps> = () => {
           required
         />
 
+        <Input2
+          name="collection_address"
+          label="NFT Address"
+          placeholder="Enter NFT address"
+          onChange={handleFieldChange}
+          value={collectionPayload.collection_address}
+          required
+        />
+
         <div>
           <span className="create-new-nft-wrapper-2-label mb-2">
             Description
@@ -419,7 +431,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
           <div className="flex flex-col gap-y-5">
             {/*Website-Link*/}
             <div className="flex items-center gap-x-5">
-              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] px-3 sm:w-[15%] bg-bg-2 rounded-lg">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
                 <div className="relative w-6 h-8">
                   <Image
                     src="/icon-svg/link.svg"
@@ -448,7 +460,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
             </div>
             {/*Discord-Link*/}
             <div className="flex items-center gap-x-5">
-              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] px-3 sm:w-[15%] bg-bg-2 rounded-lg">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
                 <div className="relative w-6 h-5">
                   <Image
                     src="/icon-svg/discord.svg"
@@ -477,7 +489,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
             </div>
             {/*Twitter-Link*/}
             <div className="flex items-center gap-x-5">
-              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] px-3 sm:w-[15%] bg-bg-2 rounded-lg">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
                 <div className="relative w-6 h-5">
                   <Image
                     src="/icon-svg/twitter.svg"
@@ -506,7 +518,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
             </div>
             {/*Instagram-Link*/}
             <div className="flex items-center gap-x-5">
-              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] px-3 sm:w-[15%] bg-bg-2 rounded-lg">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
                 <div className="relative w-6 h-8">
                   <Image
                     src="/icon-svg/instagram.svg"
@@ -536,7 +548,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
           </div>
         </div>
         <Button
-          title="Create collection"
+          title="Import collection"
           twClasses="w-full"
           onClick={handleSubmit}
           isDisabled={isTransloading}
@@ -546,4 +558,4 @@ const CreateCollection: FC<ICollectionProps> = () => {
   );
 };
 
-export default CreateCollection;
+export default ImportCollection;

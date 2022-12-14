@@ -19,17 +19,30 @@ const Footer = () => {
 
   const aboutLinks = [
     { label: "About", to: "/" },
-    { label: "About us", to: "/about-us" },
-    { label: "Terms of service", to: "" },
-    { label: "Privacy policy", to: "" },
+    { label: "About Us", to: "/about-us" },
+    { label: "Terms of Service", to: "" },
+    { label: "Privacy Policy", to: "" },
   ];
   const supportLinks = [
-    { label: "Support", to: "", type: "external" },
-    { label: "Help center", to: "", type: "external" },
-    { label: "NFT academy", to: "/nft-academy", type: "internal" },
+    // { label: "Support", to: "", type: "external" },
+    {
+      label: "Help",
+      to: "",
+      type: "external",
+    },
+    {
+      label: "Help Center",
+      to: "https://help.cloudax.io/en/collections/3705615-nft-marketplace",
+      type: "external",
+    },
+    {
+      label: "Academy",
+      to: "https://academy.cloudax.io/",
+      type: "external",
+    },
     {
       label: "Blog",
-      to: "https://spotlight.cloudax.io/topics/nft/",
+      to: "https://spotlight.cloudax.io/",
       type: "external",
     },
   ];
@@ -47,12 +60,12 @@ const Footer = () => {
             layout="fill"
           />
         </div>
-        <span className="footer-copy">All rights reserved @Cloudax 2022</span>
+        <span className="footer-copy">© 2022 Cloudax</span>
       </div>
 
       <div className="footer-icon-copy ">
         <span className="text-xl mb-4 text-[#A5AEC1] lg:mt-0">
-          All rights reserved @Cloudax 2022
+          © 2022 Cloudax
         </span>
       </div>
       <div className="about-links">

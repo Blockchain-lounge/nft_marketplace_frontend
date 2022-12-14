@@ -22,19 +22,20 @@ import {
   OwnedNftCard,
   CreatedNftCard,
   ListedNftCard,
+  CollectionCard,
+  OnChainCollectionCard,
 } from "@/src/components/molecules";
 
 import { apiRequest } from "../functions/offChain/apiRequests";
 import { toast } from "react-toastify";
-import UseFetch from "../hooks/useFetch";
 import Image from "next/image";
 import { INftcard } from "../components/molecules/NftMediumCard";
 import APPCONFIG from "../constants/Config";
 import { connectedAccount } from "../functions/onChain/authFunction";
 import { NftCardSkeleton } from "../components/lazy-loaders";
+
 const Profile = () => {
   const [profileActiveTab, setProfileActiveTab] = useState(1);
-
   const [openTab, setData] = useState(true);
   const [userOwnedProfileData, setUserOwnedProfileData] =
     useState<Array<INftcard> | null>([]);
@@ -42,6 +43,8 @@ const Profile = () => {
     useState<Array<INftcard> | null>([]);
   const [userListedProfileData, setUserListedProfileData] =
     useState<Array<INftcard> | null>([]);
+  const [collections, setCollections] = useState<INftcard[]>([]);
+  const [onChainCollections, setOnChainCollections] = useState<INftcard[]>([]);
   // const [user, setUser] = useState<null | Record<string, string>>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [myProfile, setMyProfile] = useState<{
@@ -57,12 +60,27 @@ const Profile = () => {
   const [userProfileImg, setUserProfileImg] = useState("");
   const [userBannerImg, setUserBannerImg] = useState("");
   const [activities, setActivities] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [nextPage, setNextPage] = useState(1);
+
+  const [tokenCreatedTotalPages, setTokenCreatedTotalPages] = useState(0);
+  const [tokenCreatedCurrentPage, setTokenCreatedCurrentPage] = useState(1);
+  const [tokenCreatedNextPage, setTokenCreatedNextPage] = useState(1);
+
+  const [tokenListedTotalPages, setTokenListedTotalPages] = useState(0);
+  const [tokenListedCurrentPage, setTokenListedCurrentPage] = useState(1);
+  const [tokenListedNextPage, setTokenListedNextPage] = useState(1);
 
   const profileTab = [
-    { text: "Owned", count: userOwnedProfileData.length },
+    { text: "Collected", count: userOwnedProfileData.length },
     { text: "Created", count: userCreatedProfileData.length },
     { text: "Listed", count: userListedProfileData.length },
-    { text: "Activity" },
+    { text: "Activity", count: activities.length },
+    {
+      text: "Collection",
+      count: collections.length + onChainCollections.length,
+    },
   ];
 
   const profileActivityList = [0, 1, 2, 3];
@@ -109,7 +127,9 @@ const Profile = () => {
                 response.data.data.userProfileImg
             : ""
         );
-        fetchUserActivities(response.data.data._id);
+        if(currentPage && response.data.data._id){
+          fetchUserActivities(response.data.data._id,currentPage);
+        }
         setIsLoading(false);
         // setShowModal(true);
       } else {
@@ -141,14 +161,24 @@ const Profile = () => {
     });
   };
 
-  const fetchUserActivities = async (user_id) => {
+  const fetchUserActivities = async (user_id,currentPage) => {
     const HEADER = "authenticated";
-    const REQUEST_URL = "activities?user=" + user_id;
+    const REQUEST_URL = "activities?user=" + user_id+"&&page="+currentPage;
     const METHOD = "GET";
     const DATA = {};
     apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
       if (response.status == 200) {
-        setActivities(response.data.data);
+        if(activities.length > 0){
+          for (let index = 0; index < response.data.data.activities.length; index++) {
+            setActivities(prev => [...prev, response.data.data.activities[index]]);
+          }
+        }
+        else{
+          setActivities(response.data.data.activities);
+        }
+        setTotalPages(response.data.totalPages);
+        setCurrentPage(response.data.currentPage);
+        setNextPage(response.data.nextPage);
       } else {
         toast("Unable to fetch your activities, please reload this page!");
         return;
@@ -156,9 +186,65 @@ const Profile = () => {
     });
   };
 
-  const fetchTokenCreated = async () => {
+  const fetchCollections = async () => {
+    try {
+      const HEADER = "authenticated";
+      const REQUEST_URL = "nft-collection/mine";
+      const METHOD = "GET";
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          return;
+        } else if (response.status == 401) {
+          toast("Unauthorized request!");
+          return;
+        } else if (response.status == 200) {
+          setCollections(response.data.data);
+          setIsLoading(false);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    } catch (error) {
+      toast("Something went wrong, please try again!");
+      return;
+    }
+
+    ////Onchain collections
+    try {
+      const HEADER = "authenticated";
+      const REQUEST_URL = "nft-collection/mine/on_chain";
+      const METHOD = "GET";
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          return;
+        } else if (response.status == 401) {
+          toast("Unauthorized request!");
+          return;
+        } else if (response.status == 200) {
+          setOnChainCollections(response.data.data);
+          setIsLoading(false);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    } catch (error) {
+      toast("Something went wrong, please try again!");
+      return;
+    }
+  };
+
+  const fetchTokenCreated = async (tokenCreatedCurrentPage) => {
+    // setokenCreatedCurrentPage(tokenCreatedCurrentPage+1);
     const HEADER = "authenticated";
-    const REQUEST_URL = "nft/tokens_listed";
+    const REQUEST_URL = "nft/tokens_listed?page="+tokenCreatedCurrentPage+"&type=created";
     const METHOD = "GET";
     const DATA = {};
     apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -170,14 +256,26 @@ const Profile = () => {
         toast("Unauthorized request!");
         return;
       } else if (response.status == 200) {
-        setUserCreatedProfileData([
-          ...userCreatedProfileData,
-          ...response.data.data.created_items,
-        ]);
-        setUserListedProfileData([
-          ...userListedProfileData,
-          ...response.data.data.listed_items,
-        ]);
+        
+
+        if(userCreatedProfileData.length > 0){
+          for (let index = 0; index < response.data.data.created_items.length; index++) {
+            setUserCreatedProfileData(prev => [...prev, response.data.data.created_items[index]]);
+            // setUserCreatedProfileData([
+            //   ...userCreatedProfileData,
+            //   ...response.data.data.created_items,
+            // ]);
+          }
+        }
+        else{
+          setUserCreatedProfileData([
+            ...userCreatedProfileData,
+            ...response.data.data.created_items,
+          ]);
+        }
+        setTokenCreatedTotalPages(response.data.totalPages);
+        setTokenCreatedCurrentPage(response.data.currentPage);
+        setTokenCreatedNextPage(response.data.nextPage);
 
         setIsLoading(false);
         // setShowModal(true);
@@ -187,6 +285,52 @@ const Profile = () => {
       }
     });
   };
+
+  const fetchTokenListed = async (tokenListedCurrentPage) => {
+    // setokenCreatedCurrentPage(tokenCreatedCurrentPage+1);
+    const HEADER = "authenticated";
+    const REQUEST_URL = "nft/tokens_listed?page="+tokenListedCurrentPage+"&type=listed";
+    const METHOD = "GET";
+    const DATA = {};
+    apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+      if (response.status == 400) {
+        var error = response.data.error;
+        toast(error);
+        return;
+      } else if (response.status == 401) {
+        toast("Unauthorized request!");
+        return;
+      } else if (response.status == 200) {
+        
+
+        if(userListedProfileData.length > 0){
+          for (let index = 0; index < response.data.data.listed_items.length; index++) {
+            setUserListedProfileData(prev => [...prev, response.data.data.listed_items[index]]);
+            // setUserListedProfileData([
+            //   ...userListedProfileData,
+            //   ...response.data.data.listed_items,
+            // ]);
+          }
+        }
+        else{
+          setUserListedProfileData([
+            ...userListedProfileData,
+            ...response.data.data.listed_items,
+          ]);
+        }
+        setTokenListedTotalPages(response.data.totalPages);
+        setTokenListedCurrentPage(response.data.currentPage);
+        setTokenListedNextPage(response.data.nextPage);
+
+        setIsLoading(false);
+        // setShowModal(true);
+      } else {
+        toast("Something went wrong, please try again!");
+        return;
+      }
+    });
+  };
+  
   useEffect(() => {
     // try {
     connectedAccount().then((response) => {
@@ -194,12 +338,17 @@ const Profile = () => {
         fetchTokenOwned(response);
       }
     });
-    fetchTokenCreated();
-    fetchUser();
+    if(tokenCreatedCurrentPage){
+      fetchTokenCreated(tokenCreatedCurrentPage);
+    }
 
+    if(tokenListedCurrentPage){
+      fetchTokenListed(tokenListedCurrentPage);
+    }
+    fetchUser();
+    fetchCollections();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  // console.log({ userListedProfileData });
+  }, [currentPage,tokenCreatedCurrentPage,tokenListedCurrentPage]);
 
   return (
     <DashboardLayout isLoading={isLoading}>
@@ -256,7 +405,7 @@ const Profile = () => {
               </div> */}
             </div>
           </div>
-          <div className="profile-tab">
+          <div className="profile-tab scrollbar-hide">
             <ConnectWalletTab
               tabs={profileTab}
               activeTab={profileActiveTab}
@@ -307,6 +456,13 @@ const Profile = () => {
                             to="view-created-user-nft"
                           />
                         ))}
+                    <div className="mt-8">
+                      {tokenCreatedNextPage < tokenCreatedTotalPages ? (
+                        <Button title="Load More" onClick={ () => setTokenCreatedCurrentPage(tokenCreatedCurrentPage + 1)} />
+                      ) : (
+                        ""
+                      )}
+                    </div>
                       </div>
                     ) : (
                       <div className="profile-user-nfts">
@@ -335,7 +491,7 @@ const Profile = () => {
                       ))
                   )
                 ) : profileActiveTab === 2 ? (
-                  userListedProfileData ? (
+                  userListedProfileData && userListedProfileData.length > 0 ? (
                     userListedProfileData.length > 0 ? (
                       <div className="user-profile-owned-nfts">
                         {userListedProfileData.map((val, i) => (
@@ -345,6 +501,14 @@ const Profile = () => {
                             to="view-listed-user-nft"
                           />
                         ))}
+
+<                     div className="mt-8">
+                      {tokenListedNextPage < tokenListedTotalPages ? (
+                        <Button title="Load More" onClick={ () => setTokenListedCurrentPage(tokenListedCurrentPage + 1)} />
+                      ) : (
+                        ""
+                      )}
+                    </div>
                       </div>
                     ) : (
                       <div className="profile-user-nfts">
@@ -374,24 +538,6 @@ const Profile = () => {
                   )
                 ) : profileActiveTab === 3 ? (
                   <div className="">
-                    {/* <div className="profile-user-nfts"> */}
-                    {/* <img
-                        src="/images/404-illustration.png"
-                        alt="empty-nfts"
-                      />
-                      <span className="profile-empty-nft-title">
-                        You do not have any activity.
-                      </span> */}
-                    {/* <p className="profile-empty-nft-description">
-                        There&apos;s lots of other NFTs to explore
-                      </p>
-
-                      <GradientButton
-                        title="Explore NFTs"
-                        onClick={handleNavigateToHome}
-                      /> */}
-                    {/* </div> */}
-                    {/*Activities Heading-*/}
                     <div className="profile-activity-headers-tab">
                       {profileActivityHeaders.map((header, i) => (
                         <span
@@ -403,14 +549,76 @@ const Profile = () => {
                       ))}
                     </div>
                     {/*list of activities*/}
-                    <div className="profile-activities-wrappe">
-                       {activities !== []
-                        ?
-                        activities.map((activity, i) => (
-                        <UserActivityCard {...activity} key={i} />
-                      )) : ""}
+                    <div className="overflow-x-auto">
+                      {activities !== []
+                        ? activities.map((activity, i) => (
+                            <UserActivityCard {...activity} key={i} />
+                          ))
+                        : ""}
+                        <div className="mt-8">
+                          {
+                            nextPage < totalPages
+                            ?
+                            <Button title="Load More" onClick={() => setCurrentPage(currentPage+1)} />
+                            :
+                            ""
+                          }
+                        </div>
                     </div>
                   </div>
+                ) : profileActiveTab === 4 ? (
+                  collections &&
+                  onChainCollections &&
+                  onChainCollections.length > 0 &&
+                  collections.length > 0 ? (
+                    collections.length > 0 ? (
+                      <div className="explore-items-wrapper">
+                        {collections.map((item) => (
+                          <CollectionCard key={item._id} {...item} />
+                        ))}
+
+                        {onChainCollections.map((item) => (
+                          <OnChainCollectionCard
+                            key={item.tokenAddress}
+                            {...item}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      ""
+                    )
+                  ) : (collections &&
+                      collections.length > 0 &&
+                      !onChainCollections) ||
+                    onChainCollections.length === 0 ? (
+                    collections.length > 0 ? (
+                      <div className="explore-items-wrapper">
+                        {collections.map((item) => (
+                          <CollectionCard key={item._id} {...item} />
+                        ))}
+                      </div>
+                    ) : (
+                      ""
+                    )
+                  ) : onChainCollections &&
+                    onChainCollections.length > 0 &&
+                    !collections &&
+                    collections.length === 0 ? (
+                    onChainCollections.length > 0 ? (
+                      <div className="explore-items-wrapper">
+                        {onChainCollections.map((item) => (
+                          <OnChainCollectionCard
+                            key={item.tokenAddress}
+                            {...item}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      ""
+                    )
+                  ) : (
+                    ""
+                  )
                 ) : null}
               </div>
             ) : (
