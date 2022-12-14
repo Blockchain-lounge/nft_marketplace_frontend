@@ -64,6 +64,14 @@ const Profile = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [nextPage, setNextPage] = useState(1);
 
+  const [tokenCreatedTotalPages, setTokenCreatedTotalPages] = useState(0);
+  const [tokenCreatedCurrentPage, setTokenCreatedCurrentPage] = useState(1);
+  const [tokenCreatedNextPage, setTokenCreatedNextPage] = useState(1);
+
+  const [tokenListedTotalPages, setTokenListedTotalPages] = useState(0);
+  const [tokenListedCurrentPage, setTokenListedCurrentPage] = useState(1);
+  const [tokenListedNextPage, setTokenListedNextPage] = useState(1);
+
   const profileTab = [
     { text: "Collected", count: userOwnedProfileData.length },
     { text: "Created", count: userCreatedProfileData.length },
@@ -233,9 +241,10 @@ const Profile = () => {
     }
   };
 
-  const fetchTokenCreated = async () => {
+  const fetchTokenCreated = async (tokenCreatedCurrentPage) => {
+    // setokenCreatedCurrentPage(tokenCreatedCurrentPage+1);
     const HEADER = "authenticated";
-    const REQUEST_URL = "nft/tokens_listed";
+    const REQUEST_URL = "nft/tokens_listed?page="+tokenCreatedCurrentPage+"&type=created";
     const METHOD = "GET";
     const DATA = {};
     apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -247,14 +256,26 @@ const Profile = () => {
         toast("Unauthorized request!");
         return;
       } else if (response.status == 200) {
-        setUserCreatedProfileData([
-          ...userCreatedProfileData,
-          ...response.data.data.created_items,
-        ]);
-        setUserListedProfileData([
-          ...userListedProfileData,
-          ...response.data.data.listed_items,
-        ]);
+        
+
+        if(userCreatedProfileData.length > 0){
+          for (let index = 0; index < response.data.data.created_items.length; index++) {
+            setUserCreatedProfileData(prev => [...prev, response.data.data.created_items[index]]);
+            // setUserCreatedProfileData([
+            //   ...userCreatedProfileData,
+            //   ...response.data.data.created_items,
+            // ]);
+          }
+        }
+        else{
+          setUserCreatedProfileData([
+            ...userCreatedProfileData,
+            ...response.data.data.created_items,
+          ]);
+        }
+        setTokenCreatedTotalPages(response.data.totalPages);
+        setTokenCreatedCurrentPage(response.data.currentPage);
+        setTokenCreatedNextPage(response.data.nextPage);
 
         setIsLoading(false);
         // setShowModal(true);
@@ -264,6 +285,52 @@ const Profile = () => {
       }
     });
   };
+
+  const fetchTokenListed = async (tokenListedCurrentPage) => {
+    // setokenCreatedCurrentPage(tokenCreatedCurrentPage+1);
+    const HEADER = "authenticated";
+    const REQUEST_URL = "nft/tokens_listed?page="+tokenListedCurrentPage+"&type=listed";
+    const METHOD = "GET";
+    const DATA = {};
+    apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+      if (response.status == 400) {
+        var error = response.data.error;
+        toast(error);
+        return;
+      } else if (response.status == 401) {
+        toast("Unauthorized request!");
+        return;
+      } else if (response.status == 200) {
+        
+
+        if(userListedProfileData.length > 0){
+          for (let index = 0; index < response.data.data.listed_items.length; index++) {
+            setUserListedProfileData(prev => [...prev, response.data.data.listed_items[index]]);
+            // setUserListedProfileData([
+            //   ...userListedProfileData,
+            //   ...response.data.data.listed_items,
+            // ]);
+          }
+        }
+        else{
+          setUserListedProfileData([
+            ...userListedProfileData,
+            ...response.data.data.listed_items,
+          ]);
+        }
+        setTokenListedTotalPages(response.data.totalPages);
+        setTokenListedCurrentPage(response.data.currentPage);
+        setTokenListedNextPage(response.data.nextPage);
+
+        setIsLoading(false);
+        // setShowModal(true);
+      } else {
+        toast("Something went wrong, please try again!");
+        return;
+      }
+    });
+  };
+  
   useEffect(() => {
     // try {
     connectedAccount().then((response) => {
@@ -271,11 +338,17 @@ const Profile = () => {
         fetchTokenOwned(response);
       }
     });
-    fetchTokenCreated();
+    if(tokenCreatedCurrentPage){
+      fetchTokenCreated(tokenCreatedCurrentPage);
+    }
+
+    if(tokenListedCurrentPage){
+      fetchTokenListed(tokenListedCurrentPage);
+    }
     fetchUser();
     fetchCollections();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  }, [currentPage,tokenCreatedCurrentPage,tokenListedCurrentPage]);
 
   return (
     <DashboardLayout isLoading={isLoading}>
@@ -383,6 +456,13 @@ const Profile = () => {
                             to="view-created-user-nft"
                           />
                         ))}
+                    <div className="mt-8">
+                      {tokenCreatedNextPage < tokenCreatedTotalPages ? (
+                        <Button title="Load More" onClick={ () => setTokenCreatedCurrentPage(tokenCreatedCurrentPage + 1)} />
+                      ) : (
+                        ""
+                      )}
+                    </div>
                       </div>
                     ) : (
                       <div className="profile-user-nfts">
@@ -421,6 +501,14 @@ const Profile = () => {
                             to="view-listed-user-nft"
                           />
                         ))}
+
+<                     div className="mt-8">
+                      {tokenListedNextPage < tokenListedTotalPages ? (
+                        <Button title="Load More" onClick={ () => setTokenListedCurrentPage(tokenListedCurrentPage + 1)} />
+                      ) : (
+                        ""
+                      )}
+                    </div>
                       </div>
                     ) : (
                       <div className="profile-user-nfts">
