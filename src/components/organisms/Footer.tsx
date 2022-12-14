@@ -36,7 +36,7 @@ const Footer = () => {
       type: "external",
     },
     {
-      label: "NFT Academy",
+      label: "Academy",
       to: "https://academy.cloudax.io/",
       type: "external",
     },
@@ -60,12 +60,12 @@ const Footer = () => {
             layout="fill"
           />
         </div>
-        <span className="footer-copy">All rights reserved © 2022 Cloudax</span>
+        <span className="footer-copy">© 2022 Cloudax</span>
       </div>
 
       <div className="footer-icon-copy ">
         <span className="text-xl mb-4 text-[#A5AEC1] lg:mt-0">
-          All rights reserved © 2022 Cloudax
+          © 2022 Cloudax
         </span>
       </div>
       <div className="about-links">
