@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Heading2, Button } from "@/src/components/atoms";
 import { NftCardSkeleton } from "@/src/components/lazy-loaders";
 import {
