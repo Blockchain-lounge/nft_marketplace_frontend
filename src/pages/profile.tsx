@@ -405,7 +405,7 @@ const Profile = () => {
               </div> */}
             </div>
           </div>
-          <div className="profile-tab">
+          <div className="profile-tab scrollbar-hide">
             <ConnectWalletTab
               tabs={profileTab}
               activeTab={profileActiveTab}
@@ -549,7 +549,7 @@ const Profile = () => {
                       ))}
                     </div>
                     {/*list of activities*/}
-                    <div className="profile-activities-wrappe">
+                    <div className="overflow-x-auto">
                       {activities !== []
                         ? activities.map((activity, i) => (
                             <UserActivityCard {...activity} key={i} />

@@ -43,7 +43,7 @@ const NavTab = () => {
     fetchCategories();
   }, []);
   return (
-    <div className="nav-tab-wrapper">
+    <div className="nav-tab-wrapper scrollbar-hide">
       {categories !== null
         ? categories.map((tab, i) => (
             <div key={tab.name}>
