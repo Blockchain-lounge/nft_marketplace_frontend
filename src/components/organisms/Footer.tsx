@@ -19,9 +19,9 @@ const Footer = () => {
 
   const aboutLinks = [
     { label: "About", to: "/" },
-    { label: "About us", to: "/about-us" },
-    { label: "Terms of service", to: "" },
-    { label: "Privacy policy", to: "" },
+    { label: "About Us", to: "/about-us" },
+    { label: "Terms of Service", to: "" },
+    { label: "Privacy Policy", to: "" },
   ];
   const supportLinks = [
     // { label: "Support", to: "", type: "external" },
@@ -60,12 +60,12 @@ const Footer = () => {
             layout="fill"
           />
         </div>
-        <span className="footer-copy">All rights reserved @Cloudax 2022</span>
+        <span className="footer-copy">All rights reserved © 2022 Cloudax</span>
       </div>
 
       <div className="footer-icon-copy ">
         <span className="text-xl mb-4 text-[#A5AEC1] lg:mt-0">
-          All rights reserved @Cloudax 2022
+          All rights reserved © 2022 Cloudax
         </span>
       </div>
       <div className="about-links">
