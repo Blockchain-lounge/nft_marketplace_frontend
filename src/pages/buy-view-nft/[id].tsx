@@ -71,6 +71,13 @@ const ViewNft = () => {
   //   { label: "eye color", value: "black binds", trait: 20 },
   // ];
 
+  /**
+   * Fetch user details
+   * @date 12/15/2022 - 12:01:11 PM
+   *
+   * @async
+   * @returns {*}
+   */
   const fetchUser = async () => {
     const HEADER = "authenticated";
     const REQUEST_URL = "user/my_profile";
@@ -93,9 +100,17 @@ const ViewNft = () => {
     });
   };
 
+  /**
+   * Fetch item Activities
+   * @date 12/15/2022 - 12:00:06 PM
+   *
+   * @async
+   * @returns {*}
+   */
   const fetchActivities = async () => {
     try {
-      var REQUEST_URL = "/activities?content_id=" + id+"&&page="+currentPage;
+      var REQUEST_URL =
+        "/activities?content_id=" + id + "&&page=" + currentPage;
       const HEADER = {};
       const METHOD = "GET";
       const DATA = {};
@@ -108,12 +123,18 @@ const ViewNft = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
-          if(activities && activities.length > 0){
-            for (let index = 0; index < response.data.data.activities.length; index++) {
-              setActivities(prev => [...prev, response.data.data.activities[index]]);
+          if (activities.length > 0) {
+            for (
+              let index = 0;
+              index < response.data.data.activities.length;
+              index++
+            ) {
+              setActivities((prev) => [
+                ...prev,
+                response.data.data.activities[index],
+              ]);
             }
-          }
-          else{
+          } else {
             setActivities(response.data.data.activities);
           }
           setTotalPages(response.data.totalPages);
@@ -129,6 +150,14 @@ const ViewNft = () => {
       return;
     }
   };
+
+  /**
+   * Handles buy functionality
+   * @date 12/15/2022 - 11:59:42 AM
+   *
+   * @async
+   * @returns {*}
+   */
 
   const handleBuy = async () => {
     setIsTransLoading((prev) => !prev);
@@ -223,7 +252,6 @@ const ViewNft = () => {
           }
         } catch (error) {
           setIsTransLoading((prev) => !prev);
-          // console.log("Event error", error);
           return;
         }
       }
@@ -252,10 +280,14 @@ const ViewNft = () => {
         }
       });
     }
-    // setShowModal((prev) => !prev);
   };
 
   const handleBid = async () => {
+    //Write bid function here
+    setShowModal((prev) => !prev);
+  };
+
+  const handleOffer = async () => {
     //Write bid function here
     setShowModal((prev) => !prev);
   };
@@ -290,7 +322,15 @@ const ViewNft = () => {
 
   // }
 
-  const fetchItemDetail = async (id: string) => {
+  /**
+   * Fetch item details
+   * @date 12/15/2022 - 11:57:42 AM
+   *
+   * @async
+   * @param {string} id
+   * @returns {*}
+   */
+  const fetchItemDetail = async (id: string): any => {
     if (id !== undefined) {
       const HEADER = {};
       const REQUEST_URL = "nft-listing/detail/" + id;
@@ -314,6 +354,7 @@ const ViewNft = () => {
       });
     }
   };
+
   useEffect(() => {
     connectedAccount().then((response) => {
       if (response !== null) {
@@ -323,14 +364,14 @@ const ViewNft = () => {
         // push("/");
       }
     });
-    if(id){
+    if (id) {
       fetchItemDetail(id as string);
-      if(currentPage){
+      if (currentPage) {
         fetchActivities();
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id,currentPage]);
+  }, [id, currentPage]);
 
   return (
     <DashboardLayout isLoading={!itemDetail}>
@@ -339,7 +380,7 @@ const ViewNft = () => {
         {itemDetail !== null ? (
           <div className="center space-y-8 mb-16">
             <div className="view-wrapper-hero lg:grid-cols-[0.5fr_1fr]">
-              <div className="relative h-[50vh] mb-6 lg:mb-0">
+              <div className="relative h-[45vh] sm:h-[70vh] lg:h-[90%] mb-6 lg:mb-0">
                 <Image
                   src={itemDetail.item.item_art_url}
                   alt={itemDetail.item.item_title}
@@ -459,6 +500,15 @@ const ViewNft = () => {
                             }}
                           />
                           <Button
+                            title="Make an offer"
+                            outline2
+                            wt="w-full"
+                            onClick={() => {
+                              setModaltype("offer");
+                              setShowModal((prev) => !prev);
+                            }}
+                          />
+                          {/* <Button
                             title="Place a bid"
                             outline2
                             wt="w-full"
@@ -466,7 +516,7 @@ const ViewNft = () => {
                               setModaltype("bid");
                               setShowModal((prev) => !prev);
                             }}
-                          />
+                          /> */}
                         </div>
                       ) : (
                         <Button
@@ -831,26 +881,35 @@ const ViewNft = () => {
                 </div>
               ) : null}
               <div className="mt-8">
-            {
-              nextPage < totalPages
-              ?
-              <Button title="Load More" onClick={() => setCurrentPage(currentPage+1)} />
-              :
-              ""
-            }
-          </div>
+                {nextPage < totalPages ? (
+                  <Button
+                    title="Load More"
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                  />
+                ) : (
+                  ""
+                )}
+              </div>
             </div>
           </div>
         ) : null}
         <Footer />
       </div>
       <Modal
-        title={modalType === "buy" ? "Checkout" : "Place a bid"}
+        title={
+          modalType === "buy"
+            ? "Checkout"
+            : modalType === "bid"
+            ? "Place a bid"
+            : "Make an offer"
+        }
         openModal={showModal}
         closeModal={setShowModal}
         modalWt="w-[40rem]"
         modalHt={
           modalType === "bid"
+            ? "h-full sm:h-[60%] my-auto md:h-fit overflow-y-auto"
+            : modalType === "offer"
             ? "h-full sm:h-[60%] my-auto md:h-fit overflow-y-auto"
             : "h-fit mt-28"
         }
@@ -945,6 +1004,101 @@ const ViewNft = () => {
               <Button
                 title="Place bid"
                 onClick={handleBid}
+                wt="w-full"
+                isDisabled={isTransloading}
+              />
+            </div>
+          </div>
+        ) : modalType === "offer" ? (
+          <div className="flex flex-col items-center max-w-[85%] mx-auto gap-y-5">
+            <span className="font-bold text-txt-2 text-base max-w-[80%] text-center">
+              You are about to make an offer for{" "}
+              <span className="text-white">{itemDetail.item.item_title} </span>
+              from{" "}
+              <span className="text-white">
+                {itemDetail.item.collection.name}
+              </span>{" "}
+              collection
+            </span>
+            {/* <div className="flex items-center justify-between w-full bg-bg-5 py-4 px-6 rounded-[1.25rem]">
+              <div className="flex gap-x-3 items-center">
+                <span className="block relative h-14 w-14">
+                  <Image
+                    src="/logos/coinbase-logo.png"
+                    alt="wallet-logo"
+                    layout="fill"
+                    className="rounded-full"
+                  />
+                </span>
+                <div className="flex flex-col">
+                  <span className="text-lg font-medium">Metamask</span>
+                  <span className="text-txt-2 font-medium">
+                    {connectedAddress}{" "}
+                  </span>
+                </div>
+              </div>
+              <span className="text-positive-color bg-[#00800022] py-3 px-4 rounded-3xl">
+                Connected
+              </span>
+            </div> */}
+
+            <div className="create-new-nft-wrapper-2 w-full mb-4">
+              <div className="create-new-nft-wrapper-2 w-full">
+                {/* <Select title="ETH" icon={<CoinIcon />} /> */}
+                <Input2
+                  name="coinPrice"
+                  placeholder="0.00"
+                  label="Your Offer"
+                  // onChange={handleFieldChange}
+                  // value={nftPayload.coinPrice}
+                />
+              </div>
+            </div>
+            <div className="create-new-nft-wrapper-2 w-full">
+              <span className="create-new-nft-wrapper-2-label">
+                Offer expiration
+              </span>
+              <Select
+                title={bidingExpDates}
+                lists={bidExpDates}
+                onClick={setBidingExpDates}
+              />
+            </div>
+            {/* <div className="create-new-nft-wrapper-2 w-full">
+              <Input2
+                label="Quantity"
+                name="quantity"
+                placeholder="1"
+                onChange={handleFieldChange}
+                value={nftPayload.coinPrice}
+              />
+            </div> */}
+            <div className="space-y-5 w-full mt-12">
+              <div className="flex justify-between items-center w-full">
+                <span className="text-txt-2">Balance</span>
+                <span className="flex gap-x-2 items-center">
+                  <CoinIcon />
+                  47.8
+                </span>
+              </div>
+              <div className="flex justify-between items-center w-full">
+                <span className="text-txt-2">Service Fee (0%)</span>
+                <span className="flex gap-x-2 items-center">
+                  <CoinIcon />0
+                </span>
+              </div>
+              <div className="flex justify-between items-center w-full">
+                <span className="text-txt-2">You Will Pay</span>
+                <span className="flex gap-x-2 items-center">
+                  <CoinIcon />
+                  6.95
+                </span>
+              </div>
+            </div>
+            <div className="mt-12 lg:mt-10 w-full">
+              <Button
+                title="Make an offer"
+                onClick={handleOffer}
                 wt="w-full"
                 isDisabled={isTransloading}
               />
