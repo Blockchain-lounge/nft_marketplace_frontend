@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import clsx from "clsx";
-import { Heading2, Input, Select } from "@/src/components/atoms";
+import { Heading2, Input, Select, Button } from "@/src/components/atoms";
 import {
   CaretDown,
   CopyIcon,
@@ -22,7 +22,7 @@ import {
 } from "@/src/components/atoms/vectors";
 import {
   CollectionActivityCard,
-  NftMediumCard2,
+  OwnedNftCard,
   Tab,
 } from "@/src/components/molecules";
 import { BannerImg, Footer } from "@/src/components/organisms";
@@ -35,7 +35,7 @@ import {
 import APPCONFIG from "../../constants/Config";
 import { connectedAccount } from "../../functions/onChain/authFunction";
 
-const ViewOnchainCollection = () => {
+const ViewCollection = () => {
   // const [collectionImg, setCollectionImg] = useState("");
   // const [collectionBannerImg, setCollectionBannerImg] = useState("");
   const [activeStage, setActiveStage] = useState("items");
@@ -70,12 +70,14 @@ const ViewOnchainCollection = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedId, setLoggedId] = useState("");
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [nextPage, setNextPage] = useState(1);
 
   const fetchCollectionItems = async () => {
     if (id !== undefined) {
-      const collectionAddress = id
       const HEADER = {};
-      const REQUEST_URL = "nft-on-chain-items/collection/" + collectionAddress;
+      const REQUEST_URL = "nft-collection/on-chain/" + id;
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -85,12 +87,22 @@ const ViewOnchainCollection = () => {
           push("/");
           return;
         } else if (response.status == 200) {
-          setSingleCollectionsListedItemsData(response.data.listedItems);
+          if(singleCollectionsListedItemsData.length > 0){
+            for (let index = 0; index < response.data.listedItems.length; index++) {
+              setSingleCollectionsListedItemsData(prev => [...prev, response.data.listedItems[index]]);
+            }
+          }
+          else{
+            setSingleCollectionsListedItemsData(response.data.listedItems);
+          }
+          setTotalPages(response.data.totalPages);
+          setCurrentPage(response.data.currentPage);
+          setNextPage(response.data.nextPage);
           setSingleCollectionDetail(response.data.collection);
           setSingleCollectionActivities(response.data.activities.collection);
           setSingleCollectionItemsActivities(response.data.activities.items);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
-          if (response.data.listedItems.length != 0) {
+          if (response.data.listedItems && response.data.listedItems.length != 0 && response.data.purchasedItems) {
             function floorPrices(
               purchasedItems: Array<{ listing_price: number }>
             ) {
@@ -108,7 +120,7 @@ const ViewOnchainCollection = () => {
             setcollectionfloorPrice("0");
           }
 
-          if (response.data.purchasedItems.length != 0) {
+          if (response.data.purchasedItems && response.data.purchasedItems.length != 0) {
             function collectionVolumes(
               purchasedItems: Array<{ amount: number }>
             ) {
@@ -206,7 +218,7 @@ const ViewOnchainCollection = () => {
     });
     fetchCollectionItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id,currentPage]);
   // const handleShowOption = () => {
   //   setShowOption((prev) => !prev);
   // };
@@ -459,7 +471,9 @@ const ViewOnchainCollection = () => {
                   singleCollectionsListedItemsData.length > 0 ? (
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
                       {singleCollectionsListedItemsData.map((val, i) => (
-                        <NftMediumCard2 {...val} key={val._id} />
+                        <OwnedNftCard {...val} key={val._id} 
+                        to="view-onchain-nft"
+                        />
                       ))}
                     </div>
                   ) : (
@@ -499,6 +513,16 @@ const ViewOnchainCollection = () => {
               </div>
             </>
           ) : null}
+
+          <div className="mt-8">
+            {
+              nextPage < totalPages
+              ?
+              <Button title="Load More" onClick={() => setCurrentPage(currentPage+1)} />
+              :
+              ""
+            }
+          </div>
         </div>
 
         <Footer />
@@ -507,4 +531,4 @@ const ViewOnchainCollection = () => {
   );
 };
 
-export default ViewOnchainCollection;
+export default ViewCollection;
