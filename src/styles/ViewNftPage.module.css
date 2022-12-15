@@ -1,5 +1,9 @@
 .view-wrapper-hero {
-  @apply grid lg:gap-x-8 h-[85%] lg:h-[70%];
+  @apply grid lg:gap-x-8 lg:grid-cols-[0.9fr_1.1fr];
+}
+
+.view-hero-img {
+  @apply relative h-[45vh] sm:h-[70vh] lg:h-[60vh] mb-6 lg:mb-0;
 }
 
 .view-hero-nft-owner {

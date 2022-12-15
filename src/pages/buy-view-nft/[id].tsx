@@ -123,7 +123,7 @@ const ViewNft = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
-          if (activities.length > 0) {
+          if (activities !== null && activities.length > 0) {
             for (
               let index = 0;
               index < response.data.data.activities.length;
@@ -378,22 +378,23 @@ const ViewNft = () => {
       <div className="sub-layout-wrapper scrollbar-hide">
         <ToastContainer />
         {itemDetail !== null ? (
-          <div className="center space-y-8 mb-16">
-            <div className="view-wrapper-hero lg:grid-cols-[0.5fr_1fr]">
-              <div className="relative h-[45vh] sm:h-[70vh] lg:h-[90%] mb-6 lg:mb-0">
+          <div className="center space-y-8">
+            <div className="view-wrapper-hero">
+              <div className="view-hero-img">
                 <Image
+                  priority
                   src={itemDetail.item.item_art_url}
                   alt={itemDetail.item.item_title}
                   layout="fill"
                   objectFit="cover"
-                  className="rounded-xl"
+                  className="rounded-2xl"
                   placeholder="blur"
                   blurDataURL="/images/placeholder.png"
                 />
               </div>
-              <div className=" space-y-6 lg:space-y-12 flex flex-col ">
-                <div>
-                  <div className="flex items-center mb-4">
+              <div className="space-y-6 lg:space-y-12 flex flex-col">
+                <>
+                  <div className="flex items-center">
                     <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
                       <Image
                         src={
@@ -425,7 +426,7 @@ const ViewNft = () => {
                   <span className="text-4xl lg:text-5xl font-bold">
                     {itemDetail.item.item_title}
                   </span>
-                </div>
+                </>
                 {/* <div className="view-hero-nft-owner">
                   {nftOwnersInfo.map(({ img, label, value }) => (
                     <div key={value} className="flex items-center gap-x-4">
@@ -717,9 +718,9 @@ const ViewNft = () => {
                   <Heading2 title="There's no bidding" />
                 </div>
               ) : viewNftStage === "activities" ? (
-                <div className="flex flex-col gap-y-6">
+                <div className="flex flex-col gap-y-6 overflow-auto">
                   {activities === null ? (
-                    Array(6)
+                    Array(12)
                       .fill(0)
                       .map((_, i) => (
                         <ActivityLoader
