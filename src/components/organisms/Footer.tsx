@@ -22,9 +22,6 @@ const Footer = () => {
     { label: "About Us", to: "/about-us" },
     { label: "Terms of Service", to: "" },
     { label: "Privacy Policy", to: "" },
-    { label: "About Us", to: "/about-us" },
-    { label: "Terms of Service", to: "" },
-    { label: "Privacy Policy", to: "" },
   ];
   const supportLinks = [
     // { label: "Support", to: "", type: "external" },

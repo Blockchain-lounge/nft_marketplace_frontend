@@ -84,7 +84,7 @@ const SideBar = () => {
     {
       label: "Support",
       icon: <SupportIcon />,
-      link: "/support",
+      to: "https://help.cloudax.io/en/collections/3705615-nft-marketplace",
     },
   ];
 
@@ -175,6 +175,17 @@ const SideBar = () => {
             </div>
           </a>
         ) : item.label === "NFT Academy" ? (
+          <a className="sidebar-menu" href={item.to} key={item.label}>
+            <div className="sidebar-title-wrapper">
+              <div className="sidebar-title">
+                <span className="sidebar-icon">{item.icon}</span>
+                <span className="sidebar-label">{item.label}</span>
+              </div>
+              <span className={clsx("sidebar-toggle-btn")}></span>
+              {item.tag && <span className="sidebar-tag">{item.tag}</span>}
+            </div>
+          </a>
+        ) : item.label === "Support" ? (
           <a className="sidebar-menu" href={item.to} key={item.label}>
             <div className="sidebar-title-wrapper">
               <div className="sidebar-title">

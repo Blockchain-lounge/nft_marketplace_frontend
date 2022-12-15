@@ -136,7 +136,7 @@ const UserActivityCard = ({
           ""
         )}
         <div className="profile-activity-coin-info-wrapper">
-          <span className="text-[1.375rem] font-bold">
+          <span className="text-xl sm:text-[1.375rem] font-bold">
             {created_item && created_item !== undefined && created_item !== null
               ? created_item.item_title
               : ""}

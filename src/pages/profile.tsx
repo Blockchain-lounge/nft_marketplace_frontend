@@ -33,6 +33,7 @@ import { INftcard } from "../components/molecules/NftMediumCard";
 import APPCONFIG from "../constants/Config";
 import { connectedAccount } from "../functions/onChain/authFunction";
 import { NftCardSkeleton } from "../components/lazy-loaders";
+import { IUserProps } from "../utilities/types";
 
 const Profile = () => {
   const [profileActiveTab, setProfileActiveTab] = useState(1);
@@ -47,14 +48,7 @@ const Profile = () => {
   const [onChainCollections, setOnChainCollections] = useState<INftcard[]>([]);
   // const [user, setUser] = useState<null | Record<string, string>>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [myProfile, setMyProfile] = useState<{
-    username: string;
-    userEmail: string;
-    bio: string;
-    bannerImg: string;
-    profileImg: string;
-    _id: string;
-  } | null>(null);
+  const [myProfile, setMyProfile] = useState<IUserProps | null>(null);
   // const [data, isLoading] = UseFetch("/user/my_profile");
   const { push } = useRouter();
   const [userProfileImg, setUserProfileImg] = useState("");
@@ -88,7 +82,14 @@ const Profile = () => {
 
   const handleNavigateToHome = () => push("/");
 
-  const fetchUser = async () => {
+  /**
+   * Fetch user data
+   * @date 12/15/2022 - 2:17:19 PM
+   *
+   * @async
+   * @returns {IUserProps} Return user details
+   */
+  const fetchUser = async (): IUserProps => {
     const HEADER = "authenticated";
     const REQUEST_URL = "user/my_profile";
     const METHOD = "GET";
@@ -127,11 +128,10 @@ const Profile = () => {
                 response.data.data.userProfileImg
             : ""
         );
-        if(currentPage && response.data.data._id){
-          fetchUserActivities(response.data.data._id,currentPage);
+        if (currentPage && response.data.data._id) {
+          fetchUserActivities(response.data.data._id, currentPage);
         }
         setIsLoading(false);
-        // setShowModal(true);
       } else {
         toast("Something went wrong, please try again!");
         return;
@@ -139,7 +139,15 @@ const Profile = () => {
     });
   };
 
-  const fetchTokenOwned = async (address) => {
+  /**
+   * Fetch Tokens owned by user
+   * @date 12/15/2022 - 2:35:32 PM
+   *
+   * @async
+   * @param {string} address expect user address
+   * @returns {*} returns users owned token
+   */
+  const fetchTokenOwned = async (address: string): any => {
     const HEADER = "authenticated";
     const REQUEST_URL = "nft/tokens_owned/" + address;
     const METHOD = "GET";
@@ -161,19 +169,38 @@ const Profile = () => {
     });
   };
 
-  const fetchUserActivities = async (user_id,currentPage) => {
+  /**
+   * Fetch all user activities
+   * @date 12/15/2022 - 2:38:49 PM
+   *
+   * @async
+   * @param {string} user_id expect user id
+   * @param {number} currentPage expect no of page to determine number of data to be returned.
+   *
+   * @returns {*} Return all activities user has performed
+   */
+  const fetchUserActivities = async (
+    user_id: string,
+    currentPage: number
+  ): any => {
     const HEADER = "authenticated";
-    const REQUEST_URL = "activities?user=" + user_id+"&&page="+currentPage;
+    const REQUEST_URL = "activities?user=" + user_id + "&&page=" + currentPage;
     const METHOD = "GET";
     const DATA = {};
     apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
       if (response.status == 200) {
-        if(activities.length > 0){
-          for (let index = 0; index < response.data.data.activities.length; index++) {
-            setActivities(prev => [...prev, response.data.data.activities[index]]);
+        if (activities.length > 0) {
+          for (
+            let index = 0;
+            index < response.data.data.activities.length;
+            index++
+          ) {
+            setActivities((prev) => [
+              ...prev,
+              response.data.data.activities[index],
+            ]);
           }
-        }
-        else{
+        } else {
           setActivities(response.data.data.activities);
         }
         setTotalPages(response.data.totalPages);
@@ -186,7 +213,14 @@ const Profile = () => {
     });
   };
 
-  const fetchCollections = async () => {
+  /**
+   * Fetch all user collections
+   * @date 12/15/2022 - 2:43:16 PM
+   *
+   * @async
+   * @returns {INftcard[]} Returns Array of user collections
+   */
+  const fetchCollections = async (): INftcard[] => {
     try {
       const HEADER = "authenticated";
       const REQUEST_URL = "nft-collection/mine";
@@ -241,10 +275,19 @@ const Profile = () => {
     }
   };
 
-  const fetchTokenCreated = async (tokenCreatedCurrentPage) => {
+  /**
+   * Fetch all tokens(nft item) created by user
+   * @date 12/15/2022 - 2:56:51 PM
+   *
+   * @async
+   * @param {number} tokenCreatedCurrentPage returns the tokens user created based on the tokenCreatedCurrentPage
+   * @returns {*}
+   */
+  const fetchTokenCreated = async (tokenCreatedCurrentPage: number): any => {
     // setokenCreatedCurrentPage(tokenCreatedCurrentPage+1);
     const HEADER = "authenticated";
-    const REQUEST_URL = "nft/tokens_listed?page="+tokenCreatedCurrentPage+"&type=created";
+    const REQUEST_URL =
+      "nft/tokens_listed?page=" + tokenCreatedCurrentPage + "&type=created";
     const METHOD = "GET";
     const DATA = {};
     apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -256,18 +299,22 @@ const Profile = () => {
         toast("Unauthorized request!");
         return;
       } else if (response.status == 200) {
-        
-
-        if(userCreatedProfileData.length > 0){
-          for (let index = 0; index < response.data.data.created_items.length; index++) {
-            setUserCreatedProfileData(prev => [...prev, response.data.data.created_items[index]]);
+        if (userCreatedProfileData.length > 0) {
+          for (
+            let index = 0;
+            index < response.data.data.created_items.length;
+            index++
+          ) {
+            setUserCreatedProfileData((prev) => [
+              ...prev,
+              response.data.data.created_items[index],
+            ]);
             // setUserCreatedProfileData([
             //   ...userCreatedProfileData,
             //   ...response.data.data.created_items,
             // ]);
           }
-        }
-        else{
+        } else {
           setUserCreatedProfileData([
             ...userCreatedProfileData,
             ...response.data.data.created_items,
@@ -286,10 +333,19 @@ const Profile = () => {
     });
   };
 
-  const fetchTokenListed = async (tokenListedCurrentPage) => {
+  /**
+   * Fetch all tokens listed by user
+   * @date 12/15/2022 - 2:59:34 PM
+   *
+   * @async
+   * @param {number} tokenListedCurrentPage
+   * @returns {*} returns the tokens user created based on the tokenCreatedCurrentPage
+   */
+  const fetchTokenListed = async (tokenListedCurrentPage: number): any => {
     // setokenCreatedCurrentPage(tokenCreatedCurrentPage+1);
     const HEADER = "authenticated";
-    const REQUEST_URL = "nft/tokens_listed?page="+tokenListedCurrentPage+"&type=listed";
+    const REQUEST_URL =
+      "nft/tokens_listed?page=" + tokenListedCurrentPage + "&type=listed";
     const METHOD = "GET";
     const DATA = {};
     apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -301,18 +357,22 @@ const Profile = () => {
         toast("Unauthorized request!");
         return;
       } else if (response.status == 200) {
-        
-
-        if(userListedProfileData.length > 0){
-          for (let index = 0; index < response.data.data.listed_items.length; index++) {
-            setUserListedProfileData(prev => [...prev, response.data.data.listed_items[index]]);
+        if (userListedProfileData.length > 0) {
+          for (
+            let index = 0;
+            index < response.data.data.listed_items.length;
+            index++
+          ) {
+            setUserListedProfileData((prev) => [
+              ...prev,
+              response.data.data.listed_items[index],
+            ]);
             // setUserListedProfileData([
             //   ...userListedProfileData,
             //   ...response.data.data.listed_items,
             // ]);
           }
-        }
-        else{
+        } else {
           setUserListedProfileData([
             ...userListedProfileData,
             ...response.data.data.listed_items,
@@ -330,25 +390,24 @@ const Profile = () => {
       }
     });
   };
-  
+
   useEffect(() => {
-    // try {
     connectedAccount().then((response) => {
       if (response !== null) {
         fetchTokenOwned(response);
       }
     });
-    if(tokenCreatedCurrentPage){
+    if (tokenCreatedCurrentPage) {
       fetchTokenCreated(tokenCreatedCurrentPage);
     }
 
-    if(tokenListedCurrentPage){
+    if (tokenListedCurrentPage) {
       fetchTokenListed(tokenListedCurrentPage);
     }
     fetchUser();
     fetchCollections();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage,tokenCreatedCurrentPage,tokenListedCurrentPage]);
+  }, [currentPage, tokenCreatedCurrentPage, tokenListedCurrentPage]);
 
   return (
     <DashboardLayout isLoading={isLoading}>
@@ -406,6 +465,7 @@ const Profile = () => {
             </div>
           </div>
           <div className="profile-tab scrollbar-hide">
+            {/* Profile tab*/}
             <ConnectWalletTab
               tabs={profileTab}
               activeTab={profileActiveTab}
@@ -456,13 +516,20 @@ const Profile = () => {
                             to="view-created-user-nft"
                           />
                         ))}
-                    <div className="mt-8">
-                      {tokenCreatedNextPage < tokenCreatedTotalPages ? (
-                        <Button title="Load More" onClick={ () => setTokenCreatedCurrentPage(tokenCreatedCurrentPage + 1)} />
-                      ) : (
-                        ""
-                      )}
-                    </div>
+                        <div className="mt-8">
+                          {tokenCreatedNextPage < tokenCreatedTotalPages ? (
+                            <Button
+                              title="Load More"
+                              onClick={() =>
+                                setTokenCreatedCurrentPage(
+                                  tokenCreatedCurrentPage + 1
+                                )
+                              }
+                            />
+                          ) : (
+                            ""
+                          )}
+                        </div>
                       </div>
                     ) : (
                       <div className="profile-user-nfts">
@@ -502,13 +569,20 @@ const Profile = () => {
                           />
                         ))}
 
-<                     div className="mt-8">
-                      {tokenListedNextPage < tokenListedTotalPages ? (
-                        <Button title="Load More" onClick={ () => setTokenListedCurrentPage(tokenListedCurrentPage + 1)} />
-                      ) : (
-                        ""
-                      )}
-                    </div>
+                        <div className="mt-8">
+                          {tokenListedNextPage < tokenListedTotalPages ? (
+                            <Button
+                              title="Load More"
+                              onClick={() =>
+                                setTokenListedCurrentPage(
+                                  tokenListedCurrentPage + 1
+                                )
+                              }
+                            />
+                          ) : (
+                            ""
+                          )}
+                        </div>
                       </div>
                     ) : (
                       <div className="profile-user-nfts">
@@ -530,14 +604,16 @@ const Profile = () => {
                       </div>
                     )
                   ) : (
-                    Array(12)
-                      .fill(0)
-                      .map((_, i) => (
-                        <NftCardSkeleton key={i + "explore-skeleton-card"} />
-                      ))
+                    <div className="user-profile-owned-nfts">
+                      {Array(12)
+                        .fill(0)
+                        .map((_, i) => (
+                          <NftCardSkeleton key={i + "explore-skeleton-card"} />
+                        ))}
+                    </div>
                   )
                 ) : profileActiveTab === 3 ? (
-                  <div className="">
+                  <>
                     <div className="profile-activity-headers-tab">
                       {profileActivityHeaders.map((header, i) => (
                         <span
@@ -555,17 +631,18 @@ const Profile = () => {
                             <UserActivityCard {...activity} key={i} />
                           ))
                         : ""}
-                        <div className="mt-8">
-                          {
-                            nextPage < totalPages
-                            ?
-                            <Button title="Load More" onClick={() => setCurrentPage(currentPage+1)} />
-                            :
-                            ""
-                          }
-                        </div>
+                      <div className="mt-8">
+                        {nextPage < totalPages ? (
+                          <Button
+                            title="Load More"
+                            onClick={() => setCurrentPage(currentPage + 1)}
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  </>
                 ) : profileActiveTab === 4 ? (
                   collections &&
                   onChainCollections &&

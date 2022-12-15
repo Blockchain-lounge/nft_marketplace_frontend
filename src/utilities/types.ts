@@ -95,20 +95,6 @@ export interface ITransactionCard {
   _id: string;
 }
 
-// export interface ICreatedNft {
-//   collection_id: string;
-//   createdAt: string;
-//   item_art_url: string;
-//   item_description: string;
-//   item_remaining: number;
-//   item_supply: number;
-//   item_title: string;
-//   updatedAt: string;
-//   user_id: string;
-//   __v: number;
-//   _id: string;
-// }
-
 export interface ICollection {
   category_id: string;
   collectionFeaturedImage: string;
@@ -119,5 +105,14 @@ export interface ICollection {
   name: string;
   updatedAt: string;
   user_id: string;
+  _id: string;
+}
+
+export interface IUserProps {
+  username: string;
+  userEmail: string;
+  bio: string;
+  bannerImg: string;
+  profileImg: string;
   _id: string;
 }
