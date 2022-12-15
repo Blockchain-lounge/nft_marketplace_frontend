@@ -108,7 +108,7 @@ const ViewNft = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
-          if(activities.length > 0){
+          if(activities && activities.length > 0){
             for (let index = 0; index < response.data.data.activities.length; index++) {
               setActivities(prev => [...prev, response.data.data.activities[index]]);
             }
@@ -325,7 +325,9 @@ const ViewNft = () => {
     });
     if(id){
       fetchItemDetail(id as string);
-      fetchActivities();
+      if(currentPage){
+        fetchActivities();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id,currentPage]);

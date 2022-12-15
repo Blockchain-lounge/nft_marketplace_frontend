@@ -337,6 +337,7 @@ const Profile = () => {
       if (response !== null) {
         fetchTokenOwned(response);
       }
+      fetchCollections();
     });
     if(tokenCreatedCurrentPage){
       fetchTokenCreated(tokenCreatedCurrentPage);
@@ -346,7 +347,6 @@ const Profile = () => {
       fetchTokenListed(tokenListedCurrentPage);
     }
     fetchUser();
-    fetchCollections();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage,tokenCreatedCurrentPage,tokenListedCurrentPage]);
 

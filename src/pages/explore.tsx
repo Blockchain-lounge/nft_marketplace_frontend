@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { Button, Heading2, Loader } from "../components/atoms";
@@ -22,7 +23,7 @@ const Explore = () => {
   const fetchCollections = async () => {
     try {
       const HEADER = {};
-      const REQUEST_URL = "nft-collection/index";
+      const REQUEST_URL = "nft-collection/index?page="+currentPage;
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -34,7 +35,18 @@ const Explore = () => {
           toast("Unauthorized request!");
           return;
         } else if (response?.status == 200) {
-          setCollections(response.data.data);
+          if(collections && collections.length > 0){
+            for (let index = 0; index < response.data.data.length; index++) {
+              setCollections(prev => [...prev, response.data.data[index]]);
+            }
+          }
+          else{
+            setCollections(response.data.data);
+          }
+
+          setTotalPages(response.data.totalPages);
+          setCurrentPage(response.data.currentPage);
+          setNextPage(response.data.nextPage);
           setIsLoading(false);
         } else {
           toast("Something went wrong, please try again!");
@@ -49,11 +61,8 @@ const Explore = () => {
   useEffect(() => {
     fetchCollections();
     // fetchLaunchPadDrops();
-  }, []);
+  }, [currentPage]);
 
-  const handleLoadMore = () => {
-    setCurrentPage(currentPage + 1);
-  };
 
   return (
     <DashboardLayout>
@@ -84,7 +93,7 @@ const Explore = () => {
           )}
           <div className="mt-8">
             {nextPage < totalPages ? (
-              <Button title="Load More" onClick={handleLoadMore} />
+              <Button title="Load More" onClick={() => setCurrentPage(currentPage + 1)} />
             ) : (
               ""
             )}
