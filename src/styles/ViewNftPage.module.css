@@ -10,8 +10,64 @@
   @apply flex items-center gap-x-14;
 }
 
+/* input[type="datetime-local" i] {
+} */
+
 /* .view-hero-nft-info {
 } */
+
+.bidder-date-wrapper {
+  @apply max-w-[80%] mx-auto;
+}
+
+.bidder-date-wrapper > .rdrCalendarWrapper {
+  @apply bg-transparent w-full;
+  box-shadow: 0px 4.62319px 11.558px #00000026;
+}
+.bidder-date-wrapper > .rdrCalendarWrapper .rdrDateDisplayWrapper {
+  @apply hidden;
+}
+
+.rdrCalendarWrapper .rdrMonth {
+  @apply w-full;
+}
+
+span.rdrWeekDay {
+  @apply text-white;
+}
+
+button.rdrDay span span {
+  @apply text-white;
+}
+
+button.rdrDay.rdrDayPassive span span {
+  @apply text-txt-4;
+}
+
+.rdrNextPrevButton.rdrPprevButton,
+.rdrNextPrevButton.rdrNextButton {
+  @apply bg-transparent;
+}
+
+.rdrNextPrevButton.rdrPprevButton i {
+  border-width: 4px 6px 4px 4px;
+  border-color: transparent rgb(255, 255, 255) transparent transparent;
+  transform: translate(-3px, 0px);
+}
+
+button.rdrNextPrevButton.rdrPprevButton:hover,
+button.rdrNextPrevButton.rdrNextButton:hover {
+  background: #3d91ff;
+}
+
+.rdrNextPrevButton.rdrNextButton i {
+  margin: 0 0 0 7px;
+  border-width: 4px 4px 4px 6px;
+  border-color: transparent transparent transparent rgb(255, 255, 255);
+  transform: translate(3px, 0px);
+}
+
+/**/
 
 .view-hero-nft-cta-wrapper {
   @apply flex flex-col items-center gap-y-4 border border-border-1-line p-3 rounded-lg w-full;

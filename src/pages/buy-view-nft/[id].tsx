@@ -4,6 +4,9 @@ import Image from "next/image";
 import clsx from "clsx";
 import * as moment from "moment";
 
+import { DateRange } from "react-date-range";
+import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/theme/default.css";
 import {
   Button,
   Heading2,
@@ -372,6 +375,21 @@ const ViewNft = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, currentPage]);
+
+  const [dateSelected, setDateSelected] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+    key: "selection",
+  });
+
+  const handleRangeSelection = (ranges: any) => {
+    setDateSelected(ranges.selection);
+  };
+
+  const applyDateFilter = () => {
+    onFilter(dateSelected);
+    setShowDateModal(false);
+  };
 
   return (
     <DashboardLayout isLoading={!itemDetail}>
@@ -1065,6 +1083,25 @@ const ViewNft = () => {
                 onClick={setBidingExpDates}
               />
             </div>
+            <div className="create-new-nft-wrapper-2 w-full">
+              <span className="create-new-nft-wrapper-2-label">
+                Offer duration
+              </span>
+              <div className="bidder-date-wrapper">
+                <DateRange
+                  ranges={[dateSelected]}
+                  onChange={handleRangeSelection}
+                  showMonthAndYearPickers={false}
+                />
+              </div>
+
+              {/* <Input2 type="datetime-local" /> */}
+              {/* <Select
+                title={bidingExpDates}
+                lists={bidExpDates}
+                onClick={setBidingExpDates}
+              /> */}
+            </div>
             {/* <div className="create-new-nft-wrapper-2 w-full">
               <Input2
                 label="Quantity"
@@ -1083,22 +1120,23 @@ const ViewNft = () => {
                 </span>
               </div>
               <div className="flex justify-between items-center w-full">
-                <span className="text-txt-2">Service Fee (0%)</span>
+                <span className="text-txt-2">Floor Price</span>
                 <span className="flex gap-x-2 items-center">
-                  <CoinIcon />0
+                  <CoinIcon />
+                  0.7
                 </span>
               </div>
               <div className="flex justify-between items-center w-full">
-                <span className="text-txt-2">You Will Pay</span>
+                <span className="text-txt-2">Best Offer</span>
                 <span className="flex gap-x-2 items-center">
                   <CoinIcon />
-                  6.95
+                  3.2
                 </span>
               </div>
             </div>
             <div className="mt-12 lg:mt-10 w-full">
               <Button
-                title="Make an offer"
+                title="Make offer"
                 onClick={handleOffer}
                 wt="w-full"
                 isDisabled={isTransloading}
