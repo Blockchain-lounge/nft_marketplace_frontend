@@ -1,6 +1,7 @@
 //@ts-nocheck
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from 'next/link';
 import clsx from "clsx";
 import * as moment from "moment";
 
@@ -303,8 +304,9 @@ const ViewNft = () => {
           // push("/");
           return;
         } else if (response.status == 200) {
-          if (response.data.listing == -null) {
-            // push("/");
+          if (response.data.listing ===null) {
+            toast("Item not listed!");
+            push("/");
           }
           setItemDetail(response.data.listing);
         } else {
@@ -369,7 +371,7 @@ const ViewNft = () => {
                       />
                     </div>
                     <span className="text-xl  lg:text-3xl lg:mr-1">
-                      {itemDetail.item.collection.name}
+                    <Link href={`/single-collection/${itemDetail.item.collection._id}`}>{itemDetail.item.collection.name}</Link>
                     </span>
                     <div className="h-6 w-6 relative">
                       <Image

@@ -3,18 +3,19 @@ import clsx from "clsx";
 import Image from "next/image";
 
 import { useRouter } from "next/router";
-import { uploadFile } from "../functions/offChain/apiRequests";
+import { uploadFile } from "@/src/functions/offChain/apiRequests";
 
 import React, { ChangeEvent, FC, useEffect, useState } from "react";
-import { Button, Heading2, Input2, Select } from "../components/atoms";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { apiRequest } from "../functions/offChain/apiRequests";
-import EarningLayout from "../template/EarningLayout";
-import { ICategories } from "../utilities/types";
-import { CloseIcon } from "../components/atoms/vectors";
+import { apiRequest } from "@/src/functions/offChain/apiRequests";
+import EarningLayout from "@/src/template/EarningLayout";
+import { ICategories } from "@/src/utilities/types";
+import { CloseIcon } from "@/src/components/atoms/vectors";
+import { Button, Heading2, Input2, Select } from "@/src/components/atoms";
 
-const ImportCollection: FC<ICollectionProps> = () => {
+const UpdateCollection: FC<ICollectionProps> = () => {
   const [collectionBannerPreview, setCollectionBannerPreview] = useState("");
   const [collectionBanner, setCollectionBanner] = useState("");
 
@@ -44,11 +45,9 @@ const ImportCollection: FC<ICollectionProps> = () => {
     instagram: "",
   });
 
-  const { push } = useRouter();
+  const { push, query } = useRouter();
+  const { id } = query;
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
 
   const handleFieldChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -162,7 +161,47 @@ const ImportCollection: FC<ICollectionProps> = () => {
       return;
     }
   };
- 
+
+  const fetchCollectionDetails = async (id) => {
+    if (id !== undefined) {
+      const HEADER = {};
+      const REQUEST_URL = "nft-collection/show/" + id;
+      const METHOD = "GET";
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        // console.log({ response });
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          push("/");
+          return;
+        } else if (response.status == 200) {
+          setCollectionPayload({
+            collection_name: response.data.data.name,
+            collection_description: response.data.data.description,
+            collection_address: response.data.data.collection_address,
+            collection_creator_fee: response.data.data.collection_creator_fee
+          });
+           setSocialLinksPayload({
+            website: response.data.data.website,
+            discord: response.data.data.discord,
+            instagram: response.data.data.instagram,
+            twitter: response.data.data.twitter,
+          });
+          setCollectionBannerPreview(response.data.data.cover_image_id);
+          setCollectionFeaturedArtPreview(response.data.data.collectionFeaturedImage);
+          setCollectionLogoPreview(response.data.data.collectionLogoImage);
+          setCollectionBanner(response.data.data.cover_image_id);
+          setCollectionFeaturedArt(response.data.data.collectionFeaturedImage);
+          setCollectionLogo(response.data.data.collectionLogoImage);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    }
+  };
+
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -182,9 +221,9 @@ const ImportCollection: FC<ICollectionProps> = () => {
     }
     var collectionData = {
       name: collectionPayload.collection_name,
+      description: collectionPayload.collection_description,
       collection_address: collectionPayload.collection_address,
       collection_creator_fee: collectionPayload.collection_creator_fee && isNaN(collection_creator_fee) === false ? collection_creator_fee : 0,
-      description: collectionPayload.collection_description,
       cover_image: collectionBanner,
       collectionFeaturedImage: collectionFeaturedArt,
       collectionLogoImage: collectionLogo,
@@ -195,13 +234,12 @@ const ImportCollection: FC<ICollectionProps> = () => {
     setIsTransLoading(true);
     try {
       const HEADER = "authenticated_and_form_data";
-      const REQUEST_URL = "nft-collection/store";
+      const REQUEST_URL = "nft-collection/update/"+id;
       const METHOD = "POST";
       const DATA = collectionData;
 
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
         // console.log({ response });
-        setIsTransLoading(false);
         if (response.status == 400 || response.status == 404) {
           var error = response.data.error;
           toast(error);
@@ -211,10 +249,10 @@ const ImportCollection: FC<ICollectionProps> = () => {
         if (response.status == 401) {
           toast("Unauthorized request!");
           return;
-        } else if (response.status == 201) {
+        } else if (response.status == 200) {
           toast(response.data.message);
           setIsTransLoading(false);
-          push("/create-new-nft");
+          // push("/create-new-nft");
           setCollectionPayload({
             ...collectionPayload,
             collection_name: "",
@@ -244,8 +282,12 @@ const ImportCollection: FC<ICollectionProps> = () => {
     }
   };
 
+ useEffect(() => {
+    fetchCollectionDetails(id);   
+     fetchCategories();   
+  }, [id]);
   return (
-    <EarningLayout title="Import Collection">
+    <EarningLayout title="Update a Collection">
       <div className="create-new-nft-form max-w-[80%] 2xl:max-w-[60%]">
         <ToastContainer />
         {/*Logo Image*/}
@@ -284,13 +326,6 @@ const ImportCollection: FC<ICollectionProps> = () => {
                 width="24px"
                 height="24px"
               />
-              {/* <span
-                className={clsx(
-                  collectionLogoPreview ? "hidden" : "block mt-2 text-sm"
-                )}
-              >
-                Click to change image
-              </span> */}
             </label>
           </div>
         </div>
@@ -412,7 +447,6 @@ const ImportCollection: FC<ICollectionProps> = () => {
           value={collectionPayload.collection_creator_fee}
           required
         />
-
         <div>
           <span className="create-new-nft-wrapper-2-label mb-2">
             Description
@@ -425,7 +459,7 @@ const ImportCollection: FC<ICollectionProps> = () => {
             maxLength={250}
             onChange={handleFieldChange}
 
-            // value={userDetailsPayload.bio}
+            value={collectionPayload.collection_description}
           ></textarea>
         </div>
         <div>
@@ -560,7 +594,7 @@ const ImportCollection: FC<ICollectionProps> = () => {
           </div>
         </div>
         <Button
-          title="Import collection"
+          title="Update collection"
           twClasses="w-full"
           onClick={handleSubmit}
           isDisabled={isTransloading}
@@ -570,4 +604,4 @@ const ImportCollection: FC<ICollectionProps> = () => {
   );
 };
 
-export default ImportCollection;
+export default UpdateCollection;
