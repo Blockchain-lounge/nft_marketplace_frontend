@@ -93,7 +93,8 @@ const ViewCollection = () => {
             }
           }
           else{
-            setSingleCollectionsListedItemsData(response.data.listedItems);
+            setSingleCollectionsListedItemsData(response.data.items);
+            // setSingleCollectionsListedItemsData(response.data.listedItems);
           }
           setTotalPages(response.data.totalPages);
           setCurrentPage(response.data.currentPage);
@@ -215,7 +216,7 @@ const ViewCollection = () => {
       if (response !== null) {
         isUserLoggedIn();
       }
-    });
+    }); 
     fetchCollectionItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id,currentPage]);
@@ -224,7 +225,12 @@ const ViewCollection = () => {
   // };
   const handleCollectionUpdate = () => {
     // setShowOption((prev) => !prev);
-    push("/update-collection/" + id);
+    if(singleCollectionDetail.collection_is_imported 
+      && singleCollectionDetail.collection_is_imported === true){
+      push("/update-imported-collection/" + id);
+    }else{
+      push("/update-collection/" + id);
+    }
   };
   const handleCopyToClipBoard = () => {
     toast.success("Collection link copied to your clip board successfully");

@@ -16,7 +16,6 @@ const NftCard2 = ({
   item_title,
   item_art_url,
   item_price,
-  item_remaining,
   item_supply,
   time,
   item_id,
@@ -42,10 +41,17 @@ const NftCard2 = ({
       onClick={() => push(`/${to}/${_id}`)}
     >
       <div className="nmc-wrapper-img">
-        {item_art_url ? (
+        {item_id ? (
           <Image
             src={
-              item_art_url
+              item_art_url === undefined ||
+              item_art_url === null ||
+              (item_art_url === "" &&
+                item_id !== undefined &&
+                item_id !== null &&
+                item_id !== "")
+                ? item_id.item_art_url
+                : item_art_url
             }
             alt={item_title}
             layout="fill"
@@ -115,7 +121,7 @@ const NftCard2 = ({
           </div>
         ) : (
           <div className="p-2">
-            {/* <span className="text-black flex items-center text-lg">
+            <span className="text-black flex items-center text-lg">
               <span className="h-6 w-3 relative">
                 <Image
                   src="/icon-svg/eth-dark-icon.svg"
@@ -142,7 +148,7 @@ const NftCard2 = ({
               </span>
             ) : (
               ""
-            )} */}
+            )}
           </div>
         )}
       </div>

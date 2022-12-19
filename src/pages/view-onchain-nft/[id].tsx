@@ -19,6 +19,7 @@ import APPCONFIG from "@/src/constants/Config";
 import { ethers } from "ethers";
 import "react-toastify/dist/ReactToastify.css";
 import { connectedAccount } from "../../functions/onChain/authFunction";
+import Link from 'next/link';
 
 const ViewUserNft = () => {
   const { query, push } = useRouter();
@@ -196,7 +197,9 @@ const ViewUserNft = () => {
                     {/*collection-logo*/}
                     <div className="flex items-center mb-4">
                       <span className="text-xl lg:mr-1">
-                        {itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : itemDetail.name + " - " + itemDetail.tokenId}
+                      <Link href={`/on-chain-single-collection/${itemDetail.tokenAddress}`}>
+                          {itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : itemDetail.name + " - " + itemDetail.tokenId}
+                    </Link>
                       </span>
                       <div className="h-6 w-6 relative">
                         <Image
