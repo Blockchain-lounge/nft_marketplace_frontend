@@ -21,7 +21,7 @@
 }
 
 .bidder-date-wrapper > .rdrCalendarWrapper {
-  @apply bg-transparent w-full;
+  @apply bg-transparent w-full mb-8;
   box-shadow: 0px 4.62319px 11.558px #00000026;
 }
 .bidder-date-wrapper > .rdrCalendarWrapper .rdrDateDisplayWrapper {
@@ -65,6 +65,32 @@ button.rdrNextPrevButton.rdrNextButton:hover {
   border-width: 4px 4px 4px 6px;
   border-color: transparent transparent transparent rgb(255, 255, 255);
   transform: translate(3px, 0px);
+}
+
+.react-time-picker.react-time-picker--closed.react-time-picker--enabled {
+  @apply w-max;
+}
+
+.react-time-picker__inputGroup__input.react-time-picker__inputGroup__amPm {
+  @apply bg-transparent outline-none font-medium;
+}
+
+.react-time-picker__inputGroup__input.react-time-picker__inputGroup__hour,
+.react-time-picker__inputGroup__input.react-time-picker__inputGroup__minute {
+  @apply font-medium;
+}
+
+.react-time-picker.react-time-picker--closed.react-time-picker--enabled
+  > .react-time-picker__wrapper,
+.react-time-picker.react-time-picker--open.react-time-picker--enabled
+  > .react-time-picker__wrapper {
+  @apply py-[0.85rem] lg:py-4 px-2 lg:px-3 rounded-[0.5rem] border-[1px] border-border-1-line;
+}
+
+.react-time-picker__clear-button.react-time-picker__button,
+.react-time-picker__clock-button.react-time-picker__button,
+.react-time-picker__clock.react-time-picker__clock--open {
+  @apply hidden;
 }
 
 /**/
