@@ -8,6 +8,10 @@ import { Footer } from "../components/organisms";
 const Error404Page = () => {
   const { push } = useRouter();
 
+  /**
+   * This function navigate user to home
+   * @date 12/15/2022 - 3:19:53 PM
+   */
   const navigateHome = () => {
     push("/");
   };

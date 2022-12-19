@@ -33,6 +33,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
   const [collectionPayload, setCollectionPayload] = useState({
     collection_name: "",
     collection_description: "",
+    collection_creator_price: "",
   });
 
   const [socialLinksPayload, setSocialLinksPayload] = useState({
@@ -48,6 +49,13 @@ const CreateCollection: FC<ICollectionProps> = () => {
     fetchCategories();
   }, []);
 
+  /**
+   * This function is responsible for changing input value by targeting their name as key and their corresponding input as value.
+   *
+   * @date 12/15/2022 - 3:38:06 PM
+   *
+   * @param {(ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)} e expect the input event as arguement and targets the name assigned to it's value.
+   */
   const handleFieldChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -58,6 +66,12 @@ const CreateCollection: FC<ICollectionProps> = () => {
     });
   };
 
+  /**
+   * This function is responsible for changing item social media links input value by targeting their name as key and their corresponding input as value.
+   * @date 12/15/2022 - 3:40:33 PM
+   *
+   * @param {(ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)} e expect the input event as arguement and targets the name assigned to it's value.
+   */
   const handleSocialLinksFieldChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -414,6 +428,14 @@ const CreateCollection: FC<ICollectionProps> = () => {
             />
           ) : null}
         </div>
+        <Input2
+          name="collection_creator_prices"
+          label="Creator fee in (Eth)"
+          maxLength={4}
+          placeholder="0.00"
+          onChange={handleFieldChange}
+          value={collectionPayload.collection_creator_prices}
+        />
         <div>
           <span className="create-new-nft-wrapper-2-label mb-2">Links</span>
           <div className="flex flex-col gap-y-5">

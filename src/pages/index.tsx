@@ -41,7 +41,14 @@ const Home: NextPage = () => {
   const [collections, setCollections] = useState(null);
   const [featuredCollections, setFeaturedCollections] = useState([]);
 
-  const fetchHomePageData = async () => {
+  /**
+   * This function fetches all homepage data
+   * @date 12/15/2022 - 2:01:31 PM
+   *
+   * @async
+   * @returns {*} Array of collections, Array of featured collections, Array of NFT items listed by users
+   */
+  const fetchHomePageData = async (): any => {
     try {
       const HEADER = {};
       const REQUEST_URL = "home-page/";
@@ -57,10 +64,12 @@ const Home: NextPage = () => {
           return;
         } else if (response.status == 200) {
           setCollections(response.data.data.collections);
+          //Save the first 3 collections to a state, mapped as hero cards beneath the hero image.
           setHeroData([
             ...heroData,
             ...response.data.data.collections.slice(0, 3),
           ]);
+          //Active Card is the Hero Card
           setActiveCard(response.data.data.collections[0]);
           setFeaturedCollections(response.data.data.featured_collections);
           setItems(response.data.data.items);
@@ -85,6 +94,7 @@ const Home: NextPage = () => {
         <div className="space-y-[9rem] center mb-[10.125rem]">
           {heroData.length > 1 && activeCard ? (
             <section className="hero">
+              {/*active Card displayed as hero card*/}
               <div className="hero-desc">
                 <Heading title={activeCard.name} twClasses="mt-4" />
                 <p className="lg:max-w-xl">{activeCard.description}</p>

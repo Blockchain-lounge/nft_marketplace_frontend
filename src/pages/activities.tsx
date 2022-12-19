@@ -8,7 +8,7 @@ import {
   ActivitiesSelect,
   Select2,
   SelectCheckBox,
-  Button
+  Button,
 } from "../components/atoms";
 import { ISelectCheckProps } from "../components/atoms/SelectCheckbox";
 import { CloseIcon } from "../components/atoms/vectors";
@@ -79,38 +79,54 @@ const Activities = () => {
   const sorting = [{ name: "Ascending", value: "asc" }];
   const router = useRouter();
   const { activity_type } = router.query;
-  const fetchActivities = async (activityType) => {
+  /**
+   * Fetches all activities that took place on the platform
+   * @date 12/15/2022 - 3:21:45 PM
+   *
+   * @async
+   * @param {string | ""} activityType expects params type of string which can be all activities, sales, newly listed item, newly created item etc {check events variable at line 70}
+   *
+   * @returns {*} returns activities based on the argument passed into the params else it returns all activities.
+   */
+  const fetchActivities = async (activityType: string | ""): any => {
     var REQUEST_URL = "/activities";
     switch (activityType) {
       case "newly_created_item":
-        REQUEST_URL = "/activities?activity_type=" + activityType+"&&page="+currentPage;
+        REQUEST_URL =
+          "/activities?activity_type=" + activityType + "&&page=" + currentPage;
         break;
 
       case "updated_item":
-        REQUEST_URL = "/activities?activity_type=" + activityType+"&&page="+currentPage;
+        REQUEST_URL =
+          "/activities?activity_type=" + activityType + "&&page=" + currentPage;
         break;
 
       case "newly_listed_item":
-        REQUEST_URL = "/activities?activity_type=" + activityType+"&&page="+currentPage;
+        REQUEST_URL =
+          "/activities?activity_type=" + activityType + "&&page=" + currentPage;
         break;
 
       case "updated_listing":
-        REQUEST_URL = "/activities?activity_type=" + activityType+"&&page="+currentPage;
+        REQUEST_URL =
+          "/activities?activity_type=" + activityType + "&&page=" + currentPage;
         break;
 
       case "new_mint":
-        REQUEST_URL = "/activities?activity_type=" + activityType+"&&page="+currentPage;
+        REQUEST_URL =
+          "/activities?activity_type=" + activityType + "&&page=" + currentPage;
         break;
 
       case "new_sales":
-        REQUEST_URL = "/activities?activity_type=" + activityType+"&&page="+currentPage;
+        REQUEST_URL =
+          "/activities?activity_type=" + activityType + "&&page=" + currentPage;
         break;
       case "cancelled_listing":
-        REQUEST_URL = "/activities?activity_type=" + activityType+"&&page="+currentPage;
+        REQUEST_URL =
+          "/activities?activity_type=" + activityType + "&&page=" + currentPage;
         break;
 
       default:
-        var REQUEST_URL = "/activities?page="+currentPage;
+        var REQUEST_URL = "/activities?page=" + currentPage;
     }
     try {
       const HEADER = {};
@@ -125,12 +141,18 @@ const Activities = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
-          if(activities.length > 0){
-            for (let index = 0; index < response.data.data.activities.length; index++) {
-              setActivities(prev => [...prev, response.data.data.activities[index]]);
+          if (activities.length > 0) {
+            for (
+              let index = 0;
+              index < response.data.data.activities.length;
+              index++
+            ) {
+              setActivities((prev) => [
+                ...prev,
+                response.data.data.activities[index],
+              ]);
             }
-          }
-          else{
+          } else {
             setActivities(response.data.data.activities);
           }
           setTotalPages(response.data.data.totalPages);
@@ -154,7 +176,7 @@ const Activities = () => {
         : "all"
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activity_type,currentPage]);
+  }, [activity_type, currentPage]);
 
   return (
     <DashboardLayout>
@@ -243,13 +265,14 @@ const Activities = () => {
               : null}
           </div>
           <div className="mt-8">
-            {
-              nextPage < totalPages
-              ?
-              <Button title="Load More" onClick={() => setCurrentPage(currentPage+1)} />
-              :
+            {nextPage < totalPages ? (
+              <Button
+                title="Load More"
+                onClick={() => setCurrentPage(currentPage + 1)}
+              />
+            ) : (
               ""
-            }
+            )}
           </div>
         </div>
         <Footer />
