@@ -39,6 +39,9 @@ import { BigNumber, ethers } from "ethers";
 import APPCONFIG from "@/src/constants/Config";
 import { ActivityLoader } from "@/src/components/lazy-loaders";
 import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
+
+import TimePicker from "react-time-picker/dist/entry.nostyle";
+
 const ViewNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModaltype] = useState("buy");
@@ -58,6 +61,16 @@ const ViewNft = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [nextPage, setNextPage] = useState(1);
 
+  const [dateSelected, setDateSelected] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+    key: "selection",
+  });
+
+  const [timeSelected, setTimeSelected] = useState(
+    new Date().toLocaleTimeString()
+  );
+
   const bidExpDates = [
     "1 day",
     "2 days",
@@ -67,6 +80,7 @@ const ViewNft = () => {
     "6 days",
     "7 days",
   ];
+
   // const nftProperties = [
   //   { label: "dna", value: "human", trait: 19 },
   //   { label: "eyewear", value: "cyber bindi", trait: 16 },
@@ -376,20 +390,18 @@ const ViewNft = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, currentPage]);
 
-  const [dateSelected, setDateSelected] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-    key: "selection",
-  });
-
   const handleRangeSelection = (ranges: any) => {
     setDateSelected(ranges.selection);
   };
 
-  const applyDateFilter = () => {
-    onFilter(dateSelected);
-    setShowDateModal(false);
+  const handleTimeChange = (value) => {
+    setTimeSelected(value);
   };
+  console.log(timeSelected);
+  // const applyDateFilter = () => {
+  //   onFilter(dateSelected);
+  //   setShowDateModal(false);
+  // };
 
   return (
     <DashboardLayout isLoading={!itemDetail}>
@@ -1073,7 +1085,7 @@ const ViewNft = () => {
                 />
               </div>
             </div>
-            <div className="create-new-nft-wrapper-2 w-full">
+            {/* <div className="create-new-nft-wrapper-2 w-full">
               <span className="create-new-nft-wrapper-2-label">
                 Offer expiration
               </span>
@@ -1082,7 +1094,7 @@ const ViewNft = () => {
                 lists={bidExpDates}
                 onClick={setBidingExpDates}
               />
-            </div>
+            </div> */}
             <div className="create-new-nft-wrapper-2 w-full">
               <span className="create-new-nft-wrapper-2-label">
                 Offer duration
@@ -1093,6 +1105,18 @@ const ViewNft = () => {
                   onChange={handleRangeSelection}
                   showMonthAndYearPickers={false}
                 />
+                <div className="flex items-center justify-between">
+                  <span className="create-new-nft-wrapper-2-label">
+                    Select time
+                  </span>
+                  <TimePicker onChange={setTimeSelected} value={timeSelected} />
+                </div>
+
+                {/* <Input2
+                  type="time"
+                  value={timeSelected}
+                  onChange={handleTimeChange}
+                /> */}
               </div>
 
               {/* <Input2 type="datetime-local" /> */}
