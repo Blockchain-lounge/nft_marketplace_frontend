@@ -1,13 +1,10 @@
 //@ts-nocheck
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from 'next/link';
+import Link from "next/link";
 import clsx from "clsx";
 import * as moment from "moment";
 
-import { DateRange } from "react-date-range";
-import "react-date-range/dist/styles.css"; // main style file
-import "react-date-range/dist/theme/default.css";
 import {
   Button,
   Heading2,
@@ -40,8 +37,7 @@ import { BigNumber, ethers } from "ethers";
 import APPCONFIG from "@/src/constants/Config";
 import { ActivityLoader } from "@/src/components/lazy-loaders";
 import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
-
-import TimePicker from "react-time-picker/dist/entry.nostyle";
+import DateTime from "@/src/components/organisms/DateTime";
 
 const ViewNft = () => {
   const [showModal, setShowModal] = useState(false);
@@ -361,7 +357,7 @@ const ViewNft = () => {
           // push("/");
           return;
         } else if (response.status == 200) {
-          if (response.data.listing ===null) {
+          if (response.data.listing === null) {
             toast("Item not listed!");
             push("/");
           }
@@ -399,6 +395,7 @@ const ViewNft = () => {
   const handleTimeChange = (value) => {
     setTimeSelected(value);
   };
+
   console.log(timeSelected);
   // const applyDateFilter = () => {
   //   onFilter(dateSelected);
@@ -443,7 +440,11 @@ const ViewNft = () => {
                       />
                     </div>
                     <span className="text-xl  lg:text-3xl lg:mr-1">
-                    <Link href={`/single-collection/${itemDetail.item.collection._id}`}>{itemDetail.item.collection.name}</Link>
+                      <Link
+                        href={`/single-collection/${itemDetail.item.collection._id}`}
+                      >
+                        {itemDetail.item.collection.name}
+                      </Link>
                     </span>
                     <div className="h-6 w-6 relative">
                       <Image
@@ -1101,25 +1102,8 @@ const ViewNft = () => {
               <span className="create-new-nft-wrapper-2-label">
                 Offer duration
               </span>
-              <div className="bidder-date-wrapper">
-                <DateRange
-                  ranges={[dateSelected]}
-                  onChange={handleRangeSelection}
-                  showMonthAndYearPickers={false}
-                />
-                <div className="flex items-center justify-between">
-                  <span className="create-new-nft-wrapper-2-label">
-                    Select time
-                  </span>
-                  <TimePicker onChange={setTimeSelected} value={timeSelected} />
-                </div>
 
-                {/* <Input2
-                  type="time"
-                  value={timeSelected}
-                  onChange={handleTimeChange}
-                /> */}
-              </div>
+              <DateTime />
 
               {/* <Input2 type="datetime-local" /> */}
               {/* <Select
