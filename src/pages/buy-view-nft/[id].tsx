@@ -46,7 +46,6 @@ import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 
 import TimePicker from "react-time-picker/dist/entry.nostyle";
 
-
 import TimePicker from "react-time-picker/dist/entry.nostyle";
 
 const ViewNft = () => {
@@ -97,7 +96,6 @@ const ViewNft = () => {
     "6 days",
     "7 days",
   ];
-
 
   // const nftProperties = [
   //   { label: "dna", value: "human", trait: 19 },
@@ -490,7 +488,11 @@ const ViewNft = () => {
                       />
                     </div>
                     <span className="text-xl  lg:text-3xl lg:mr-1">
-                    <Link href={`/single-collection/${itemDetail.item.collection._id}`}>{itemDetail.item.collection.name}</Link>
+                      <Link
+                        href={`/single-collection/${itemDetail.item.collection._id}`}
+                      >
+                        {itemDetail.item.collection.name}
+                      </Link>
                     </span>
                     <div className="h-6 w-6 relative">
                       <Image
@@ -1189,7 +1191,7 @@ const ViewNft = () => {
                 lists={bidExpDates}
                 onClick={setBidingExpDates}
               /> */}
-            </div> */}
+            </div>
             <div className="create-new-nft-wrapper-2 w-full">
               <span className="create-new-nft-wrapper-2-label">
                 Offer duration
