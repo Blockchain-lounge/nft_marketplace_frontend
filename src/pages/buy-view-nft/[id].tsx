@@ -8,9 +8,6 @@ import * as moment from "moment";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css";
-import { DateRange } from "react-date-range";
-import "react-date-range/dist/styles.css"; // main style file
-import "react-date-range/dist/theme/default.css";
 import {
   Button,
   Heading2,
@@ -46,8 +43,6 @@ import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 
 import TimePicker from "react-time-picker/dist/entry.nostyle";
 
-import TimePicker from "react-time-picker/dist/entry.nostyle";
-
 const ViewNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModaltype] = useState("buy");
@@ -66,16 +61,6 @@ const ViewNft = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [nextPage, setNextPage] = useState(1);
-
-  const [dateSelected, setDateSelected] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-    key: "selection",
-  });
-
-  const [timeSelected, setTimeSelected] = useState(
-    new Date().toLocaleTimeString()
-  );
 
   const [dateSelected, setDateSelected] = useState({
     startDate: new Date(),
@@ -423,19 +408,6 @@ const ViewNft = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, currentPage]);
-
-  const handleRangeSelection = (ranges: any) => {
-    setDateSelected(ranges.selection);
-  };
-
-  const handleTimeChange = (value) => {
-    setTimeSelected(value);
-  };
-  console.log(timeSelected);
-  // const applyDateFilter = () => {
-  //   onFilter(dateSelected);
-  //   setShowDateModal(false);
-  // };
 
   const handleRangeSelection = (ranges: any) => {
     setDateSelected(ranges.selection);
@@ -1161,37 +1133,7 @@ const ViewNft = () => {
                 onClick={setBidingExpDates}
               />
             </div> */}
-            <div className="create-new-nft-wrapper-2 w-full">
-              <span className="create-new-nft-wrapper-2-label">
-                Offer duration
-              </span>
-              <div className="bidder-date-wrapper">
-                <DateRange
-                  ranges={[dateSelected]}
-                  onChange={handleRangeSelection}
-                  showMonthAndYearPickers={false}
-                />
-                <div className="flex items-center justify-between">
-                  <span className="create-new-nft-wrapper-2-label">
-                    Select time
-                  </span>
-                  <TimePicker onChange={setTimeSelected} value={timeSelected} />
-                </div>
 
-                {/* <Input2
-                  type="time"
-                  value={timeSelected}
-                  onChange={handleTimeChange}
-                /> */}
-              </div>
-
-              {/* <Input2 type="datetime-local" /> */}
-              {/* <Select
-                title={bidingExpDates}
-                lists={bidExpDates}
-                onClick={setBidingExpDates}
-              /> */}
-            </div>
             <div className="create-new-nft-wrapper-2 w-full">
               <span className="create-new-nft-wrapper-2-label">
                 Offer duration
