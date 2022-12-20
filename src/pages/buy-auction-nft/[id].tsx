@@ -42,9 +42,8 @@ import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 
 import TimePicker from "react-time-picker/dist/entry.nostyle";
 
-const ViewNft = () => {
+const BuyAuctionNFT = () => {
   const [showModal, setShowModal] = useState(false);
-  const [modalType, setModaltype] = useState("buy");
   const [itemDetail, setItemDetail] = useState<INftcard | null>(null);
   const { query, push } = useRouter();
   const { id } = query;
@@ -53,10 +52,8 @@ const ViewNft = () => {
   const [userId, setUserId] = useState<null | string>(null);
   const [isTransloading, setIsTransLoading] = useState(false);
   const [activities, setActivities] = useState(null);
-  const [dollarRate] = UseConvertEthToDollar();
-  // const viewNftStages = ["overview", "properties", "bids", "history"];
-  const [bidingExpDates, setBidingExpDates] = useState("1 day");
-  const viewNftStages = ["overview", "activities"];
+  // const [dollarRate] = UseConvertEthToDollar();
+  const viewNftStages = ["overview", "history"];
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [nextPage, setNextPage] = useState(1);
@@ -299,45 +296,10 @@ const ViewNft = () => {
     }
   };
 
-  const handleBid = async () => {
-    //Write bid function here
-    setShowModal((prev) => !prev);
-  };
-
   const handleOffer = async () => {
     //Write bid function here
     setShowModal((prev) => !prev);
   };
-
-  // const approve = async () => {
-  //   const provider = new ethers.providers.Web3Provider(
-  //     (window as any).ethereum
-  //   );
-  //   const signer = provider.getSigner();
-  //   const nftAbi = [
-  //     "function approve(address to, uint256 tokenId) external",
-  //     "function setApprovalForAll(address operator, bool _approved) external",
-  //     "function getApproved(uint256 tokenId) external view returns (address operator)",
-  //     "function isApprovedForAll(address owner, address operator) external view returns (bool)",
-  //     "function safeTransferFrom(address from, address to, uint256 tokenId) external",
-  //     "function ownerOf(uint256 tokenId) external view returns (address owner)",
-  //     "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)",
-  //     "event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId)",
-  //     "event ApprovalForAll(address indexed owner, address indexed operator, bool approved)"
-  //   ]
-  //   const contract = new ethers.Contract(
-  //     APPCONFIG.SmartContractAddress,
-  //     nftAbi,
-  //     signer
-  //   );
-
-  //   const transaction = await contract.approve(
-
-  //   );
-  //   var tnx = await transaction.wait();
-  //   toast("Please approve this transaction!");
-
-  // }
 
   /**
    * Fetch item details
@@ -373,23 +335,7 @@ const ViewNft = () => {
   };
 
   useEffect(() => {
-    // connectedAccount().then((response) => {
-    //   if (response !== null) {
-    setConnectedAddress("response");
-    //     fetchUser();
-    //   } else {
-    //     // push("/");
-    //   }
-    // });
-    // if (id) {
-    //   fetchItemDetail(id as string);
-    //   if (currentPage) {
-    //     fetchActivities();
-    //   }
-    // }
-
     const itemData = {
-      listing_price: 1.2,
       item: {
         item_art_url: "/images/buyNftSample.png",
         item_title: "CloneX #3119",
@@ -414,7 +360,7 @@ const ViewNft = () => {
   const handleTimeChange = (value) => {
     setTimeSelected(value);
   };
-  console.log(timeSelected);
+
   // const applyDateFilter = () => {
   //   onFilter(dateSelected);
   //   setShowDateModal(false);
@@ -439,7 +385,7 @@ const ViewNft = () => {
                   blurDataURL="/images/placeholder.png"
                 />
               </div>
-              <div className="space-y-6 lg:space-y-4 flex flex-col">
+              <div className="space-y-6 lg:space-y-8 flex flex-col">
                 <>
                   <div className="flex items-center">
                     <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
@@ -457,7 +403,7 @@ const ViewNft = () => {
                         blurDataURL="/images/placeholder.png"
                       />
                     </div>
-                    <span className="text-xl  lg:text-2xl lg:mr-1">
+                    <span className="text-xl  lg:text-3xl lg:mr-1">
                       {itemDetail.item.collection.name}
                     </span>
                     <div className="h-6 w-6 relative">
@@ -470,7 +416,7 @@ const ViewNft = () => {
                       />
                     </div>
                   </div>
-                  <span className="text-2xl lg:text-3xl font-bold">
+                  <span className="text-4xl lg:text-5xl font-bold">
                     {itemDetail.item.item_title}
                   </span>
                 </>
@@ -508,39 +454,41 @@ const ViewNft = () => {
                 </div>
                 <div className="view-hero-nft-cta-wrapper">
                   <div className="flex w-full gap-x-6">
-                    <div className="p-4 bg-bg-5 rounded-md w-full">
+                    <div className="p-4 bg-bg-5 rounded-md w-1/2">
                       <span className="text-txt-2 text-xl block mb-4">
-                        Price
+                        Time left
                       </span>
-                      <div className="">
-                        <span className="flex items-center text-[1.75rem] gap-x-1">
-                          <CoinIcon />
-                          {itemDetail.listing_price}
+                      <div className="w-fit">
+                        <span className="flex items-center text-[1.75rem] gap-x-1 font-bold">
+                          06 : 08 : 32 : 44
                         </span>
-                        {dollarRate ? (
-                          <span className="text-xl font-medium block mt-2">
-                            $
-                            {(itemDetail.listing_price * dollarRate).toFixed(2)}
+                        <div className=" grid items-center mt-2  grid-cols-[0.4fr_0.35fr_0.35fr_0.25fr]">
+                          <span className="text-xl font-medium text-txt-2">
+                            d
                           </span>
-                        ) : (
-                          ""
-                        )}
+                          <span className="text-xl font-medium text-txt-2">
+                            hrs
+                          </span>
+                          <span className="text-xl font-medium text-txt-2">
+                            min
+                          </span>
+                          <span className="text-xl font-medium text-txt-2">
+                            sec
+                          </span>
+                        </div>
                       </div>
                     </div>
-                    <div className="p-4 bg-bg-5 rounded-md w-full">
+                    <div className="p-4 bg-bg-5 rounded-md w-1/2">
                       <span className="text-txt-2 text-xl block mb-4">
-                        Highest floor bid
+                        Minimum bid
                       </span>
                       <div>
-                        <span className="flex items-center  text-[1.5rem] gap-x-1">
+                        <span className="flex items-center text-[1.75rem] gap-x-1 font-bold">
                           <CoinIcon />
-                          51k
+                          0.0003
                         </span>
                         <span className="text-xl font-medium flex items-center mt-2 text-txt-2 gap-x-2">
-                          by
-                          <span className="earnings-card-history">
-                            0x7a20d...9257
-                          </span>
+                          $67
                         </span>
                       </div>
                     </div>
@@ -550,26 +498,15 @@ const ViewNft = () => {
                   </span>
                   <div className="flex flex-col gap-y-4 w-full">
                     <div className="flex gap-x-5 w-full">
-                      {connectedAddress ? (
-                        <div className="w-full space-y-4">
-                          <Button
-                            title="Buy now"
-                            wt="w-full"
-                            onClick={() => {
-                              setModaltype("buy");
-                              setShowModal((prev) => !prev);
-                            }}
-                          />
-                          <Button
-                            title="Make an offer"
-                            outline2
-                            wt="w-full"
-                            onClick={() => {
-                              setModaltype("offer");
-                              setShowModal((prev) => !prev);
-                            }}
-                          />
-                          {/* <Button
+                      <div className="w-full space-y-4">
+                        <Button
+                          title="Place a bid"
+                          wt="w-full"
+                          onClick={() => {
+                            setShowModal((prev) => !prev);
+                          }}
+                        />
+                        {/* <Button
                             title="Place a bid"
                             outline2
                             wt="w-full"
@@ -578,13 +515,8 @@ const ViewNft = () => {
                               setShowModal((prev) => !prev);
                             }}
                           /> */}
-                        </div>
-                      ) : (
-                        <Button
-                          title="You need to connect your wallet to continue"
-                          wt="w-full"
-                        />
-                      )}
+                      </div>
+
                       {/* <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
                         <CartIcon />
                       </span> */}
@@ -658,9 +590,9 @@ const ViewNft = () => {
               {viewNftStage === "overview" ? (
                 <div>
                   <div className="view-nft-description space-y-3">
-                    <h2 className="text-2xl font-bold">Description</h2>
-                    <div className="flex flex-col lg:w-1/2">
-                      <p className="text-txt-2">
+                    <h2 className="text-2xl font-bold ">Description</h2>
+                    <div className="flex flex-col">
+                      <p className="text-txt-2 lg:w-1/2">
                         {/*@ts-ignore*/}
                         {itemDetail.item.item_description}
                       </p>
@@ -777,7 +709,7 @@ const ViewNft = () => {
                   ))} */}
                   <Heading2 title="There's no bidding" />
                 </div>
-              ) : viewNftStage === "activities" ? (
+              ) : viewNftStage === "history" ? (
                 <div className="flex flex-col gap-y-6 overflow-auto">
                   {activities === null ? (
                     Array(12)
@@ -957,132 +889,25 @@ const ViewNft = () => {
         <Footer />
       </div>
       <Modal
-        title={
-          modalType === "buy"
-            ? "Checkout"
-            : modalType === "bid"
-            ? "Place a bid"
-            : "Make an offer"
-        }
+        title="Place a bid"
         openModal={showModal}
         closeModal={setShowModal}
         modalWt="w-[40rem]"
-        modalHt={
-          modalType === "bid"
-            ? "h-full sm:h-[60%] my-auto md:h-fit overflow-y-auto"
-            : modalType === "offer"
-            ? "h-full sm:h-[60%] my-auto md:h-fit lg:h-[80%] overflow-y-auto"
-            : "h-fit mt-28"
-        }
+        modalHt="h-full sm:h-[60%] my-auto md:h-fit lg:h-[80%] overflow-y-auto"
       >
-        {modalType === "bid" ? (
+        {
           <div className="flex flex-col items-center max-w-[85%] mx-auto gap-y-5">
-            <span className="font-bold text-txt-2 text-base max-w-[80%] text-center">
+            <span className="font-bold text-xl text-txt-2 text-center">
               You are about to place a bid for{" "}
-              <span className="text-white">{itemDetail.item.item_title} </span>
+              <span className="text-white font-bold text-xl">
+                {itemDetail !== null && itemDetail.item.item_title}{" "}
+              </span>
               from{" "}
-              <span className="text-white">
-                {itemDetail.item.collection.name}
+              <span className="text-white font-bold text-xl">
+                {itemDetail !== null && itemDetail.item.collection.name}
               </span>{" "}
               collection
             </span>
-            {/* <div className="flex items-center justify-between w-full bg-bg-5 py-4 px-6 rounded-[1.25rem]">
-              <div className="flex gap-x-3 items-center">
-                <span className="block relative h-14 w-14">
-                  <Image
-                    src="/logos/coinbase-logo.png"
-                    alt="wallet-logo"
-                    layout="fill"
-                    className="rounded-full"
-                  />
-                </span>
-                <div className="flex flex-col">
-                  <span className="text-lg font-medium">Metamask</span>
-                  <span className="text-txt-2 font-medium">
-                    {connectedAddress}{" "}
-                  </span>
-                </div>
-              </div>
-              <span className="text-positive-color bg-[#00800022] py-3 px-4 rounded-3xl">
-                Connected
-              </span>
-            </div> */}
-
-            <div className="create-new-nft-wrapper-2 w-full">
-              <div className="create-new-nft-wrapper-2 w-full">
-                {/* <Select title="ETH" icon={<CoinIcon />} /> */}
-                <Input2
-                  name="coinPrice"
-                  placeholder="0.00"
-                  label="Your bid"
-                  // onChange={handleFieldChange}
-                  // value={nftPayload.coinPrice}
-                />
-              </div>
-            </div>
-            <div className="create-new-nft-wrapper-2 w-full">
-              <span className="create-new-nft-wrapper-2-label">
-                Bid expiration
-              </span>
-              <Select
-                title={bidingExpDates}
-                lists={bidExpDates}
-                onClick={setBidingExpDates}
-              />
-            </div>
-            <div className="create-new-nft-wrapper-2 w-full">
-              <Input2
-                label="Quantity"
-                name="quantity"
-                placeholder="1"
-                // onChange={handleFieldChange}
-                // value={nftPayload.coinPrice}
-              />
-            </div>
-            <div className="space-y-5 w-full">
-              <div className="flex justify-between items-center w-full">
-                <span className="text-txt-2">Balance</span>
-                <span className="flex">
-                  <CoinIcon />
-                  47.8
-                </span>
-              </div>
-              <div className="flex justify-between items-center w-full">
-                <span className="text-txt-2">Service Fee (0%)</span>
-                <span className="flex">
-                  <CoinIcon />0
-                </span>
-              </div>
-              <div className="flex justify-between items-center w-full">
-                <span className="text-txt-2">You Will Pay</span>
-                <span className="flex">
-                  <CoinIcon />
-                  6.95
-                </span>
-              </div>
-            </div>
-            <div className="mt-12 lg:mt-10 w-full">
-              <Button
-                title="Place bid"
-                onClick={handleBid}
-                wt="w-full"
-                isDisabled={isTransloading}
-              />
-            </div>
-          </div>
-        ) : modalType === "offer" ? (
-          <div className="flex flex-col items-center max-w-[85%] mx-auto gap-y-5">
-            <p className="font-bold text-xl text-txt-2 text-center">
-              You are about to make an offer for{" "}
-              <span className="text-white font-bold text-xl">
-                {itemDetail.item.item_title}{" "}
-              </span>
-              from{" "}
-              <span className="text-white font-bold text-xl">
-                {itemDetail.item.collection.name}
-              </span>{" "}
-              collection
-            </p>
             {/* <div className="flex items-center justify-between w-full bg-bg-5 py-4 px-6 rounded-[1.25rem]">
               <div className="flex gap-x-3 items-center">
                 <span className="block relative h-14 w-14">
@@ -1111,7 +936,7 @@ const ViewNft = () => {
                 <Input2
                   name="coinPrice"
                   placeholder="0.00"
-                  label="Your Offer"
+                  label="Your bid"
                   // onChange={handleFieldChange}
                   // value={nftPayload.coinPrice}
                 />
@@ -1129,7 +954,7 @@ const ViewNft = () => {
             </div> */}
             <div className="create-new-nft-wrapper-2 w-full">
               <span className="create-new-nft-wrapper-2-label">
-                Offer duration
+                Bid Expiration
               </span>
               <div className="bidder-date-wrapper">
                 <DateRange
@@ -1137,12 +962,12 @@ const ViewNft = () => {
                   onChange={handleRangeSelection}
                   showMonthAndYearPickers={false}
                 />
-                <div className="flex items-center justify-between">
+                {/* <div className="flex items-center justify-between">
                   <span className="create-new-nft-wrapper-2-label">
                     Select time
                   </span>
                   <TimePicker onChange={setTimeSelected} value={timeSelected} />
-                </div>
+                </div> */}
 
                 {/* <Input2
                   type="time"
@@ -1192,72 +1017,17 @@ const ViewNft = () => {
             </div>
             <div className="mt-12 lg:mt-10 w-full">
               <Button
-                title="Make offer"
+                title="Place bid"
                 onClick={handleOffer}
                 wt="w-full"
                 isDisabled={isTransloading}
               />
             </div>
           </div>
-        ) : (
-          <div className="flex flex-col items-center max-w-[65%] mx-auto gap-y-5 text-clip">
-            <p className="font-bold text-xl items-center">
-              You are about to purchase{" "}
-              <span className="text-txt-2 font-bold  text-xl">
-                {itemDetail !== null ? itemDetail.item.item_title : ""}
-              </span>
-              {/* from
-              <span className="text-txt-2">Jakes💸</span> */}
-            </p>
-            {/* <div className="flex items-center justify-between w-full bg-bg-5 py-4 px-6 rounded-[1.25rem]">
-              <div className="flex gap-x-3 items-center">
-                <span className="block relative h-14 w-14">
-                  <Image
-                    src="/logos/coinbase-logo.png"
-                    alt="wallet-logo"
-                    layout="fill"
-                    className="rounded-full"
-                  />
-                </span>
-                <div className="flex flex-col">
-                  <span className="text-lg font-medium">Coinbase</span>
-                  <span className="text-txt-2 font-medium">0xb4d...002d </span>
-                </div>
-              </div>
-              <span className="text-positive-color bg-[#00800022] py-3 px-4 rounded-3xl">
-                Connected
-              </span>
-            </div> */}
-            {/* <div className="flex justify-between items-center w-full">
-              <span className="text-txt-2">Balance</span>
-              <span className="flex">
-                <CoinIcon />
-                47.8
-              </span>
-            </div> */}
-            {/* <div className="flex justify-between items-center w-full">
-              <span className="text-txt-2">Service Fee (0%)</span>
-              <span className="flex">
-                <CoinIcon />0
-              </span>
-            </div> */}
-            <div className="flex justify-between items-center w-full">
-              <span className="text-txt-2">You Will Pay</span>
-              <span className="flex gap-x-1">
-                <CoinIcon />
-                {itemDetail !== null ? itemDetail.listing_price : ""}
-              </span>
-            </div>
-            <Button
-              title="Pay"
-              onClick={handleBuy}
-              isDisabled={isTransloading}
-            />
-          </div>
-        )}
+        }
       </Modal>
     </DashboardLayout>
   );
 };
 
-export default ViewNft;
+export default BuyAuctionNFT;
