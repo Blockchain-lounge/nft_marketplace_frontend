@@ -377,7 +377,7 @@ const ViewNft = () => {
   useEffect(() => {
     connectedAccount().then((response) => {
       if (response !== null) {
-    setConnectedAddress(response);
+        setConnectedAddress(response);
         fetchUser();
       } else {
         // push("/");
@@ -416,7 +416,7 @@ const ViewNft = () => {
   const handleTimeChange = (value) => {
     setTimeSelected(value);
   };
-  console.log(timeSelected);
+
   // const applyDateFilter = () => {
   //   onFilter(dateSelected);
   //   setShowDateModal(false);
@@ -499,15 +499,12 @@ const ViewNft = () => {
                     <div className="flex flex-col">
                       <span className="text-txt-2">Creator</span>
                       <span>
-                        {
-                          itemDetail.item
-                          && itemDetail.item.creator
-                          && itemDetail.item.creator.username
-                          && itemDetail.item.creator.username.length > 0
-                          ?
-                          itemDetail.item.creator.username
-                          :' ---- '
-                        }
+                        {itemDetail.item &&
+                        itemDetail.item.creator &&
+                        itemDetail.item.creator.username &&
+                        itemDetail.item.creator.username.length > 0
+                          ? itemDetail.item.creator.username
+                          : " ---- "}
                       </span>
                     </div>
                   </div>
@@ -524,14 +521,11 @@ const ViewNft = () => {
                     <div className="flex flex-col">
                       <span className="text-txt-2">Current Owner</span>
                       <span>
-                      {
-                          itemDetail.owned_by
-                          && itemDetail.owned_by.username
-                          && itemDetail.owned_by.username.length > 0
-                          ?
-                          itemDetail.owned_by.username
-                          :' ---- '
-                        }
+                        {itemDetail.owned_by &&
+                        itemDetail.owned_by.username &&
+                        itemDetail.owned_by.username.length > 0
+                          ? itemDetail.owned_by.username
+                          : " ---- "}
                       </span>
                     </div>
                   </div>
