@@ -547,14 +547,14 @@ const ViewNft = () => {
                         )}
                       </div>
                     </div>
-                    <div className="p-4 bg-bg-5 rounded-md w-full">
+                    {/* <div className="p-4 bg-bg-5 rounded-md w-full">
                       <span className="text-txt-2 text-xl block mb-4">
-                        Highest floor bid
+                        Highest floor bid (Coming Soon)
                       </span>
                       <div>
                         <span className="flex items-center  text-[1.5rem] gap-x-1">
                           <CoinIcon />
-                          51k
+                          ----
                         </span>
                         <span className="text-xl font-medium flex items-center mt-2 text-txt-2 gap-x-2">
                           by
@@ -563,11 +563,11 @@ const ViewNft = () => {
                           </span>
                         </span>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
-                  <span className="text-lg font-medium">
+                  {/* <span className="text-lg font-medium">
                     Last sale price 10.8 ETH
-                  </span>
+                  </span> */}
                   <div className="flex flex-col gap-y-4 w-full">
                     <div className="flex gap-x-5 w-full">
                       {connectedAddress ? (
@@ -581,13 +581,13 @@ const ViewNft = () => {
                             }}
                           />
                           <Button
-                            title="Make an offer"
+                            title="Make an offer  Coming Soon!!!"
                             outline2
                             wt="w-full"
-                            onClick={() => {
-                              setModaltype("offer");
-                              setShowModal((prev) => !prev);
-                            }}
+                            // onClick={() => {
+                            //   setModaltype("offer");
+                            //   setShowModal((prev) => !prev);
+                            // }}
                           />
                           {/* <Button
                             title="Place a bid"

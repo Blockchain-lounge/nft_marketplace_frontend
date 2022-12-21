@@ -165,7 +165,7 @@ const CreateNewNft = () => {
             listing_quantity: response.data.listing.listing_quantity,
             listing_royalty: response.data.listing.listing_royalty,
           });
-          if(response.data.listing.item.collection){
+          if (response.data.listing.item.collection) {
             setNftPayloadSelect({
               ...nftPayloadselect,
               label: response.data.listing.item.collection.name,
@@ -186,9 +186,8 @@ const CreateNewNft = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     var msg = "";
-    
-   if(itemDetail.relisted && itemDetail.relisted === true)
-    {
+
+    if (itemDetail.relisted && itemDetail.relisted === true) {
       if (
         (nftListingPayload.listing_quantity &&
           nftListingPayload.listing_quantity.length === 0) ||
@@ -197,7 +196,9 @@ const CreateNewNft = () => {
         msg = "quantity listed is required";
         toast(msg);
         return;
-      } else if (isNaN(parseFloat(nftListingPayload.listing_quantity)) === true) {
+      } else if (
+        isNaN(parseFloat(nftListingPayload.listing_quantity)) === true
+      ) {
         msg = "quantity to be listed must be a valid positive number";
         toast(msg);
         return;
@@ -211,9 +212,11 @@ const CreateNewNft = () => {
         toast(msg);
         return;
       }
-    }
-    else if(!itemDetail.relisted || itemDetail.relisted === false || !itemDetail.relisted)
-    {
+    } else if (
+      !itemDetail.relisted ||
+      itemDetail.relisted === false ||
+      !itemDetail.relisted
+    ) {
       if (
         Number(nftListingPayload.listing_quantity) >
         Number(itemDetail?.item.item_supply)
@@ -223,7 +226,10 @@ const CreateNewNft = () => {
         return;
       }
     }
-    if(itemDetail.relisted && itemDetail.relisted === false || !itemDetail.relisted){
+    if (
+      (itemDetail.relisted && itemDetail.relisted === false) ||
+      !itemDetail.relisted
+    ) {
       if (
         (nftListingPayload.listing_royalty &&
           nftListingPayload.listing_royalty.length === 0) ||
@@ -232,7 +238,9 @@ const CreateNewNft = () => {
         msg = "listed royalty is required";
         toast(msg);
         return;
-      } else if (isNaN(parseFloat(nftListingPayload.listing_royalty)) === true) {
+      } else if (
+        isNaN(parseFloat(nftListingPayload.listing_royalty)) === true
+      ) {
         msg = "royalty must be a valid positive number";
         toast(msg);
         return;
@@ -256,43 +264,45 @@ const CreateNewNft = () => {
       var formData = {
         listing_price: nftListingPayload.listing_price,
         listing_quantity: nftListingPayload.listing_quantity,
-        listing_royalty: itemDetail && itemDetail.relisted === false ? nftListingPayload.listing_royalty : 0,
-        collection_id: nftPayloadselect.id ? nftPayloadselect.id : null
+        listing_royalty:
+          itemDetail && itemDetail.relisted === false
+            ? nftListingPayload.listing_royalty
+            : 0,
+        collection_id: nftPayloadselect.id ? nftPayloadselect.id : null,
       };
 
-      if(itemDetail.relisted 
-          && itemDetail.relisted === true
-          && itemDetail.item.token_address
-          && itemDetail.item.token_address !== null
-          ){
-
-            const provider = new ethers.providers.Web3Provider(
-              (window as any).ethereum
-            );
+      if (
+        itemDetail.relisted &&
+        itemDetail.relisted === true &&
+        itemDetail.item.token_address &&
+        itemDetail.item.token_address !== null
+      ) {
+        const provider = new ethers.providers.Web3Provider(
+          (window as any).ethereum
+        );
         const signer = provider.getSigner();
         const contract = new ethers.Contract(
-                              APPCONFIG.SmartContractAddress,
-                              abi,
-                              signer
-                            );
+          APPCONFIG.SmartContractAddress,
+          abi,
+          signer
+        );
         const tokenAddress = itemDetail.item.token_address;
         const tokenId = itemDetail.item.token_id;
-        
+
         const listing_price = ethers.utils.parseUnits(
           nftListingPayload.listing_price.toString()
         );
-        try{
+        try {
           toast("Please approve this transaction!");
-        const transaction = await contract.updateListing(
-          tokenAddress,
-          tokenId,
-          listing_price
-        );
-        const tnx = await transaction.wait();
-        }
-        catch(err){
+          const transaction = await contract.updateListing(
+            tokenAddress,
+            tokenId,
+            listing_price
+          );
+          const tnx = await transaction.wait();
+        } catch (err) {
           toast("Transaction cancelled!");
-      setIsTransLoading(false);
+          setIsTransLoading(false);
 
           return;
         }
@@ -369,40 +379,36 @@ const CreateNewNft = () => {
                 onChange={handleFieldChange}
                 value={nftListingPayload.listing_price}
               />
-            {
-              itemDetail && itemDetail.relisted === false
-              ?
+              {itemDetail && itemDetail.relisted === false ? (
                 <>
-                <Input2
+                  {/* <Input2
                 label="Royalty"
                 name="listing_royalty"
                 maxLength={4}
                 placeholder="0.00"
                 onChange={handleFieldChange}
                 value={nftListingPayload.listing_royalty}
-              />
-              <Input2
-                label="Quantity to be listed"
-                name="listing_quantity"
-                placeholder="0"
-                onChange={handleFieldChange}
-                value={nftListingPayload.listing_quantity}
-              />
-              </>
-              :
-              ""
-            }
-            {
-              itemDetail && itemDetail.relisted === true
-              ?
-              <Select
-              title={nftPayloadselect.label}
-              lists={collections}
-              onClick2={handleSelect}
-            />
-            :
-            ""
-            }
+              /> */}
+                  <Input2
+                    label="Quantity to be listed"
+                    name="listing_quantity"
+                    placeholder="0"
+                    onChange={handleFieldChange}
+                    value={nftListingPayload.listing_quantity}
+                  />
+                </>
+              ) : (
+                ""
+              )}
+              {itemDetail && itemDetail.relisted === true ? (
+                <Select
+                  title={nftPayloadselect.label}
+                  lists={collections}
+                  onClick2={handleSelect}
+                />
+              ) : (
+                ""
+              )}
             </div>
             <Button title="Update" isDisabled={isTransloading} />
           </form>
