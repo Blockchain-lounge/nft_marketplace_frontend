@@ -53,6 +53,9 @@ const ViewCollection = () => {
     singleCollectionsListedItemsData,
     setSingleCollectionsListedItemsData,
   ] = useState<string | number>("");
+
+  const [singleCollectionsCreatedItemsData, setSingleCollectionsCreatedItemsData] =
+    useState([]);
   const [copySuccess, setCopySuccess] = useState("");
   const [collectionfloorPrice, setcollectionfloorPrice] = useState<
     string | number
@@ -93,8 +96,8 @@ const ViewCollection = () => {
             }
           }
           else{
-            setSingleCollectionsListedItemsData(response.data.items);
-            // setSingleCollectionsListedItemsData(response.data.listedItems);
+            // setSingleCollectionsListedItemsData(response.data.items);
+            setSingleCollectionsListedItemsData(response.data.listedItems);
           }
           setTotalPages(response.data.totalPages);
           setCurrentPage(response.data.currentPage);
@@ -103,6 +106,8 @@ const ViewCollection = () => {
           setSingleCollectionActivities(response.data.activities.collection);
           setSingleCollectionItemsActivities(response.data.activities.items);
           setSingleCollectionPurchasedItems(response.data.purchasedItems);
+          setSingleCollectionsCreatedItemsData(response.data.items);
+
           if (response.data.listedItems.length != 0) {
             function floorPrices(
               purchasedItems: Array<{ listing_price: number }>
@@ -474,11 +479,26 @@ const ViewCollection = () => {
                 {/* <div>hello</div> */}
                 <div className="">
                   {singleCollectionsListedItemsData &&
-                  singleCollectionsListedItemsData.length > 0 ? (
+                  singleCollectionsListedItemsData.length > 0 &&
+                  singleCollectionsCreatedItemsData && 
+                  singleCollectionsCreatedItemsData.length > 0 ? (
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
-                      {singleCollectionsListedItemsData.map((val, i) => (
-                        <NftMediumCard2 {...val} key={val._id} />
-                      ))}
+                      {
+                        singleCollectionsListedItemsData.length > 0
+                        ?
+                        singleCollectionsListedItemsData.map((val, i) => (
+                          <NftMediumCard2 {...val} key={val._id} />
+                        ))
+                        :""
+                      }
+                      {
+                        singleCollectionsCreatedItemsData.length > 0
+                        ?
+                        singleCollectionsCreatedItemsData.map((val, i) => (
+                          <NftMediumCard2 {...val} key={val._id} />
+                        ))
+                        :""
+                      }
                     </div>
                   ) : (
                     <Heading2 title="You have no items in this collection." />
