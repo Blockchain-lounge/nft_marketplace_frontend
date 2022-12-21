@@ -360,7 +360,7 @@ const BuyUnlistedNFT = () => {
   const handleTimeChange = (value) => {
     setTimeSelected(value);
   };
-  console.log(timeSelected);
+
   // const applyDateFilter = () => {
   //   onFilter(dateSelected);
   //   setShowDateModal(false);
