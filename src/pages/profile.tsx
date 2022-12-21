@@ -72,7 +72,7 @@ const Profile = () => {
     { text: "Listed", count: userListedProfileData.length },
     { text: "Activity", count: activities.length },
     {
-      text: "Collection",
+      text: "My Collection",
       count: collections.length + onChainCollections.length,
     },
   ];

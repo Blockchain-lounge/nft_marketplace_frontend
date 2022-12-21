@@ -204,8 +204,8 @@ const Settings = () => {
 
   return (
     <DashboardLayout isLoading={isLoading}>
-      <div className="sub-layout-wrapper">
-        <div className="center mx-auto max-w-[90%] lg:max-w-[70%]">
+      <div className="sub-layout-wrapper scrollbar-hide">
+        <div className="center mx-auto max-w-[90%] lg:max-w-[70%] w-full">
           {/* <div className="settings-tab">
             {settingStages.map(({ label, stage }) => (
               <div

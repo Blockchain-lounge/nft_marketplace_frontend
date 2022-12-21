@@ -5,9 +5,6 @@ import Link from "next/link";
 import clsx from "clsx";
 import * as moment from "moment";
 
-import { DateRange } from "react-date-range";
-import "react-date-range/dist/styles.css"; // main style file
-import "react-date-range/dist/theme/default.css";
 import {
   Button,
   Heading2,
@@ -40,8 +37,7 @@ import { BigNumber, ethers } from "ethers";
 import APPCONFIG from "@/src/constants/Config";
 import { ActivityLoader } from "@/src/components/lazy-loaders";
 import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
-
-import TimePicker from "react-time-picker/dist/entry.nostyle";
+import DateTime from "@/src/components/organisms/DateTime";
 
 const ViewNft = () => {
   const [showModal, setShowModal] = useState(false);
@@ -553,14 +549,14 @@ const ViewNft = () => {
                         )}
                       </div>
                     </div>
-                    <div className="p-4 bg-bg-5 rounded-md w-full">
+                    {/* <div className="p-4 bg-bg-5 rounded-md w-full">
                       <span className="text-txt-2 text-xl block mb-4">
-                        Highest floor bid
+                        Highest floor bid (Coming Soon)
                       </span>
                       <div>
                         <span className="flex items-center  text-[1.5rem] gap-x-1">
                           <CoinIcon />
-                          51k
+                          ----
                         </span>
                         <span className="text-xl font-medium flex items-center mt-2 text-txt-2 gap-x-2">
                           by
@@ -569,11 +565,11 @@ const ViewNft = () => {
                           </span>
                         </span>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
-                  <span className="text-lg font-medium">
+                  {/* <span className="text-lg font-medium">
                     Last sale price 10.8 ETH
-                  </span>
+                  </span> */}
                   <div className="flex flex-col gap-y-4 w-full">
                     <div className="flex gap-x-5 w-full">
                       {connectedAddress ? (
@@ -587,13 +583,13 @@ const ViewNft = () => {
                             }}
                           />
                           <Button
-                            title="Make an offer"
+                            title="Make an offer  Coming Soon!!!"
                             outline2
                             wt="w-full"
-                            onClick={() => {
-                              setModaltype("offer");
-                              setShowModal((prev) => !prev);
-                            }}
+                            // onClick={() => {
+                            //   setModaltype("offer");
+                            //   setShowModal((prev) => !prev);
+                            // }}
                           />
                           {/* <Button
                             title="Place a bid"
@@ -1158,25 +1154,8 @@ const ViewNft = () => {
               <span className="create-new-nft-wrapper-2-label">
                 Offer duration
               </span>
-              <div className="bidder-date-wrapper">
-                <DateRange
-                  ranges={[dateSelected]}
-                  onChange={handleRangeSelection}
-                  showMonthAndYearPickers={false}
-                />
-                <div className="flex items-center justify-between">
-                  <span className="create-new-nft-wrapper-2-label">
-                    Select time
-                  </span>
-                  <TimePicker onChange={setTimeSelected} value={timeSelected} />
-                </div>
 
-                {/* <Input2
-                  type="time"
-                  value={timeSelected}
-                  onChange={handleTimeChange}
-                /> */}
-              </div>
+              <DateTime />
 
               {/* <Input2 type="datetime-local" /> */}
               {/* <Select

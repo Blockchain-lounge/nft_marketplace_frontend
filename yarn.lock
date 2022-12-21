@@ -1244,7 +1244,7 @@
 
 "@types/react-time-picker@^4.0.2":
   version "4.0.2"
-  resolved "https://registry.npmjs.org/@types/react-time-picker/-/react-time-picker-4.0.2.tgz"
+  resolved "https://registry.yarnpkg.com/@types/react-time-picker/-/react-time-picker-4.0.2.tgz#5070794ba571a0873b215b42ae1ef1f633a4f3c4"
   integrity sha512-B7H7ayYULMii0s3E0OJPhBmzTirdn2iiAK8KzZ95dqtOVC5RXz0FM8bOACkGfEK6/UJ3IZfl9CARqzLi9rNELQ==
   dependencies:
     "@types/react-clock" "*"
@@ -4363,7 +4363,7 @@ run-parallel@^1.1.9:
   dependencies:
     queue-microtask "^1.2.2"
 
-rxjs@*:
+rxjs@^7.5.2:
   version "7.8.0"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.8.0.tgz#90a938862a82888ff4c7359811a595e14e1e09a4"
   integrity sha512-F2+gxDshqmIub1KdvZkaEfGDwLNpPvk9Fs6LD/MyQxNgMds/WH9OdDDXOmxUZpME+iSK3rQCctkL0DYyytUqMg==
