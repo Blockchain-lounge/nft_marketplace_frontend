@@ -10,8 +10,90 @@
   @apply flex items-center gap-x-14;
 }
 
+/* input[type="datetime-local" i] {
+} */
+
 /* .view-hero-nft-info {
 } */
+
+.bidder-date-wrapper {
+  @apply max-w-[80%] mx-auto;
+}
+
+.bidder-date-wrapper > .rdrCalendarWrapper {
+  @apply bg-transparent w-full mb-8;
+  box-shadow: 0px 4.62319px 11.558px #00000026;
+}
+.bidder-date-wrapper > .rdrCalendarWrapper .rdrDateDisplayWrapper {
+  @apply hidden;
+}
+
+.rdrCalendarWrapper .rdrMonth {
+  @apply w-full;
+}
+
+span.rdrWeekDay {
+  @apply text-white;
+}
+
+button.rdrDay span span {
+  @apply text-white;
+}
+
+button.rdrDay.rdrDayPassive span span {
+  @apply text-txt-4;
+}
+
+.rdrNextPrevButton.rdrPprevButton,
+.rdrNextPrevButton.rdrNextButton {
+  @apply bg-transparent;
+}
+
+.rdrNextPrevButton.rdrPprevButton i {
+  border-width: 4px 6px 4px 4px;
+  border-color: transparent rgb(255, 255, 255) transparent transparent;
+  transform: translate(-3px, 0px);
+}
+
+button.rdrNextPrevButton.rdrPprevButton:hover,
+button.rdrNextPrevButton.rdrNextButton:hover {
+  background: #3d91ff;
+}
+
+.rdrNextPrevButton.rdrNextButton i {
+  margin: 0 0 0 7px;
+  border-width: 4px 4px 4px 6px;
+  border-color: transparent transparent transparent rgb(255, 255, 255);
+  transform: translate(3px, 0px);
+}
+
+.react-time-picker.react-time-picker--closed.react-time-picker--enabled {
+  @apply w-max;
+}
+
+.react-time-picker__inputGroup__input.react-time-picker__inputGroup__amPm {
+  @apply bg-transparent outline-none font-medium;
+}
+
+.react-time-picker__inputGroup__input.react-time-picker__inputGroup__hour,
+.react-time-picker__inputGroup__input.react-time-picker__inputGroup__minute {
+  @apply font-medium;
+}
+
+.react-time-picker.react-time-picker--closed.react-time-picker--enabled
+  > .react-time-picker__wrapper,
+.react-time-picker.react-time-picker--open.react-time-picker--enabled
+  > .react-time-picker__wrapper {
+  @apply py-[0.85rem] lg:py-4 px-2 lg:px-3 rounded-[0.5rem] border-[1px] border-border-1-line;
+}
+
+.react-time-picker__clear-button.react-time-picker__button,
+.react-time-picker__clock-button.react-time-picker__button,
+.react-time-picker__clock.react-time-picker__clock--open {
+  @apply hidden;
+}
+
+/**/
 
 .view-hero-nft-cta-wrapper {
   @apply flex flex-col items-center gap-y-4 border border-border-1-line p-3 rounded-lg w-full;
