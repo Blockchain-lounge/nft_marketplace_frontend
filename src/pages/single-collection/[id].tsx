@@ -479,7 +479,7 @@ const ViewCollection = () => {
                 {/* <div>hello</div> */}
                 <div className="">
                   {singleCollectionsListedItemsData &&
-                  singleCollectionsListedItemsData.length > 0 &&
+                  singleCollectionsListedItemsData.length > 0 ||
                   singleCollectionsCreatedItemsData && 
                   singleCollectionsCreatedItemsData.length > 0 ? (
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
