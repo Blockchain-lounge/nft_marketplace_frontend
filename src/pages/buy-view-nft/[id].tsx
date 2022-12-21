@@ -375,36 +375,36 @@ const ViewNft = () => {
   };
 
   useEffect(() => {
-    // connectedAccount().then((response) => {
-    //   if (response !== null) {
-    setConnectedAddress("response");
-    //     fetchUser();
-    //   } else {
-    //     // push("/");
-    //   }
-    // });
-    // if (id) {
-    //   fetchItemDetail(id as string);
-    //   if (currentPage) {
-    //     fetchActivities();
-    //   }
-    // }
+    connectedAccount().then((response) => {
+      if (response !== null) {
+    setConnectedAddress(response);
+        fetchUser();
+      } else {
+        // push("/");
+      }
+    });
+    if (id) {
+      fetchItemDetail(id as string);
+      if (currentPage) {
+        fetchActivities();
+      }
+    }
 
-    const itemData = {
-      listing_price: 1.2,
-      item: {
-        item_art_url: "/images/buyNftSample.png",
-        item_title: "CloneX #3119",
-        item_description:
-          "20,000 next-gen Avatars, by RTFKT and Takashi Murakami 🌸 If you own a clone without any Murakami trait please read the terms regarding RTFKT - Owned Content",
-        collection: {
-          logo_image: "/images/collection-avatar.png",
-          name: "CloneX",
-        },
-      },
-    };
+    // const itemData = {
+    //   listing_price: 1.2,
+    //   item: {
+    //     item_art_url: "/images/buyNftSample.png",
+    //     item_title: "CloneX #3119",
+    //     item_description:
+    //       "20,000 next-gen Avatars, by RTFKT and Takashi Murakami 🌸 If you own a clone without any Murakami trait please read the terms regarding RTFKT - Owned Content",
+    //     collection: {
+    //       logo_image: "/images/collection-avatar.png",
+    //       name: "CloneX",
+    //     },
+    //   },
+    // };
 
-    setItemDetail({ ...itemData });
+    // setItemDetail({ ...itemData });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, currentPage]);
@@ -490,10 +490,25 @@ const ViewNft = () => {
                         objectFit="cover"
                         className="rounded-full"
                       />
+                      {/* itemDetail.item.creator 
+                          && itemDetail.item.creator.username 
+                          && itemDetail.item.creator.username > 0
+                          ?
+                          : 'cc' */}
                     </div>
                     <div className="flex flex-col">
                       <span className="text-txt-2">Creator</span>
-                      <span>0x7a20d...9257</span>
+                      <span>
+                        {
+                          itemDetail.item
+                          && itemDetail.item.creator
+                          && itemDetail.item.creator.username
+                          && itemDetail.item.creator.username.length > 0
+                          ?
+                          itemDetail.item.creator.username
+                          :' ---- '
+                        }
+                      </span>
                     </div>
                   </div>
                   <div className="flex items-center gap-x-4">
@@ -508,7 +523,16 @@ const ViewNft = () => {
                     </div>
                     <div className="flex flex-col">
                       <span className="text-txt-2">Current Owner</span>
-                      <span>Jakes</span>
+                      <span>
+                      {
+                          itemDetail.owned_by
+                          && itemDetail.owned_by.username
+                          && itemDetail.owned_by.username.length > 0
+                          ?
+                          itemDetail.owned_by.username
+                          :' ---- '
+                        }
+                      </span>
                     </div>
                   </div>
                 </div>

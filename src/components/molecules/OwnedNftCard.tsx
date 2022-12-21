@@ -24,10 +24,20 @@ const OwnedNftCard = ({
 }) => {
   const { push } = useRouter();
 
+  const openLink = () =>{
+      if(metadata && metadata.cloudax_token 
+       && metadata.cloudax_token._id
+       && metadata.cloudax_token._id.lenght > 0){
+        push(`/buy-view-nft/${metadata.cloudax_token._id}`)
+      }
+      else{
+        push(`/${to}/${tokenAddress}?tokenId=${tokenId}`)
+      }
+  }
   return (
     <div
       className="nmc-wrapper cursor-pointer"
-      onClick={() => push(`/${to}/${tokenAddress}?tokenId=${tokenId}`)}
+      onClick={() => openLink()}
     >
       <div className="nmc-wrapper-img">
             <Image
