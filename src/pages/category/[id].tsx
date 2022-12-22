@@ -44,14 +44,7 @@ const CategoryPage = () => {
           push("/");
           return;
         } else if (response.status == 200) {
-          if(collections.length > 0){
-            for (let index = 0; index < response.data.createdCollections.length; index++) {
-              setCollections(prev => [...prev, response.data.createdCollections[index]]);
-            }
-          }
-          else{
-            setCollections(response.data.createdCollections);
-          }
+          setCollections(response.data.createdCollections);
           setTotalPages(response.data.totalPages);
           setCurrentPage(response.data.currentPage);
           setNextPage(response.data.nextPage);

@@ -205,8 +205,8 @@ const BuyUnlistedNFT = () => {
       if (itemDetail.relisted && itemDetail.relisted === true) {
         toast("Please approve this transaction!");
         const transaction = await contract.buyNft(
-          itemDetail.item.token_address,
-          itemDetail.item.token_id,
+          itemDetail.token_address,
+          itemDetail.token_id,
           {
             value: price,
             gasPrice: 20000000,
@@ -216,7 +216,7 @@ const BuyUnlistedNFT = () => {
 
         buyer = connectedAddress;
         trackCopyBaseUrl = "null";
-        soldItemCopyId = itemDetail.item.token_id;
+        soldItemCopyId = itemDetail.token_id;
       } else if (!itemDetail.relisted || itemDetail.relisted === false) {
         toast("Please approve this transaction!");
 
@@ -224,9 +224,9 @@ const BuyUnlistedNFT = () => {
         const transaction = await contract.buyItemCopy(
           itemDetail.listed_by.address,
           priceListed,
-          itemDetail.item.item_supply,
+          itemDetail.item_supply,
           itemDetail.listing_royalty,
-          itemDetail.item._id,
+          itemDetail._id,
           item_base_uri,
           {
             value: price,
@@ -312,7 +312,7 @@ const BuyUnlistedNFT = () => {
   const fetchItemDetail = async (id: string): any => {
     if (id !== undefined) {
       const HEADER = {};
-      const REQUEST_URL = "nft-listing/detail/" + id;
+      const REQUEST_URL = "nft-item/detail/" + id;
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -322,10 +322,11 @@ const BuyUnlistedNFT = () => {
           // push("/");
           return;
         } else if (response.status == 200) {
-          if (response.data.listing == -null) {
+          if (response.data.data == null) {
             // push("/");
           }
-          setItemDetail(response.data.listing);
+          setItemDetail(response.data.data);
+          fetchActivities();
         } else {
           toast("Something went wrong, please try again!");
           return;
@@ -335,21 +336,7 @@ const BuyUnlistedNFT = () => {
   };
 
   useEffect(() => {
-    const itemData = {
-      item: {
-        item_art_url: "/images/buyNftSample.png",
-        item_title: "CloneX #3119",
-        item_description:
-          "20,000 next-gen Avatars, by RTFKT and Takashi Murakami 🌸 If you own a clone without any Murakami trait please read the terms regarding RTFKT - Owned Content",
-        collection: {
-          logo_image: "/images/collection-avatar.png",
-          name: "CloneX",
-        },
-      },
-    };
-
-    setItemDetail({ ...itemData });
-
+    fetchItemDetail(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, currentPage]);
 
@@ -376,8 +363,8 @@ const BuyUnlistedNFT = () => {
               <div className="view-hero-img">
                 <Image
                   priority
-                  src={itemDetail.item.item_art_url}
-                  alt={itemDetail.item.item_title}
+                  src={itemDetail.item_art_url}
+                  alt={itemDetail.item_title}
                   layout="fill"
                   objectFit="cover"
                   className="rounded-2xl"
@@ -391,8 +378,9 @@ const BuyUnlistedNFT = () => {
                     <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
                       <Image
                         src={
-                          itemDetail.item.collection
-                            ? itemDetail.item.collection.logo_image
+                          itemDetail &&
+                          itemDetail.collection_id
+                            ? itemDetail.collection_id.collectionLogoImage
                             : "/images/placeholder.png"
                         }
                         alt="colx-img"
@@ -404,7 +392,7 @@ const BuyUnlistedNFT = () => {
                       />
                     </div>
                     <span className="text-xl  lg:text-3xl lg:mr-1">
-                      {itemDetail.item.collection.name}
+                      {itemDetail && itemDetail.collection_id ? itemDetail.collection_id.name : ''}
                     </span>
                     <div className="h-6 w-6 relative">
                       <Image
@@ -417,7 +405,7 @@ const BuyUnlistedNFT = () => {
                     </div>
                   </div>
                   <span className="text-4xl lg:text-5xl font-bold">
-                    {itemDetail.item.item_title}
+                    {itemDetail.item_title}
                   </span>
                 </>
                 <div className="view-hero-nft-owner">
@@ -433,7 +421,14 @@ const BuyUnlistedNFT = () => {
                     </div>
                     <div className="flex flex-col">
                       <span className="text-txt-2">Creator</span>
-                      <span>0x7a20d...9257</span>
+                      <span>
+                      {itemDetail.user_id &&
+                        itemDetail.user_id &&
+                        itemDetail.user_id.username &&
+                        itemDetail.user_id.username.length > 0
+                          ? itemDetail.user_id.username
+                          : " ---- "}
+                      </span>
                     </div>
                   </div>
                   <div className="flex items-center gap-x-4">
@@ -448,12 +443,19 @@ const BuyUnlistedNFT = () => {
                     </div>
                     <div className="flex flex-col">
                       <span className="text-txt-2">Current Owner</span>
-                      <span>Jakes</span>
+                      <span>
+                      {itemDetail.user_id &&
+                        itemDetail.user_id &&
+                        itemDetail.user_id.username &&
+                        itemDetail.user_id.username.length > 0
+                          ? itemDetail.user_id.username
+                          : " ---- "}
+                      </span>
                     </div>
                   </div>
                 </div>
                 <div className="view-hero-nft-cta-wrapper">
-                  <div className="flex w-full gap-x-6">
+                  {/* <div className="flex w-full gap-x-6">
                     <div className="p-4 bg-bg-5 rounded-md w-1/2">
                       <span className="text-txt-2 text-xl block mb-4">
                         Highest floor bid
@@ -474,7 +476,7 @@ const BuyUnlistedNFT = () => {
                   </div>
                   <span className="text-lg font-medium">
                     Last sale price 10.8 ETH
-                  </span>
+                  </span> */}
                   <div className="flex flex-col gap-y-4 w-full">
                     <div className="flex gap-x-5 w-full">
                       <div className="w-full space-y-4">
@@ -573,7 +575,7 @@ const BuyUnlistedNFT = () => {
                     <div className="flex flex-col">
                       <p className="text-txt-2 lg:w-1/2">
                         {/*@ts-ignore*/}
-                        {itemDetail.item.item_description}
+                        {itemDetail.item_description}
                       </p>
                     </div>
                     {/* <span className="flex items-center gap-x-2 text-txt-3 font-medium">
@@ -804,6 +806,10 @@ const BuyUnlistedNFT = () => {
                                         created_item_listed !== undefined &&
                                         created_item_listed !== null
                                       ? created_item_listed.item_title
+                                      : created_item &&
+                                      created_item !== undefined &&
+                                      created_item !== null
+                                    ? created_item.item_title
                                       : ""}
                                   </b>
                                 </span>
@@ -879,11 +885,11 @@ const BuyUnlistedNFT = () => {
             <span className="font-bold text-txt-2 text-base max-w-[80%] text-center">
               You are about to make an offer for{" "}
               <span className="text-white">
-                {itemDetail !== null && itemDetail.item.item_title}{" "}
+                {itemDetail !== null && itemDetail.item_title}{" "}
               </span>
               from{" "}
               <span className="text-white">
-                {itemDetail !== null && itemDetail.item.collection.name}
+                {itemDetail !== null && itemDetail.collection_id.name}
               </span>{" "}
               collection
             </span>

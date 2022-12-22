@@ -360,7 +360,7 @@ const ViewNft = () => {
           return;
         } else if (response.status == 200) {
           if (response.data.listing === null) {
-            toast("Item not listed!");
+            alert("Item not listed!");
             push("/");
           }
           setItemDetail(response.data.listing);

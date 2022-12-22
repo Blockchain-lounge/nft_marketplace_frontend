@@ -25,7 +25,8 @@ const NftCard2 = ({
   listing_quantity,
   listing_remaining,
   maxWidth,
-  to = "buy-view-nft",
+  listeLinkedTo = "buy-view-nft",
+  unListeLinkedTo = "buy-unlisted-nft",
 }: Partial<Pick<INftcard, "name" | "imgUrl" | "price">> & {
   time?: boolean;
   to?: string;
@@ -33,13 +34,21 @@ const NftCard2 = ({
 }) => {
   const [dollarRate] = UseConvertEthToDollar();
   const { push } = useRouter();
+  const linkedTo =()=>{
+    if(item_art_url && item_art_url.length > 0){
+      push(`/${unListeLinkedTo}/${_id}`)
+    }
+    else{
+      push(`/${listeLinkedTo}/${_id}`)
+    }
+  }
   return (
     <div
       className={clsx(
         "rounded-[0.975rem] bg-white w-full lg:max-w-full cursor-pointer",
         maxWidth
       )}
-      onClick={() => push(`/${to}/${_id}`)}
+      onClick={() => linkedTo()}
     >
       <div className="nmc-wrapper-img">
         {item_id ? (
