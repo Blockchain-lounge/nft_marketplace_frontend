@@ -209,7 +209,7 @@ const ViewNft = () => {
           itemDetail.item.token_id,
           {
             value: price,
-            gasPrice: 20000000,
+            // gasPrice: 20000000,
             // gasPrice: 3124913238,
           }
         );
@@ -231,7 +231,7 @@ const ViewNft = () => {
           item_base_uri,
           {
             value: price,
-            gasPrice: 20000000,
+            // gasPrice: 20000000,
             // gasPrice: 908462167791,
             // maxFeePerGas:18462167791,
             // baseFee: 18462167791 
@@ -362,7 +362,7 @@ const ViewNft = () => {
           return;
         } else if (response.status == 200) {
           if (response.data.listing === null) {
-            toast("Item not listed!");
+            alert("Item not listed!");
             push("/");
           }
           setItemDetail(response.data.listing);
