@@ -258,7 +258,8 @@ const ListNft = () => {
                   value={nftListingPayload.listing_price}
                 />
                 {
-                  itemDetail.metadata
+                  itemDetail
+                  && itemDetail.metadata
                   && itemDetail.metadata !== null
                   && itemDetail.metadata.cloudax_token
                   && itemDetail.metadata.cloudax_token !== null 
