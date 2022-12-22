@@ -69,18 +69,33 @@ const AboutUs = () => {
               Making it easier to participate in the cloud-based economy
             </h1>
           </section>
-          <p className="text-xl bg-bg-3 rounded-3xl p-6 lg:p-12 leading-relaxed">
-            We are focusing our innovation on &quot;ease of access&quot; - we
-            want you to have the best experience collecting NFT - Non-Fungible
-            Tokens. For whatever it is you are passionate about; our NFT
-            marketplace offers a variety of categories that will suit your need.
-            You can find the best creators and digital goods in our innovative
-            marketplace.We are passionate about NFT because of its uniqueness.
-            NFT is a unique digital identifier that cannot be copied,
-            substituted, or subdivided, recorded in a blockchain, and used to
-            certify authenticity and ownership. Our NFT marketplace is part of
-            the Cloudax Ecosystem.
-          </p>
+          <article className="flex flex-col gap-y-14">
+            <p className="text-xl bg-bg-3 rounded-3xl p-6 lg:p-12 leading-relaxed">
+              Cloudax is focusing her innovation on &quot; ease of access,
+              security, compatibility, and simplicity&quot; - we want our users
+              to have the best experience collecting NFTs - Non-Fungible Tokens.
+              Since the first NFT was minted in 2014 by Kevin McCoy, the concept
+              has attracted interest from diverse fields, but none could capture
+              the idea the way Cloudax has. We are making it easier for everyone
+              to participate in this cloud-based economy. We&quot;re expanding
+              our scope to contain whatever and widening our reach to include
+              whomever.
+            </p>
+            <p className="text-xl bg-bg-3 rounded-3xl p-6 lg:p-12 leading-relaxed">
+              Cloudax innovative NFT Marketplace is broad enough to cover
+              whatever you are passionate about; Art, Photography, Real Estate,
+              Virtual World, Music, Games, etc. we offer a variety of categories
+              that will suit your needs. You can find the best creators and
+              digital goods in our innovative marketplace.
+            </p>
+            <p className="text-xl bg-bg-3 rounded-3xl p-6 lg:p-12 leading-relaxed">
+              We are passionate about NFT because of its uniqueness. According
+              to Wikipedia, “NFT is a unique digital identifier that cannot be
+              copied, substituted, or subdivided, recorded in a blockchain, and
+              used to certify authenticity and ownership.” Our NFT Marketplace
+              is part of the Cloudax Ecosystem.
+            </p>
+          </article>
           {/* <section className="flex justify-around">
             {aboutUs.map(({ image, name, value }) => (
               <div
@@ -101,7 +116,7 @@ const AboutUs = () => {
               </div>
             ))}
           </section> */}
-          <section className="lg:w-[80vw] overflow-hidden">
+          {/* <section className="lg:w-[80vw] overflow-hidden">
             <NftHeader heading="Blog" />
             <div className="flex gap-x-14 w-[100%] overflow-auto scrollbar-hide">
               {blogSection.map(({ content, image, name }) => (
@@ -115,7 +130,7 @@ const AboutUs = () => {
                 </div>
               ))}
             </div>
-          </section>
+          </section> */}
         </div>
         <Footer />
       </div>

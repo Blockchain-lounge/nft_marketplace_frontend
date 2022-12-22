@@ -58,6 +58,14 @@
   @apply hidden sm:grid sm:grid-cols-[0.3fr_0.15fr_0.2fr_0.35fr] lg:grid-cols-4 px-6 mb-[1.875rem];
 }
 
+.collection-activity-headers-tab {
+  @apply hidden mt-8 sm:grid sm:grid-cols-[0.34fr_0.13fr_0.17fr_0.13fr_0.15fr] lg:grid-cols-[0.35fr_0.15fr_0.2fr_0.12fr_0.18fr] px-6 mb-[1.875rem];
+}
+
+.collection-activity-list {
+  @apply flex gap-x-4 sm:gap-x-0 justify-between sm:grid sm:grid-cols-[0.2fr_0.15fr_0.2fr_0.15fr_0.35fr] lg:grid-cols-[0.35fr_0.15fr_0.2fr_0.12fr_0.18fr] px-6 mb-[1.875rem] items-center;
+}
+
 .profile-activity-list {
   @apply flex gap-x-4 sm:gap-x-0 justify-between sm:grid sm:grid-cols-[0.3fr_0.15fr_0.2fr_0.35fr] lg:grid-cols-4 px-6 mb-[1.875rem];
 }

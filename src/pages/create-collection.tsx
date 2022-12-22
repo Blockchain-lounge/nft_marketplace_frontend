@@ -33,8 +33,8 @@ const CreateCollection: FC<ICollectionProps> = () => {
   const [collectionPayload, setCollectionPayload] = useState({
     collection_name: "",
     collection_description: "",
-    collection_creator_price: "",
-    creator_fee_receiver_address: "",
+    // collection_creator_price: "",
+    // creator_fee_receiver_address: "",
   });
 
   const [socialLinksPayload, setSocialLinksPayload] = useState({
@@ -221,7 +221,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 201) {
-          toast(response.data.message);
+          toast.success(response.data.message);
           setIsTransLoading(false);
           push("/create-new-nft");
           setCollectionPayload({
@@ -429,21 +429,21 @@ const CreateCollection: FC<ICollectionProps> = () => {
             />
           ) : null}
         </div>
-        <Input2
+        {/* <Input2
           name="collection_creator_prices"
           label="Creator fee in %"
           maxLength={4}
           placeholder="0%"
           onChange={handleFieldChange}
           value={collectionPayload.collection_creator_prices}
-        />
-        <Input2
+        /> */}
+        {/* <Input2
           name="creator_fee_receiver_address"
           label="Creator fee receiver address"
           placeholder="0x7a20d...9257"
           onChange={handleFieldChange}
           value={collectionPayload.creator_fee_receiver_address}
-        />
+        /> */}
         <div>
           <span className="create-new-nft-wrapper-2-label mb-2">Links</span>
           <div className="flex flex-col gap-y-5">

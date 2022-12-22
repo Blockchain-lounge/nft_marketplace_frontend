@@ -209,7 +209,8 @@ const ViewNft = () => {
           itemDetail.item.token_id,
           {
             value: price,
-            gasPrice: 3124913238,
+            // gasPrice: 20000000,
+            // gasPrice: 3124913238,
           }
         );
         tnx = await transaction.wait();
@@ -230,8 +231,9 @@ const ViewNft = () => {
           item_base_uri,
           {
             value: price,
-            gasPrice: 908462167791,
-            maxFeePerGas:18462167791,
+            // gasPrice: 20000000,
+            // gasPrice: 908462167791,
+            // maxFeePerGas:18462167791,
             // baseFee: 18462167791 
           }
         );
@@ -582,7 +584,7 @@ const ViewNft = () => {
                               setShowModal((prev) => !prev);
                             }}
                           />
-                          <Button
+                          {/* <Button
                             title="Make an offer  Coming Soon!!!"
                             outline2
                             wt="w-full"
@@ -590,7 +592,7 @@ const ViewNft = () => {
                             //   setModaltype("offer");
                             //   setShowModal((prev) => !prev);
                             // }}
-                          />
+                          /> */}
                           {/* <Button
                             title="Place a bid"
                             outline2
