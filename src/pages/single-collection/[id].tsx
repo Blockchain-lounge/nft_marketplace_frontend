@@ -54,8 +54,10 @@ const ViewCollection = () => {
     setSingleCollectionsListedItemsData,
   ] = useState<string | number>("");
 
-  const [singleCollectionsCreatedItemsData, setSingleCollectionsCreatedItemsData] =
-    useState([]);
+  const [
+    singleCollectionsCreatedItemsData,
+    setSingleCollectionsCreatedItemsData,
+  ] = useState([]);
   const [copySuccess, setCopySuccess] = useState("");
   const [collectionfloorPrice, setcollectionfloorPrice] = useState<
     string | number
@@ -90,12 +92,18 @@ const ViewCollection = () => {
           push("/");
           return;
         } else if (response.status == 200) {
-          if(singleCollectionsListedItemsData.length > 0){
-            for (let index = 0; index < response.data.listedItems.length; index++) {
-              setSingleCollectionsListedItemsData(prev => [...prev, response.data.listedItems[index]]);
+          if (singleCollectionsListedItemsData.length > 0) {
+            for (
+              let index = 0;
+              index < response.data.listedItems.length;
+              index++
+            ) {
+              setSingleCollectionsListedItemsData((prev) => [
+                ...prev,
+                response.data.listedItems[index],
+              ]);
             }
-          }
-          else{
+          } else {
             // setSingleCollectionsListedItemsData(response.data.items);
             setSingleCollectionsListedItemsData(response.data.listedItems);
           }
@@ -221,19 +229,21 @@ const ViewCollection = () => {
       if (response !== null) {
         isUserLoggedIn();
       }
-    }); 
+    });
     fetchCollectionItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id,currentPage]);
+  }, [id, currentPage]);
   // const handleShowOption = () => {
   //   setShowOption((prev) => !prev);
   // };
   const handleCollectionUpdate = () => {
     // setShowOption((prev) => !prev);
-    if(singleCollectionDetail.collection_is_imported 
-      && singleCollectionDetail.collection_is_imported === true){
+    if (
+      singleCollectionDetail.collection_is_imported &&
+      singleCollectionDetail.collection_is_imported === true
+    ) {
       push("/update-imported-collection/" + id);
-    }else{
+    } else {
       push("/update-collection/" + id);
     }
   };
@@ -326,9 +336,13 @@ const ViewCollection = () => {
 
               <div className="w-[80%] sm:w-[35%] lg:w-full my-4 lg:my-0 flex gap-x-4 items-center">
                 {singleCollectionDetail &&
-                singleCollectionDetail.website !== undefined ? (
+                singleCollectionDetail.website !== "" ? (
                   <a
-                    href={singleCollectionDetail.website}
+                    href={
+                      /^http/.test(singleCollectionDetail.website)
+                        ? singleCollectionDetail.website
+                        : "https://" + singleCollectionDetail.website
+                    }
                     target="_blank"
                     className="flex items-center rounded-md border-border-1-line border p-2 h-12"
                     rel="noreferrer"
@@ -341,10 +355,14 @@ const ViewCollection = () => {
                   </span>
                 )}
                 {singleCollectionDetail &&
-                singleCollectionDetail.discord !== undefined ? (
+                singleCollectionDetail.discord !== "" ? (
                   <a
                     target="_blank"
-                    href={singleCollectionDetail.discord}
+                    href={
+                      /^http/.test(singleCollectionDetail.discord)
+                        ? singleCollectionDetail.discord
+                        : "https://" + singleCollectionDetail.discord
+                    }
                     rel="noreferrer"
                     className="rounded-md border-border-1-line border p-2 h-12 flex items-center"
                   >
@@ -356,11 +374,15 @@ const ViewCollection = () => {
                   </span>
                 )}
                 {singleCollectionDetail &&
-                singleCollectionDetail.twitter !== undefined ? (
+                singleCollectionDetail.twitter !== "" ? (
                   <a
                     target="_blank"
                     rel="noreferrer"
-                    href={singleCollectionDetail.twitter}
+                    href={
+                      /^http/.test(singleCollectionDetail.twitter)
+                        ? singleCollectionDetail.twitter
+                        : "https://" + singleCollectionDetail.twitter
+                    }
                     className="rounded-md border-border-1-line border p-1 h-12  flex items-center"
                   >
                     <TwitterIcon />
@@ -371,9 +393,13 @@ const ViewCollection = () => {
                   </span>
                 )}
                 {singleCollectionDetail &&
-                singleCollectionDetail.instagram !== undefined ? (
+                singleCollectionDetail.instagram !== "" ? (
                   <a
-                    href={singleCollectionDetail.instagram}
+                    href={
+                      /^http/.test(singleCollectionDetail.instagram)
+                        ? singleCollectionDetail.instagram
+                        : "https://" + singleCollectionDetail.instagram
+                    }
                     target="_blank"
                     rel="noreferrer"
                     className="rounded-md border-border-1-line border p-2 h-12 flex items-center"
@@ -484,22 +510,16 @@ const ViewCollection = () => {
                   singleCollectionsCreatedItemsData 
                    ? (
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
-                      {
-                        singleCollectionsListedItemsData.length > 0
-                        ?
-                        singleCollectionsListedItemsData.map((val, i) => (
-                          <NftMediumCard2 {...val} key={val._id} />
-                        ))
-                        :""
-                      }
-                      {
-                        singleCollectionsCreatedItemsData.length > 0
-                        ?
-                        singleCollectionsCreatedItemsData.map((val, i) => (
-                          <NftMediumCard2 {...val} key={val._id} />
-                        ))
-                        :""
-                      }
+                      {singleCollectionsListedItemsData.length > 0
+                        ? singleCollectionsListedItemsData.map((val, i) => (
+                            <NftMediumCard2 {...val} key={val._id} />
+                          ))
+                        : ""}
+                      {singleCollectionsCreatedItemsData.length > 0
+                        ? singleCollectionsCreatedItemsData.map((val, i) => (
+                            <NftMediumCard2 {...val} key={val._id} />
+                          ))
+                        : ""}
                     </div>
                   ) : (
                     <Heading2 title="You have no items in this collection." />
@@ -540,13 +560,14 @@ const ViewCollection = () => {
           ) : null}
 
           <div className="mt-8">
-            {
-              nextPage < totalPages
-              ?
-              <Button title="Load More" onClick={() => setCurrentPage(currentPage+1)} />
-              :
+            {nextPage < totalPages ? (
+              <Button
+                title="Load More"
+                onClick={() => setCurrentPage(currentPage + 1)}
+              />
+            ) : (
               ""
-            }
+            )}
           </div>
         </div>
 

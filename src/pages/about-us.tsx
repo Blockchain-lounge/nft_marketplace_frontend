@@ -81,7 +81,7 @@ const AboutUs = () => {
             certify authenticity and ownership. Our NFT marketplace is part of
             the Cloudax Ecosystem.
           </p>
-          <section className="flex justify-around">
+          {/* <section className="flex justify-around">
             {aboutUs.map(({ image, name, value }) => (
               <div
                 key={"about-us-section" + name}
@@ -100,7 +100,7 @@ const AboutUs = () => {
                 <span className="text-lg text-txt-2">{name}</span>
               </div>
             ))}
-          </section>
+          </section> */}
           <section className="lg:w-[80vw] overflow-hidden">
             <NftHeader heading="Blog" />
             <div className="flex gap-x-14 w-[100%] overflow-auto scrollbar-hide">
