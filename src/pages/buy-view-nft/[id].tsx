@@ -380,7 +380,7 @@ const ViewNft = () => {
         setConnectedAddress(response);
         fetchUser();
       } else {
-        // push("/");
+        push("/");
       }
     });
     if (id) {
