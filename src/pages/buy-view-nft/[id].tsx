@@ -209,7 +209,8 @@ const ViewNft = () => {
           itemDetail.item.token_id,
           {
             value: price,
-            gasPrice: 3124913238,
+            gasPrice: 20000000,
+            // gasPrice: 3124913238,
           }
         );
         tnx = await transaction.wait();
