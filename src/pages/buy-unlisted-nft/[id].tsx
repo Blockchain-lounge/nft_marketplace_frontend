@@ -477,7 +477,7 @@ const BuyUnlistedNFT = () => {
                   <span className="text-lg font-medium">
                     Last sale price 10.8 ETH
                   </span> */}
-                  <div className="flex flex-col gap-y-4 w-full">
+                  {/* <div className="flex flex-col gap-y-4 w-full"> */}
                     {/* <div className="flex gap-x-5 w-full"> */}
                       {/* <div className="w-full space-y-4"> */}
                         {/* <Button
@@ -511,7 +511,7 @@ const BuyUnlistedNFT = () => {
                         setShowModal((prev) => !prev);
                       }}
                     /> */}
-                  </div>
+                  {/* </div> */}
                 </div>
               </div>
               {/* <div className="flex gap-x-6 mt-6 items-center">
