@@ -259,8 +259,11 @@ const ListNft = () => {
                 />
                 {
                   itemDetail.metadata
-                  && itemDetail.metadata.cloudax_token 
+                  && itemDetail.metadata !== null
+                  && itemDetail.metadata.cloudax_token
+                  && itemDetail.metadata.cloudax_token !== null 
                   && itemDetail.metadata.cloudax_token._id
+                  && itemDetail.metadata.cloudax_token._id !== null
                   && itemDetail.metadata.cloudax_token._id.lenght > 0
                   ?
                   ''
