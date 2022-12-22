@@ -75,7 +75,7 @@ const UserActivityCard = ({
     // code block
   }
   return (
-    <div className="profile-activity-list scrollbar-hide">
+    <div className="collection-activity-list scrollbar-hide">
       <div className="profile-activity-item">
         {created_item ? (
           <img
@@ -216,39 +216,39 @@ const UserActivityCard = ({
         )}
       </div>
 
-      <div className="profile-activity-receiver-wrapper">
-        <div className="profile-activity-receiver">
-          {to_user_id && to_user_id !== undefined ? (
-            <img
-              src={
-                to_user_id &&
-                to_user_id !== undefined &&
-                to_user_id.userBannerImg !== undefined
-                  ? to_user_id.userBannerImg
-                  : "/images/hero-dashboard.jpg"
-              }
-              alt=""
-            />
-          ) : (
-            "--"
-          )}
-          {to_user_id && to_user_id !== undefined ? (
-            <span>
-              {to_user_id &&
+      {/* <div className="profile-activity-receiver-wrapper"> */}
+      <div className="profile-activity-receiver">
+        {to_user_id && to_user_id !== undefined ? (
+          <img
+            src={
+              to_user_id &&
               to_user_id !== undefined &&
-              to_user_id.username &&
-              to_user_id.username !== undefined
-                ? to_user_id.username
-                : ""}
-            </span>
-          ) : (
-            "--"
-          )}
-        </div>
-        <span className="profile-activity-receiver-time text-txt-1">
-          {moment(createdAt).format("ddd, MMM Do YYYY, hh:mm:ss")}
-        </span>
+              to_user_id.userBannerImg !== undefined
+                ? to_user_id.userBannerImg
+                : "/images/hero-dashboard.jpg"
+            }
+            alt=""
+          />
+        ) : (
+          "--"
+        )}
+        {to_user_id && to_user_id !== undefined ? (
+          <span>
+            {to_user_id &&
+            to_user_id !== undefined &&
+            to_user_id.username &&
+            to_user_id.username !== undefined
+              ? to_user_id.username
+              : ""}
+          </span>
+        ) : (
+          "--"
+        )}
       </div>
+      {/* </div> */}
+      <span className="profile-activity-receiver-time text-txt-1">
+        {moment(createdAt).format("ddd, MMM Do YYYY, hh:mm:ss")}
+      </span>
     </div>
   );
 };
