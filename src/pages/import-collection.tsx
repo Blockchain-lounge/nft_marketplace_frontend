@@ -34,6 +34,7 @@ const ImportCollection: FC<ICollectionProps> = () => {
     collection_name: "",
     collection_description: "",
     collection_address: "",
+    collection_creator_fee: 0,
   });
 
   const [socialLinksPayload, setSocialLinksPayload] = useState({
@@ -161,7 +162,7 @@ const ImportCollection: FC<ICollectionProps> = () => {
       return;
     }
   };
-
+ 
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -181,7 +182,8 @@ const ImportCollection: FC<ICollectionProps> = () => {
     }
     var collectionData = {
       name: collectionPayload.collection_name,
-      collectionAddress: collectionPayload.collection_address,
+      collection_address: collectionPayload.collection_address,
+      collection_creator_fee: collectionPayload.collection_creator_fee && isNaN(collection_creator_fee) === false ? collection_creator_fee : 0,
       description: collectionPayload.collection_description,
       cover_image: collectionBanner,
       collectionFeaturedImage: collectionFeaturedArt,
@@ -199,6 +201,7 @@ const ImportCollection: FC<ICollectionProps> = () => {
 
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
         // console.log({ response });
+        setIsTransLoading(false);
         if (response.status == 400 || response.status == 404) {
           var error = response.data.error;
           toast(error);
@@ -398,6 +401,15 @@ const ImportCollection: FC<ICollectionProps> = () => {
           placeholder="Enter NFT address"
           onChange={handleFieldChange}
           value={collectionPayload.collection_address}
+          required
+        />
+
+        <Input2
+          name="collection_creator_fee"
+          label="NFT Creator Fee"
+          placeholder="Enter NFT Creator Fee in %"
+          onChange={handleFieldChange}
+          value={collectionPayload.collection_creator_fee}
           required
         />
 

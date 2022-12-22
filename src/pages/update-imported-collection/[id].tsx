@@ -3,18 +3,19 @@ import clsx from "clsx";
 import Image from "next/image";
 
 import { useRouter } from "next/router";
-import { uploadFile } from "../functions/offChain/apiRequests";
+import { uploadFile } from "@/src/functions/offChain/apiRequests";
 
 import React, { ChangeEvent, FC, useEffect, useState } from "react";
-import { Button, Heading2, Input2, Select } from "../components/atoms";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { apiRequest } from "../functions/offChain/apiRequests";
-import EarningLayout from "../template/EarningLayout";
-import { ICategories } from "../utilities/types";
-import { CloseIcon } from "../components/atoms/vectors";
+import { apiRequest } from "@/src/functions/offChain/apiRequests";
+import EarningLayout from "@/src/template/EarningLayout";
+import { ICategories } from "@/src/utilities/types";
+import { CloseIcon } from "@/src/components/atoms/vectors";
+import { Button, Heading2, Input2, Select } from "@/src/components/atoms";
 
-const CreateCollection: FC<ICollectionProps> = () => {
+const UpdateCollection: FC<ICollectionProps> = () => {
   const [collectionBannerPreview, setCollectionBannerPreview] = useState("");
   const [collectionBanner, setCollectionBanner] = useState("");
 
@@ -33,8 +34,8 @@ const CreateCollection: FC<ICollectionProps> = () => {
   const [collectionPayload, setCollectionPayload] = useState({
     collection_name: "",
     collection_description: "",
-    // collection_creator_price: "",
-    // creator_fee_receiver_address: "",
+    collection_address: "",
+    collection_creator_fee: 0,
   });
 
   const [socialLinksPayload, setSocialLinksPayload] = useState({
@@ -44,19 +45,10 @@ const CreateCollection: FC<ICollectionProps> = () => {
     instagram: "",
   });
 
-  const { push } = useRouter();
+  const { push, query } = useRouter();
+  const { id } = query;
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
 
-  /**
-   * This function is responsible for changing input value by targeting their name as key and their corresponding input as value.
-   *
-   * @date 12/15/2022 - 3:38:06 PM
-   *
-   * @param {(ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)} e expect the input event as arguement and targets the name assigned to it's value.
-   */
   const handleFieldChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -67,12 +59,6 @@ const CreateCollection: FC<ICollectionProps> = () => {
     });
   };
 
-  /**
-   * This function is responsible for changing item social media links input value by targeting their name as key and their corresponding input as value.
-   * @date 12/15/2022 - 3:40:33 PM
-   *
-   * @param {(ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)} e expect the input event as arguement and targets the name assigned to it's value.
-   */
   const handleSocialLinksFieldChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -176,13 +162,54 @@ const CreateCollection: FC<ICollectionProps> = () => {
     }
   };
 
+  const fetchCollectionDetails = async (id) => {
+    if (id !== undefined) {
+      const HEADER = {};
+      const REQUEST_URL = "nft-collection/show/" + id;
+      const METHOD = "GET";
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        // console.log({ response });
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          push("/");
+          return;
+        } else if (response.status == 200) {
+          setCollectionPayload({
+            collection_name: response.data.data.name,
+            collection_description: response.data.data.description,
+            collection_address: response.data.data.collection_address,
+            collection_creator_fee: response.data.data.collection_creator_fee
+          });
+           setSocialLinksPayload({
+            website: response.data.data.website,
+            discord: response.data.data.discord,
+            instagram: response.data.data.instagram,
+            twitter: response.data.data.twitter,
+          });
+          setCollectionBannerPreview(response.data.data.cover_image_id);
+          setCollectionFeaturedArtPreview(response.data.data.collectionFeaturedImage);
+          setCollectionLogoPreview(response.data.data.collectionLogoImage);
+          setCollectionBanner(response.data.data.cover_image_id);
+          setCollectionFeaturedArt(response.data.data.collectionFeaturedImage);
+          setCollectionLogo(response.data.data.collectionLogoImage);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    }
+  };
+
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     var msg = "";
     if (
       !collectionPayload.collection_name ||
-      !collectionPayload.collection_description
+      !collectionPayload.collection_description ||
+      !collectionPayload.collection_address
     ) {
       msg = "Collection name and decsription is required";
       toast(msg);
@@ -195,6 +222,8 @@ const CreateCollection: FC<ICollectionProps> = () => {
     var collectionData = {
       name: collectionPayload.collection_name,
       description: collectionPayload.collection_description,
+      collection_address: collectionPayload.collection_address,
+      collection_creator_fee: collectionPayload.collection_creator_fee && isNaN(collection_creator_fee) === false ? collection_creator_fee : 0,
       cover_image: collectionBanner,
       collectionFeaturedImage: collectionFeaturedArt,
       collectionLogoImage: collectionLogo,
@@ -205,7 +234,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
     setIsTransLoading(true);
     try {
       const HEADER = "authenticated_and_form_data";
-      const REQUEST_URL = "nft-collection/store";
+      const REQUEST_URL = "nft-collection/update/"+id;
       const METHOD = "POST";
       const DATA = collectionData;
 
@@ -220,10 +249,10 @@ const CreateCollection: FC<ICollectionProps> = () => {
         if (response.status == 401) {
           toast("Unauthorized request!");
           return;
-        } else if (response.status == 201) {
-          toast.success(response.data.message);
+        } else if (response.status == 200) {
+          toast(response.data.message);
           setIsTransLoading(false);
-          push("/create-new-nft");
+          // push("/create-new-nft");
           setCollectionPayload({
             ...collectionPayload,
             collection_name: "",
@@ -253,9 +282,13 @@ const CreateCollection: FC<ICollectionProps> = () => {
     }
   };
 
+ useEffect(() => {
+    fetchCollectionDetails(id);   
+     fetchCategories();   
+  }, [id]);
   return (
-    <EarningLayout title="Create a Collection">
-      <div className="create-new-nft-form sm:max-w-[80%] 2xl:max-w-[60%]">
+    <EarningLayout title="Update a Collection">
+      <div className="create-new-nft-form max-w-[80%] 2xl:max-w-[60%]">
         <ToastContainer />
         {/*Logo Image*/}
         <div className="create-new-nft-wrapper-2">
@@ -293,13 +326,6 @@ const CreateCollection: FC<ICollectionProps> = () => {
                 width="24px"
                 height="24px"
               />
-              {/* <span
-                className={clsx(
-                  collectionLogoPreview ? "hidden" : "block mt-2 text-sm"
-                )}
-              >
-                Click to change image
-              </span> */}
             </label>
           </div>
         </div>
@@ -404,6 +430,23 @@ const CreateCollection: FC<ICollectionProps> = () => {
           required
         />
 
+        <Input2
+          name="collection_address"
+          label="NFT Address"
+          placeholder="Enter NFT address"
+          onChange={handleFieldChange}
+          value={collectionPayload.collection_address}
+          required
+        />
+
+        <Input2
+          name="collection_creator_fee"
+          label="NFT Creator Fee"
+          placeholder="Enter NFT Creator Fee in %"
+          onChange={handleFieldChange}
+          value={collectionPayload.collection_creator_fee}
+          required
+        />
         <div>
           <span className="create-new-nft-wrapper-2-label mb-2">
             Description
@@ -416,7 +459,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
             maxLength={250}
             onChange={handleFieldChange}
 
-            // value={userDetailsPayload.bio}
+            value={collectionPayload.collection_description}
           ></textarea>
         </div>
         <div>
@@ -429,27 +472,12 @@ const CreateCollection: FC<ICollectionProps> = () => {
             />
           ) : null}
         </div>
-        {/* <Input2
-          name="collection_creator_prices"
-          label="Creator fee in %"
-          maxLength={4}
-          placeholder="0%"
-          onChange={handleFieldChange}
-          value={collectionPayload.collection_creator_prices}
-        /> */}
-        {/* <Input2
-          name="creator_fee_receiver_address"
-          label="Creator fee receiver address"
-          placeholder="0x7a20d...9257"
-          onChange={handleFieldChange}
-          value={collectionPayload.creator_fee_receiver_address}
-        /> */}
         <div>
           <span className="create-new-nft-wrapper-2-label mb-2">Links</span>
           <div className="flex flex-col gap-y-5">
             {/*Website-Link*/}
             <div className="flex items-center gap-x-5">
-              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] px-3 sm:w-[15%] bg-bg-2 rounded-lg">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
                 <div className="relative w-6 h-8">
                   <Image
                     src="/icon-svg/link.svg"
@@ -478,7 +506,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
             </div>
             {/*Discord-Link*/}
             <div className="flex items-center gap-x-5">
-              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] px-3 sm:w-[15%] bg-bg-2 rounded-lg">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
                 <div className="relative w-6 h-5">
                   <Image
                     src="/icon-svg/discord.svg"
@@ -507,7 +535,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
             </div>
             {/*Twitter-Link*/}
             <div className="flex items-center gap-x-5">
-              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] px-3 sm:w-[15%] bg-bg-2 rounded-lg">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
                 <div className="relative w-6 h-5">
                   <Image
                     src="/icon-svg/twitter.svg"
@@ -536,7 +564,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
             </div>
             {/*Instagram-Link*/}
             <div className="flex items-center gap-x-5">
-              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] px-3 sm:w-[15%] bg-bg-2 rounded-lg">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
                 <div className="relative w-6 h-8">
                   <Image
                     src="/icon-svg/instagram.svg"
@@ -566,7 +594,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
           </div>
         </div>
         <Button
-          title="Create collection"
+          title="Update collection"
           twClasses="w-full"
           onClick={handleSubmit}
           isDisabled={isTransloading}
@@ -576,4 +604,4 @@ const CreateCollection: FC<ICollectionProps> = () => {
   );
 };
 
-export default CreateCollection;
+export default UpdateCollection;

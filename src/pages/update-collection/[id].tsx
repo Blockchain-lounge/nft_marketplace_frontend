@@ -34,6 +34,8 @@ const UpdateCollection: FC<ICollectionProps> = () => {
   const [collectionPayload, setCollectionPayload] = useState({
     collection_name: "",
     collection_description: "",
+    collection_creator_price: "",
+    creator_fee_receiver_address: "",
   });
 
   const [socialLinksPayload, setSocialLinksPayload] = useState({
@@ -45,7 +47,6 @@ const UpdateCollection: FC<ICollectionProps> = () => {
 
   const { push, query } = useRouter();
   const { id } = query;
-
 
   const handleFieldChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -176,16 +177,18 @@ const UpdateCollection: FC<ICollectionProps> = () => {
         } else if (response.status == 200) {
           setCollectionPayload({
             collection_name: response.data.data.name,
-            collection_description: response.data.data.description
+            collection_description: response.data.data.description,
           });
-           setSocialLinksPayload({
+          setSocialLinksPayload({
             website: response.data.data.website,
             discord: response.data.data.discord,
             instagram: response.data.data.instagram,
             twitter: response.data.data.twitter,
           });
           setCollectionBannerPreview(response.data.data.cover_image_id);
-          setCollectionFeaturedArtPreview(response.data.data.collectionFeaturedImage);
+          setCollectionFeaturedArtPreview(
+            response.data.data.collectionFeaturedImage
+          );
           setCollectionLogoPreview(response.data.data.collectionLogoImage);
           setCollectionBanner(response.data.data.cover_image_id);
           setCollectionFeaturedArt(response.data.data.collectionFeaturedImage);
@@ -227,7 +230,7 @@ const UpdateCollection: FC<ICollectionProps> = () => {
     setIsTransLoading(true);
     try {
       const HEADER = "authenticated_and_form_data";
-      const REQUEST_URL = "nft-collection/update/"+id;
+      const REQUEST_URL = "nft-collection/update/" + id;
       const METHOD = "POST";
       const DATA = collectionData;
 
@@ -275,9 +278,9 @@ const UpdateCollection: FC<ICollectionProps> = () => {
     }
   };
 
- useEffect(() => {
-    fetchCollectionDetails(id);   
-     fetchCategories();   
+  useEffect(() => {
+    fetchCollectionDetails(id);
+    fetchCategories();
   }, [id]);
   return (
     <EarningLayout title="Update a Collection">
@@ -434,7 +437,6 @@ const UpdateCollection: FC<ICollectionProps> = () => {
             rows={5}
             maxLength={250}
             onChange={handleFieldChange}
-
             value={collectionPayload.collection_description}
           ></textarea>
         </div>
@@ -448,6 +450,23 @@ const UpdateCollection: FC<ICollectionProps> = () => {
             />
           ) : null}
         </div>
+
+        <Input2
+          name="collection_creator_prices"
+          label="Creator fee in %"
+          maxLength={4}
+          placeholder="0%"
+          onChange={handleFieldChange}
+          value={collectionPayload.collection_creator_prices}
+        />
+        <Input2
+          name="creator_fee_receiver_address"
+          label="Creator fee receiver address"
+          placeholder="0x7a20d...9257"
+          onChange={handleFieldChange}
+          value={collectionPayload.creator_fee_receiver_address}
+        />
+
         <div>
           <span className="create-new-nft-wrapper-2-label mb-2">Links</span>
           <div className="flex flex-col gap-y-5">

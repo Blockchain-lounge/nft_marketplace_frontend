@@ -20,8 +20,7 @@ const OnChainCollectionCard: NextPage<Partial<ICollectionCard>> = ({
       <div
         className="relative h-[80%] w-full"
         onClick={() => 
-            // push(`/on-chain-single-collection/${tokenAddress}`)
-            push(`#`)
+            push(`/on-chain-single-collection/${tokenAddress}`)
         }
       >
         <Image

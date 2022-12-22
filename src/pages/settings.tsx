@@ -26,12 +26,13 @@ const Settings = () => {
   const { push } = useRouter();
   /*Setting screen are divided into stages*/
   const [settingStage, setSettingStage] = useState("edit-profile");
-  const [userImgBanner, setUserImgBanner] = useState<FileList | null>(null);
-  const [userImg, setUserImg] = useState<FileList | null>(null);
-  const [userImgPreview, setUserImgPreview] = useState<FileList | null>(null);
-  const [userBannerImg, setUserBannerImg] = useState<FileList | null>(null);
-  const [userBannerImgPreview, setUserBannerImgPreview] =
-    useState<FileList | null>(null);
+  const [userImgBanner, setUserImgBanner] = useState<FileList | string>("");
+  const [userImg, setUserImg] = useState<FileList | string>("");
+  const [userImgPreview, setUserImgPreview] = useState<FileList | string>("");
+  const [userBannerImg, setUserBannerImg] = useState<FileList | string>("");
+  const [userBannerImgPreview, setUserBannerImgPreview] = useState<
+    FileList | string
+  >("");
   const [myProfile, setMyProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [userDetailsPayload, setUserDetailsPayload] = useState({
@@ -97,7 +98,8 @@ const Settings = () => {
           toast(msg);
           return false;
         }
-        setUserImg(files[0]);
+        setUserImg(URL.createObjectURL(files[0]));
+
         const { imgUrl } = await uploadFile(files[0], toast);
         setUserImgPreview(imgUrl);
 
@@ -125,9 +127,10 @@ const Settings = () => {
           toast(msg);
           return false;
         }
-        setUserBannerImg(files[0]);
+        setUserBannerImg(URL.createObjectURL(files[0]));
         const { imgUrl } = await uploadFile(files[0], toast);
         setUserBannerImgPreview(imgUrl);
+
         // setUserBannerImgPreview(URL.createObjectURL(files[0]));
       }
     }
@@ -204,8 +207,8 @@ const Settings = () => {
 
   return (
     <DashboardLayout isLoading={isLoading}>
-      <div className="sub-layout-wrapper">
-        <div className="center mx-auto max-w-[90%] lg:max-w-[70%]">
+      <div className="sub-layout-wrapper scrollbar-hide">
+        <div className="center mx-auto max-w-[90%] lg:max-w-[70%] w-full">
           {/* <div className="settings-tab">
             {settingStages.map(({ label, stage }) => (
               <div
@@ -244,9 +247,10 @@ const Settings = () => {
                     <Image
                       priority
                       src={
-                        userImgPreview
-                          ? //@ts-ignore
-                            userImgPreview
+                        userImg !== ""
+                          ? userImg
+                          : userImgPreview
+                          ? userImgPreview
                           : userDetailsPayload.profileImg ||
                             "/images/avatar.png"
                       }
@@ -290,9 +294,10 @@ const Settings = () => {
                   <Image
                     priority
                     src={
-                      userBannerImgPreview
-                        ? //@ts-ignore
-                          userBannerImgPreview
+                      userBannerImg !== ""
+                        ? userBannerImg
+                        : userBannerImgPreview
+                        ? userBannerImgPreview
                         : userDetailsPayload.bannerImg ||
                           "/images/banner-placeholder.svg"
                     }

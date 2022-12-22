@@ -31,11 +31,11 @@ const CreateNftNavOptions = ({
       icon: <CreateCollectionIcon />,
       to: "/create-collection",
     },
-    {
-      link: "Import Collection",
-      icon: <CreateCollectionIcon />,
-      to: "/import-collection",
-    },
+    // {
+    //   link: "Import Collection",
+    //   icon: <CreateCollectionIcon />,
+    //   to: "/import-collection",
+    // },
   ];
   const { push } = useRouter();
   return (

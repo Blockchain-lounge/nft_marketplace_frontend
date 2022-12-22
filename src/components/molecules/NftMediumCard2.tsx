@@ -17,6 +17,7 @@ const NftCard2 = ({
   item_art_url,
   item_price,
   item_supply,
+  item_remaining,
   time,
   item_id,
   resell_item_id,
@@ -72,6 +73,20 @@ const NftCard2 = ({
             blurDataURL="/images/placeholder.png"
             className="rounded-t-xl"
           />
+        )
+        : item_art_url ? (
+          <Image
+            src={
+              item_art_url !== undefined || item_art_url !== null
+                ? item_art_url
+                : ""
+            }
+            alt={item_title}
+            layout="fill"
+            placeholder="blur"
+            blurDataURL="/images/placeholder.png"
+            className="rounded-t-xl"
+          />
         ) : (
           ""
         )}
@@ -84,8 +99,10 @@ const NftCard2 = ({
             {item_id
               ? item_id.item_title
               : resell_item_id
-              ? resell_item_id.item_title
-              : ""}
+                ? resell_item_id.item_title
+              : item_title
+                ? item_title
+              :""}
           </span>
           <span className="nmc-sub-wrapper-2-owner">
             {item_supply === undefined ||
@@ -95,7 +112,8 @@ const NftCard2 = ({
               item_id !== null &&
               item_id !== "")
               ? listing_remaining + "/" + listing_quantity
-              : item_remaining + "/" + item_supply}
+              : item_remaining + "/" + item_supply
+              }
           </span>
         </div>
         {time ? (
@@ -119,7 +137,7 @@ const NftCard2 = ({
               </div>
             </div>
           </div>
-        ) : (
+        ) : item_price !== undefined ?(
           <div className="p-2">
             <span className="text-black flex items-center text-lg">
               <span className="h-6 w-3 relative">
@@ -150,7 +168,36 @@ const NftCard2 = ({
               ""
             )}
           </div>
-        )}
+        )
+        : listing_price !== undefined ?(
+          <div className="p-2">
+            <span className="text-black flex items-center text-lg">
+              <span className="h-6 w-3 relative">
+                <Image
+                  src="/icon-svg/eth-dark-icon.svg"
+                  alt="ethereum coin"
+                  layout="fill"
+                />
+              </span>
+              { listing_price
+                ? listing_price
+                : 0
+                }
+            </span>
+            {dollarRate ? (
+              <span className="text-black flex items-center text-lg ">
+                <span className="text-lg text-black font-bold">$</span>
+                {(
+                  (listing_price
+                    ? listing_price
+                    : 0) * dollarRate
+                ).toFixed(2)}
+              </span>
+            ) : (
+              ""
+            )}
+          </div>
+        ) : ""}
       </div>
     </div>
   );

@@ -18,6 +18,7 @@ import { toast,ToastContainer } from "react-toastify";
 import APPCONFIG from "@/src/constants/Config";
 import { ethers } from "ethers";
 import "react-toastify/dist/ReactToastify.css";
+import { connectedAccount } from "../../functions/onChain/authFunction";
 import Link from 'next/link';
 
 const ViewUserNft = () => {
@@ -27,6 +28,8 @@ const ViewUserNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [itemDetail, setItemDetail] = useState(null);
   const [isTransloading, setIsTransLoading] = useState(false);
+  const [connectedAddress, setConnectedAddress] = useState(null);
+
   const nftAbi = [
     "function approve(address to, uint256 tokenId) external",
     "function setApprovalForAll(address operator, bool _approved) external",
@@ -84,32 +87,12 @@ const ViewUserNft = () => {
     push(`/update-nft/${id}`);
   };
 
-  const fetchUser = async () => {
-    const HEADER = "authenticated";
-    const REQUEST_URL = "user/my_profile";
-    const METHOD = "GET";
-    const DATA = {};
-    apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-      if (response.status == 400) {
-        var error = response.data.error;
-        toast(error);
-        return;
-      } else if (response.status == 401) {
-        toast("Unauthorized request!");
-        return;
-      } else if (response.status == 200) {
-        setOwner(response.data.data.userProfileImg);
-      } else {
-        toast("Something went wrong, please try again!");
-        return;
-      }
-    });
-  };
+ 
   const fetchItemDetail = async () => {
     if (id !== undefined) {
       const contractAddress = id;
-      const HEADER = "authenticated";
-      const REQUEST_URL = "nft-item/owned/detail/" + tokenId + "/" + contractAddress;
+      const HEADER = {};
+      const REQUEST_URL = "nft-item/onchain/" + tokenId + "/" + contractAddress;
       const METHOD = "GET";
       const DATA = {};
 
@@ -134,7 +117,11 @@ const ViewUserNft = () => {
 
   useEffect(() => {
     fetchItemDetail();
-    fetchUser();
+    connectedAccount().then((response) => {
+      if (response !== null) {
+        setConnectedAddress(response);
+      } 
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   // console.log({ itemDetail });
@@ -210,8 +197,8 @@ const ViewUserNft = () => {
                     {/*collection-logo*/}
                     <div className="flex items-center mb-4">
                       <span className="text-xl lg:mr-1">
-                    <Link href={`/on-chain-single-collection/${itemDetail.tokenAddress}`}>
-                    {itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : itemDetail.name + " - " + itemDetail.tokenId}
+                      <Link href={`/on-chain-single-collection/${itemDetail.tokenAddress}`}>
+                          {itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : itemDetail.name + " - " + itemDetail.tokenId}
                     </Link>
                       </span>
                       <div className="h-6 w-6 relative">
@@ -265,12 +252,32 @@ const ViewUserNft = () => {
                       </div>
                     </div>
                     <div className="flex items-center justify-between gap-x-4 mt-4">
-                      <Button
-                        title="Approve & Sell"
-                        wt="w-full"
-                        onClick={handleSellNft}
-                        isDisabled={isTransloading}
-                      />
+                    {connectedAddress ? (
+                        <div className="w-full space-y-4">
+                          <Button
+                            title="Buy now"
+                            wt="w-full"
+                            // onClick={() => {
+                            //   setModaltype("buy");
+                            //   setShowModal((prev) => !prev);
+                            // }}
+                          />
+                          <Button
+                            title="Place a bid"
+                            outline2
+                            wt="w-full"
+                            // onClick={() => {
+                            //   setModaltype("bid");
+                            //   setShowModal((prev) => !prev);
+                            // }}
+                          />
+                        </div>
+                      ) : (
+                        <Button
+                          title="You need to connect your wallet to continue"
+                          wt="w-full"
+                        />
+                      )}
                     </div>
                   </div>
 
