@@ -48,7 +48,7 @@ const ViewCollection = () => {
   const { id } = query;
 
   const collectionStages = ["items", "activity"];
-  const activityHeaders = ["Item", "Price", "From", "To"];
+  const activityHeaders = ["Item", "Price", "From", "To", "Date"];
   const [
     singleCollectionsListedItemsData,
     setSingleCollectionsListedItemsData,
@@ -478,10 +478,11 @@ const ViewCollection = () => {
               <div className="single-collection-lists">
                 {/* <div>hello</div> */}
                 <div className="">
-                  {singleCollectionsListedItemsData &&
-                  singleCollectionsListedItemsData.length > 0 ||
-                  singleCollectionsCreatedItemsData && 
-                  singleCollectionsCreatedItemsData.length > 0 ? (
+                  {
+                  singleCollectionsListedItemsData
+                   ||
+                  singleCollectionsCreatedItemsData 
+                   ? (
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
                       {
                         singleCollectionsListedItemsData.length > 0
