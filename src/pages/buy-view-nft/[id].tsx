@@ -231,8 +231,9 @@ const ViewNft = () => {
           item_base_uri,
           {
             value: price,
-            gasPrice: 908462167791,
-            maxFeePerGas:18462167791,
+            gasPrice: 20000000,
+            // gasPrice: 908462167791,
+            // maxFeePerGas:18462167791,
             // baseFee: 18462167791 
           }
         );
