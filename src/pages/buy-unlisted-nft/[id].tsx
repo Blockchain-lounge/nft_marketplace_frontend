@@ -454,7 +454,7 @@ const BuyUnlistedNFT = () => {
                     </div>
                   </div>
                 </div>
-                <div className="view-hero-nft-cta-wrapper">
+                {/* <div className="view-hero-nft-cta-wrapper"> */}
                   {/* <div className="flex w-full gap-x-6">
                     <div className="p-4 bg-bg-5 rounded-md w-1/2">
                       <span className="text-txt-2 text-xl block mb-4">
@@ -512,7 +512,7 @@ const BuyUnlistedNFT = () => {
                       }}
                     /> */}
                   {/* </div> */}
-                </div>
+                {/* </div> */}
               </div>
               {/* <div className="flex gap-x-6 mt-6 items-center">
                 <span className="flex gap-x-2 items-center">
