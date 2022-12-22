@@ -28,7 +28,7 @@ const ListNft = () => {
   const [nftListingPayload, setNftListingPayload] = useState({
     listing_quantity: "",
     listing_price: "",
-    // listing_royalty: "",
+    listing_royalty: "",
   });
   const [itemDetail, setItemDetail] = useState<INftProps | null>(null);
   const {
