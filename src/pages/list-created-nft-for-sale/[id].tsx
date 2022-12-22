@@ -106,15 +106,15 @@ const ListNft = () => {
       toast(msg);
       return;
     }
-    // if (!nftListingPayload.listing_royalty.trim()) {
-    //   msg = "listed royalty is empty";
-    //   toast(msg);
-    //   return;
-    // } else if (isNaN(parseFloat(nftListingPayload.listing_royalty)) === true) {
-    //   msg = "royalty must be a valid positive number";
-    //   toast(msg);
-    //   return;
-    // }
+    if (!nftListingPayload.listing_royalty.trim()) {
+      msg = "listed royalty is empty";
+      toast(msg);
+      return;
+    } else if (isNaN(parseFloat(nftListingPayload.listing_royalty)) === true) {
+      msg = "royalty must be a valid positive number";
+      toast(msg);
+      return;
+    }
     if (!nftListingPayload.listing_price.trim()) {
       msg = "listed price is empty";
       toast(msg);
@@ -174,14 +174,14 @@ const ListNft = () => {
                   value={nftListingPayload.listing_price}
                 />
 
-                {/* <Input2
+                <Input2
                   label="Royalty"
                   name="listing_royalty"
                   maxLength={4}
                   placeholder="0.00"
                   onChange={handleFieldChange}
                   value={nftListingPayload.listing_royalty}
-                /> */}
+                />
 
                 <Input2
                   label="Quantity to be listed"
