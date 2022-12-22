@@ -221,7 +221,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 201) {
-          toast(response.data.message);
+          toast.success(response.data.message);
           setIsTransLoading(false);
           push("/create-new-nft");
           setCollectionPayload({

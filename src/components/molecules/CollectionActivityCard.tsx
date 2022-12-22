@@ -75,7 +75,7 @@ const CollectionActivityCard = ({
   }
 
   return (
-    <div className="profile-activity-list">
+    <div className="collection-activity-list">
       <div className="profile-activity-item">
         {collection_id ? (
           <img
@@ -183,19 +183,20 @@ const CollectionActivityCard = ({
         )}
       </div>
 
-      <div className="profile-activity-receiver-wrapper">
-        <div className="profile-activity-receiver">
-          {to_user_id &&
-          to_user_id !== undefined &&
-          to_user_id.username &&
-          to_user_id.username !== undefined
-            ? to_user_id.username
-            : "----"}
-        </div>
-        <span className="profile-activity-receiver-time text-txt-1">
-          {moment(createdAt).format("ddd, MMM Do YYYY, hh:mm:ss")}
-        </span>
+      {/* <div className="profile-activity-receiver-wrapper"> */}
+      <div className="profile-activity-receiver">
+        {to_user_id &&
+        to_user_id !== undefined &&
+        to_user_id.username &&
+        to_user_id.username !== undefined
+          ? to_user_id.username
+          : "----"}
       </div>
+
+      {/* </div> */}
+      <span className="profile-activity-receiver-time text-txt-1">
+        {moment(createdAt).format("ddd, MMM Do YYYY, hh:mm:ss")}
+      </span>
     </div>
   );
 };

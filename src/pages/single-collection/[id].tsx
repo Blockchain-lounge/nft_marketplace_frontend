@@ -531,7 +531,7 @@ const ViewCollection = () => {
             <>
               {/*Activities Heading-*/}
               {/* <Heading2 title="You have not perform any activity." /> */}
-              <div className="profile-activity-headers-tab mt-8">
+              <div className="collection-activity-headers-tab">
                 {activityHeaders.map((header, i) => (
                   <span key={header + i} className="profile-activity-header">
                     {header}

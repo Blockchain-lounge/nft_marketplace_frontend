@@ -78,7 +78,7 @@ const Profile = () => {
   ];
 
   const profileActivityList = [0, 1, 2, 3];
-  const profileActivityHeaders = ["Item", "Price", "From", "To"];
+  const profileActivityHeaders = ["Item", "Price", "From", "To", "Date"];
 
   const handleNavigateToHome = () => push("/");
 
@@ -604,17 +604,27 @@ const Profile = () => {
                       </div>
                     )
                   ) : (
-                    <div className="user-profile-owned-nfts">
-                      {Array(12)
-                        .fill(0)
-                        .map((_, i) => (
-                          <NftCardSkeleton key={i + "explore-skeleton-card"} />
-                        ))}
+                    <div className="profile-user-nfts">
+                      <img
+                        src="/images/404-illustration.png"
+                        alt="empty-nfts"
+                      />
+                      <span className="profile-empty-nft-title">
+                        You have not listed any NFT
+                      </span>
+                      <p className="profile-empty-nft-description">
+                        There&apos;s lots of other NFTs to explore
+                      </p>
+
+                      <GradientButton
+                        title="Explore NFTs"
+                        onClick={handleNavigateToHome}
+                      />
                     </div>
                   )
                 ) : profileActiveTab === 3 ? (
                   <>
-                    <div className="profile-activity-headers-tab">
+                    <div className="collection-activity-headers-tab">
                       {profileActivityHeaders.map((header, i) => (
                         <span
                           key={header + i}
