@@ -454,7 +454,7 @@ const BuyUnlistedNFT = () => {
                     </div>
                   </div>
                 </div>
-                <div className="view-hero-nft-cta-wrapper">
+                {/* <div className="view-hero-nft-cta-wrapper"> */}
                   {/* <div className="flex w-full gap-x-6">
                     <div className="p-4 bg-bg-5 rounded-md w-1/2">
                       <span className="text-txt-2 text-xl block mb-4">
@@ -477,16 +477,16 @@ const BuyUnlistedNFT = () => {
                   <span className="text-lg font-medium">
                     Last sale price 10.8 ETH
                   </span> */}
-                  <div className="flex flex-col gap-y-4 w-full">
-                    <div className="flex gap-x-5 w-full">
-                      <div className="w-full space-y-4">
-                        <Button
+                  {/* <div className="flex flex-col gap-y-4 w-full"> */}
+                    {/* <div className="flex gap-x-5 w-full"> */}
+                      {/* <div className="w-full space-y-4"> */}
+                        {/* <Button
                           title="Make an offer"
                           wt="w-full"
                           onClick={() => {
                             setShowModal((prev) => !prev);
                           }}
-                        />
+                        /> */}
                         {/* <Button
                             title="Place a bid"
                             outline2
@@ -496,12 +496,12 @@ const BuyUnlistedNFT = () => {
                               setShowModal((prev) => !prev);
                             }}
                           /> */}
-                      </div>
+                      {/* </div> */}
 
                       {/* <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
                         <CartIcon />
                       </span> */}
-                    </div>
+                    {/* </div> */}
                     {/* <Button
                       title="Place a bid"
                       wt="w-full"
@@ -511,8 +511,8 @@ const BuyUnlistedNFT = () => {
                         setShowModal((prev) => !prev);
                       }}
                     /> */}
-                  </div>
-                </div>
+                  {/* </div> */}
+                {/* </div> */}
               </div>
               {/* <div className="flex gap-x-6 mt-6 items-center">
                 <span className="flex gap-x-2 items-center">
