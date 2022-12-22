@@ -584,7 +584,7 @@ const ViewNft = () => {
                               setShowModal((prev) => !prev);
                             }}
                           />
-                          <Button
+                          {/* <Button
                             title="Make an offer  Coming Soon!!!"
                             outline2
                             wt="w-full"
@@ -592,7 +592,7 @@ const ViewNft = () => {
                             //   setModaltype("offer");
                             //   setShowModal((prev) => !prev);
                             // }}
-                          />
+                          /> */}
                           {/* <Button
                             title="Place a bid"
                             outline2
