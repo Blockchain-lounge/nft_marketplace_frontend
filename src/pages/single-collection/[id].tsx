@@ -260,7 +260,7 @@ const ViewCollection = () => {
     typeof window !== "undefined" && window.location.origin
       ? window.location.origin
       : "";
-
+  // console.log({ singleCollectionsListedItemsData });
   return (
     <DashboardLayout isLoading={isLoading}>
       <ToastContainer />

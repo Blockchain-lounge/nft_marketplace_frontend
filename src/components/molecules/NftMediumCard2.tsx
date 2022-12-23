@@ -7,6 +7,8 @@ import { EditIcon, LikeIcon } from "@/src/components/atoms/vectors";
 // import { Nftcard } from "./NftMediumCard";
 import Image from "next/image";
 import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
+import { useEffect, useState } from "react";
+import { apiRequest } from "@/src/functions/offChain/apiRequests";
 
 // Partial<Pick<INftcard, "name" | "imgUrl" | "price">> & {
 //   time?: boolean;
@@ -33,31 +35,60 @@ const NftCard2 = ({
   maxWidth?: string;
   user_id?: string;
 }) => {
+  const [userId, setUserId] = useState("");
   const [dollarRate] = UseConvertEthToDollar();
   const { push } = useRouter();
-  console.log({ user_id, _id });
+
+  const fetchUserId = async () => {
+    // try {
+    var REQUEST_URL = "/user/auth/loggedIn";
+    const HEADER = "authenticated";
+    const METHOD = "GET";
+    const DATA = {};
+    apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+      if (response.status == 401) {
+        return;
+      } else if (response.status == 200) {
+        console.log(response.data.isLoggedIn);
+        setUserId(response.data.user._id);
+      } else {
+        return;
+      }
+    });
+    // } catch (error) {
+    //   toast("Something went wrong, please try again!");
+    //   return;
+    // }
+  };
+
+  useEffect(() => {
+    fetchUserId();
+    // return () => {
+    // }
+  }, []);
+
   return (
     <div
       className={clsx(
         "rounded-[0.975rem] bg-white w-full lg:max-w-full cursor-pointer relative",
         maxWidth
       )}
-      // onClick={() => push(`/${to}/${_id}`)}
     >
-      <div
-        className="h-12 w-12 p-4 grid place-content-center cursor-pointer mr-4 bg-bg-4 absolute right-0 top-4 z-10 rounded-md"
-        onClick={
-          (e) => console.log({ e })
-          // push(
-          //   listing_price
-          //     ? `/view-listed-user-nft/${_id}`
-          //     : `/view-created-user-nft/${_id}`
-          // )
-        }
-      >
-        <EditIcon />
-      </div>
-      <div className="nmc-wrapper-img">
+      {user_id === userId ? (
+        <div
+          className="h-12 w-12 p-4 grid place-content-center cursor-pointer mr-4 bg-bg-4 absolute right-0 top-4 z-10 rounded-md"
+          onClick={() =>
+            push(
+              listing_price
+                ? `/view-listed-user-nft/${_id}`
+                : `/view-created-user-nft/${_id}`
+            )
+          }
+        >
+          <EditIcon />
+        </div>
+      ) : null}
+      <div className="nmc-wrapper-img" onClick={() => push(`/${to}/${_id}`)}>
         {item_id ? (
           <Image
             src={
