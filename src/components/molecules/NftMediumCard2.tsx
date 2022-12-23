@@ -49,7 +49,6 @@ const NftCard2 = ({
       if (response.status == 401) {
         return;
       } else if (response.status == 200) {
-        console.log(response.data.isLoggedIn);
         setUserId(response.data.user._id);
       } else {
         return;
