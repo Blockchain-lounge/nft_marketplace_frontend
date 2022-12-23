@@ -18,6 +18,7 @@ import {
   CaretDown,
   CartIcon,
   CoinIcon,
+  EditIcon,
   LikeIcon,
   StatIcon,
 } from "../../components/atoms/vectors";
@@ -42,7 +43,7 @@ import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 
 import TimePicker from "react-time-picker/dist/entry.nostyle";
 
-const BuyUnlistedNFT = () => {
+const ViewUnlistedNFT = () => {
   const [showModal, setShowModal] = useState(false);
   const [itemDetail, setItemDetail] = useState<INftcard | null>(null);
   const { query, push } = useRouter();
@@ -1009,4 +1010,4 @@ const BuyUnlistedNFT = () => {
   );
 };
 
-export default BuyUnlistedNFT;
+export default ViewUnlistedNFT;

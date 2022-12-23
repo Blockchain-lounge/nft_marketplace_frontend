@@ -149,11 +149,12 @@ const ListNft = () => {
       toast(msg);
       return;
     }
-    else if (!nftPayloadselect.id || nftPayloadselect.id.length === 0) {
-      msg = "listed collection is empty";
-      toast(msg);
-      return;
-    } else if (isNaN(parseFloat(nftListingPayload.listing_price)) === true) {
+    // else if (!nftPayloadselect.id || nftPayloadselect.id.length === 0) {
+    //   msg = "listed collection is empty";
+    //   toast(msg);
+    //   return;
+    // } 
+    else if (isNaN(parseFloat(nftListingPayload.listing_price)) === true) {
       msg = "price of listed must be a valid positive number";
       toast(msg);
       return;
@@ -189,12 +190,16 @@ const ListNft = () => {
           toast("Transaction cancelled!");
         }
 
+        
         var formData = {
           listing_price: nftListingPayload.listing_price,
           listing_quantity: 1,
           token_address: tokenAddress,
           token_id: tokenId,
-          collection_id: nftPayloadselect.id
+          collection_id: itemDetail.metadata
+          && itemDetail.metadata.cloudax_token 
+          && itemDetail.metadata.cloudax_token.coludax_collection_id
+          && itemDetail.metadata.cloudax_token.coludax_collection_id.lenght > 0 ? itemDetail.metadata.cloudax_token.coludax_collection_id : nftPayloadselect.id
         };
 
         const HEADER = "authenticated";
@@ -252,11 +257,24 @@ const ListNft = () => {
                   onChange={handleFieldChange}
                   value={nftListingPayload.listing_price}
                 />
-                <Select
-                  title={nftPayloadselect.label}
-                  lists={collections}
-                  onClick2={handleSelect}
-                />
+                {
+                  itemDetail
+                  && itemDetail.metadata
+                  && itemDetail.metadata !== null
+                  && itemDetail.metadata.cloudax_token
+                  && itemDetail.metadata.cloudax_token !== null 
+                  && itemDetail.metadata.cloudax_token._id
+                  && itemDetail.metadata.cloudax_token._id !== null
+                  && itemDetail.metadata.cloudax_token._id.lenght > 0
+                  ?
+                  ''
+                  :
+                  <Select
+                    title={nftPayloadselect.label}
+                    lists={collections}
+                    onClick2={handleSelect}
+                  />
+                }
               </div>
             </div>
             <div className="create-new-nft-gas-fee-wrapper ">
