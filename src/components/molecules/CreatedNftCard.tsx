@@ -18,7 +18,7 @@ const CreatedNftCard = ({
   time,
   item_id,
   listing_price,
-  to = "buy-view-nft",
+  to = "view-unlisted-nft",
 }: Partial<Pick<INftcard, "name" | "imgUrl" | "price">> & {
   time?: boolean;
   to?: string;
