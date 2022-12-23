@@ -3,7 +3,7 @@
 import { useRouter } from "next/router";
 import clsx from "clsx";
 
-import { LikeIcon } from "@/src/components/atoms/vectors";
+import { EditIcon, LikeIcon } from "@/src/components/atoms/vectors";
 // import { Nftcard } from "./NftMediumCard";
 import Image from "next/image";
 import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
@@ -25,22 +25,38 @@ const NftCard2 = ({
   listing_quantity,
   listing_remaining,
   maxWidth,
+  user_id,
   to = "buy-view-nft",
 }: Partial<Pick<INftcard, "name" | "imgUrl" | "price">> & {
   time?: boolean;
   to?: string;
   maxWidth?: string;
+  user_id?: string;
 }) => {
   const [dollarRate] = UseConvertEthToDollar();
   const { push } = useRouter();
+  console.log({ user_id, _id });
   return (
     <div
       className={clsx(
-        "rounded-[0.975rem] bg-white w-full lg:max-w-full cursor-pointer",
+        "rounded-[0.975rem] bg-white w-full lg:max-w-full cursor-pointer relative",
         maxWidth
       )}
-      onClick={() => push(`/${to}/${_id}`)}
+      // onClick={() => push(`/${to}/${_id}`)}
     >
+      <div
+        className="h-12 w-12 p-4 grid place-content-center cursor-pointer mr-4 bg-bg-4 absolute right-0 top-4 z-10 rounded-md"
+        onClick={
+          (e) => console.log({ e })
+          // push(
+          //   listing_price
+          //     ? `/view-listed-user-nft/${_id}`
+          //     : `/view-created-user-nft/${_id}`
+          // )
+        }
+      >
+        <EditIcon />
+      </div>
       <div className="nmc-wrapper-img">
         {item_id ? (
           <Image
@@ -73,8 +89,7 @@ const NftCard2 = ({
             blurDataURL="/images/placeholder.png"
             className="rounded-t-xl"
           />
-        )
-        : item_art_url ? (
+        ) : item_art_url ? (
           <Image
             src={
               item_art_url !== undefined || item_art_url !== null
@@ -99,10 +114,10 @@ const NftCard2 = ({
             {item_id
               ? item_id.item_title
               : resell_item_id
-                ? resell_item_id.item_title
+              ? resell_item_id.item_title
               : item_title
-                ? item_title
-              :""}
+              ? item_title
+              : ""}
           </span>
           <span className="nmc-sub-wrapper-2-owner">
             {item_supply === undefined ||
@@ -112,8 +127,7 @@ const NftCard2 = ({
               item_id !== null &&
               item_id !== "")
               ? listing_remaining + "/" + listing_quantity
-              : item_remaining + "/" + item_supply
-              }
+              : item_remaining + "/" + item_supply}
           </span>
         </div>
         {time ? (
@@ -137,7 +151,7 @@ const NftCard2 = ({
               </div>
             </div>
           </div>
-        ) : item_price !== undefined ?(
+        ) : item_price !== undefined ? (
           <div className="p-2">
             <span className="text-black flex items-center text-lg">
               <span className="h-6 w-3 relative">
@@ -168,8 +182,7 @@ const NftCard2 = ({
               ""
             )}
           </div>
-        )
-        : listing_price !== undefined ?(
+        ) : listing_price !== undefined ? (
           <div className="p-2">
             <span className="text-black flex items-center text-lg">
               <span className="h-6 w-3 relative">
@@ -179,25 +192,20 @@ const NftCard2 = ({
                   layout="fill"
                 />
               </span>
-              { listing_price
-                ? listing_price
-                : 0
-                }
+              {listing_price ? listing_price : 0}
             </span>
             {dollarRate ? (
               <span className="text-black flex items-center text-lg ">
                 <span className="text-lg text-black font-bold">$</span>
-                {(
-                  (listing_price
-                    ? listing_price
-                    : 0) * dollarRate
-                ).toFixed(2)}
+                {((listing_price ? listing_price : 0) * dollarRate).toFixed(2)}
               </span>
             ) : (
               ""
             )}
           </div>
-        ) : ""}
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

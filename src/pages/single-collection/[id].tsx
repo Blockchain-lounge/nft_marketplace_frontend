@@ -260,7 +260,7 @@ const ViewCollection = () => {
     typeof window !== "undefined" && window.location.origin
       ? window.location.origin
       : "";
-
+  // console.log({ singleCollectionsListedItemsData });
   return (
     <DashboardLayout isLoading={isLoading}>
       <ToastContainer />
@@ -504,11 +504,8 @@ const ViewCollection = () => {
               <div className="single-collection-lists">
                 {/* <div>hello</div> */}
                 <div className="">
-                  {
-                  singleCollectionsListedItemsData
-                   ||
-                  singleCollectionsCreatedItemsData 
-                   ? (
+                  {singleCollectionsListedItemsData ||
+                  singleCollectionsCreatedItemsData ? (
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
                       {singleCollectionsListedItemsData.length > 0
                         ? singleCollectionsListedItemsData.map((val, i) => (
