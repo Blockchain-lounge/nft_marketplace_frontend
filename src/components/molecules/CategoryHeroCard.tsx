@@ -4,7 +4,7 @@ import React from "react";
 import { Button, Heading } from "../atoms";
 import { useRouter } from "next/router";
 
-const CategoryHeroCard = ({category}) => {
+const CategoryHeroCard = ({ category }) => {
   const { push } = useRouter();
 
   const handlePush = () => {
@@ -19,9 +19,7 @@ const CategoryHeroCard = ({category}) => {
             Experience even more
           </span>
           <Heading title={category.name} twClasses="mt-4" />
-          <p className="lg:max-w-xl">
-            {category.description}
-          </p>
+          <p className="lg:max-w-xl">{category.description}</p>
           {/* <Button title="Explore" /> */}
         </div>
         <div className="hero-img-cards">
@@ -29,7 +27,7 @@ const CategoryHeroCard = ({category}) => {
             <Image
               layout="fill"
               objectFit="cover"
-              src={category.icon_image}
+              src={category.icon_image || "/images/placeholder.png"}
               alt={category.name}
               className="rounded-2xl"
               placeholder="blur"

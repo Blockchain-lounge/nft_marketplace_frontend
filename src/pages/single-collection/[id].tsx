@@ -260,7 +260,7 @@ const ViewCollection = () => {
     typeof window !== "undefined" && window.location.origin
       ? window.location.origin
       : "";
-  // console.log({ singleCollectionsListedItemsData });
+
   return (
     <DashboardLayout isLoading={isLoading}>
       <ToastContainer />
@@ -514,7 +514,11 @@ const ViewCollection = () => {
                         : ""}
                       {singleCollectionsCreatedItemsData.length > 0
                         ? singleCollectionsCreatedItemsData.map((val, i) => (
-                            <NftMediumCard2 {...val} key={val._id} />
+                            <NftMediumCard2
+                              {...val}
+                              key={val._id}
+                              to="view-unlisted-nft"
+                            />
                           ))
                         : ""}
                     </div>
