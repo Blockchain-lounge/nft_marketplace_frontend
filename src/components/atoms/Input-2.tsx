@@ -54,7 +54,7 @@ const Input2: FC<InputProps> = ({
         )}
       </div>
       {belowDesc && (
-        <p className="create-new-nft-wrapper-2-label-type">{belowDesc}</p>
+        <p className="create-new-nft-wrapper-2-label-type mt-1">{belowDesc}</p>
       )}
     </div>
   );

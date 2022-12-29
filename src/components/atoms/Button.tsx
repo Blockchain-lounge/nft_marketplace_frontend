@@ -6,6 +6,7 @@ export interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
   title: string;
   outline?: boolean;
   outline2?: boolean;
+  danger?: boolean;
   twClasses?: string;
   prefix?: ReactNode;
   suffix?: ReactNode;
@@ -17,6 +18,7 @@ const Button: FC<IButton> = ({
   title,
   outline,
   outline2,
+  danger,
   twClasses,
   prefix,
   suffix,
@@ -28,7 +30,13 @@ const Button: FC<IButton> = ({
     <button
       className={clsx(
         "btn",
-        outline ? "btn-outline" : outline2 ? "btn-outline-2" : "btn-primary",
+        outline
+          ? "btn-outline"
+          : outline2
+          ? "btn-outline-2"
+          : danger
+          ? "btn-danger"
+          : "btn-primary",
         wt ? wt : "w-[11.9rem]",
         twClasses
       )}
@@ -44,7 +52,9 @@ const Button: FC<IButton> = ({
           )}
         ></span>
       ) : (
-        <span>{title}</span>
+        <span className={clsx(danger ? "text-negative-color" : "text-white")}>
+          {title}
+        </span>
       )}
       {suffix && <span>{suffix}</span>}
     </button>
