@@ -58,15 +58,18 @@ const ViewNft = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [nextPage, setNextPage] = useState(1);
 
-  const [dateSelected, setDateSelected] = useState({
+  const [date, setDateSelected] = useState({
     startDate: new Date(),
     endDate: new Date(),
-    key: "selection",
   });
-
   const [timeSelected, setTimeSelected] = useState(
     new Date().toLocaleTimeString()
   );
+
+  //this function handles the date selection
+  const handleRangeSelection = (ranges: any) => {
+    setDateSelected(ranges.selection);
+  };
 
   const bidExpDates = [
     "1 day",
@@ -234,7 +237,7 @@ const ViewNft = () => {
             // gasPrice: 20000000,
             // gasPrice: 908462167791,
             // maxFeePerGas:18462167791,
-            // baseFee: 18462167791 
+            // baseFee: 18462167791
           }
         );
         tnx = await transaction.wait();
@@ -409,19 +412,6 @@ const ViewNft = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, currentPage]);
 
-  const handleRangeSelection = (ranges: any) => {
-    setDateSelected(ranges.selection);
-  };
-
-  const handleTimeChange = (value) => {
-    setTimeSelected(value);
-  };
-
-  // const applyDateFilter = () => {
-  //   onFilter(dateSelected);
-  //   setShowDateModal(false);
-  // };
-
   return (
     <DashboardLayout isLoading={!itemDetail}>
       <div className="sub-layout-wrapper scrollbar-hide">
@@ -584,15 +574,15 @@ const ViewNft = () => {
                               setShowModal((prev) => !prev);
                             }}
                           />
-                          {/* <Button
-                            title="Make an offer  Coming Soon!!!"
+                          <Button
+                            title="Make an offer"
                             outline2
                             wt="w-full"
-                            // onClick={() => {
-                            //   setModaltype("offer");
-                            //   setShowModal((prev) => !prev);
-                            // }}
-                          /> */}
+                            onClick={() => {
+                              setModaltype("offer");
+                              setShowModal((prev) => !prev);
+                            }}
+                          />
                           {/* <Button
                             title="Place a bid"
                             outline2
@@ -1135,7 +1125,7 @@ const ViewNft = () => {
                 <Input2
                   name="coinPrice"
                   placeholder="0.00"
-                  label="Your Offer"
+                  label="Your Offer in (Eth)"
                   // onChange={handleFieldChange}
                   // value={nftPayload.coinPrice}
                 />
@@ -1157,7 +1147,13 @@ const ViewNft = () => {
                 Offer duration
               </span>
 
-              <DateTime />
+              <DateTime
+                startDate={date.startDate}
+                endDate={date.endDate}
+                handleRangeSelection={handleRangeSelection}
+                time={timeSelected}
+                handleSelectedTime={setTimeSelected}
+              />
 
               {/* <Input2 type="datetime-local" /> */}
               {/* <Select

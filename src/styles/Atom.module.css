@@ -22,6 +22,10 @@
   @apply bg-[#16162D] border-border-1-line border-[1px];
 }
 
+.btn-danger {
+  @apply bg-[#16162D] border-negative-color border-[1px];
+}
+
 .btn-primary {
   @apply bg-gradient-to-r from-[#2F79F9] to-[#3DAEFA] rounded-[0.625rem];
 }
