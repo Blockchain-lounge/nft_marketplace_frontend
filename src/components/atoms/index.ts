@@ -9,7 +9,7 @@ export { default as Input } from "./Input";
 export { default as Input2 } from "./Input-2";
 export { default as Loader } from "./Loader";
 export { default as NextSliderBtn } from "./NextSliderBtn";
-export { default as Notification } from "./Notification";
+
 export { default as PrevSliderBtn } from "./PrevSliderBtn";
 export { default as Select } from "./Select";
 export { default as Select2 } from "./Select2";

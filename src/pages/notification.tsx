@@ -1,32 +1,54 @@
 //@ts-nocheck
-import Skeleton from "react-loading-skeleton";
+
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import {
-  Heading2,
-  ActivitiesSelect,
-  Select2,
-  SelectCheckBox,
-  Button,
-} from "../components/atoms";
+import { Heading2, ActivitiesSelect, Button } from "../components/atoms";
 import { ISelectCheckProps } from "../components/atoms/SelectCheckbox";
 import { CloseIcon } from "../components/atoms/vectors";
-import { ActivityLoader, NftCardSkeleton } from "../components/lazy-loaders";
-import { Tab2, TransactionCard } from "../components/molecules";
+import { ActivityLoader } from "../components/lazy-loaders";
+import { NotificationCard } from "../components/molecules";
 import { Footer } from "../components/organisms";
 import { apiRequest } from "../functions/offChain/apiRequests";
 import DashboardLayout from "../template/DashboardLayout";
-import { ITransactionCard } from "../utilities/types";
+
 import { useRouter } from "next/router";
 
-const Activities = () => {
+const Notification = () => {
   const [currentTab, setCurrentTab] = useState("1 h");
-  const [isFetching, setIsfetching] = useState(true);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [nextPage, setNextPage] = useState(1);
-  const [activities, setActivities] = useState([]);
+  const [isFetching, setIsfetching] = useState(true);
+  const [notification, setActivities] = useState([
+    {
+      activity_type: "newly_created_collection",
+      created_item: {
+        item_art_url: "/images/Dreamy-ape.png",
+        item_name: "Clone X",
+        time: "4 hours ago",
+      },
+    },
+    {
+      activity_type: "new_offer",
+      offer: {
+        item_art_url: "/images/Dreamy-ape.png",
+        item_name: "CloneX#12345",
+        time: "4 hours ago",
+        price: "4.5",
+      },
+    },
+    {
+      activity_type: "newly_added_item",
+      added_item: {
+        by: "Mikeoxf",
+        item_art_url: "/images/Dreamy-ape.png",
+        collection_name: "CloneX#12345",
+        time: "4 hours ago",
+        price: "4.5",
+      },
+    },
+  ]);
   const [currentEvent, setCurrentEvent] = useState<{
     name: string;
     value: string;
@@ -70,14 +92,14 @@ const Activities = () => {
 
   const events = [
     { name: "All", value: "all" },
-    { name: "Sales", value: "new_sales" },
-    { name: "Newly listed Item", value: "newly_listed_item" },
-    { name: "Newly Created Item", value: "newly_created_item" },
+    { name: "New offer", value: "new_offer" },
+    { name: "Newly Added Item", value: "newly_added_item" },
+    { name: "Newly Created Item", value: "newly_created_collection" },
   ];
 
   const sorting = [{ name: "Ascending", value: "asc" }];
   const router = useRouter();
-  const { activity_type } = router.query;
+  // const { activity_type } = router.query;
   /**
    * Fetches all activities that took place on the platform
    * @date 12/15/2022 - 3:21:45 PM
@@ -87,97 +109,6 @@ const Activities = () => {
    *
    * @returns {*} returns activities based on the argument passed into the params else it returns all activities.
    */
-  const fetchActivities = async (activityType: string | ""): any => {
-    var REQUEST_URL = "/activities";
-    switch (activityType) {
-      case "newly_created_item":
-        REQUEST_URL =
-          "/activities?activity_type=" + activityType + "&&page=" + currentPage;
-        break;
-
-      case "updated_item":
-        REQUEST_URL =
-          "/activities?activity_type=" + activityType + "&&page=" + currentPage;
-        break;
-
-      case "newly_listed_item":
-        REQUEST_URL =
-          "/activities?activity_type=" + activityType + "&&page=" + currentPage;
-        break;
-
-      case "updated_listing":
-        REQUEST_URL =
-          "/activities?activity_type=" + activityType + "&&page=" + currentPage;
-        break;
-
-      case "new_mint":
-        REQUEST_URL =
-          "/activities?activity_type=" + activityType + "&&page=" + currentPage;
-        break;
-
-      case "new_sales":
-        REQUEST_URL =
-          "/activities?activity_type=" + activityType + "&&page=" + currentPage;
-        break;
-      case "cancelled_listing":
-        REQUEST_URL =
-          "/activities?activity_type=" + activityType + "&&page=" + currentPage;
-        break;
-
-      default:
-        var REQUEST_URL = "/activities?page=" + currentPage;
-    }
-    try {
-      const HEADER = {};
-      const METHOD = "GET";
-      const DATA = {};
-      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-        if (response.status == 400) {
-          var error = response.data.error;
-          toast(error);
-          return;
-        } else if (response.status == 401) {
-          toast("Unauthorized request!");
-          return;
-        } else if (response.status == 200) {
-          setIsfetching((prev) => !prev);
-          if (activities.length > 0) {
-            for (
-              let index = 0;
-              index < response.data.data.activities.length;
-              index++
-            ) {
-              setActivities((prev) => [
-                ...prev,
-                response.data.data.activities[index],
-              ]);
-            }
-          } else {
-            setActivities(response.data.data.activities);
-          }
-
-          setTotalPages(response.data.data.totalPages);
-          setCurrentPage(response.data.data.currentPage);
-          setNextPage(response.data.data.nextPage);
-        } else {
-          toast("Something went wrong, please try again!");
-          return;
-        }
-      });
-    } catch (error) {
-      toast("Something went wrong, please try again!");
-      return;
-    }
-  };
-
-  useEffect(() => {
-    fetchActivities(
-      activity_type && activity_type !== "" && activity_type !== null
-        ? activity_type
-        : "all"
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activity_type, currentPage]);
 
   return (
     <DashboardLayout>
@@ -185,8 +116,8 @@ const Activities = () => {
         <div className="center">
           <div className="collection-page-top">
             <div className="collection-page-sub-top">
-              <Heading2 title="Activities" />
-              <ActivitiesSelect
+              <Heading2 title="Notification" />
+              {/* <ActivitiesSelect
                 title="Event type"
                 placeholder={
                   typeof currentEvent === "object" ? currentEvent.name : ""
@@ -199,22 +130,8 @@ const Activities = () => {
                 }
                 lists={events}
                 wt="w-[13.5rem]"
-              />
-              {/* <SelectCheckBox
-                lists={collections}
-                //@ts-ignore
-                setLists={setCollections}
-                title="Collection"
-                selectedLists={selectedCollection}
-                newLists={setSelectedCollection}
               /> */}
-              {/* <Select title="Chains" /> */}
             </div>
-            {/* <Tab2
-              tabs={tabs}
-              activeTab={currentTab}
-              setActiveTab={setCurrentTab}
-            /> */}
           </div>
           <div className="flex items-center gap-x-4 mb-6">
             {selectedCollection.map((val, i) => (
@@ -253,26 +170,25 @@ const Activities = () => {
             ))}
           </div>
           <div className="total-earnings-history-wrapper ">
-            {activities.length === 0 && isFetching
+            {notification.length === 0 && isFetching
               ? Array(8)
                   .fill(0)
                   .map((_, i) => (
                     <ActivityLoader key={"activity-skeleton-key" + i} />
                   ))
-              : activities && activities.length === 0
-              ? "No activities yet!"
-              : activities && activities.length > 0
-              ? activities.map((txn, i) => <TransactionCard key={i} {...txn} />)
+              : notification && notification.length === 0
+              ? "No notification yet!"
+              : notification && notification.length > 0
+              ? notification.map((txn, i) => (
+                  <NotificationCard key={i} {...txn} />
+                ))
               : null}
           </div>
           <div className="mt-8">
             {nextPage < totalPages ? (
               <Button
                 title="Load More"
-                onClick={() => {
-                  setIsfetching((prev) => !prev);
-                  setCurrentPage(currentPage + 1);
-                }}
+                onClick={() => setCurrentPage(currentPage + 1)}
               />
             ) : (
               ""
@@ -284,4 +200,4 @@ const Activities = () => {
     </DashboardLayout>
   );
 };
-export default Activities;
+export default Notification;
