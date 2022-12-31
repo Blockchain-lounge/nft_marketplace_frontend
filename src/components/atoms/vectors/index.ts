@@ -48,6 +48,7 @@ export { default as MediumIcon } from "./medium-icon";
 export { default as NextIcon } from "./next-icon";
 export { default as NightMode } from "./night-mode-icon";
 export { default as NftAcademyIcon } from "./nft-academy-icon";
+export { default as Notification } from "./Notification";
 export { default as OptionIcon } from "./option-icon";
 export { default as PlayIcon } from "./play-icon";
 export { default as PolygonIcon } from "./polygon-icon";

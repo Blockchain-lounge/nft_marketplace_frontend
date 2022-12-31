@@ -22,6 +22,7 @@ export { default as NftList } from "./NftList";
 export { default as NftMediumCard } from "./NftMediumCard";
 export { default as NftMediumCard2 } from "./NftMediumCard2";
 export { default as NftMediumCard3 } from "./NftMediumCard3";
+export { default as NotificationCard } from "./NotificationCard";
 export { default as OwnedNftCard } from "./OwnedNftCard";
 export { default as CreatedNftCard } from "./CreatedNftCard";
 export { default as ListedNftCard } from "./ListedNftCard";

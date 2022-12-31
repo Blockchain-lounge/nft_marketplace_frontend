@@ -14,6 +14,7 @@ import {
   BlogIcon,
   NftAcademyIcon,
   SupportIcon,
+  Notification,
 } from "@/src/components/atoms/vectors";
 
 import { useDispatch } from "react-redux";
@@ -64,6 +65,12 @@ const SideBar = () => {
       label: "Activities",
       icon: <ActivityIcon />,
       link: "/activities",
+    },
+    {
+      label: "Notification",
+      icon: <Notification />,
+      count: 23,
+      link: "/notification",
     },
     {
       label: "Cloudax Games",
