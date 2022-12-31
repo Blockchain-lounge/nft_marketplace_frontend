@@ -22,6 +22,26 @@ const Notification = () => {
   const [isFetching, setIsfetching] = useState(true);
   const [notification, setActivities] = useState([
     {
+      activity_type: "new_offer",
+      offer: {
+        by: "Mikeoxf",
+        item_art_url: "/images/Dreamy-ape.png",
+        item_name: "CloneX#12345",
+        time: "4 hours ago",
+        price: "4.5",
+      },
+    },
+    {
+      activity_type: "newly_added_item",
+      added_item: {
+        by: "Mikeoxf",
+        item_art_url: "/images/Dreamy-ape.png",
+        collection_name: "CloneX#12345",
+        time: "4 hours ago",
+        price: "4.5",
+      },
+    },
+    {
       activity_type: "newly_created_collection",
       created_item: {
         item_art_url: "/images/Dreamy-ape.png",
@@ -32,8 +52,29 @@ const Notification = () => {
     {
       activity_type: "new_offer",
       offer: {
+        by: "Mikeoxf",
         item_art_url: "/images/Dreamy-ape.png",
         item_name: "CloneX#12345",
+        time: "4 hours ago",
+        price: "4.5",
+      },
+    },
+    {
+      activity_type: "newly_added_item",
+      added_item: {
+        by: "Mikeoxf",
+        item_art_url: "/images/Dreamy-ape.png",
+        collection_name: "CloneX#12345",
+        time: "4 hours ago",
+        price: "4.5",
+      },
+    },
+    {
+      activity_type: "newly_added_item",
+      added_item: {
+        by: "Mikeoxf",
+        item_art_url: "/images/Dreamy-ape.png",
+        collection_name: "CloneX#12345",
         time: "4 hours ago",
         price: "4.5",
       },
@@ -117,7 +158,7 @@ const Notification = () => {
           <div className="collection-page-top">
             <div className="collection-page-sub-top">
               <Heading2 title="Notification" />
-              {/* <ActivitiesSelect
+              <ActivitiesSelect
                 title="Event type"
                 placeholder={
                   typeof currentEvent === "object" ? currentEvent.name : ""
@@ -130,7 +171,7 @@ const Notification = () => {
                 }
                 lists={events}
                 wt="w-[13.5rem]"
-              /> */}
+              />
             </div>
           </div>
           <div className="flex items-center gap-x-4 mb-6">

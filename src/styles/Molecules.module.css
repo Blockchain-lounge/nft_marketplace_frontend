@@ -412,9 +412,11 @@
   @apply text-white;
 }
 
-.total-earning-transaction-date-time span,
-.total-earning-transaction-details
-  .total-earning-withdrawn-transaction-details {
+.notification-detail {
+  @apply font-medium text-[#A2A3B8] text-xs sm:text-base flex items-center gap-x-2;
+}
+
+.notification-date-time {
   @apply font-medium text-[#A2A3B8] text-xs sm:text-base;
 }
 
@@ -448,4 +450,8 @@
 
 .transaction-card-span {
   @apply text-sm sm:text-[1.375rem] font-bold text-txt-2;
+}
+
+.notification-span {
+  @apply text-sm sm:text-[1.375rem] font-bold text-white;
 }

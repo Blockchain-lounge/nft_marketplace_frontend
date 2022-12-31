@@ -4,6 +4,7 @@ import Image from "next/image";
 import React from "react";
 import { CoinIcon } from "../atoms/vectors";
 import * as moment from "moment";
+import { Button } from "../atoms";
 
 const NotificationCard = ({
   activity_type,
@@ -50,13 +51,11 @@ const NotificationCard = ({
               placeholder="blur"
               blurDataURL="/images/placeholder.png"
             />
-          ) : resell_item_id ? (
+          ) : offer ? (
             <Image
               src={
-                resell_item_id &&
-                resell_item_id !== undefined &&
-                resell_item_id !== null
-                  ? resell_item_id.item_art_url
+                offer && offer !== undefined && offer !== null
+                  ? offer.item_art_url
                   : ""
               }
               alt=""
@@ -65,13 +64,11 @@ const NotificationCard = ({
               placeholder="blur"
               blurDataURL="/images/placeholder.png"
             />
-          ) : created_item_listed ? (
+          ) : added_item ? (
             <Image
               src={
-                created_item_listed &&
-                created_item_listed !== undefined &&
-                created_item_listed !== null
-                  ? created_item_listed.item_art_url
+                added_item && added_item !== undefined && added_item !== null
+                  ? added_item.item_art_url
                   : "/images/profile-nft.png"
               }
               alt=""
@@ -86,153 +83,79 @@ const NotificationCard = ({
           )}
         </div>
         <div className="transaction-card">
-          {activity_type === "newly_created_item" ? (
-            <p className="transaction-card-p">
-              {from_user_id &&
-              from_user_id !== undefined &&
-              from_user_id.username &&
-              from_user_id.username !== undefined
-                ? from_user_id.username
-                : ""}
-              <span className="transaction-card-span">
-                {" "}
-                created new item{" "}
-                <b>
-                  {created_item &&
-                  created_item !== undefined &&
-                  created_item !== null
-                    ? created_item.item_title
-                    : ""}
-                </b>
-              </span>
+          {activity_type === "newly_created_collection" ? (
+            <p className="transaction-card-span">
+              Your collection{" "}
+              <span className="notification-span">
+                {created_item &&
+                created_item !== undefined &&
+                created_item.item_name &&
+                created_item.item_name !== undefined
+                  ? created_item.item_name
+                  : ""}
+              </span>{" "}
+              has been created successfully
+              <b>
+                {created_item &&
+                created_item !== undefined &&
+                created_item !== null
+                  ? created_item.item_title
+                  : ""}
+              </b>
             </p>
-          ) : activity_type === "updated_item" ? (
+          ) : activity_type === "newly_added_item" ? (
             <p className="transaction-card-p">
-              {from_user_id &&
-              from_user_id !== undefined &&
-              from_user_id.username &&
-              from_user_id.username !== undefined
-                ? from_user_id.username
+              {added_item &&
+              added_item !== undefined &&
+              added_item.by &&
+              added_item.by !== undefined
+                ? added_item.by
                 : ""}
               <span className="transaction-card-span">
                 {" "}
-                updated an item{" "}
-                <b>
-                  {created_item &&
-                  created_item !== undefined &&
-                  created_item !== null
-                    ? created_item.item_title
-                    : ""}
-                </b>
+                added an item to your collection{" "}
               </span>
+
+              {added_item && added_item !== undefined && added_item !== null
+                ? added_item.collection_name
+                : ""}
             </p>
-          ) : activity_type === "newly_listed_item" ? (
+          ) : activity_type === "new_offer" ? (
             <p className="transaction-card-p">
-              {from_user_id &&
-              from_user_id !== undefined &&
-              from_user_id.username &&
-              from_user_id.username !== undefined
-                ? from_user_id.username
+              {offer &&
+              offer !== undefined &&
+              offer.by &&
+              offer.by !== undefined
+                ? offer.by
                 : ""}
-              <span className="transaction-card-span">
-                {" "}
-                recently listed an item{" "}
-                <b>
-                  {created_item_listed &&
-                  created_item_listed !== undefined &&
-                  created_item_listed !== null
-                    ? created_item_listed.item_title
-                    : ""}
-                </b>
-              </span>
-            </p>
-          ) : activity_type === "updated_listing" ? (
-            <p className="transaction-card-p">
-              {from_user_id &&
-              from_user_id !== undefined &&
-              from_user_id.username &&
-              from_user_id.username !== undefined
-                ? from_user_id.username
+              <span className="transaction-card-span"> made an offer for </span>
+              {offer && offer !== undefined && offer !== null
+                ? offer.item_name
                 : ""}
-              <span className="transaction-card-span">
-                {" "}
-                recently updated an item{" "}
-                <b>
-                  {listed_item &&
-                  listed_item !== undefined &&
-                  listed_item !== null &&
-                  created_item_listed !== undefined &&
-                  created_item_listed !== null
-                    ? created_item_listed.item_title
-                    : ""}
-                </b>
-              </span>
-            </p>
-          ) : activity_type === "new_mint" ? (
-            <p className="transaction-card-p">
-              {from_user_id &&
-              from_user_id !== undefined &&
-              from_user_id.username &&
-              from_user_id.username !== undefined
-                ? from_user_id.username
-                : ""}
-              <span className="transaction-card-span">
-                {" "}
-                recently minted an item{" "}
-                <b>
-                  {created_item_listed &&
-                  created_item_listed !== undefined &&
-                  created_item_listed !== null
-                    ? created_item_listed.item_title
-                    : ""}
-                </b>
-              </span>
-            </p>
-          ) : activity_type === "new_sales" ? (
-            <p className="transaction-card-p">
-              {from_user_id &&
-              from_user_id !== undefined &&
-              from_user_id.username &&
-              from_user_id.username !== undefined
-                ? from_user_id.username
-                : ""}
-              <span className="transaction-card-span">
-                {" "}
-                recently purchased an item{" "}
-                <b>
-                  {created_item_listed &&
-                  created_item_listed !== undefined &&
-                  created_item_listed !== null
-                    ? created_item_listed.item_title
-                    : ""}
-                </b>
-              </span>
-            </p>
-          ) : activity_type === "cancelled_listing" ? (
-            <p className="transaction-card-p">
-              {from_user_id &&
-              from_user_id !== undefined &&
-              from_user_id.username &&
-              from_user_id.username !== undefined
-                ? from_user_id.username
-                : ""}
-              <span className="transaction-card-span">
-                {" "}
-                recently cancelled an item{" "}
-                <b>
-                  {created_item_listed &&
-                  created_item_listed !== undefined &&
-                  created_item_listed !== null
-                    ? created_item_listed.item_title
-                    : ""}
-                </b>
-              </span>
             </p>
           ) : null}
 
-          <div className="total-earning-transaction-date-time">
-            <span className="total-earning-transaction-date"></span>
-            <span className="total-earning-transaction-time">10:52</span>
+          <div className="notification-detail">
+            {activity_type === "new_offer" ? (
+              <>
+                <span className="flex items-center gap-x-2 font-bold">
+                  <CoinIcon /> {offer.price}
+                </span>
+                <span className="h-1 w-1 bg-txt-4 rounded-full"></span>
+              </>
+            ) : (
+              ""
+            )}
+            <span className="font-medium text-xs sm:text-base text-txt-2">
+              {activity_type === "newly_created_collection"
+                ? created_item.time
+                : activity_type === "newly_added_item"
+                ? added_item.time
+                : activity_type === "new_offer"
+                ? offer.time
+                : ""}
+            </span>
+            {/* <span className="notification-date-time">10:52</span> */}
           </div>
         </div>
       </div>
@@ -242,6 +165,18 @@ const NotificationCard = ({
       {/*   </span> */}
       {/*   <span className="total-earning-coin-sold-receiver">$5,954,532</span> */}
       {/* </div> */}
+      <div className="flex gap-x-6">
+        {activity_type === "newly_created_collection" ||
+        activity_type === "newly_added_item" ? (
+          <Button title="View" outline2 />
+        ) : activity_type === "new_offer" ? (
+          <>
+            <Button title="Decline" danger /> <Button title="Accept" />
+          </>
+        ) : (
+          ""
+        )}
+      </div>
     </div>
   );
 };
