@@ -43,7 +43,7 @@
 
 /* connect wallet tab */
 .connect-header-tab {
-  @apply pb-3 flex justify-center gap-x-16 w-max border-[#33364D] border-b-[0.0625rem];
+  @apply pb-3 flex border-[#33364D] border-b-[0.0625rem];
 }
 
 /* display wallet */

@@ -76,6 +76,8 @@ export { default as SupportSellIcon } from "./support-sell-icon";
 export { default as SupportPromotionIcon } from "./support-promotion-icon";
 export { default as SupportSafetyIcon } from "./support-safety-icon";
 export { default as StatIcon } from "./stat-icon";
+export { default as SwapIcon } from "./swap-icon";
+export { default as SwapArrowIcon } from "./swap-arrow";
 export { default as TelegramIcon } from "./telegram";
 export { default as TezozIcon } from "./tezoz-icon";
 export { default as TiktokIcon } from "./tiktok-icon";
