@@ -7,24 +7,10 @@ import * as moment from "moment";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css";
-import {
-  Button,
-  Heading2,
-  Input2,
-  Loader,
-  Select,
-} from "../../components/atoms";
-import {
-  CaretDown,
-  CartIcon,
-  CoinIcon,
-  EditIcon,
-  LikeIcon,
-  StatIcon,
-} from "../../components/atoms/vectors";
+import { Button, Heading2, Input2 } from "../../components/atoms";
+import { CoinIcon } from "../../components/atoms/vectors";
 import { Footer, Modal } from "../../components/organisms";
 import DashboardLayout from "../../template/DashboardLayout";
-import EyeIcon from "@/src/components/atoms/vectors/eye-icon";
 import { apiRequest } from "../../functions/offChain/apiRequests";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -32,19 +18,26 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 
 import abi from "../../artifacts/abi.json";
-import { findEvents } from "../../functions/onChain/generalFunction";
 
-import { connectedAccount } from "../../functions/onChain/authFunction";
 import { INftcard } from "@/src/components/molecules/NftMediumCard";
-import { BigNumber, ethers } from "ethers";
+import { ethers } from "ethers";
 import APPCONFIG from "@/src/constants/Config";
 import { ActivityLoader } from "@/src/components/lazy-loaders";
-import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 
 import TimePicker from "react-time-picker/dist/entry.nostyle";
+import { SwapCard } from "@/src/components/molecules";
 
 const ViewUnlistedNFT = () => {
   const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState<"offer" | "addFunds">("offer");
+  const [nftPayload, setNftPayload] = useState({
+    nft_quantity: "0",
+    nft_price: "0.0",
+  });
+
+  const [ethInput, setEthInput] = useState("0.0");
+  const [wETHInput, setWETHInput] = useState("0.0");
+
   const [itemDetail, setItemDetail] = useState<INftcard | null>(null);
   const { query, push } = useRouter();
   const { id } = query;
@@ -345,14 +338,18 @@ const ViewUnlistedNFT = () => {
     setDateSelected(ranges.selection);
   };
 
-  const handleTimeChange = (value) => {
-    setTimeSelected(value);
+  const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNftPayload({
+      ...nftPayload,
+      [name]: value,
+    });
   };
-
-  // const applyDateFilter = () => {
-  //   onFilter(dateSelected);
-  //   setShowDateModal(false);
-  // };
+  //write your function to handle eth swap
+  const handleEthSwap = (e) => {
+    // setShowModal((prev) => !prev);
+    setModalType("offer");
+  };
 
   return (
     <DashboardLayout isLoading={!itemDetail}>
@@ -876,13 +873,17 @@ const ViewUnlistedNFT = () => {
         <Footer />
       </div>
       <Modal
-        title="Make an offer"
+        title={modalType === "offer" ? "Make an offer" : "Add funds"}
         openModal={showModal}
         closeModal={setShowModal}
-        modalWt="w-[40rem]"
-        modalHt="h-full sm:h-[60%] my-auto md:h-fit lg:h-[80%] overflow-y-auto"
+        modalWt={modalType === "addFunds" ? "w-[40rem] md:w-fit" : "w-[40rem]"}
+        modalHt={
+          modalType === "addFunds"
+            ? "h-full sm:h-[60%] my-auto md:h-fit overflow-y-auto"
+            : "h-full sm:h-[60%] my-auto md:h-fit lg:h-[80%] overflow-y-auto"
+        }
       >
-        {
+        {modalType === "offer" ? (
           <div className="flex flex-col items-center max-w-[85%] mx-auto gap-y-5">
             <span className="font-bold text-txt-2 text-base max-w-[80%] text-center">
               You are about to make an offer for{" "}
@@ -918,15 +919,36 @@ const ViewUnlistedNFT = () => {
             </div> */}
 
             <div className="create-new-nft-wrapper-2 w-full mb-4">
-              <div className="create-new-nft-wrapper-2 w-full">
-                {/* <Select title="ETH" icon={<CoinIcon />} /> */}
+              <div className="create-new-nft-wrapper-2 w-full space-y-6">
                 <Input2
-                  name="coinPrice"
-                  placeholder="0.00"
-                  label="Your Offer"
-                  // onChange={handleFieldChange}
-                  // value={nftPayload.coinPrice}
+                  name="nft_quantity"
+                  placeholder="0"
+                  label="Item Quantity"
+                  onChange={handleFieldChange}
+                  value={nftPayload.nft_quantity}
                 />
+
+                <>
+                  <Input2
+                    name="nft_price"
+                    placeholder="0.00"
+                    label="Your Offer"
+                    onChange={handleFieldChange}
+                    value={nftPayload.nft_price}
+                  />
+                  <p>
+                    <span className="font-bold text-txt-2 text-base">
+                      Insufficient wETH balance,{" "}
+                    </span>
+
+                    <span
+                      className="earnings-card-history cursor-pointer font-bold"
+                      onClick={() => setModalType((prev) => "addFunds")}
+                    >
+                      Add funds or swap
+                    </span>
+                  </p>
+                </>
               </div>
             </div>
             {/* <div className="create-new-nft-wrapper-2 w-full">
@@ -1011,7 +1033,15 @@ const ViewUnlistedNFT = () => {
               />
             </div>
           </div>
-        }
+        ) : (
+          <SwapCard
+            ethValue={ethInput}
+            wETHvalue={wETHInput}
+            setEthValue={setEthInput}
+            setWETHvalue={setWETHInput}
+            handleEthSwap={handleEthSwap}
+          />
+        )}
       </Modal>
     </DashboardLayout>
   );

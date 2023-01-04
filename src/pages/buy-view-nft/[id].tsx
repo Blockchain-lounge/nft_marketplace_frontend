@@ -38,10 +38,13 @@ import APPCONFIG from "@/src/constants/Config";
 import { ActivityLoader } from "@/src/components/lazy-loaders";
 import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 import DateTime from "@/src/components/organisms/DateTime";
+import { SwapCard } from "@/src/components/molecules";
 
 const ViewNft = () => {
   const [showModal, setShowModal] = useState(false);
-  const [modalType, setModaltype] = useState("buy");
+  const [modalType, setModaltype] = useState<"buy" | "addFunds">("buy");
+  const [ethInput, setEthInput] = useState("0.0");
+  const [wETHInput, setWETHInput] = useState("0.0");
   const [itemDetail, setItemDetail] = useState<INftcard | null>(null);
   const { query, push } = useRouter();
   const { id } = query;
@@ -69,6 +72,11 @@ const ViewNft = () => {
     new Date().toLocaleTimeString()
   );
 
+  //write your function to handle eth swap
+  const handleEthSwap = (e) => {
+    // setShowModal((prev) => !prev);
+    setModaltype("buy");
+  };
   //this function handles the date selection
   const handleRangeSelection = (ranges: any) => {
     setDateSelected(ranges.selection);
@@ -1022,16 +1030,20 @@ const ViewNft = () => {
             ? "Checkout"
             : modalType === "bid"
             ? "Place a bid"
+            : modalType === "addFunds"
+            ? "Add funds"
             : "Make an offer"
         }
         openModal={showModal}
         closeModal={setShowModal}
-        modalWt="w-[40rem]"
+        modalWt={modalType === "addFunds" ? "w-[40rem] md:w-fit" : "w-[40rem]"}
         modalHt={
           modalType === "bid"
             ? "h-full sm:h-[60%] my-auto md:h-fit overflow-y-auto"
             : modalType === "offer"
             ? "h-full sm:h-[60%] my-auto md:h-fit lg:h-[80%] overflow-y-auto"
+            : modalType === "addFunds"
+            ? "h-full sm:h-[60%] my-auto md:h-fit overflow-y-auto"
             : "h-fit mt-28"
         }
       >
@@ -1176,6 +1188,18 @@ const ViewNft = () => {
                   onChange={handleFieldChange}
                   value={offerPayload.price}
                 />
+                <p className="mt-6">
+                  <span className="font-bold text-txt-2 text-base">
+                    Insufficient wETH balance ?{" "}
+                  </span>
+
+                  <span
+                    className="earnings-card-history cursor-pointer font-bold"
+                    onClick={() => setModaltype((prev) => "addFunds")}
+                  >
+                    Add funds or swap
+                  </span>
+                </p>
               </div>
             </div>
             {/* <div className="create-new-nft-wrapper-2 w-full">
@@ -1251,6 +1275,14 @@ const ViewNft = () => {
             </div>
             </form>
           </div>
+        ) : modalType === "addFunds" ? (
+          <SwapCard
+            ethValue={ethInput}
+            wETHvalue={wETHInput}
+            setEthValue={setEthInput}
+            setWETHvalue={setWETHInput}
+            handleEthSwap={handleEthSwap}
+          />
         ) : (
           <div className="flex flex-col items-center max-w-[65%] mx-auto gap-y-5 text-clip">
             <p className="font-bold text-xl items-center">
@@ -1305,6 +1337,18 @@ const ViewNft = () => {
               onClick={handleBuy}
               isDisabled={isTransloading}
             />
+            <p>
+              <span className="font-bold text-txt-2 text-base">
+                Insufficient wETH balance ?{" "}
+              </span>
+
+              <span
+                className="earnings-card-history cursor-pointer font-bold"
+                onClick={() => setModaltype((prev) => "addFunds")}
+              >
+                Add funds or swap
+              </span>
+            </p>
           </div>
         )}
       </Modal>

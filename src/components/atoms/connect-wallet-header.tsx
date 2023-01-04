@@ -4,8 +4,8 @@ import React from "react";
 interface IConnectWalletHeader {
   isActive?: boolean;
   onClick: () => void;
-  text: string;
-  ICON?: any;
+  text: any;
+  ICON?: React.ElementType;
   count?: number;
 }
 
