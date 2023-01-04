@@ -7,26 +7,10 @@ import * as moment from "moment";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css";
-import {
-  Button,
-  Heading2,
-  Input2,
-  Loader,
-  Select,
-} from "../../components/atoms";
-import {
-  CaretDown,
-  CartIcon,
-  CoinIcon,
-  EditIcon,
-  LikeIcon,
-  StatIcon,
-  SwapArrowIcon,
-  SwapIcon,
-} from "../../components/atoms/vectors";
+import { Button, Heading2, Input2 } from "../../components/atoms";
+import { CoinIcon } from "../../components/atoms/vectors";
 import { Footer, Modal } from "../../components/organisms";
 import DashboardLayout from "../../template/DashboardLayout";
-import EyeIcon from "@/src/components/atoms/vectors/eye-icon";
 import { apiRequest } from "../../functions/offChain/apiRequests";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -34,26 +18,26 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 
 import abi from "../../artifacts/abi.json";
-import { findEvents } from "../../functions/onChain/generalFunction";
 
-import { connectedAccount } from "../../functions/onChain/authFunction";
 import { INftcard } from "@/src/components/molecules/NftMediumCard";
-import { BigNumber, ethers } from "ethers";
+import { ethers } from "ethers";
 import APPCONFIG from "@/src/constants/Config";
 import { ActivityLoader } from "@/src/components/lazy-loaders";
-import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 
 import TimePicker from "react-time-picker/dist/entry.nostyle";
-import { ConnectWalletTab } from "@/src/components/molecules";
+import { SwapCard } from "@/src/components/molecules";
 
 const ViewUnlistedNFT = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState<"offer" | "addFunds">("offer");
-  const [activeOfferTab, SetActiveOfferTab] = useState(0);
-  const offerTab = [
-    { text: "Swap for wETH", icon: SwapIcon },
-    { text: "Deposit Crypto", icon: SwapIcon },
-  ];
+  const [nftPayload, setNftPayload] = useState({
+    nft_quantity: "0",
+    nft_price: "0.0",
+  });
+
+  const [ethInput, setEthInput] = useState("0.0");
+  const [wETHInput, setWETHInput] = useState("0.0");
+
   const [itemDetail, setItemDetail] = useState<INftcard | null>(null);
   const { query, push } = useRouter();
   const { id } = query;
@@ -354,14 +338,18 @@ const ViewUnlistedNFT = () => {
     setDateSelected(ranges.selection);
   };
 
-  const handleTimeChange = (value) => {
-    setTimeSelected(value);
+  const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNftPayload({
+      ...nftPayload,
+      [name]: value,
+    });
   };
 
-  // const applyDateFilter = () => {
-  //   onFilter(dateSelected);
-  //   setShowDateModal(false);
-  // };
+  const handleEthSwap = (e) => {
+    // setShowModal((prev) => !prev);
+    setModalType("offer");
+  };
 
   return (
     <DashboardLayout isLoading={!itemDetail}>
@@ -888,8 +876,12 @@ const ViewUnlistedNFT = () => {
         title={modalType === "offer" ? "Make an offer" : "Add funds"}
         openModal={showModal}
         closeModal={setShowModal}
-        modalWt={modalType === "addFunds" ? "w-max" : "w-[40rem]"}
-        modalHt="h-full sm:h-[60%] my-auto md:h-fit lg:h-[80%] overflow-y-auto"
+        modalWt={modalType === "addFunds" ? "w-[40rem] md:w-fit" : "w-[40rem]"}
+        modalHt={
+          modalType === "addFunds"
+            ? "h-full sm:h-[60%] my-auto md:h-fit overflow-y-auto"
+            : "h-full sm:h-[60%] my-auto md:h-fit lg:h-[80%] overflow-y-auto"
+        }
       >
         {modalType === "offer" ? (
           <div className="flex flex-col items-center max-w-[85%] mx-auto gap-y-5">
@@ -929,25 +921,28 @@ const ViewUnlistedNFT = () => {
             <div className="create-new-nft-wrapper-2 w-full mb-4">
               <div className="create-new-nft-wrapper-2 w-full space-y-6">
                 <Input2
-                  name="itemQuantiy"
+                  name="nft_quantity"
                   placeholder="0"
                   label="Item Quantity"
-                  // onChange={handleFieldChange}
-                  // value={nftPayload.coinPrice}
+                  onChange={handleFieldChange}
+                  value={nftPayload.nft_quantity}
                 />
 
                 <>
                   <Input2
-                    name="coinPrice"
+                    name="nft_price"
                     placeholder="0.00"
                     label="Your Offer"
-                    // onChange={handleFieldChange}
-                    // value={nftPayload.coinPrice}
+                    onChange={handleFieldChange}
+                    value={nftPayload.nft_price}
                   />
-                  <p className="font-bold text-txt-2 text-base">
-                    insufficient wETH balance,{" "}
+                  <p className="">
+                    <span className="font-bold text-txt-2 text-base">
+                      Insufficient wETH balance,{" "}
+                    </span>
+
                     <span
-                      className="earnings-card-history cursor-pointer"
+                      className="earnings-card-history cursor-pointer font-bold"
                       onClick={() => setModalType((prev) => "addFunds")}
                     >
                       Add funds or swap
@@ -1039,72 +1034,13 @@ const ViewUnlistedNFT = () => {
             </div>
           </div>
         ) : (
-          <div>
-            <ConnectWalletTab
-              tabs={offerTab}
-              activeTab={activeOfferTab}
-              setActiveTab={SetActiveOfferTab}
-              tabWT="w-full justify-evenly"
-            />
-            <div className="px-10 pt-14">
-              {activeOfferTab === 0 ? (
-                <div className="">
-                  <div className="flex justify-between items-center gap-x-6 mb-2">
-                    <div className="">
-                      <span className="font-medium ">Swap</span>
-                      <div className="mt-2 border border-border-1-line rounded-xl px-12 flex flex-col items-center gap-y-6 py-6">
-                        <span className="text-4xl font-medium">1</span>
-                        <span className="flex items-center gap-x-3 py-3 px-12 bg-bg-6 rounded-full font-medium">
-                          <CoinIcon /> ETH
-                        </span>
-                      </div>
-                    </div>
-                    <span className="py-4 px-6 bg-bg-6 rounded-full">
-                      <SwapArrowIcon />
-                    </span>
-                    <div className="">
-                      <span className="font-medium ">For</span>
-                      <div className="mt-2 border border-border-1-line rounded-xl px-12 flex flex-col items-center gap-y-6 py-6">
-                        <span className="text-4xl font-medium">0.5</span>
-                        <span className="flex items-center gap-x-3 py-3 px-12 bg-bg-6 rounded-full font-medium">
-                          <CoinIcon /> wETH
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <span className="font-medium ">Insufficient ETH Balance</span>
-                  <div className="mt-10">
-                    <Button title="Swap for Wrap ETH" wt="w-full" />
-                    <p className="text-center mt-5 text-txt-4">
-                      Powered by the Uniswap Protocol
-                    </p>
-                  </div>
-                </div>
-              ) : activeOfferTab === 1 ? (
-                <div className="">
-                  <div className="flex flex-col items-center">
-                    <div className="relative w-[9rem] h-[10rem]">
-                      <Image
-                        src="/images/wwcc.webp"
-                        alt="wallet with credit card"
-                        layout="fill"
-                      />
-                    </div>
-                    <p className="text-center mt-10 mx-auto w-[80%]">
-                      Transfer funds from an exchange or another wallet to your
-                      wallet address below:
-                    </p>
-                  </div>
-                  <div className="flex gap-x-6 mt-12">
-                    <span className="w-[80%] font-bold py-4 pl-6 rounded-lg bg-bg-6">
-                      0xdE8cFsgre5y454754h545uu5u4u5u1C79
-                    </span>
-                    <Button title="Copy" />
-                  </div>
-                </div>
-              ) : null}
-            </div>
-          </div>
+          <SwapCard
+            ethValue={ethInput}
+            wETHvalue={wETHInput}
+            setEthValue={setEthInput}
+            setWETHvalue={setWETHInput}
+            handleEthSwap={handleEthSwap}
+          />
         )}
       </Modal>
     </DashboardLayout>

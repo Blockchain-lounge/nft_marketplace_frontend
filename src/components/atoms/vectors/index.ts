@@ -84,6 +84,7 @@ export { default as TiktokIcon } from "./tiktok-icon";
 export { default as TorusIcon } from "./activities-icon";
 export { default as TrendingIcon } from "./trending-icon";
 export { default as TwitterIcon } from "./twitter-icon";
+export { default as UniSwapGuardIcon } from "./uniswap-guard";
 export { default as ViewHistoryArrowIcon } from "./view-history-arrow";
 export { default as WalletConnect } from "./wallet-connect";
 export { default as WalletIcon } from "./wallet-icon";

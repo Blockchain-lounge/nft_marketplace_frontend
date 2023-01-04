@@ -40,7 +40,7 @@ const Input2: FC<InputProps> = ({
           id={name}
           placeholder={placeholder}
           autoComplete="off"
-          className="text-white outline-none"
+          className="text-white outline-none text-[1.125rem] w-full"
           onChange={onChange}
           {...rest}
         />
