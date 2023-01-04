@@ -1,8 +1,10 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import clsx from "clsx";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button, Input2 } from "@/src/components/atoms";
+import DateTime from "@/src/components/organisms/DateTime";
 import {
   AuctionIcon,
   BidIcon,
@@ -24,18 +26,33 @@ import { INftProps } from "@/src/utilities/types";
 
 const ListNft = () => {
   const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState("item");
   const [isTransloading, setIsTransLoading] = useState(false);
   const [nftListingPayload, setNftListingPayload] = useState({
     listing_quantity: "",
     listing_price: "",
-    listing_royalty: "",
+    // listing_royalty: "",
+    starting_bidding_price: "",
+    reserved_bidding_price: "",
   });
+  const [priceListingType, setPriceListingType] = useState("fixed");
+  const [date, setDateSelected] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+  });
+  const [timeSelected, setTimeSelected] = useState(
+    new Date().toLocaleTimeString()
+  );
+
+  //this function handles the date selection
+  const handleRangeSelection = (ranges: any) => {
+    setDateSelected(ranges.selection);
+  };
   const [itemDetail, setItemDetail] = useState<INftProps | null>(null);
   const {
     push,
     query: { id },
   } = useRouter();
-  const [priceListType, setPriceListType] = useState("Fixed price");
 
   const fetchItemDetail = async () => {
     if (id !== undefined) {
@@ -65,9 +82,9 @@ const ListNft = () => {
   }, [id]);
 
   const priceListingTypes = [
-    { type: "Fixed price", icon: <FixedPriceIcon /> },
-    { type: "Open for bids", icon: <BidIcon /> },
-    { type: "Auction", icon: <AuctionIcon /> },
+    { label: "Fixed price", icon: <FixedPriceIcon />, type: "fixed" },
+    // { label: "Open for bids", icon: <BidIcon /> },
+    { label: "Auction", icon: <AuctionIcon />, type: "auction" },
   ];
 
   const fees = [
@@ -106,15 +123,15 @@ const ListNft = () => {
       toast(msg);
       return;
     }
-    if (!nftListingPayload.listing_royalty.trim()) {
-      msg = "listed royalty is empty";
-      toast(msg);
-      return;
-    } else if (isNaN(parseFloat(nftListingPayload.listing_royalty)) === true) {
-      msg = "royalty must be a valid positive number";
-      toast(msg);
-      return;
-    }
+    // if (!nftListingPayload.listing_royalty.trim()) {
+    //   msg = "listed royalty is empty";
+    //   toast(msg);
+    //   return;
+    // } else if (isNaN(parseFloat(nftListingPayload.listing_royalty)) === true) {
+    //   msg = "royalty must be a valid positive number";
+    //   toast(msg);
+    //   return;
+    // }
     if (!nftListingPayload.listing_price.trim()) {
       msg = "listed price is empty";
       toast(msg);
@@ -128,12 +145,19 @@ const ListNft = () => {
         const HEADER = "authenticated";
         const REQUEST_URL = "nft-listing/store/" + id;
         const METHOD = "POST";
-        const DATA = nftListingPayload;
+        const DATA = {
+                    listing_type: priceListingType, 
+                    listing_price: nftListingPayload.listing_price,
+                    listing_quantity: nftListingPayload.listing_quantity,
+                    // listing_royalty: nftListingPayload.listing_royalty,
+                    reserved_bidding_price: nftListingPayload.reserved_bidding_price,
+                    starting_bidding_price: nftListingPayload.starting_bidding_price,
+                  };
 
         apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
           if (response.status == 400) {
             var error = response.data.error;
-            toast(error);
+            toast.error(error);
             setIsTransLoading(false);
             return;
           } else if (response.status == 401) {
@@ -159,47 +183,126 @@ const ListNft = () => {
 
   return (
     <EarningLayout title="List item for sale" isLoading={itemDetail === null}>
-      <div className="flex flex-col-reverse gap-y-20 lg:gap-0 lg:flex-row lg:h-[70vh]">
+      <div className="flex flex-col-reverse gap-y-20 lg:gap-0 lg:flex-row">
         <div className="space-y-8 lg:w-[70%]">
           <ToastContainer />
           <form className="space-y-8" onSubmit={handleSubmit}>
             <div className="space-y-2">
               <div className="lg:w-[80%] space-y-8">
-                {/* <Select title="ETH" icon={<CoinIcon />} /> */}
-                <Input2
-                  label="Price in (Eth)"
-                  name="listing_price"
-                  placeholder="0.00"
-                  onChange={handleFieldChange}
-                  value={nftListingPayload.listing_price}
-                />
+                <>
+                  <span className="create-new-nft-wrapper-2-label">
+                    Price Listing Type
+                  </span>
+                  <span className="text-sm text-txt-2">
+                    Select the price type for this listing
+                  </span>
+                  <div className="flex justify-between w-full gap-x-5">
+                    {priceListingTypes.map((p, i) => (
+                      <div
+                        key={"new-nft-listing" + p.type}
+                        className={clsx(
+                          "flex flex-col items-center gap-y-2 py-6 w-1/2 border rounded-[0.75rem] cursor-pointer",
+                          priceListingType === p.type
+                            ? "border-txt-1 bg-[#192142]"
+                            : "border-border-1-line"
+                        )}
+                        onClick={() => {
+                          //function to handle price listing change type
+                          setPriceListingType(p.type);
+                        }}
+                      >
+                        <span>{p.icon}</span>
+                        <span>{p.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </>
+                {priceListingType === "fixed" ? (
+                  <>
+                    <Input2
+                      label="Price in (Eth)"
+                      name="listing_price"
+                      placeholder="0.00"
+                      onChange={handleFieldChange}
+                      value={nftListingPayload.listing_price}
+                    />
 
-                <Input2
-                  label="Royalty"
-                  name="listing_royalty"
-                  maxLength={4}
-                  placeholder="0.00"
-                  onChange={handleFieldChange}
-                  value={nftListingPayload.listing_royalty}
-                />
+                    {/* <Input2
+                      label="Royalty"
+                      name="listing_royalty"
+                      maxLength={4}
+                      placeholder="0.00"
+                      onChange={handleFieldChange}
+                      value={nftListingPayload.listing_royalty}
+                    /> */}
 
-                <Input2
-                  label="Quantity to be listed"
-                  name="listing_quantity"
-                  placeholder="0"
-                  onChange={handleFieldChange}
-                  value={
-                    nftListingPayload.listing_quantity !==
-                      itemDetail?.item_supply &&
-                    nftListingPayload.listing_quantity === "0"
-                      ? itemDetail?.item_supply
-                      : nftListingPayload.listing_quantity
-                  }
-                  suffix={itemDetail !== null ? itemDetail?.item_supply : ""}
-                />
+                    <Input2
+                      label="Quantity to be listed"
+                      name="listing_quantity"
+                      placeholder="0"
+                      onChange={handleFieldChange}
+                      value={
+                        nftListingPayload.listing_quantity !==
+                          itemDetail?.item_supply &&
+                        nftListingPayload.listing_quantity === "0"
+                          ? itemDetail?.item_supply
+                          : nftListingPayload.listing_quantity
+                      }
+                      suffix={
+                        itemDetail !== null ? itemDetail?.item_supply : ""
+                      }
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Input2
+                      label="Starting auction price in (Eth)"
+                      belowDesc="The starting price for the auction."
+                      name="starting_bidding_price"
+                      placeholder="0.00"
+                      onChange={handleFieldChange}
+                      value={nftListingPayload.listing_price}
+                    />
+
+                    <Input2
+                      label="Reserved auction price in (Eth)"
+                      belowDesc="The minimum price for the auction to be successful."
+                      name="reserved_bidding_price"
+                      placeholder="0.00"
+                      onChange={handleFieldChange}
+                      value={nftListingPayload.listing_price}
+                    />
+                    <Input2
+                      label="Quantity to be listed"
+                      name="listing_quantity"
+                      placeholder="0"
+                      onChange={handleFieldChange}
+                      value={
+                        nftListingPayload.listing_quantity !==
+                          itemDetail?.item_supply &&
+                        nftListingPayload.listing_quantity === "0"
+                          ? itemDetail?.item_supply
+                          : nftListingPayload.listing_quantity
+                      }
+                      suffix={
+                        itemDetail !== null ? itemDetail?.item_supply : ""
+                      }
+                    />
+                    <Button
+                      title="Set auction duration"
+                      outline
+                      type="button"
+                      onClick={() => {
+                        setModalType("auction-time");
+                        setShowModal((prev) => !prev);
+                      }}
+                    />
+                  </>
+                )}
               </div>
             </div>
-            <div className="create-new-nft-gas-fee-wrapper ">
+
+            <div className="create-new-nft-gas-fee-wrapper">
               <span>Fees</span>
               <div className="create-new-nft-gas-fee">
                 {fees.map(({ label, value }) => (
@@ -213,6 +316,7 @@ const ListNft = () => {
                 ))}
               </div>
             </div>
+
             <Button
               isDisabled={isTransloading}
               title="Complete listing"
@@ -265,49 +369,75 @@ const ListNft = () => {
           </div>
         ) : null}
       </div>
+
       <Modal
         openModal={showModal}
         closeModal={setShowModal}
-        noTop
-        modalWt="w-[30rem]"
+        title={modalType === "auction-time" ? "Set auction duration" : ""}
+        noTop={modalType === "auction-time" ? false : true}
+        modalWt={modalType === "auction-time" ? "w-[35rem]" : "w-[30rem]"}
       >
-        {itemDetail !== null ? (
-          <div className="create-new-nft-success">
-            <div className="mt-4 h-40 w-40 relative">
-              <Image
-                src={itemDetail.item_art_url}
-                alt={itemDetail.item_title}
-                layout="fill"
-                objectFit="cover"
-                className="rounded-2xl"
-                placeholder="blur"
-                blurDataURL="/images/placeholder.png"
-              />
-              <span className="absolute right-[0.3rem] bottom-[-0.7rem] bg-positive-color h-8 w-8 grid place-items-center rounded-full border-bg-1 border-[2.5px]">
-                <CheckIcon color="#15152E" />
-              </span>
-            </div>
-            <span className="text-lg">Your item has been listed!</span>
-            <span className="text-sm font-medium mx-auto max-w-[60%] text-center text-txt-2">
-              CloneX #3119 from CloneX Collection has been listed for sale
-            </span>
-            <div className="flex flex-col items-center gap-y-2 my-2">
-              <span className="text-sm text-txt-3">Share to</span>
-              <span className="flex items-center gap-x-6">
-                <ProfileLinkIcon />
-                <FbIcon />
-                <TwitterIcon />
-                <DiscordIcon />
-              </span>
-            </div>
-            <span className="crete-new-nft-icons"></span>
+        {modalType === "auction-time" ? (
+          <div className="px-8 space-y-8 pb-2">
+            <DateTime
+              startDate={date.startDate}
+              endDate={date.endDate}
+              handleRangeSelection={handleRangeSelection}
+              time={timeSelected}
+              handleSelectedTime={setTimeSelected}
+            />
+
             <Button
-              title="View listing"
-              outline2
-              onClick={() => push(`/sell-nft/${id}`)}
+              wt="w-full"
+              title="Apply"
+              onClick={() => {
+                setModalType("item");
+                setShowModal((prev) => !prev);
+                toast.success("Auction duration set successfully");
+              }}
             />
           </div>
-        ) : null}
+        ) : (
+          <>
+            {itemDetail !== null ? (
+              <div className="create-new-nft-success">
+                <div className="mt-4 h-40 w-40 relative">
+                  <Image
+                    src={itemDetail.item_art_url}
+                    alt={itemDetail.item_title}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-2xl"
+                    placeholder="blur"
+                    blurDataURL="/images/placeholder.png"
+                  />
+                  <span className="absolute right-[0.3rem] bottom-[-0.7rem] bg-positive-color h-8 w-8 grid place-items-center rounded-full border-bg-1 border-[2.5px]">
+                    <CheckIcon color="#15152E" />
+                  </span>
+                </div>
+                <span className="text-lg">Your item has been listed!</span>
+                <span className="text-sm font-medium mx-auto max-w-[60%] text-center text-txt-2">
+                  CloneX #3119 from CloneX Collection has been listed for sale
+                </span>
+                <div className="flex flex-col items-center gap-y-2 my-2">
+                  <span className="text-sm text-txt-3">Share to</span>
+                  <span className="flex items-center gap-x-6">
+                    <ProfileLinkIcon />
+                    <FbIcon />
+                    <TwitterIcon />
+                    <DiscordIcon />
+                  </span>
+                </div>
+                <span className="crete-new-nft-icons"></span>
+                <Button
+                  title="View listing"
+                  outline2
+                  onClick={() => push(`/sell-nft/${id}`)}
+                />
+              </div>
+            ) : null}
+          </>
+        )}
       </Modal>
     </EarningLayout>
   );

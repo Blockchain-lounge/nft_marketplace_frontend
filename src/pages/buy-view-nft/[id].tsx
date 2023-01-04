@@ -57,16 +57,22 @@ const ViewNft = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [nextPage, setNextPage] = useState(1);
-
-  const [dateSelected, setDateSelected] = useState({
+  const [offerPayload, setOfferPayload] = useState(0.000);
+  const [nftListingPayload, setNftListingPayload] = useState({
+    price: "0.000",
+  });
+  const [date, setDateSelected] = useState({
     startDate: new Date(),
     endDate: new Date(),
-    key: "selection",
   });
-
   const [timeSelected, setTimeSelected] = useState(
     new Date().toLocaleTimeString()
   );
+
+  //this function handles the date selection
+  const handleRangeSelection = (ranges: any) => {
+    setDateSelected(ranges.selection);
+  };
 
   const bidExpDates = [
     "1 day",
@@ -92,6 +98,15 @@ const ViewNft = () => {
    * @async
    * @returns {*}
    */
+  const handleFieldChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setOfferPayload({
+      ...offerPayload,
+      [name]: value,
+    });
+  };
   const fetchUser = async () => {
     const HEADER = "authenticated";
     const REQUEST_URL = "user/my_profile";
@@ -173,6 +188,40 @@ const ViewNft = () => {
    * @returns {*}
    */
 
+  const makeOffer = async (event) => {
+    event.preventDefault();
+    setIsTransLoading((prev) => !prev);
+    {
+      //@ts-ignore
+      var formData = {
+        listing_id: itemDetail._id,
+        offer_start_date: date.startDate,
+        offer_end_date: date.endDate,
+        amount: offerPayload.price,
+        offer_time: timeSelected
+        // bidder: buyer,
+      };
+
+      const HEADER = "authenticated";
+      const REQUEST_URL = "nft-offer/make_offer";
+      const METHOD = "POST";
+      const DATA = formData;
+      // toast("Finalizing the transaction...");
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
+        if (response.status == 200 || response.status == 201) {
+          toast(response.data.message);
+          setIsTransLoading(false);
+          push("");
+        } else {
+          toast(response.data.error);
+          setIsTransLoading(false);
+        }
+      });
+    }
+
+    // setShowModal((prev) => !prev);
+  }
+
   const handleBuy = async () => {
     setIsTransLoading((prev) => !prev);
     {
@@ -234,7 +283,7 @@ const ViewNft = () => {
             // gasPrice: 20000000,
             // gasPrice: 908462167791,
             // maxFeePerGas:18462167791,
-            // baseFee: 18462167791 
+            // baseFee: 18462167791
           }
         );
         tnx = await transaction.wait();
@@ -305,10 +354,10 @@ const ViewNft = () => {
     setShowModal((prev) => !prev);
   };
 
-  const handleOffer = async () => {
-    //Write bid function here
-    setShowModal((prev) => !prev);
-  };
+  // const handleOffer = async () => {
+  //   //Write bid function here
+  //   setShowModal((prev) => !prev);
+  // };
 
   // const approve = async () => {
   //   const provider = new ethers.providers.Web3Provider(
@@ -408,19 +457,6 @@ const ViewNft = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, currentPage]);
-
-  const handleRangeSelection = (ranges: any) => {
-    setDateSelected(ranges.selection);
-  };
-
-  const handleTimeChange = (value) => {
-    setTimeSelected(value);
-  };
-
-  // const applyDateFilter = () => {
-  //   onFilter(dateSelected);
-  //   setShowDateModal(false);
-  // };
 
   return (
     <DashboardLayout isLoading={!itemDetail}>
@@ -585,7 +621,7 @@ const ViewNft = () => {
                             }}
                           />
                           <Button
-                            title="Make an offer  Coming Soon!!!"
+                            title="Make an offer"
                             outline2
                             wt="w-full"
                             onClick={() => {
@@ -593,7 +629,7 @@ const ViewNft = () => {
                               setShowModal((prev) => !prev);
                             }}
                           />
-                          <Button
+                          {/* <Button
                             title="Place a bid"
                             outline2
                             wt="w-full"
@@ -601,7 +637,7 @@ const ViewNft = () => {
                               setModaltype("bid");
                               setShowModal((prev) => !prev);
                             }}
-                          />
+                          /> */}
                         </div>
                       ) : (
                         <Button
@@ -1129,15 +1165,16 @@ const ViewNft = () => {
               </span>
             </div> */}
 
+            <form action="#" onSubmit={(e) => makeOffer(e)}>
             <div className="create-new-nft-wrapper-2 w-full mb-4">
               <div className="create-new-nft-wrapper-2 w-full">
                 {/* <Select title="ETH" icon={<CoinIcon />} /> */}
                 <Input2
-                  name="coinPrice"
+                  name="price"
                   placeholder="0.00"
-                  label="Your Offer"
-                  // onChange={handleFieldChange}
-                  // value={nftPayload.coinPrice}
+                  label="Your Offer in (Eth)"
+                  onChange={handleFieldChange}
+                  value={offerPayload.price}
                 />
               </div>
             </div>
@@ -1157,7 +1194,13 @@ const ViewNft = () => {
                 Offer duration
               </span>
 
-              <DateTime />
+              <DateTime
+                startDate={date.startDate}
+                endDate={date.endDate}
+                handleRangeSelection={handleRangeSelection}
+                time={timeSelected}
+                handleSelectedTime={setTimeSelected}
+              />
 
               {/* <Input2 type="datetime-local" /> */}
               {/* <Select
@@ -1201,11 +1244,12 @@ const ViewNft = () => {
             <div className="mt-12 lg:mt-10 w-full">
               <Button
                 title="Make offer"
-                onClick={handleOffer}
+                onClick={(e) => makeOffer(e)}
                 wt="w-full"
                 isDisabled={isTransloading}
               />
             </div>
+            </form>
           </div>
         ) : (
           <div className="flex flex-col items-center max-w-[65%] mx-auto gap-y-5 text-clip">

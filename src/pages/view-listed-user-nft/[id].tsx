@@ -19,6 +19,8 @@ import APPCONFIG from "../../constants/Config";
 import abi from "../../artifacts/abi.json";
 import { ethers } from "ethers";
 import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
+import { handleModalOpen } from "@/src/reducers/modalReducer";
+import { connectedAccount } from "../../functions/onChain/authFunction";
 
 const ViewUserNft = () => {
   const [dollarRate] = UseConvertEthToDollar();
@@ -28,7 +30,10 @@ const ViewUserNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [itemDetail, setItemDetail] = useState(null);
   const [isTransloading, setIsTransLoading] = useState(false);
-
+  const [connectedAddress, setConnectedAddress] = useState(null);
+  const [offerLists, setOfferLists] = useState([]);
+  const [shownOffer, setShownOffer] = useState([]);
+  
   const handleCancelNftListing = async () => {
     if (id !== undefined) {
       setIsTransLoading(true);
@@ -93,22 +98,30 @@ const ViewUserNft = () => {
     const REQUEST_URL = "user/my_profile";
     const METHOD = "GET";
     const DATA = {};
-    apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-      if (response.status == 400) {
-        var error = response.data.error;
-        toast(error);
-        return;
-      } else if (response.status == 401) {
-        toast("Unauthorized request!");
-        return;
-      } else if (response.status == 200) {
-        setOwner(response.data.data.userProfileImg);
-      } else {
-        toast("Something went wrong, please try again!");
-        return;
-      }
-    });
+    try{
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status === 400) {
+          var error = response.data.error;
+          toast(error);
+          return;
+        } else if (response.status === 401) {
+          toast("Unauthorized request!");
+          push("/");
+          return;
+        } else if (response.status === 200) {
+          setOwner(response.data.data.userProfileImg);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    }
+    catch(err){
+      toast("Unauthorized request!");
+      push("/");
+    }
   };
+
   const fetchItemDetail = async () => {
     if (id !== undefined) {
       const HEADER = {};
@@ -135,22 +148,96 @@ const ViewUserNft = () => {
     }
   };
 
+  const acceptOffer = async (action)=>{
+    if(shownOffer[0]._id && shownOffer[0]._id.length > 0){
+      
+      const offer_id = shownOffer[0]._id
+      const HEADER = 'authenticated';
+      const REQUEST_URL = "nft-offer/accept_reject_offer" + offer_id+'?action='+action;
+      const METHOD = "GET";
+      const DATA = {};
+
+      await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400 || response.status == 404) {
+          var error = response.data.error;
+          toast(error);
+          setShowModal((prev) => !prev);
+          // push("/");
+          return;
+        } else if (response.status == 200) {
+          toast(response.data.message);
+          setShowModal((prev) => !prev);
+        } else {
+          toast("Something went wrong, please try again!");
+          setShowModal((prev) => !prev);
+          return;
+        }
+      });
+
+    }
+  }
+  const fetchOffers = async (id) => {
+    if (id !== undefined) {
+      const HEADER = 'authenticated';
+      const REQUEST_URL = "nft-offer/" + id;
+      const METHOD = "GET";
+      const DATA = {};
+
+      await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          // push("/");
+          return;
+        } else if (response.status == 200) {
+          setOfferLists(response.data.data);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    }
+  };
+
   useEffect(() => {
     fetchItemDetail();
-    fetchUser();
+    connectedAccount().then((response) => {
+      if (response !== null) {
+        setConnectedAddress(response);
+        fetchOffers(id);
+        fetchUser();
+      }
+      else{
+        toast("Unauthorized request!");
+        push("/");
+      }
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleNavigateToCollection = () => {
     push(`/single-collection/${itemDetail.item.collection._id}`);
   };
-  // console.log({ itemDetail });
+
+
+  const viewOffer = (offer_id) => {
+    var selectedOffer = [];
+    for (var i = 0, len = offerLists.length; i < len; i++) {
+      if(offerLists[i]._id === offer_id){
+        selectedOffer.push(offerLists[i]);
+        setShownOffer(selectedOffer);
+        setShowModal((prev) => !prev);
+        return;
+      }
+      
+  }
+  };
   return (
     <DashboardLayout>
       {itemDetail !== null ? (
         <div className="sub-layout-wrapper scrollbar-hide">
           <div className="center space-y-8 h-screen lg:h-[80vh]">
-            <div className="grid lg:gap-x-8 lg:grid-cols-[0.35fr_0.3fr_0.35fr]">
+            <div className="grid lg:gap-x-8 lg:grid-cols-[0.37fr_0.3fr_0.33fr]">
               <div>
                 <div className="relative h-[23rem] lg:h-[100%]">
                   <Image
@@ -291,7 +378,7 @@ const ViewUserNft = () => {
                           )}
                         </div>
                         <div className="">
-                          <span className="text-txt-2 block text-xl">
+                          <span className="text-txt-2 block text-xl mb-4">
                             Item quantity
                           </span>
                           <span className="text-xl">
@@ -317,36 +404,65 @@ const ViewUserNft = () => {
                       />
                     </div>
                   </div>
-
-                  {/* <Button title="Edit" wt="w-full" outline2 /> */}
-                  {/* <div className="w-full flex flex-col gap-y-4">
-                    <div className="flex gap-x-5">
-                      <Button
-                        title="Sell"
-                        onClick={() => push(`/list-nft-for-sale/${id}`)}
-                        wt="w-full"
-                      />
-                    </div>
-                  </div> */}
                 </div>
               </div>
-              <div className="create-new-nft-wrapper-2 border border-border-1-line p-4 rounded-[1.25rem] hidden lg:block">
+              <div className="create-new-nft-wrapper-2 border border-border-1-line p-4 rounded-[1.25rem] hidden lg:block h-[55vh]">
                 <span className="create-new-nft-wrapper-2-label  pb-2 border-b border-border-1-line">
                   Offers
                 </span>
-                <div className="flex flex-col justify-center items-center h-[90%] gap-y-4">
-                  <div className="relative h-[50%] w-[70%] ">
-                    <Image
-                      priority
-                      src="/images/no-offer.svg"
-                      alt="buy-nft-sample"
-                      layout="fill"
-                      objectFit="contain"
-                    />
-                  </div>
-                  <span className="create-new-nft-wrapper-2-label">
-                    No offers yet
-                  </span>
+                <div className="flex flex-col pt-4 h-[90%] gap-y-4 overflow-auto scrollbar-hide">
+                  {/*if there is no offer show this*/}
+                  {
+                    offerLists && offerLists.length > 0
+                    ?
+<>
+                    {offerLists.map((offer, i) => (
+                      <div
+                        key={"offer-list" + offer.address + i}
+                        className="flex justify-between items-center cursor-pointer hover:bg-bg-3 p-3 rounded-md"
+                        onClick={() => viewOffer(offer._id)}
+                      >
+                        <div className="flex items-center gap-x-4">
+                          <div className="relative h-14 w-14">
+                            <Image
+                              src={offer.item_id.item_art_url}
+                              alt={"offer-img" + i}
+                              layout="fill"
+                              objectFit="contain"
+                              className="rounded-full"
+                            />
+                          </div>
+                          <span className="font-medium">{
+                            offer.user_id.username !== null
+                            && offer.user_id.username !== ''
+                            ? offer.user_id.username
+                            : ''
+                          }</span>
+                        </div>
+                        <span className="font-bold flex items-center gap-x-2">
+                          <CoinIcon />
+                          {offer.offer_price}ETH
+                        </span>
+                      </div>
+                    ))}
+                  </>
+                  :
+<>
+                    <div className="relative h-[50%] w-[70%]">
+                      <Image
+                        priority
+                        src="/images/no-offer.svg"
+                        alt="buy-nft-sample"
+                        layout="fill"
+                        objectFit="contain"
+                      />
+                    </div>
+                    <span className="create-new-nft-wrapper-2-label">
+                      No offers yet
+                    </span>
+                  </>
+
+                  }
                 </div>
               </div>
             </div>
@@ -389,8 +505,50 @@ const ViewUserNft = () => {
       ) : (
         ""
       )}
-      <Modal openModal={showModal} closeModal={setShowModal} title="offer">
-        <div></div>
+      <Modal
+        openModal={showModal}
+        closeModal={setShowModal}
+        title="Offer"
+        modalWt="w-[25rem]"
+      >
+        <div className="max-w-[80%] mx-auto">
+          <p className="font-medium text-lg text-center text-txt-3 max-w-[80%] mx-auto leading-loose">
+            <span className="font-bold text-lg">
+              {
+                shownOffer && shownOffer.length > 0 && shownOffer[0].user_id && shownOffer[0].user_id.username
+                ?
+                shownOffer[0].user_id.username+' 💸'
+                : ''
+              }              
+              </span> 
+              placed an offer
+            for <span className="font-bold text-lg">
+              {
+                shownOffer && shownOffer.length > 0 && shownOffer[0].item_id && shownOffer[0].item_id.item_title
+                ?
+                shownOffer[0].item_id.item_title
+                : ''
+              }  
+              </span>
+          </p>
+          <span className="text-[2.375rem] font-bold flex justify-center gap-x-2 my-10">
+            <CoinIcon />
+            {
+                shownOffer && shownOffer.length > 0 && shownOffer[0].offer_price
+                ?
+                shownOffer[0].offer_price
+                : ''
+              }  
+          </span>
+          <div className="mt-4 w-full space-y-4">
+            <Button title="Accept" wt="w-full" 
+            onClick={()=> acceptOffer('accept')} 
+            />
+            <Button title="Decline" danger wt="w-full" 
+            onClick={()=> acceptOffer('decline')} 
+            />
+          </div>
+        </div>
       </Modal>
     </DashboardLayout>
   );

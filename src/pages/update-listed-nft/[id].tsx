@@ -62,7 +62,17 @@ const CreateNewNft = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isTransloading, setIsTransLoading] = useState(false);
   const [connectedAddress, setConnectedAddress] = useState(null);
+  const priceListingTypes = [
+    { label: "Fixed price", icon: <FixedPriceIcon />, type: "fixed" },
+    // { label: "Open for bids", icon: <BidIcon /> },
+    { label: "Auction", icon: <AuctionIcon />, type: "auction" },
+  ];
+  const [priceListingType, setPriceListingType] = useState("fixed");
 
+  const fees = [
+    { label: "Service fee", value: "2%" },
+    // { label: "Creator fee", value: "0%" },
+  ];
   const {
     push,
     query: { id },
@@ -226,26 +236,27 @@ const CreateNewNft = () => {
         return;
       }
     }
-    if (
-      (itemDetail.relisted && itemDetail.relisted === false) ||
-      !itemDetail.relisted
-    ) {
-      if (
-        (nftListingPayload.listing_royalty &&
-          nftListingPayload.listing_royalty.length === 0) ||
-        nftListingPayload.listing_royalty === 0
-      ) {
-        msg = "listed royalty is required";
-        toast(msg);
-        return;
-      } else if (
-        isNaN(parseFloat(nftListingPayload.listing_royalty)) === true
-      ) {
-        msg = "royalty must be a valid positive number";
-        toast(msg);
-        return;
-      }
-    }
+    // if (
+    //   (itemDetail.relisted && itemDetail.relisted === false) ||
+    //   !itemDetail.relisted
+    // ) {
+    //   if (
+    //     (nftListingPayload.listing_royalty &&
+    //       nftListingPayload.listing_royalty.length === 0) ||
+    //     nftListingPayload.listing_royalty === 0
+    //   ) {
+    //     msg = "listed royalty is required";
+    //     toast(msg);
+    //     return;
+    //   } 
+    //   else if (
+    //     isNaN(parseFloat(nftListingPayload.listing_royalty)) === true
+    //   ) {
+    //     msg = "royalty must be a valid positive number";
+    //     toast(msg);
+    //     return;
+    //   }
+    // }
     if (
       (nftListingPayload.listing_price &&
         nftListingPayload.listing_price.length === 0) ||
@@ -254,11 +265,13 @@ const CreateNewNft = () => {
       msg = "listed price is required";
       toast(msg);
       return;
-    } else if (isNaN(parseFloat(nftListingPayload.listing_price)) === true) {
+    } 
+    else if (isNaN(parseFloat(nftListingPayload.listing_price)) === true) {
       msg = "price of listed must be a valid positive number";
       toast(msg);
       return;
-    } else {
+    } 
+    else {
       // console.log({ itemIPFSURL });
       setIsTransLoading(true);
       var formData = {
@@ -269,6 +282,7 @@ const CreateNewNft = () => {
             ? nftListingPayload.listing_royalty
             : 0,
         collection_id: nftPayloadselect.id ? nftPayloadselect.id : null,
+        listing_type: priceListingType, 
       };
 
       if (
@@ -367,11 +381,42 @@ const CreateNewNft = () => {
   // console.log({ itemDetail });
   return (
     <EarningLayout isLoading={isLoading} title="Update Item">
-      <div className="flex flex-col-reverse gap-y-20 lg:gap-0 lg:flex-row lg:h-[70vh]">
+      <div className="flex flex-col-reverse gap-y-20 lg:gap-0 lg:flex-row">
         <div className="space-y-8 lg:w-[70%]">
           <ToastContainer />
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="lg:w-[80%] space-y-8">
+            <>
+                  <span className="create-new-nft-wrapper-2-label">
+                    Price Listing Type
+                  </span>
+                  <span className="text-sm text-txt-2">
+                    Select the price type for this listing
+                  </span>
+                  <div className="flex justify-between w-full gap-x-5">
+                    {priceListingTypes.map((p, i) => (
+                      <div
+                        key={"new-nft-listing" + p.type}
+                        className={clsx(
+                          "flex flex-col items-center gap-y-2 py-6 w-1/2 border rounded-[0.75rem] cursor-pointer",
+                          priceListingType === p.type
+                            ? "border-txt-1 bg-[#192142]"
+                            : "border-border-1-line"
+                        )}
+                        onClick={() => {
+                          //function to handle price listing change type
+                          setPriceListingType(p.type);
+                        }}
+                      >
+                        <span>{p.icon}</span>
+                        <span>{p.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </>
+                {
+                priceListingType === "fixed" ? (
+                  <>
               <Input2
                 label="Price"
                 name="listing_price"
@@ -409,6 +454,68 @@ const CreateNewNft = () => {
               ) : (
                 ""
               )}
+              </>
+              ): (
+                  <>
+                    <Input2
+                      label="Starting auction price in (Eth)"
+                      belowDesc="The starting price for the auction."
+                      name="starting_bidding_price"
+                      placeholder="0.00"
+                      onChange={handleFieldChange}
+                      value={nftListingPayload.listing_price}
+                    />
+
+                    <Input2
+                      label="Reserved auction price in (Eth)"
+                      belowDesc="The minimum price for the auction to be successful."
+                      name="reserved_bidding_price"
+                      placeholder="0.00"
+                      onChange={handleFieldChange}
+                      value={nftListingPayload.listing_price}
+                    />
+                    <Input2
+                      label="Quantity to be listed"
+                      name="listing_quantity"
+                      placeholder="0"
+                      onChange={handleFieldChange}
+                      value={
+                        nftListingPayload.listing_quantity !==
+                          itemDetail?.item_supply &&
+                        nftListingPayload.listing_quantity === "0"
+                          ? itemDetail?.item_supply
+                          : nftListingPayload.listing_quantity
+                      }
+                      suffix={
+                        itemDetail !== null ? itemDetail?.item_supply : ""
+                      }
+                    />
+
+                    <div className="create-new-nft-gas-fee-wrapper">
+                      <span>Fees</span>
+                      <div className="create-new-nft-gas-fee">
+                        {fees.map(({ label, value }) => (
+                          <div
+                            className="flex justify-between items-center space-y-2"
+                            key={label}
+                          >
+                            <span className="text-txt-2">{label}</span>
+                            <span>{value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <Button
+                      title="Set auction duration"
+                      outline
+                      type="button"
+                      onClick={() => {
+                        setModalType("auction-time");
+                        setShowModal((prev) => !prev);
+                      }}
+                    />
+                  </>
+                )}
             </div>
             <Button title="Update" isDisabled={isTransloading} />
           </form>

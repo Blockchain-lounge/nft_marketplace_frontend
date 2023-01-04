@@ -12,11 +12,7 @@ const SidebarLink = ({ item }: { item: any }) => {
   const handleOpenSubmenu = () => setOpenSubmenu(!openSubmenu);
   const { pathname, push } = useRouter();
 
-  return item.subLinks ? //     </div> //       <span className="sidebar-label">{item.label}</span> //       <span className="sidebar-icon">{item.icon}</span> //     <div className="sidebar-title"> //   <div className="sidebar-title-wrapper"> // > //   className={clsx("sidebar-menu", item.link === pathname && "bg-[#212346]")} // <div
-  //     <span
-  //       className={clsx(
-  //         "sidebar-toggle-btn",
-  //         openSubmenu && "sidebar-open",
+  return item.subLinks ? //         openSubmenu && "sidebar-open", //         "sidebar-toggle-btn", //       className={clsx( //     <span //     </div> //       <span className="sidebar-label">{item.label}</span> //       <span className="sidebar-icon">{item.icon}</span> //     <div className="sidebar-title"> //   <div className="sidebar-title-wrapper"> // > //   className={clsx("sidebar-menu", item.link === pathname && "bg-[#212346]")} // <div
   //         !item.subLinks ? "hidden" : "block"
   //       )}
   //       onClick={handleOpenSubmenu}
@@ -67,6 +63,9 @@ const SidebarLink = ({ item }: { item: any }) => {
           <CaretDown />
         </span>
         {item.tag && <span className="sidebar-tag">{item.tag}</span>}
+        {item.count && (
+          <span className="connect-header-wrapper-count">{item.count}</span>
+        )}
       </div>
     </div>
   );

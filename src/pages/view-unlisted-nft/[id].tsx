@@ -379,8 +379,7 @@ const ViewUnlistedNFT = () => {
                     <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
                       <Image
                         src={
-                          itemDetail &&
-                          itemDetail.collection_id
+                          itemDetail && itemDetail.collection_id
                             ? itemDetail.collection_id.collectionLogoImage
                             : "/images/placeholder.png"
                         }
@@ -393,7 +392,9 @@ const ViewUnlistedNFT = () => {
                       />
                     </div>
                     <span className="text-xl  lg:text-3xl lg:mr-1">
-                      {itemDetail && itemDetail.collection_id ? itemDetail.collection_id.name : ''}
+                      {itemDetail && itemDetail.collection_id
+                        ? itemDetail.collection_id.name
+                        : ""}
                     </span>
                     <div className="h-6 w-6 relative">
                       <Image
@@ -423,7 +424,7 @@ const ViewUnlistedNFT = () => {
                     <div className="flex flex-col">
                       <span className="text-txt-2">Creator</span>
                       <span>
-                      {itemDetail.user_id &&
+                        {itemDetail.user_id &&
                         itemDetail.user_id &&
                         itemDetail.user_id.username &&
                         itemDetail.user_id.username.length > 0
@@ -445,7 +446,7 @@ const ViewUnlistedNFT = () => {
                     <div className="flex flex-col">
                       <span className="text-txt-2">Current Owner</span>
                       <span>
-                      {itemDetail.user_id &&
+                        {itemDetail.user_id &&
                         itemDetail.user_id &&
                         itemDetail.user_id.username &&
                         itemDetail.user_id.username.length > 0
@@ -456,7 +457,7 @@ const ViewUnlistedNFT = () => {
                   </div>
                 </div>
                 {/* <div className="view-hero-nft-cta-wrapper"> */}
-                  {/* <div className="flex w-full gap-x-6">
+                {/* <div className="flex w-full gap-x-6">
                     <div className="p-4 bg-bg-5 rounded-md w-1/2">
                       <span className="text-txt-2 text-xl block mb-4">
                         Highest floor bid
@@ -478,17 +479,17 @@ const ViewUnlistedNFT = () => {
                   <span className="text-lg font-medium">
                     Last sale price 10.8 ETH
                   </span> */}
-                  {/* <div className="flex flex-col gap-y-4 w-full"> */}
-                    {/* <div className="flex gap-x-5 w-full"> */}
-                      {/* <div className="w-full space-y-4"> */}
-                        {/* <Button
-                          title="Make an offer"
-                          wt="w-full"
-                          onClick={() => {
-                            setShowModal((prev) => !prev);
-                          }}
-                        /> */}
-                        {/* <Button
+                {/* <div className="flex flex-col gap-y-4 w-full"> */}
+                {/* <div className="flex gap-x-5 w-full"> */}
+                {/* <div className="w-full space-y-4"> */}
+                <Button
+                  title="Make an offer"
+                  wt="w-full"
+                  onClick={() => {
+                    setShowModal((prev) => !prev);
+                  }}
+                />
+                {/* <Button
                             title="Place a bid"
                             outline2
                             wt="w-full"
@@ -497,13 +498,13 @@ const ViewUnlistedNFT = () => {
                               setShowModal((prev) => !prev);
                             }}
                           /> */}
-                      {/* </div> */}
+                {/* </div> */}
 
-                      {/* <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
+                {/* <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
                         <CartIcon />
                       </span> */}
-                    {/* </div> */}
-                    {/* <Button
+                {/* </div> */}
+                {/* <Button
                       title="Place a bid"
                       wt="w-full"
                       outline2
@@ -512,7 +513,7 @@ const ViewUnlistedNFT = () => {
                         setShowModal((prev) => !prev);
                       }}
                     /> */}
-                  {/* </div> */}
+                {/* </div> */}
                 {/* </div> */}
               </div>
               {/* <div className="flex gap-x-6 mt-6 items-center">
@@ -808,9 +809,9 @@ const ViewUnlistedNFT = () => {
                                         created_item_listed !== null
                                       ? created_item_listed.item_title
                                       : created_item &&
-                                      created_item !== undefined &&
-                                      created_item !== null
-                                    ? created_item.item_title
+                                        created_item !== undefined &&
+                                        created_item !== null
+                                      ? created_item.item_title
                                       : ""}
                                   </b>
                                 </span>
