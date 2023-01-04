@@ -345,7 +345,7 @@ const ViewUnlistedNFT = () => {
       [name]: value,
     });
   };
-
+  //write your function to handle eth swap
   const handleEthSwap = (e) => {
     // setShowModal((prev) => !prev);
     setModalType("offer");
@@ -936,7 +936,7 @@ const ViewUnlistedNFT = () => {
                     onChange={handleFieldChange}
                     value={nftPayload.nft_price}
                   />
-                  <p className="">
+                  <p>
                     <span className="font-bold text-txt-2 text-base">
                       Insufficient wETH balance,{" "}
                     </span>

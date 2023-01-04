@@ -43,7 +43,7 @@ const SwapCard = ({
         tabs={offerTab}
         activeTab={activeOfferTab}
         setActiveTab={SetActiveOfferTab}
-        tabWT="w-full justify-evenly"
+        tabWT="w-full justify-around"
       />
       <div className="px-10 pt-14">
         {activeOfferTab === 0 ? (
@@ -88,7 +88,7 @@ const SwapCard = ({
                 wt="w-full"
                 onClick={handleEthSwap}
               />
-              <p className="text-center font-medium mt-5 text-txt-2 flex items-center justify-center">
+              <p className="text-center font-medium mt-5 text-txt-2 flex items-center justify-center gap-x-2">
                 <UniSwapGuardIcon />
                 Powered by the Uniswap Protocol
               </p>
