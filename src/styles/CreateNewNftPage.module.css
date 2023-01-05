@@ -26,7 +26,7 @@
 }
 
 .create-new-nft-gas-fee-wrapper {
-  @apply bg-bg-5 p-6 rounded-xl w-[50%] space-y-2;
+  @apply bg-bg-5 p-6 rounded-xl w-full md:w-[50%] space-y-2;
 }
 
 .create-new-nft-properties {
