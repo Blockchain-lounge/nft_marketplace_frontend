@@ -42,8 +42,11 @@ import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 
 import TimePicker from "react-time-picker/dist/entry.nostyle";
 import { SwapCard } from "@/src/components/molecules";
+import { useTimeCountDown } from "@/src/hooks/useTimeCountDown";
 
 const BuyAuctionNFT = () => {
+  const { time } = useTimeCountDown("January 20, 2023");
+
   const [showModal, setShowModal] = useState(false);
   const [nftBidPayload, setNftBidPayload] = useState({
     price: 0.0,
@@ -369,7 +372,6 @@ const BuyAuctionNFT = () => {
         },
       },
     };
-
     setItemDetail({ ...itemData });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -443,7 +445,7 @@ const BuyAuctionNFT = () => {
                   </span>
                 </>
                 <div className="view-hero-nft-owner">
-                  <div className="flex items-center gap-x-4 w-1/3">
+                  <div className="flex items-center gap-x-4 md:w-1/3">
                     <div className="relative h-14 w-14">
                       <Image
                         src="/images/avatar.png"
@@ -458,7 +460,7 @@ const BuyAuctionNFT = () => {
                       <span>0x7a20d...9257</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-x-4">
+                  <div className="flex items-center">
                     <div className="relative h-14 w-14">
                       <Image
                         src="/images/avatar.png"
@@ -480,11 +482,48 @@ const BuyAuctionNFT = () => {
                       <span className="text-txt-2 text-xl block mb-4">
                         Time left
                       </span>
-                      <div className="w-fit">
-                        <span className="flex items-center text-[1.3rem] md:text-[1.75rem] gap-x-1 font-bold">
-                          06 : 08 : 32 : 44
-                        </span>
-                        <div className=" grid items-center mt-2 grid-cols-[0.4fr_0.35fr_0.35fr_0.25fr]">
+                      <div className="md:w-[70%]">
+                        <div className="grid items-center mt-2 grid-cols-[0.23fr_0.24fr_0.24fr_0.24fr]  md:grid-cols-[0.32fr_0.35fr_0.32fr_0.32fr]">
+                          <div className="flex gap-x-1">
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              {Math.abs(time.days).toString().length < 2
+                                ? "0" + Math.abs(time.days)
+                                : Math.abs(time.days)}
+                            </span>
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              :
+                            </span>
+                          </div>
+                          <div className="flex gap-x-1">
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              {Math.abs(time.hours).toString().length < 2
+                                ? "0" + Math.abs(time.hours)
+                                : Math.abs(time.hours)}
+                            </span>
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              :
+                            </span>
+                          </div>
+                          <div className="flex gap-x-3">
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              {Math.abs(time.minutes).toString().length < 2
+                                ? "0" + Math.abs(time.minutes)
+                                : Math.abs(time.minutes)}
+                            </span>
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              :
+                            </span>
+                          </div>
+                          <div className="flex gap-x-1">
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              {Math.abs(time.seconds).toString().length < 2
+                                ? "0" + Math.abs(time.seconds)
+                                : Math.abs(time.seconds)}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="grid items-center mt-2 grid-cols-[0.23fr_0.24fr_0.24fr_0.24fr]  md:grid-cols-[0.32fr_0.35fr_0.32fr_0.32fr]">
                           <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
                             d
                           </span>

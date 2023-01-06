@@ -17,6 +17,7 @@ export { default as MiniUserProfile } from "./MiniUserProfile";
 export { default as MiniUserWallet } from "./MiniUserWallet";
 export { default as NavTab } from "./NavTab";
 export { default as NftAcadCard } from "./NftAcadCard";
+export { default as NftAuctionCard } from "./NftAuctionCard";
 export { default as NftHeaderCard } from "./NftHeader";
 export { default as NftList } from "./NftList";
 export { default as NftMediumCard } from "./NftMediumCard";
