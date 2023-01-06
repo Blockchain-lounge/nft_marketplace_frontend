@@ -119,9 +119,9 @@ const ViewNft = () => {
       ...nftOfferPayload,
       [name]: value,
     });
-    console.log("Price", offerPayload.price)
+    console.log("Price", nftOfferPayload.price)
     console.log("balance", balanceInWEth)
-    isSufficient(offerPayload.price, balanceInWEth);
+    isSufficient(nftOfferPayload.price, balanceInWEth);
   };
   const fetchUser = async () => {
     const HEADER = "authenticated";
@@ -229,8 +229,8 @@ const ViewNft = () => {
         // bidder: buyer,
       };
 
-      if (offerPayload.price > balanceInWEth) {
-        toast("Insufficient balance " + balanceInWEth + " to complete an offer of " + offerPayload.price);
+      if (nftOfferPayload.price > balanceInWEth) {
+        toast("Insufficient balance " + balanceInWEth + " to complete an offer of " + nftOfferPayload.price);
         toast("Add or swap eth for wEth")
         setIsTransLoading(false);
         // alert("Insufficient wETh balance, add or swap eth for wEth")
