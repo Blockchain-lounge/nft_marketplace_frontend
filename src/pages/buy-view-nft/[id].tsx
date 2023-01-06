@@ -63,11 +63,12 @@ const ViewNft = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [nextPage, setNextPage] = useState(1);
-  const [offerPayload, setOfferPayload] = useState(0.000);
-  const [nftListingPayload, setNftListingPayload] = useState({
-    price: "0.000",
+  const [nftOfferPayload, setNftOfferPayload] = useState({
+    price: 0.0,
+    quantity: 1,
   });
   const [balanceInWEth, setBalanceInWEth] = useState(0);
+
   const [date, setDateSelected] = useState({
     startDate: new Date(),
     endDate: new Date(),
@@ -114,8 +115,8 @@ const ViewNft = () => {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setOfferPayload({
-      ...offerPayload,
+    setNftOfferPayload({
+      ...nftOfferPayload,
       [name]: value,
     });
     console.log("Price", offerPayload.price)
@@ -208,14 +209,23 @@ const ViewNft = () => {
     // @dev here is the actual wETh balance for the smart contract call "balanceInWEth"
 
     setIsTransLoading((prev) => !prev);
+    if (Number(nftOfferPayload.quantity) > itemDetail.listing_remaining) {
+      toast.error(
+        "The quantity you specified is more than the listed item quantity"
+      );
+      setNftOfferPayload({ ...nftOfferPayload, quantity: 1 });
+      setIsTransLoading((prev) => !prev);
+      setShowModal((prev) => !prev);
+      return;
+    }
     {
       //@ts-ignore
       var formData = {
         listing_id: itemDetail._id,
         offer_start_date: date.startDate,
         offer_end_date: date.endDate,
-        amount: offerPayload.price,
-        offer_time: timeSelected
+        amount: nftOfferPayload.price * nftOfferPayload.quantity,
+        offer_time: timeSelected,
         // bidder: buyer,
       };
 
@@ -242,14 +252,23 @@ const ViewNft = () => {
           }
         });
       }
-
     }
 
     // setShowModal((prev) => !prev);
-  }
+  };
 
   const handleBuy = async () => {
     setIsTransLoading((prev) => !prev);
+
+    if (Number(nftOfferPayload.quantity) > itemDetail.listing_remaining) {
+      toast.error(
+        "The quantity you specified is more than the listed item quantity"
+      );
+      setNftOfferPayload({ ...nftOfferPayload, quantity: 1 });
+      setIsTransLoading((prev) => !prev);
+      setShowModal((prev) => !prev);
+      return;
+    }
     {
       /*write your payment info here*/
       const provider = new ethers.providers.Web3Provider(
@@ -275,7 +294,8 @@ const ViewNft = () => {
       var buyer = connectedAddress;
       var trackCopyBaseUrl = "";
       var soldItemCopyId = "";
-      var amount = itemDetail.listing_price as string;
+      var amount = (itemDetail.listing_price *
+        nftOfferPayload.quantity) as string;
 
       if (itemDetail.relisted && itemDetail.relisted === true) {
         toast("Please approve this transaction!");
@@ -336,7 +356,7 @@ const ViewNft = () => {
               //   tnx.events[1].args[0].toNumber()
               // );
               // console.log("buyer", tnx.events[1].args[3]);
-              console.log("buytrackCopyBaseUrl-2", tnx.events[1].args[5]);
+              // console.log("buytrackCopyBaseUrl-2", tnx.events[1].args[5]);
             }
           } else {
             toast("We were unable to complete your transaction!");
@@ -636,6 +656,18 @@ const ViewNft = () => {
                         ) : (
                           ""
                         )}
+                      </div>
+                    </div>
+                    <div className="p-4 bg-bg-5 rounded-md w-full">
+                      <span className="text-txt-2 text-xl block mb-4">
+                        Quantity
+                      </span>
+                      <div className="">
+                        <span className="flex items-center text-[1.75rem] gap-x-1">
+                          {/* <CoinIcon /> */}
+                          {itemDetail.listing_remaining}/
+                          {itemDetail.listing_quantity}
+                        </span>
                       </div>
                     </div>
                     {/* <div className="p-4 bg-bg-5 rounded-md w-full">
@@ -1186,7 +1218,7 @@ const ViewNft = () => {
             </div>
           </div>
         ) : modalType === "offer" ? (
-          <div className="flex flex-col items-center max-w-[85%] mx-auto gap-y-5">
+          <div className="flex flex-col items-center max-w-[85%] mx-auto w-full gap-y-5">
             <p className="font-bold text-xl text-txt-2 text-center">
               You are about to make an offer for{" "}
               <span className="text-white font-bold text-xl">
@@ -1220,23 +1252,34 @@ const ViewNft = () => {
               </span>
             </div> */}
 
-            <form action="#" onSubmit={(e) => makeOffer(e)}>
-              <div className="create-new-nft-wrapper-2 w-full mb-4">
+            <form action="#" onSubmit={(e) => makeOffer(e)} className="w-full">
+              <div className="create-new-nft-wrapper-2 mb-4">
                 <div className="create-new-nft-wrapper-2 w-full">
                   {/* <Select title="ETH" icon={<CoinIcon />} /> */}
-                  <Input2
-                    name="price"
-                    placeholder="0.00"
-                    label="Your Offer in (Eth)"
-                    onChange={handleFieldChange}
-                    value={offerPayload.price}
-                  />
+                  <div className="w-full space-y-4">
+                    <Input2
+                      name="quantity"
+                      placeholder="1"
+                      label="Item quantity"
+                      onChange={handleFieldChange}
+                      value={nftOfferPayload.quantity}
+                    />
+
+                    <Input2
+                      name="price"
+                      placeholder="0.00"
+                      label="Your Offer in (Eth)"
+                      onChange={handleFieldChange}
+                      value={nftOfferPayload.price}
+                    />
+                  </div>
+
                   <p className="mt-6">
                     {/* {!isSufficient && ( */}
                     {/* <div> */}
                     {/* <span className="font-bold text-txt-2 text-base">
-                      Insufficient wETH balance ?{" "}
-                    </span> */}
+                        Insufficient wETH balance ?{" "}
+                      </span> */}
                     <span
                       className="earnings-card-history cursor-pointer font-bold"
                       onClick={() => setModaltype((prev) => "addFunds")}
@@ -1344,6 +1387,15 @@ const ViewNft = () => {
               {/* from
               <span className="text-txt-2">Jakes💸</span> */}
             </p>
+            <div className="w-full">
+              <Input2
+                name="quantity"
+                placeholder="1"
+                label="Item quantity"
+                onChange={handleFieldChange}
+                value={nftOfferPayload.quantity}
+              />
+            </div>
             {/* <div className="flex items-center justify-between w-full bg-bg-5 py-4 px-6 rounded-[1.25rem]">
               <div className="flex gap-x-3 items-center">
                 <span className="block relative h-14 w-14">
@@ -1380,7 +1432,9 @@ const ViewNft = () => {
               <span className="text-txt-2">You Will Pay</span>
               <span className="flex gap-x-1">
                 <CoinIcon />
-                {itemDetail !== null ? itemDetail.listing_price : ""}
+                {itemDetail !== null
+                  ? itemDetail.listing_price * nftOfferPayload.quantity
+                  : ""}
               </span>
             </div>
             <Button

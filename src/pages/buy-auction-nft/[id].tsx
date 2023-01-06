@@ -41,9 +41,17 @@ import { ActivityLoader } from "@/src/components/lazy-loaders";
 import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 
 import TimePicker from "react-time-picker/dist/entry.nostyle";
+import { SwapCard } from "@/src/components/molecules";
 
 const BuyAuctionNFT = () => {
   const [showModal, setShowModal] = useState(false);
+  const [nftBidPayload, setNftBidPayload] = useState({
+    price: 0.0,
+    quantity: 1,
+  });
+  const [modalType, setModaltype] = useState<"bid" | "addFunds">("bid");
+  const [ethInput, setEthInput] = useState("0.0");
+  const [wETHInput, setWETHInput] = useState("0.0");
   const [itemDetail, setItemDetail] = useState<INftcard | null>(null);
   const { query, push } = useRouter();
   const { id } = query;
@@ -77,6 +85,20 @@ const BuyAuctionNFT = () => {
     "6 days",
     "7 days",
   ];
+
+  const handleFieldChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setNftBidPayload({
+      ...nftBidPayload,
+      [name]: value,
+    });
+  };
+  const handleEthSwap = (e) => {
+    // setShowModal((prev) => !prev);
+    setModaltype("bid");
+  };
 
   // const nftProperties = [
   //   { label: "dna", value: "human", trait: 19 },
@@ -459,20 +481,20 @@ const BuyAuctionNFT = () => {
                         Time left
                       </span>
                       <div className="w-fit">
-                        <span className="flex items-center text-[1.75rem] gap-x-1 font-bold">
+                        <span className="flex items-center text-[1.3rem] md:text-[1.75rem] gap-x-1 font-bold">
                           06 : 08 : 32 : 44
                         </span>
-                        <div className=" grid items-center mt-2  grid-cols-[0.4fr_0.35fr_0.35fr_0.25fr]">
-                          <span className="text-xl font-medium text-txt-2">
+                        <div className=" grid items-center mt-2 grid-cols-[0.4fr_0.35fr_0.35fr_0.25fr]">
+                          <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
                             d
                           </span>
-                          <span className="text-xl font-medium text-txt-2">
+                          <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
                             hrs
                           </span>
-                          <span className="text-xl font-medium text-txt-2">
+                          <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
                             min
                           </span>
-                          <span className="text-xl font-medium text-txt-2">
+                          <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
                             sec
                           </span>
                         </div>
@@ -483,11 +505,11 @@ const BuyAuctionNFT = () => {
                         Minimum bid
                       </span>
                       <div>
-                        <span className="flex items-center text-[1.75rem] gap-x-1 font-bold">
+                        <span className="flex items-center text-[1.3rem] md:text-[1.75rem] gap-x-1 font-bold">
                           <CoinIcon />
                           0.0003
                         </span>
-                        <span className="text-xl font-medium flex items-center mt-2 text-txt-2 gap-x-2">
+                        <span className="text-[1.2rem] md:text-xl font-medium flex items-center mt-2 text-txt-2 gap-x-2">
                           $67
                         </span>
                       </div>
@@ -889,13 +911,21 @@ const BuyAuctionNFT = () => {
         <Footer />
       </div>
       <Modal
-        title="Place a bid"
+        title={modalType === "addFunds" ? "Add funds" : "Place a bid"}
         openModal={showModal}
         closeModal={setShowModal}
-        modalWt="w-[40rem]"
+        modalWt={modalType === "addFunds" ? "w-[40rem] md:w-fit" : "w-[40rem]"}
         modalHt="h-full sm:h-[60%] my-auto md:h-fit lg:h-[80%] overflow-y-auto"
       >
-        {
+        {modalType === "addFunds" ? (
+          <SwapCard
+            ethValue={ethInput}
+            wETHvalue={wETHInput}
+            setEthValue={setEthInput}
+            setWETHvalue={setWETHInput}
+            handleEthSwap={handleEthSwap}
+          />
+        ) : (
           <div className="flex flex-col items-center max-w-[85%] mx-auto gap-y-5">
             <span className="font-bold text-xl text-txt-2 text-center">
               You are about to place a bid for{" "}
@@ -931,15 +961,35 @@ const BuyAuctionNFT = () => {
             </div> */}
 
             <div className="create-new-nft-wrapper-2 w-full mb-4">
-              <div className="create-new-nft-wrapper-2 w-full">
-                {/* <Select title="ETH" icon={<CoinIcon />} /> */}
+              <div className="create-new-nft-wrapper-2 w-full space-y-6">
                 <Input2
-                  name="coinPrice"
-                  placeholder="0.00"
-                  label="Your bid"
-                  // onChange={handleFieldChange}
-                  // value={nftPayload.coinPrice}
+                  name="quantity"
+                  placeholder="1"
+                  label="Item quantity"
+                  onChange={handleFieldChange}
+                  value={nftBidPayload.quantity}
                 />
+                <div className="">
+                  <Input2
+                    name="price"
+                    placeholder="0.00"
+                    label="Your bid"
+                    onChange={handleFieldChange}
+                    value={nftBidPayload.coinPrice}
+                  />
+                  <p className="mt-2">
+                    <span className="font-bold text-txt-2 text-base">
+                      Insufficient wETH balance ?{" "}
+                    </span>
+
+                    <span
+                      className="earnings-card-history cursor-pointer font-bold"
+                      onClick={() => setModaltype((prev) => "addFunds")}
+                    >
+                      Add funds or swap
+                    </span>
+                  </p>
+                </div>
               </div>
             </div>
             {/* <div className="create-new-nft-wrapper-2 w-full">
@@ -1024,7 +1074,7 @@ const BuyAuctionNFT = () => {
               />
             </div>
           </div>
-        }
+        )}
       </Modal>
     </DashboardLayout>
   );

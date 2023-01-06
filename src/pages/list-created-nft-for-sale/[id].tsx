@@ -146,13 +146,13 @@ const ListNft = () => {
         const REQUEST_URL = "nft-listing/store/" + id;
         const METHOD = "POST";
         const DATA = {
-                    listing_type: priceListingType, 
-                    listing_price: nftListingPayload.listing_price,
-                    listing_quantity: nftListingPayload.listing_quantity,
-                    // listing_royalty: nftListingPayload.listing_royalty,
-                    reserved_bidding_price: nftListingPayload.reserved_bidding_price,
-                    starting_bidding_price: nftListingPayload.starting_bidding_price,
-                  };
+          listing_type: priceListingType,
+          listing_price: nftListingPayload.listing_price,
+          listing_quantity: nftListingPayload.listing_quantity,
+          // listing_royalty: nftListingPayload.listing_royalty,
+          reserved_bidding_price: nftListingPayload.reserved_bidding_price,
+          starting_bidding_price: nftListingPayload.starting_bidding_price,
+        };
 
         apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
           if (response.status == 400) {
@@ -183,25 +183,23 @@ const ListNft = () => {
 
   return (
     <EarningLayout title="List item for sale" isLoading={itemDetail === null}>
-      <div className="flex flex-col-reverse gap-y-20 lg:gap-0 lg:flex-row">
+      <div className="flex flex-col gap-y-6 md:gap-y-20 lg:gap-0 lg:flex-row">
         <div className="space-y-8 lg:w-[70%]">
           <ToastContainer />
           <form className="space-y-8" onSubmit={handleSubmit}>
             <div className="space-y-2">
               <div className="lg:w-[80%] space-y-8">
                 <>
-                  <span className="create-new-nft-wrapper-2-label">
-                    Price Listing Type
-                  </span>
+                  <span className="create-new-nft-wrapper-2-label">Type</span>
                   <span className="text-sm text-txt-2">
                     Select the price type for this listing
                   </span>
-                  <div className="flex justify-between w-full gap-x-5">
+                  <div className="flex flex-col lg:flex-row justify-between gap-y-5 md:gap-y-0 w-full gap-x-5">
                     {priceListingTypes.map((p, i) => (
                       <div
                         key={"new-nft-listing" + p.type}
                         className={clsx(
-                          "flex flex-col items-center gap-y-2 py-6 w-1/2 border rounded-[0.75rem] cursor-pointer",
+                          "flex flex-col items-center gap-y-2 py-6 w-full md:w-1/2 border rounded-[0.75rem] cursor-pointer",
                           priceListingType === p.type
                             ? "border-txt-1 bg-[#192142]"
                             : "border-border-1-line"
@@ -316,24 +314,24 @@ const ListNft = () => {
                 ))}
               </div>
             </div>
-
-            <Button
-              isDisabled={isTransloading}
-              title="Complete listing"
-              // onClick={() => setShowModal((prev) => !prev)}
-            />
+            <div className="hidden lg:block">
+              <Button
+                isDisabled={isTransloading}
+                title="Complete listing"
+                // onClick={() => setShowModal((prev) => !prev)}
+              />
+            </div>
           </form>
         </div>
         {itemDetail !== null ? (
-          <div className="mb-8 max-w-[80%] mx-auto w-full lg:mx-0 lg:max-w-[40%]">
+          <div className="mb-8 mx-auto w-full lg:mx-0 lg:max-w-[40%]">
             <div className="create-new-nft-wrapper-2 mt-2">
               <span className="create-new-nft-wrapper-2-label">Preview</span>
               <span className="create-new-nft-wrapper-2-label-type">
                 This is how your item will be displayed
               </span>
             </div>
-
-            <div className="lg:w-[25rem] h-[20rem] lg:h-[27rem] mt-4">
+            <div className="lg:w-[25rem] h-[37rem] lg:h-[32rem] mt-4 flex flex-col">
               <div className="h-[100%] relative">
                 {/* <div className="nmc-wrapper-likes nmc-wrapper2-likes z-10">
                 <LikeIcon />
@@ -365,6 +363,14 @@ const ListNft = () => {
                   {itemDetail.collection_id.name}
                 </span>
               </div>
+            </div>
+            <div className="lg:hidden mt-8">
+              <Button
+                isDisabled={isTransloading}
+                title="Complete listing"
+                // onClick={() => setShowModal((prev) => !prev)}
+                wt="w-full"
+              />
             </div>
           </div>
         ) : null}

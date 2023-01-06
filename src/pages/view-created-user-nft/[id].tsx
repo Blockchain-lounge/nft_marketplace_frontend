@@ -90,10 +90,10 @@ const ViewUserNft = () => {
     <DashboardLayout>
       {itemDetail !== null ? (
         <div className="sub-layout-wrapper scrollbar-hide">
-          <div className="center space-y-8 h-screen lg:h-[80vh]">
+          <div className="center space-y-8 lg:h-[80vh]">
             <div className="grid lg:gap-x-8 lg:grid-cols-[0.35fr_0.3fr_0.35fr]">
               <div>
-                <div className="relative h-[23rem] lg:h-[100%]">
+                <div className="relative h-[35rem] lg:h-[100%]">
                   <Image
                     src={itemDetail.item_art_url}
                     alt={itemDetail.item_title}
@@ -143,7 +143,7 @@ const ViewUserNft = () => {
                   </span>
                 </div> */}
               </div>
-              <div className="space-y-8 py-4">
+              <div className="mt-4 md:mt-0 space-y-8 py-4">
                 <div>
                   <div className="flex items-center mb-5">
                     {/*collection-logo*/}
@@ -212,7 +212,7 @@ const ViewUserNft = () => {
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between gap-x-4 mt-4">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-y-4 md:gap-y-0 gap-x-4 mt-4">
                       <Button
                         title="Edit"
                         outline2
@@ -239,7 +239,7 @@ const ViewUserNft = () => {
                   </div> */}
                 </div>
               </div>
-              <div className="create-new-nft-wrapper-2 border border-border-1-line p-4 rounded-[1.25rem] hidden lg:block">
+              <div className="create-new-nft-wrapper-2 border border-border-1-line p-4 rounded-[1.25rem] h-[35vh] lg:h-[50vh] lg:block">
                 <span className="create-new-nft-wrapper-2-label  pb-2 border-b border-border-1-line">
                   Offers
                 </span>

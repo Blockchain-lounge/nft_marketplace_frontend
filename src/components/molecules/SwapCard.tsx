@@ -139,11 +139,11 @@ const SwapCard = ({
                 address below:
               </p>
             </div>
-            <div className="flex gap-x-6 mt-12">
-              <span className="w-[80%] font-bold py-4 pl-6 rounded-lg bg-bg-6">
+            <div className="flex flex-col md:flex-row gap-y-6 md:gap-y-0 gap-x-6 mt-12 w-full">
+              <span className="md:w-[80%] font-bold py-4 pl-6 rounded-lg bg-bg-6">
                 0xdE8cFsgre5y454754h545uu5u4u5u1C79
               </span>
-              <Button title="Copy" />
+              <Button title="Copy" wt="  w-full md:w-[40%]" />
             </div>
           </div>
         ) : null}
