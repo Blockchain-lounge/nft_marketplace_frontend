@@ -29,6 +29,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 
 import abi from "../../artifacts/abi.json";
+import wEthAbi from "@/src/artifacts/wEthAbi.json";
 import { findEvents } from "../../functions/onChain/generalFunction";
 
 import { connectedAccount } from "../../functions/onChain/authFunction";
@@ -119,8 +120,8 @@ const ViewNft = () => {
       ...nftOfferPayload,
       [name]: value,
     });
-    console.log("Price", nftOfferPayload.price)
-    console.log("balance", balanceInWEth)
+    // console.log("Price", nftOfferPayload.price)
+    // console.log("balance", balanceInWEth)
     isSufficient(nftOfferPayload.price, balanceInWEth);
   };
   const fetchUser = async () => {
@@ -235,22 +236,51 @@ const ViewNft = () => {
         setIsTransLoading(false);
         // alert("Insufficient wETh balance, add or swap eth for wEth")
       } else {
-        toast("Approve wEth")
-        const HEADER = "authenticated";
-        const REQUEST_URL = "nft-offer/make_offer";
-        const METHOD = "POST";
-        const DATA = formData;
-        // toast("Finalizing the transaction...");
-        apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
-          if (response.status == 200 || response.status == 201) {
-            toast(response.data.message);
-            setIsTransLoading(false);
-            push("");
-          } else {
-            toast(response.data.error);
-            setIsTransLoading(false);
+        if (nftOfferPayload.price != 0) {
+          toast("Approve wEth")
+          const provider = new ethers.providers.Web3Provider(
+            (window as any).ethereum
+          );
+          const signer = provider.getSigner();
+          const contract = new ethers.Contract(
+            APPCONFIG.wEthAddress_testnet,
+            wEthAbi,
+            signer
+          );
+
+          var tnx = null;
+          try {
+            const transaction = await contract.approve(
+              APPCONFIG.SmartContractAddress,
+              ethers.utils.parseUnits(nftOfferPayload.price.toString(), "ether")
+            );
+            tnx = await transaction.wait();
+            toast("Approval Completed")
           }
-        });
+          catch (err) {
+            toast("Transaction cancelled!");
+            toast(err.message);
+            console.log(err.message)
+          }
+          const HEADER = "authenticated";
+          const REQUEST_URL = "nft-offer/make_offer";
+          const METHOD = "POST";
+          const DATA = formData;
+          // toast("Finalizing the transaction...");
+          apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
+            if (response.status == 200 || response.status == 201) {
+              toast(response.data.message);
+              setIsTransLoading(false);
+              push("");
+            } else {
+              toast(response.data.error);
+              setIsTransLoading(false);
+            }
+          });
+        } else {
+          toast("You can place an offer of 0 ETH");
+          setIsTransLoading(false);
+        }
       }
     }
 
