@@ -7,11 +7,16 @@ import {
   SwapIcon,
   UniSwapGuardIcon,
 } from "../../components/atoms/vectors";
+import { toast, ToastContainer } from "react-toastify";
 import { Button } from "../atoms";
+import { swapEthforWEth } from "@/src/functions/onChain/generalFunction";
+import { swapWEthforEth } from "@/src/functions/onChain/generalFunction";
+import { getWalletWEthBalance } from "@/src/functions/onChain/generalFunction";
+import { connectedAccount } from "@/src/functions/onChain/authFunction";
 
 interface IPropsSwap {
-  ethValue: string;
-  setEthValue: Dispatch<SetStateAction<string>>;
+  ethValue: number;
+  setEthValue: Dispatch<SetStateAction<number>>;
   wETHvalue: string;
   setWETHvalue: Dispatch<SetStateAction<string>>;
   handleEthSwap: () => void;
@@ -37,8 +42,32 @@ const SwapCard = ({
   const handleWETHvalue = (e: ChangeEvent<HTMLInputElement>) => {
     setWETHvalue(e.target.value);
   };
+  const handleWEthSwap = () => {
+    if (ethValue != 0) {
+      connectedAccount().then((response) => {
+        if (response !== null) {
+          getWalletWEthBalance(response).then((balance) => {
+            if (ethValue < balance) {
+              swapEthforWEth(ethValue);
+            } else {
+              toast("Insufficent ETH")
+            }
+
+          });
+        } else {
+          toast("Connect your wallet")
+        }
+      });
+
+    } else {
+      // alert("You can't swap 0 eth")
+      toast("You can't swap 0 eth")
+    }
+
+  }
   return (
     <div className="">
+      <ToastContainer />
       <ConnectWalletTab
         tabs={offerTab}
         activeTab={activeOfferTab}
@@ -71,7 +100,7 @@ const SwapCard = ({
                 <div className="mt-2 border border-border-1-line rounded-xl px-12 flex flex-col items-center gap-y-6 py-6">
                   <input
                     className="text-4xl font-medium w-[8rem] text-center"
-                    value={wETHvalue}
+                    value={ethValue}
                     onChange={handleWETHvalue}
                   />
                   <div className="flex items-center gap-x-3 py-3 px-12 bg-bg-6 rounded-full font-medium">
@@ -81,12 +110,13 @@ const SwapCard = ({
               </div>
             </div>
             {/*Below Swap Wrap*/}
+            {/*Display this only when you insert insufficient amount of eth in the value field*/}
             <span className="font-medium">Insufficient ETH Balance</span>
             <div className="mt-10">
               <Button
                 title="Swap for Wrap ETH"
                 wt="w-full"
-                onClick={handleEthSwap}
+                onClick={handleWEthSwap}
               />
               <p className="text-center font-medium mt-5 text-txt-2 flex items-center justify-center gap-x-2">
                 <UniSwapGuardIcon />

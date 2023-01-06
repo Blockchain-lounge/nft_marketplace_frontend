@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { ethers } from "ethers";
 import { disconnectWallet } from "./authFunction";
+import APPCONFIG from "@/src/constants/Config";
+import wEthAbi from "@/src/artifacts/wEthAbi.json";
 
 export const getNetworkDetails = async () => {
   const provider = new ethers.providers.Web3Provider((window as any).ethereum);
@@ -104,4 +106,68 @@ export const getWalletBalance = async (address: string) => {
     }
   });
   return balance; //Response from the variable chainId is assigned to the right variable
+};
+
+export const getWalletWEthBalance = async (address: string) => {
+  var balanceInEth = 0 + " WETH";
+  
+  const provider = new ethers.providers.Web3Provider(
+    (window as any).ethereum
+  );
+  const signer = provider.getSigner();
+  const contract = new ethers.Contract(
+    APPCONFIG.wEthAddress_testnet,
+    wEthAbi,
+    signer
+  );
+
+  if (address !== null) {
+    return contract.balanceOf(address).then((balance) => {
+      // convert a currency unit from wei to ether
+      balanceInEth = ethers.utils.formatEther(balance);
+      balanceInEth = Number(
+        Math.round(parseFloat(balanceInEth + "e" + 5)) + "e-" + 5
+      ).toFixed(5); //Balance in 5 decimal places
+      // balanceInEth = balanceInEth + " ETH";
+      return balanceInEth;
+    });
+  } else {
+    return balanceInEth;
+  }
+ 
+};
+
+export const swapEthforWEth = async (amount: number) => {
+  const provider = new ethers.providers.Web3Provider(
+    (window as any).ethereum
+  );
+  const signer = provider.getSigner();
+  const contract = new ethers.Contract(
+    APPCONFIG.wEthAddress_testnet,
+    wEthAbi,
+    signer
+  );
+  if (amount !== null) {
+    const coreAmount = ethers.utils.parseUnits(amount.toString(),"ether");
+    const transaction = await contract.deposit({value: coreAmount})
+    const tnx = await transaction.wait();
+  } 
+ 
+};
+
+export const swapWEthforEth = async (amount: number) => {
+  const provider = new ethers.providers.Web3Provider(
+    (window as any).ethereum
+  );
+  const signer = provider.getSigner();
+  const contract = new ethers.Contract(
+    APPCONFIG.wEthAddress_testnet,
+    wEthAbi,
+    signer
+  );
+  if (amount !== null) {
+    const coreAmount = ethers.utils.parseUnits(amount.toString(),"ether");
+    const transaction = await contract.withdraw(coreAmount)
+    const tnx = await transaction.wait();
+  }
 };
