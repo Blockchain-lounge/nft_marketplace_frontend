@@ -21,9 +21,12 @@ import { ethers } from "ethers";
 import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 import { handleModalOpen } from "@/src/reducers/modalReducer";
 import { connectedAccount } from "../../functions/onChain/authFunction";
+import { useTimeCountDown } from "@/src/hooks/useTimeCountDown";
+import { NftBidCard } from "@/src/components/molecules";
 
 const ViewUserNft = () => {
   const [dollarRate] = UseConvertEthToDollar();
+  const { time } = useTimeCountDown("January 20, 2023");
   const { query, push } = useRouter();
   const { id } = query;
   const [owner, setOwner] = useState(null);
@@ -34,63 +37,8 @@ const ViewUserNft = () => {
   const [offerLists, setOfferLists] = useState([]);
   const [shownOffer, setShownOffer] = useState([]);
 
-  const handleCancelNftListing = async () => {
-    if (id !== undefined) {
-      setIsTransLoading(true);
-      if (
-        itemDetail.relisted &&
-        itemDetail.relisted === true &&
-        itemDetail.item.token_address &&
-        itemDetail.item.token_address !== null
-      ) {
-        const provider = new ethers.providers.Web3Provider(
-          (window as any).ethereum
-        );
-        const signer = provider.getSigner();
-        const contract = new ethers.Contract(
-          APPCONFIG.SmartContractAddress,
-          abi,
-          signer
-        );
-        const tokenAddress = itemDetail.item.token_address;
-        const tokenId = itemDetail.item.token_id;
-
-        try {
-          toast("Please approve this transaction!");
-          const transaction = await contract.cancelListing(
-            tokenAddress,
-            tokenId
-          );
-          const tnx = await transaction.wait();
-        } catch (err) {
-          toast("Transaction cancelled!");
-          setIsTransLoading(false);
-          return;
-        }
-      }
-
-      const HEADER = "authenticated";
-      const REQUEST_URL = "nft-listing/cancel/" + id;
-      const METHOD = "DELETE";
-      const DATA = {};
-      await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-        if (response.status == 400) {
-          var error = response.data.error;
-          toast(error);
-          return;
-        } else if (response.status == 200) {
-          toast(response.data.message);
-          push(`/profile`);
-        } else {
-          toast(response.data.error);
-          return;
-        }
-      });
-    }
-  };
-
-  const handleEditNft = () => {
-    push(`/update-listed-nft/${id}`);
+  const handleResellNftBiding = async () => {
+    //write your resell function here
   };
 
   const fetchUser = async () => {
@@ -198,17 +146,50 @@ const ViewUserNft = () => {
   };
 
   useEffect(() => {
-    fetchItemDetail();
-    connectedAccount().then((response) => {
-      if (response !== null) {
-        setConnectedAddress(response);
-        fetchOffers(id);
-        fetchUser();
-      } else {
-        toast("Unauthorized request!");
-        push("/");
-      }
+    setItemDetail({
+      item: {
+        collection: {
+          cover_image:
+            "https://cloudaxnftmarketplace.s3.us-east-2.amazonaws.com/profile-nft.png",
+          featured_image:
+            "https://cloudaxnftmarketplace.s3.us-east-2.amazonaws.com/profile-nft.png",
+          logo_image:
+            "https://cloudaxnftmarketplace.s3.us-east-2.amazonaws.com/profile-nft.png",
+          name: "Alien-gal",
+          _id: "638a0e48959e5066e8903cbc",
+        },
+        creator: {
+          userBannerImg:
+            "https://cloudaxnftmarketplace.s3.us-east-2.amazonaws.com/workspace.jpeg",
+          userProfileImg:
+            "https://cloudaxnftmarketplace.s3.us-east-2.amazonaws.com/img.jpeg",
+          username: "Hafidh",
+          _id: "638a0910959e5066e890397f",
+        },
+        item_art_url:
+          "https://cloudax.infura-ipfs.io/ipfs/QmNMVTUrTQrjG34hk32BbFEEdnZA8icMN7Womag9ycGn5D",
+        item_description: "Alien gal",
+        item_supply: 10,
+        item_title: "Alien gal",
+        _id: "638a0f3c959e5066e8903ceb",
+      },
+      listed_by: {
+        address: "0x5ef5cc9687d0af365e687d775f82f9420290e016",
+        userBannerImg:
+          "https://cloudaxnftmarketplace.s3.us-east-2.amazonaws.com/workspace.jpeg",
+        userProfileImg:
+          "https://cloudaxnftmarketplace.s3.us-east-2.amazonaws.com/img.jpeg",
+        username: "Hafidh",
+        _id: "638a0910959e5066e890397f",
+      },
+      listing_price: 0.00032,
+      listing_quantity: 5,
+      listing_remaining: 5,
+      owned_by: null,
+      relisted: false,
+      _id: "638a0f64959e5066e8903d42",
     });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
@@ -227,7 +208,7 @@ const ViewUserNft = () => {
       }
     }
   };
-
+  // console.log({ itemDetail });
   return (
     <DashboardLayout>
       {itemDetail !== null ? (
@@ -285,7 +266,7 @@ const ViewUserNft = () => {
                   </span>
                 </div> */}
               </div>
-              <div className="mt-4 md:mt-0 space-y-8 py-4">
+              <div className="mt-4 md:mt-0 space-y-4 pt-4">
                 <div>
                   {itemDetail.item.collection ? (
                     <div className="flex items-center mb-5">
@@ -356,7 +337,7 @@ const ViewUserNft = () => {
                       <div className="flex justify-between">
                         <div className="">
                           <span className="text-txt-2 block mb-4 text-xl">
-                            Selling price
+                            Price
                           </span>
                           <span className="flex items-center text-[1.5rem] gap-x-1">
                             <CoinIcon />
@@ -373,7 +354,7 @@ const ViewUserNft = () => {
                             ""
                           )}
                         </div>
-                        <div className="">
+                        {/* <div className="">
                           <span className="text-txt-2 block text-xl mb-4">
                             Item quantity
                           </span>
@@ -382,25 +363,31 @@ const ViewUserNft = () => {
                               "/" +
                               itemDetail.listing_quantity}
                           </span>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                     <div className="flex flex-col md:flex-row items-center justify-between gap-y-4 md:gap-y-0 gap-x-4 mt-4">
-                      <Button
+                      {/* <Button
                         title="Edit"
                         outline2
                         wt="w-full"
                         onClick={handleEditNft}
-                      />
+                      /> */}
                       <Button
-                        title="Cancel listing"
+                        title="Resell"
                         wt="w-full"
                         isDisabled={isTransloading}
-                        onClick={() => handleCancelNftListing()}
+                        onClick={() => handleResellNftBiding()}
                       />
                     </div>
                   </div>
                 </div>
+                <p className="py-4 lg:py-0 font-medium text-txt-2 text-center lg:text-left">
+                  Your listing will expire in:{" "}
+                  <span className="font-medium">
+                    {time.days}:{time.hours}:{time.minutes}:{time.seconds}
+                  </span>
+                </p>
               </div>
               <div className="create-new-nft-wrapper-2 border border-border-1-line p-4 rounded-[1.25rem] h-[35vh] lg:block lg:h-[55vh]">
                 <span className="create-new-nft-wrapper-2-label  pb-2 border-b border-border-1-line">
@@ -408,36 +395,41 @@ const ViewUserNft = () => {
                 </span>
                 <div className="pt-4 h-[90%] overflow-auto scrollbar-hide">
                   {/*if there is no offer show this*/}
-                  {offerLists && offerLists.length > 0 ? (
+                  {[1].length > 0 ? (
+                    // <>
+                    //   {offerLists.map((offer, i) => (
+                    //     <div
+                    //       key={"offer-list" + offer.address + i}
+                    //       className="flex justify-between items-center cursor-pointer hover:bg-bg-3 p-3 rounded-md"
+                    //       onClick={() => viewOffer(offer._id)}
+                    //     >
+                    //       <div className="flex items-center gap-x-4">
+                    //         <div className="relative h-14 w-14">
+                    //           <Image
+                    //             src={offer.item_id.item_art_url}
+                    //             alt={"offer-img" + i}
+                    //             layout="fill"
+                    //             objectFit="contain"
+                    //             className="rounded-full"
+                    //           />
+                    //         </div>
+                    //         <span className="font-medium">
+                    //           {offer.user_id.username !== null &&
+                    //           offer.user_id.username !== ""
+                    //             ? offer.user_id.username
+                    //             : ""}
+                    //         </span>
+                    //       </div>
+                    //       <span className="font-bold flex items-center gap-x-2">
+                    //         <CoinIcon />
+                    //         {offer.offer_price}ETH
+                    //       </span>
+                    //     </div>
+                    //   ))}
+                    // </>
                     <div className="flex flex-col h-full gap-y-4 scrollbar-hide">
-                      {offerLists.map((offer, i) => (
-                        <div
-                          key={"offer-list" + offer.address + i}
-                          className="flex justify-between items-center cursor-pointer hover:bg-bg-3 p-3 rounded-md"
-                          onClick={() => viewOffer(offer._id)}
-                        >
-                          <div className="flex items-center gap-x-4">
-                            <div className="relative h-14 w-14">
-                              <Image
-                                src={offer.item_id.item_art_url}
-                                alt={"offer-img" + i}
-                                layout="fill"
-                                objectFit="contain"
-                                className="rounded-full"
-                              />
-                            </div>
-                            <span className="font-medium">
-                              {offer.user_id.username !== null &&
-                              offer.user_id.username !== ""
-                                ? offer.user_id.username
-                                : ""}
-                            </span>
-                          </div>
-                          <span className="font-bold flex items-center gap-x-2">
-                            <CoinIcon />
-                            {offer.offer_price}ETH
-                          </span>
-                        </div>
+                      {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((offer, i) => (
+                        <NftBidCard key={"bidding-list" + i} />
                       ))}
                     </div>
                   ) : (

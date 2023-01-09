@@ -231,13 +231,18 @@ const ViewNft = () => {
       };
 
       if (nftOfferPayload.price > balanceInWEth) {
-        toast("Insufficient balance " + balanceInWEth + " to complete an offer of " + nftOfferPayload.price);
-        toast("Add or swap eth for wEth")
+        toast(
+          "Insufficient balance " +
+            balanceInWEth +
+            " to complete an offer of " +
+            nftOfferPayload.price
+        );
+        toast("Add or swap eth for wEth");
         setIsTransLoading(false);
         // alert("Insufficient wETh balance, add or swap eth for wEth")
       } else {
         if (nftOfferPayload.price != 0) {
-          toast("Approve wEth")
+          toast("Approve wEth");
           const provider = new ethers.providers.Web3Provider(
             (window as any).ethereum
           );
@@ -255,19 +260,20 @@ const ViewNft = () => {
               ethers.utils.parseUnits(nftOfferPayload.price.toString(), "ether")
             );
             tnx = await transaction.wait();
-            toast("Approval Completed")
-          }
-          catch (err) {
+            toast("Approval Completed");
+          } catch (err) {
             toast("Transaction cancelled!");
             toast(err.message);
-            console.log(err.message)
+            console.log(err.message);
           }
           const HEADER = "authenticated";
           const REQUEST_URL = "nft-offer/make_offer";
           const METHOD = "POST";
           const DATA = formData;
           // toast("Finalizing the transaction...");
-          apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
+          apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (
+            response
+          ) {
             if (response.status == 200 || response.status == 201) {
               toast(response.data.message);
               setIsTransLoading(false);
@@ -508,11 +514,8 @@ const ViewNft = () => {
         // push("/");
       }
 
-
-
       // Get wETH balance
       if (connectedAddress !== null) {
-
         getWalletWEthBalance(connectedAddress).then((response) => {
           setBalanceInWEth(response);
           // console.log(balanceInWEth)
@@ -521,7 +524,6 @@ const ViewNft = () => {
         // swapEthforWEth(amount)
         // swapWEthforEth(amount)
       }
-
     });
     if (id) {
       fetchItemDetail(id as string);
@@ -551,13 +553,13 @@ const ViewNft = () => {
 
   const isSufficient = async (price, balanceInWEth) => {
     if (price < balanceInWEth) {
-      console.log("true")
+      // console.log("true")
       return true;
     } else {
-      console.log("false")
+      // console.log("false")
       return false;
     }
-  }
+  };
 
   return (
     <DashboardLayout isLoading={!itemDetail}>
@@ -578,7 +580,7 @@ const ViewNft = () => {
                   blurDataURL="/images/placeholder.png"
                 />
               </div>
-              <div className="space-y-6 lg:space-y-4 flex flex-col">
+              <div className="space-y-6 lg:space-y-7 flex flex-col">
                 <>
                   <div className="flex items-center">
                     <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
@@ -637,9 +639,9 @@ const ViewNft = () => {
                       <span className="text-txt-2">Creator</span>
                       <span>
                         {itemDetail.item &&
-                          itemDetail.item.creator &&
-                          itemDetail.item.creator.username &&
-                          itemDetail.item.creator.username.length > 0
+                        itemDetail.item.creator &&
+                        itemDetail.item.creator.username &&
+                        itemDetail.item.creator.username.length > 0
                           ? itemDetail.item.creator.username
                           : " ---- "}
                       </span>
@@ -659,8 +661,8 @@ const ViewNft = () => {
                       <span className="text-txt-2">Current Owner</span>
                       <span>
                         {itemDetail.owned_by &&
-                          itemDetail.owned_by.username &&
-                          itemDetail.owned_by.username.length > 0
+                        itemDetail.owned_by.username &&
+                        itemDetail.owned_by.username.length > 0
                           ? itemDetail.owned_by.username
                           : " ---- "}
                       </span>
@@ -985,8 +987,8 @@ const ViewNft = () => {
                                 <Image
                                   src={
                                     resell_item_id &&
-                                      resell_item_id !== undefined &&
-                                      resell_item_id !== null
+                                    resell_item_id !== undefined &&
+                                    resell_item_id !== null
                                       ? resell_item_id.item_art_url
                                       : ""
                                   }
@@ -999,8 +1001,8 @@ const ViewNft = () => {
                                 <Image
                                   src={
                                     created_item &&
-                                      created_item !== undefined &&
-                                      created_item !== null
+                                    created_item !== undefined &&
+                                    created_item !== null
                                       ? created_item.item_art_url
                                       : ""
                                   }
@@ -1013,8 +1015,8 @@ const ViewNft = () => {
                                 <Image
                                   src={
                                     created_item_listed &&
-                                      created_item_listed !== undefined &&
-                                      created_item_listed !== null
+                                    created_item_listed !== undefined &&
+                                    created_item_listed !== null
                                       ? created_item_listed.item_art_url
                                       : ""
                                   }
@@ -1031,9 +1033,9 @@ const ViewNft = () => {
                               <div className="flex items-center gap-x-2">
                                 <span className="text-xl font-bold">
                                   {from_user_id &&
-                                    from_user_id !== undefined &&
-                                    from_user_id.username &&
-                                    from_user_id.username !== undefined
+                                  from_user_id !== undefined &&
+                                  from_user_id.username &&
+                                  from_user_id.username !== undefined
                                     ? from_user_id.username
                                     : "----"}
                                 </span>
@@ -1041,40 +1043,40 @@ const ViewNft = () => {
                                   {activity_type === "newly_created_item"
                                     ? "created"
                                     : activity_type === "updated_item"
-                                      ? "updated"
-                                      : activity_type === "newly_listed_item"
-                                        ? "listed"
-                                        : activity_type === "updated_listing"
-                                          ? "bupdated a listed"
-                                          : activity_type === "new_mint"
-                                            ? "minted"
-                                            : activity_type === "new_sales"
-                                              ? "purchased"
-                                              : activity_type === "new_mint"
-                                                ? "minted"
-                                                : activity_type === "cancelled_listing"
-                                                  ? "delisted"
-                                                  : ""}
+                                    ? "updated"
+                                    : activity_type === "newly_listed_item"
+                                    ? "listed"
+                                    : activity_type === "updated_listing"
+                                    ? "bupdated a listed"
+                                    : activity_type === "new_mint"
+                                    ? "minted"
+                                    : activity_type === "new_sales"
+                                    ? "purchased"
+                                    : activity_type === "new_mint"
+                                    ? "minted"
+                                    : activity_type === "cancelled_listing"
+                                    ? "delisted"
+                                    : ""}
                                 </span>
                                 <span className="transaction-card-span">
                                   <b>
                                     {resell_item_id &&
-                                      resell_item_id !== undefined &&
-                                      resell_item_id !== null
+                                    resell_item_id !== undefined &&
+                                    resell_item_id !== null
                                       ? resell_item_id.item_title
                                       : created_item_listed &&
                                         created_item_listed !== undefined &&
                                         created_item_listed !== null
-                                        ? created_item_listed.item_title
-                                        : ""}
+                                      ? created_item_listed.item_title
+                                      : ""}
                                   </b>
                                 </span>
                                 {to_user_id && (
                                   <span className="text-xl font-bold">
                                     {to_user_id &&
-                                      to_user_id !== undefined &&
-                                      to_user_id.username &&
-                                      to_user_id.username !== undefined
+                                    to_user_id !== undefined &&
+                                    to_user_id.username &&
+                                    to_user_id.username !== undefined
                                       ? to_user_id.username
                                       : "----"}
                                   </span>
@@ -1134,10 +1136,10 @@ const ViewNft = () => {
           modalType === "buy"
             ? "Checkout"
             : modalType === "bid"
-              ? "Place a bid"
-              : modalType === "addFunds"
-                ? "Add funds"
-                : "Make an offer"
+            ? "Place a bid"
+            : modalType === "addFunds"
+            ? "Add funds"
+            : "Make an offer"
         }
         openModal={showModal}
         closeModal={setShowModal}
@@ -1146,10 +1148,10 @@ const ViewNft = () => {
           modalType === "bid"
             ? "h-full sm:h-[60%] my-auto md:h-fit overflow-y-auto"
             : modalType === "offer"
-              ? "h-full sm:h-[60%] my-auto md:h-fit lg:h-[80%] overflow-y-auto"
-              : modalType === "addFunds"
-                ? "h-full sm:h-[60%] my-auto md:h-fit overflow-y-auto"
-                : "h-fit mt-28"
+            ? "h-full sm:h-[60%] my-auto md:h-fit lg:h-[80%] overflow-y-auto"
+            : modalType === "addFunds"
+            ? "h-full sm:h-[60%] my-auto md:h-fit overflow-y-auto"
+            : "h-fit mt-28"
         }
       >
         {modalType === "bid" ? (
@@ -1192,8 +1194,8 @@ const ViewNft = () => {
                   name="coinPrice"
                   placeholder="0.00"
                   label="Your bid"
-                // onChange={handleFieldChange}
-                // value={nftPayload.coinPrice}
+                  // onChange={handleFieldChange}
+                  // value={nftPayload.coinPrice}
                 />
               </div>
             </div>
@@ -1212,8 +1214,8 @@ const ViewNft = () => {
                 label="Quantity"
                 name="quantity"
                 placeholder="1"
-              // onChange={handleFieldChange}
-              // value={nftPayload.coinPrice}
+                // onChange={handleFieldChange}
+                // value={nftPayload.coinPrice}
               />
             </div>
             <div className="space-y-5 w-full">
@@ -1319,10 +1321,6 @@ const ViewNft = () => {
                     {/* </div> */}
                     {/* )} */}
                     {/* {isSufficient && ("")} */}
-
-
-
-
                   </p>
                 </div>
               </div>

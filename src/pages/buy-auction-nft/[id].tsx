@@ -460,7 +460,7 @@ const BuyAuctionNFT = () => {
                       <span>0x7a20d...9257</span>
                     </div>
                   </div>
-                  <div className="flex items-center">
+                  <div className="flex items-center gap-x-4">
                     <div className="relative h-14 w-14">
                       <Image
                         src="/images/avatar.png"
@@ -486,9 +486,9 @@ const BuyAuctionNFT = () => {
                         <div className="grid items-center mt-2 grid-cols-[0.23fr_0.24fr_0.24fr_0.24fr]  md:grid-cols-[0.32fr_0.35fr_0.32fr_0.32fr]">
                           <div className="flex gap-x-1">
                             <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
-                              {Math.abs(time.days).toString().length < 2
-                                ? "0" + Math.abs(time.days)
-                                : Math.abs(time.days)}
+                              {time.days.toString().length < 2
+                                ? "0" + time.days
+                                : time.days}
                             </span>
                             <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
                               :
@@ -496,9 +496,9 @@ const BuyAuctionNFT = () => {
                           </div>
                           <div className="flex gap-x-1">
                             <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
-                              {Math.abs(time.hours).toString().length < 2
-                                ? "0" + Math.abs(time.hours)
-                                : Math.abs(time.hours)}
+                              {time.hours.toString().length < 2
+                                ? "0" + time.hours
+                                : time.hours}
                             </span>
                             <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
                               :
@@ -506,9 +506,9 @@ const BuyAuctionNFT = () => {
                           </div>
                           <div className="flex gap-x-3">
                             <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
-                              {Math.abs(time.minutes).toString().length < 2
-                                ? "0" + Math.abs(time.minutes)
-                                : Math.abs(time.minutes)}
+                              {time.minutes.toString().length < 2
+                                ? "0" + time.minutes
+                                : time.minutes}
                             </span>
                             <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
                               :
@@ -516,9 +516,9 @@ const BuyAuctionNFT = () => {
                           </div>
                           <div className="flex gap-x-1">
                             <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
-                              {Math.abs(time.seconds).toString().length < 2
-                                ? "0" + Math.abs(time.seconds)
-                                : Math.abs(time.seconds)}
+                              {time.seconds.toString().length < 2
+                                ? "0" + time.seconds
+                                : time.seconds}
                             </span>
                           </div>
                         </div>
