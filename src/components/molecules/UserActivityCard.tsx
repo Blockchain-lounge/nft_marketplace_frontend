@@ -246,7 +246,7 @@ const UserActivityCard = ({
         )}
       </div>
       {/* </div> */}
-      <span className="profile-activity-receiver-time text-txt-1">
+      <span className=" hidden lg:block text-txt-1">
         {moment(createdAt).format("ddd, MMM Do YYYY, hh:mm:ss")}
       </span>
     </div>
