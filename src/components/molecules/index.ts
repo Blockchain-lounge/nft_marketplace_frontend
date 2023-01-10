@@ -29,6 +29,7 @@ export { default as CreatedNftCard } from "./CreatedNftCard";
 export { default as ListedNftCard } from "./ListedNftCard";
 export { default as NftMiniCard } from "./NftMiniCard";
 export { default as NftSlider } from "./NftSlider";
+export { default as NftBidCard } from "./NftBidCard";
 export { default as Sidebar } from "./Sidebar";
 export { default as SwapCard } from "./SwapCard";
 export { default as Tab } from "./Tab";

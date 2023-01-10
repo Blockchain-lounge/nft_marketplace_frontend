@@ -66,12 +66,12 @@ const SideBar = () => {
       icon: <ActivityIcon />,
       link: "/activities",
     },
-    {
-      label: "Notification",
-      icon: <Notification />,
-      count: 23,
-      link: "/notification",
-    },
+    // {
+    //   label: "Notification",
+    //   icon: <Notification />,
+    //   count: 23,
+    //   link: "/notification",
+    // },
     {
       label: "Cloudax Games",
       icon: <GamesIcon />,
