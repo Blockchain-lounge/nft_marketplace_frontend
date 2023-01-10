@@ -13,6 +13,11 @@ import { apiRequest } from "../functions/offChain/apiRequests";
 import EarningLayout from "../template/EarningLayout";
 import { ICategories } from "../utilities/types";
 import { CloseIcon } from "../components/atoms/vectors";
+import { connectedAccount } from "../functions/onChain/authFunction";
+import APPCONFIG from "@/src/constants/Config";
+import abi from "../artifacts/abi.json";
+import { BigNumber, ethers } from "ethers";
+import { findEvents } from "../functions/onChain/generalFunction";
 
 const CreateCollection: FC<ICollectionProps> = () => {
   const [collectionBannerPreview, setCollectionBannerPreview] = useState("");
@@ -33,9 +38,11 @@ const CreateCollection: FC<ICollectionProps> = () => {
   const [collectionPayload, setCollectionPayload] = useState({
     collection_name: "",
     collection_description: "",
+    collection_creator_fee: 0,
     // collection_creator_price: "",
     // creator_fee_receiver_address: "",
   });
+  const [connectedAddress, setConnectedAddress] = useState(null);
 
   const [socialLinksPayload, setSocialLinksPayload] = useState({
     website: "",
@@ -47,6 +54,14 @@ const CreateCollection: FC<ICollectionProps> = () => {
   const { push } = useRouter();
 
   useEffect(() => {
+    connectedAccount().then((response) => {
+      if (response !== null) {
+        setConnectedAddress(response);
+      } else {
+        push("/");
+      }
+    });
+
     fetchCategories();
   }, []);
 
@@ -180,6 +195,9 @@ const CreateCollection: FC<ICollectionProps> = () => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     var msg = "";
+    var tnx = '';
+    var collection_on_chain_id ='';
+    var transaction = '';
     if (
       !collectionPayload.collection_name ||
       !collectionPayload.collection_description
@@ -192,17 +210,62 @@ const CreateCollection: FC<ICollectionProps> = () => {
       toast(msg);
       return false;
     }
+    setIsTransLoading(true);
+    const collection_creator_fee = collectionPayload.collection_creator_fee && isNaN(collectionPayload.collection_creator_fee) === false ? collectionPayload.collection_creator_fee : 0;
+    const provider = new ethers.providers.Web3Provider(
+      (window as any).ethereum
+    );
+   
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(
+      APPCONFIG.SmartContractAddress,
+      abi,
+      signer
+    );
+
+    try{
+        transaction = await contract.createCollection(
+        collection_creator_fee,
+        connectedAddress
+        );
+    }
+    catch (error) {
+      toast("Transaction unapproved!");
+      setIsTransLoading((prev) => !prev);
+      return
+    }
+   
+      try {
+        tnx = await transaction.wait();
+        const events = findEvents('CollectionCreated', tnx.events, true);
+        if (events !== undefined && events.length > 0 && events !== true) {
+            collection_on_chain_id = events.collectionId.toNumber();
+        }
+        if (tnx.events[0]) {
+          
+        } else {
+          toast("We were unable to complete your transaction!");
+          setIsTransLoading(false);
+          return;
+        }
+      } catch (error) {
+        setIsTransLoading(false);
+        return;
+      }
+
     var collectionData = {
       name: collectionPayload.collection_name,
       description: collectionPayload.collection_description,
       cover_image: collectionBanner,
       collectionFeaturedImage: collectionFeaturedArt,
       collectionLogoImage: collectionLogo,
+      collection_on_chain_id: collection_on_chain_id,
       category_id: category._id || category.id,
+      collection_creator_fee: collectionPayload.collection_creator_fee && isNaN(collectionPayload.collection_creator_fee) === false ? collectionPayload.collection_creator_fee : 0,
       ...socialLinksPayload,
     };
-    // console.log({ collectionData });
-    setIsTransLoading(true);
+    
+    
     try {
       const HEADER = "authenticated_and_form_data";
       const REQUEST_URL = "nft-collection/store";
@@ -210,7 +273,6 @@ const CreateCollection: FC<ICollectionProps> = () => {
       const DATA = collectionData;
 
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-        // console.log({ response });
         if (response.status == 400 || response.status == 404) {
           var error = response.data.error;
           toast(error);
@@ -224,22 +286,22 @@ const CreateCollection: FC<ICollectionProps> = () => {
           toast.success(response.data.message);
           setIsTransLoading(false);
           push("/create-new-nft");
-          setCollectionPayload({
-            ...collectionPayload,
-            collection_name: "",
-            collection_description: "",
-          });
-          setSocialLinksPayload({
-            ...socialLinksPayload,
-            website: "",
-            discord: "",
-            instagram: "",
-            twitter: "",
-          });
-          setCollectionBanner(null);
-          setCollectionFeaturedArt(null);
-          setCollectionLogo(null);
-          // closeModal((prev) => !prev);
+          // setCollectionPayload({
+          //   ...collectionPayload,
+          //   collection_name: "",
+          //   collection_description: "",
+          // });
+          // setSocialLinksPayload({
+          //   ...socialLinksPayload,
+          //   website: "",
+          //   discord: "",
+          //   instagram: "",
+          //   twitter: "",
+          // });
+          // setCollectionBanner(null);
+          // setCollectionFeaturedArt(null);
+          // setCollectionLogo(null);
+          // // closeModal((prev) => !prev);
         } else {
           toast("Something went wrong, please try again!");
           setIsTransLoading(false);
@@ -403,7 +465,14 @@ const CreateCollection: FC<ICollectionProps> = () => {
           value={collectionPayload.collection_name}
           required
         />
-
+        <Input2
+          name="collection_creator_fee"
+          label="NFT Creator Fee"
+          placeholder="Enter NFT Creator Fee in %"
+          onChange={handleFieldChange}
+          value={collectionPayload.collection_creator_fee}
+          required
+        />
         <div>
           <span className="create-new-nft-wrapper-2-label mb-2">
             Description

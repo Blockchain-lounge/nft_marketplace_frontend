@@ -183,7 +183,7 @@ const ImportCollection: FC<ICollectionProps> = () => {
     var collectionData = {
       name: collectionPayload.collection_name,
       collection_address: collectionPayload.collection_address,
-      collection_creator_fee: collectionPayload.collection_creator_fee && isNaN(collection_creator_fee) === false ? collection_creator_fee : 0,
+      collection_creator_fee: collectionPayload.collection_creator_fee && isNaN(collectionPayload.collection_creator_fee) === false ? collectionPayload.collection_creator_fee : 0,
       description: collectionPayload.collection_description,
       cover_image: collectionBanner,
       collectionFeaturedImage: collectionFeaturedArt,

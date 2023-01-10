@@ -226,6 +226,7 @@ const ViewNft = () => {
         offer_start_date: date.startDate,
         offer_end_date: date.endDate,
         amount: nftOfferPayload.price * nftOfferPayload.quantity,
+        offer_quantity: nftOfferPayload.quantity,
         offer_time: timeSelected,
         // bidder: buyer,
       };
@@ -260,10 +261,9 @@ const ViewNft = () => {
           catch (err) {
             toast("Transaction cancelled!");
             toast(err.message);
-            console.log(err.message)
           }
           const HEADER = "authenticated";
-          const REQUEST_URL = "nft-offer/make_offer";
+          const REQUEST_URL = "nft-offer/make_offer?type=listed";
           const METHOD = "POST";
           const DATA = formData;
           // toast("Finalizing the transaction...");

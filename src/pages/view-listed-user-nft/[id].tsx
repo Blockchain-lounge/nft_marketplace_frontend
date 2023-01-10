@@ -153,7 +153,7 @@ const ViewUserNft = () => {
       
       const offer_id = shownOffer[0]._id
       const HEADER = 'authenticated';
-      const REQUEST_URL = "nft-offer/accept_reject_offer" + offer_id+'?action='+action;
+      const REQUEST_URL = "nft-offer/accept_reject_offer/" + offer_id+'?action='+action;
       const METHOD = "GET";
       const DATA = {};
 

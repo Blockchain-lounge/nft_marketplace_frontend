@@ -132,52 +132,84 @@ const ListNft = () => {
     //   toast(msg);
     //   return;
     // }
-    if (!nftListingPayload.listing_price.trim()) {
-      msg = "listed price is empty";
-      toast(msg);
-      return;
-    } else if (isNaN(parseFloat(nftListingPayload.listing_price)) === true) {
-      msg = "price of listed must be a valid positive number";
-      toast(msg);
-      return;
-    } else {
-      try {
-        const HEADER = "authenticated";
-        const REQUEST_URL = "nft-listing/store/" + id;
-        const METHOD = "POST";
-        const DATA = {
-          listing_type: priceListingType,
-          listing_price: nftListingPayload.listing_price,
-          listing_quantity: nftListingPayload.listing_quantity,
-          // listing_royalty: nftListingPayload.listing_royalty,
-          reserved_bidding_price: nftListingPayload.reserved_bidding_price,
-          starting_bidding_price: nftListingPayload.starting_bidding_price,
-        };
-
-        apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-          if (response.status == 400) {
-            var error = response.data.error;
-            toast.error(error);
-            setIsTransLoading(false);
-            return;
-          } else if (response.status == 401) {
-            toast("Unauthorized request!");
-            setIsTransLoading(false);
-            return;
-          } else if (response.status == 201) {
-            setIsTransLoading(false);
-            toast(response.data.message);
-            push("/profile");
-          } else {
-            toast("Something went wrong, please try again!");
-            setIsTransLoading(false);
-            return;
-          }
-        });
-      } catch (error) {
-        toast("Something went wrong, please try again!");
+    if(priceListingType === 'fixed'){
+      if (nftListingPayload.listing_price.length === 0) {
+        msg = "listing price is empty";
+        toast(msg);
+        return;
+      } else if (isNaN(parseFloat(nftListingPayload.listing_price)) === true) {
+        msg = "Price of listed must be a valid positive number";
+        toast(msg);
         return;
       }
+    }
+    else if(priceListingType === 'auction'){
+      if (date.startDate.length === 0) {
+        msg = "Auction end date is empty";
+        toast(msg);
+        return;
+      }
+      else if (date.endDate.length === 0) {
+        msg = "Auction start date is empty";
+        toast(msg);
+        return;
+      } 
+      else if (timeSelected.length === 0) {
+        msg = "Auction time is empty";
+        toast(msg);
+        return;
+      }
+      else if (nftListingPayload.reserved_bidding_price.length === 0) {
+        msg = "Auction reserved bidding price is empty";
+        toast(msg);
+        return;
+      } 
+      else if (nftListingPayload.starting_bidding_price.length === 0) {
+        msg = "Auction starting bidding price is empty";
+        toast(msg);
+        return;
+      } 
+    }
+    
+    try {
+      const HEADER = "authenticated";
+      const REQUEST_URL = "nft-listing/store/" + id;
+      const METHOD = "POST";
+      const DATA = {
+        listing_type: priceListingType,
+        listing_price: nftListingPayload.listing_price,
+        listing_quantity: nftListingPayload.listing_quantity,
+        // listing_royalty: nftListingPayload.listing_royalty,
+        reserved_bidding_price: nftListingPayload.reserved_bidding_price,
+        starting_bidding_price: nftListingPayload.starting_bidding_price,
+        auction_start_date: date.startDate,
+        auction_end_date: date.endDate,
+        auction_time: timeSelected,
+      };
+
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast.error(error);
+          setIsTransLoading(false);
+          return;
+        } else if (response.status == 401) {
+          toast("Unauthorized request!");
+          setIsTransLoading(false);
+          return;
+        } else if (response.status == 201) {
+          setIsTransLoading(false);
+          toast(response.data.message);
+          push("/profile");
+        } else {
+          toast("Something went wrong, please try again!");
+          setIsTransLoading(false);
+          return;
+        }
+      });
+    } catch (error) {
+      toast("Something went wrong, please try again!");
+      return;
     }
   };
 
@@ -259,7 +291,7 @@ const ListNft = () => {
                       name="starting_bidding_price"
                       placeholder="0.00"
                       onChange={handleFieldChange}
-                      value={nftListingPayload.listing_price}
+                      value={nftListingPayload.starting_bidding_price}
                     />
 
                     <Input2
@@ -268,7 +300,7 @@ const ListNft = () => {
                       name="reserved_bidding_price"
                       placeholder="0.00"
                       onChange={handleFieldChange}
-                      value={nftListingPayload.listing_price}
+                      value={nftListingPayload.reserved_bidding_price}
                     />
                     <Input2
                       label="Quantity to be listed"

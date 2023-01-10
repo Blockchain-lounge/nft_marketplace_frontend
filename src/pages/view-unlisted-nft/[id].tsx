@@ -23,6 +23,7 @@ import { INftcard } from "@/src/components/molecules/NftMediumCard";
 import { ethers } from "ethers";
 import APPCONFIG from "@/src/constants/Config";
 import { ActivityLoader } from "@/src/components/lazy-loaders";
+import wEthAbi from "@/src/artifacts/wEthAbi.json";
 
 import TimePicker from "react-time-picker/dist/entry.nostyle";
 import { SwapCard } from "@/src/components/molecules";
@@ -86,6 +87,89 @@ const ViewUnlistedNFT = () => {
    * @async
    * @returns {*}
    */
+
+  const makeOffer = async (event) => {
+    event.preventDefault();
+    // @dev here is the actual wETh balance for the smart contract call "balanceInWEth"
+
+    setIsTransLoading((prev) => !prev);
+    if (Number(nftOfferPayload.quantity) > itemDetail.listing_remaining) {
+      toast.error(
+        "The quantity you specified is more than the listed item quantity"
+      );
+      setNftOfferPayload({ ...nftOfferPayload, quantity: 1 });
+      setIsTransLoading((prev) => !prev);
+      setShowModal((prev) => !prev);
+      return;
+    }
+    {
+      //@ts-ignore
+      var formData = {
+        listing_id: itemDetail._id,
+        offer_start_date: date.startDate,
+        offer_end_date: date.endDate,
+        amount: nftOfferPayload.price * nftOfferPayload.quantity,
+        offer_quantity: nftOfferPayload.quantity,
+        offer_time: timeSelected,
+        // bidder: buyer,
+      };
+
+      if (nftOfferPayload.price > balanceInWEth) {
+        toast("Insufficient balance " + balanceInWEth + " to complete an offer of " + nftOfferPayload.price);
+        toast("Add or swap eth for wEth")
+        setIsTransLoading(false);
+        // alert("Insufficient wETh balance, add or swap eth for wEth")
+      } else {
+        if (nftOfferPayload.price != 0) {
+          toast("Approve wEth")
+          const provider = new ethers.providers.Web3Provider(
+            (window as any).ethereum
+          );
+          const signer = provider.getSigner();
+          const contract = new ethers.Contract(
+            APPCONFIG.wEthAddress_testnet,
+            wEthAbi,
+            signer
+          );
+
+          var tnx = null;
+          try {
+            const transaction = await contract.approve(
+              APPCONFIG.SmartContractAddress,
+              ethers.utils.parseUnits(nftOfferPayload.price.toString(), "ether")
+            );
+            tnx = await transaction.wait();
+            toast("Approval Completed")
+          }
+          catch (err) {
+            toast("Transaction cancelled!");
+            toast(err.message);
+          }
+          const HEADER = "authenticated";
+          const REQUEST_URL = "nft-offer/make_offer?type=unlisted";
+          const METHOD = "POST";
+          const DATA = formData;
+          // toast("Finalizing the transaction...");
+          apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
+            if (response.status == 200 || response.status == 201) {
+              toast(response.data.message);
+              setIsTransLoading(false);
+              push("");
+            } else {
+              toast(response.data.error);
+              setIsTransLoading(false);
+            }
+          });
+        } else {
+          toast("You can place an offer of 0 ETH");
+          setIsTransLoading(false);
+        }
+      }
+    }
+
+    // setShowModal((prev) => !prev);
+  };
+
   const fetchUser = async () => {
     const HEADER = "authenticated";
     const REQUEST_URL = "user/my_profile";
@@ -917,7 +1001,7 @@ const ViewUnlistedNFT = () => {
                 Connected
               </span>
             </div> */}
-
+        <form action="#" onSubmit={(e) => makeOffer(e)} className="w-full">
             <div className="create-new-nft-wrapper-2 w-full mb-4">
               <div className="create-new-nft-wrapper-2 w-full space-y-6">
                 <Input2
@@ -1027,11 +1111,12 @@ const ViewUnlistedNFT = () => {
             <div className="mt-12 lg:mt-10 w-full">
               <Button
                 title="Make offer"
-                onClick={handleOffer}
-                wt="w-full"
-                isDisabled={isTransloading}
+                onClick={(e) => makeOffer(e)}
+                  wt="w-full"
+                  isDisabled={isTransloading}
               />
             </div>
+          </form>
           </div>
         ) : (
           <SwapCard
