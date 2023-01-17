@@ -63,6 +63,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
     });
 
     fetchCategories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
@@ -178,7 +179,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
-          setCategory(response.data.data[1]);
+          // setCategory(response.data.data[1]);
           setCategories(response.data.data);
         } else {
           toast("Something went wrong, please try again!");
@@ -195,9 +196,9 @@ const CreateCollection: FC<ICollectionProps> = () => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     var msg = "";
-    var tnx = '';
-    var collection_on_chain_id ='';
-    var transaction = '';
+    var tnx = "";
+    var collection_on_chain_id = "";
+    var transaction = "";
     if (
       !collectionPayload.collection_name ||
       !collectionPayload.collection_description
@@ -211,11 +212,15 @@ const CreateCollection: FC<ICollectionProps> = () => {
       return false;
     }
     setIsTransLoading(true);
-    const collection_creator_fee = collectionPayload.collection_creator_fee && isNaN(collectionPayload.collection_creator_fee) === false ? collectionPayload.collection_creator_fee : 0;
+    const collection_creator_fee =
+      collectionPayload.collection_creator_fee &&
+      isNaN(collectionPayload.collection_creator_fee) === false
+        ? collectionPayload.collection_creator_fee
+        : 0;
     const provider = new ethers.providers.Web3Provider(
       (window as any).ethereum
     );
-   
+
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
       APPCONFIG.SmartContractAddress,
@@ -223,35 +228,33 @@ const CreateCollection: FC<ICollectionProps> = () => {
       signer
     );
 
-    try{
-        transaction = await contract.createCollection(
+    try {
+      transaction = await contract.createCollection(
         collection_creator_fee,
         connectedAddress
-        );
-    }
-    catch (error) {
+      );
+    } catch (error) {
       toast("Transaction unapproved!");
       setIsTransLoading((prev) => !prev);
-      return
+      return;
     }
-   
-      try {
-        tnx = await transaction.wait();
-        const events = findEvents('CollectionCreated', tnx.events, true);
-        if (events !== undefined && events.length > 0 && events !== true) {
-            collection_on_chain_id = events.collectionId.toNumber();
-        }
-        if (tnx.events[0]) {
-          
-        } else {
-          toast("We were unable to complete your transaction!");
-          setIsTransLoading(false);
-          return;
-        }
-      } catch (error) {
+
+    try {
+      tnx = await transaction.wait();
+      const events = findEvents("CollectionCreated", tnx.events, true);
+      if (events !== undefined && events.length > 0 && events !== true) {
+        collection_on_chain_id = events.collectionId.toNumber();
+      }
+      if (tnx.events[0]) {
+      } else {
+        toast("We were unable to complete your transaction!");
         setIsTransLoading(false);
         return;
       }
+    } catch (error) {
+      setIsTransLoading(false);
+      return;
+    }
 
     var collectionData = {
       name: collectionPayload.collection_name,
@@ -261,11 +264,14 @@ const CreateCollection: FC<ICollectionProps> = () => {
       collectionLogoImage: collectionLogo,
       collection_on_chain_id: collection_on_chain_id,
       category_id: category._id || category.id,
-      collection_creator_fee: collectionPayload.collection_creator_fee && isNaN(collectionPayload.collection_creator_fee) === false ? collectionPayload.collection_creator_fee : 0,
+      collection_creator_fee:
+        collectionPayload.collection_creator_fee &&
+        isNaN(collectionPayload.collection_creator_fee) === false
+          ? collectionPayload.collection_creator_fee
+          : 0,
       ...socialLinksPayload,
     };
-    
-    
+
     try {
       const HEADER = "authenticated_and_form_data";
       const REQUEST_URL = "nft-collection/store";
@@ -321,7 +327,10 @@ const CreateCollection: FC<ICollectionProps> = () => {
         <ToastContainer />
         {/*Logo Image*/}
         <div className="create-new-nft-wrapper-2">
-          <span className="create-new-nft-wrapper-2-label">Logo Image</span>
+          <div className="flex gap-x-2">
+            <span className="create-new-nft-wrapper-2-label">Logo Image</span>
+            <span className="text-txt-2">(required)</span>
+          </div>
           <span className="create-new-nft-wrapper-2-label-type">
             File types supported: JPG, JPEG, PNG, SVG, WEBP and GIF. Max size:
             20 MB
@@ -367,7 +376,10 @@ const CreateCollection: FC<ICollectionProps> = () => {
         </div>
         {/*Banner Image*/}
         <div className="create-new-nft-wrapper-2">
-          <span className="create-new-nft-wrapper-2-label">Banner Image</span>
+          <div className="flex gap-x-2">
+            <span className="create-new-nft-wrapper-2-label">Banner Image</span>
+            <span className="text-txt-2">(required)</span>
+          </div>
           <span className="create-new-nft-wrapper-2-label-type">
             File types supported: JPG, JPEG, PNG, SVG, WEBP and GIF. Max size:
             20 MB
@@ -412,7 +424,12 @@ const CreateCollection: FC<ICollectionProps> = () => {
         </div>
         {/*Featured Image*/}
         <div className="create-new-nft-wrapper-2">
-          <span className="create-new-nft-wrapper-2-label">Featured Image</span>
+          <div className="flex gap-x-2">
+            <span className="create-new-nft-wrapper-2-label">
+              Featured Image
+            </span>
+            <span className="text-txt-2">(required)</span>
+          </div>
           <span className="create-new-nft-wrapper-2-label-type">
             File types supported: JPG, JPEG, PNG, SVG, WEBP and GIF. Max size:
             20 MB
@@ -474,9 +491,13 @@ const CreateCollection: FC<ICollectionProps> = () => {
           required
         />
         <div>
-          <span className="create-new-nft-wrapper-2-label mb-2">
-            Description
-          </span>
+          <div className="flex gap-x-2">
+            <span className="create-new-nft-wrapper-2-label mb-2">
+              Description
+            </span>
+            <span className="text-txt-2">(required)</span>
+          </div>
+
           <textarea
             name="collection_description"
             className="w-full bg-transparent text-white outline-none select"
@@ -489,10 +510,15 @@ const CreateCollection: FC<ICollectionProps> = () => {
           ></textarea>
         </div>
         <div>
-          <span className="create-new-nft-wrapper-2-label mb-2">Category</span>
-          {category !== null ? (
+          <div className="flex gap-x-2 mb-2">
+            <span className="create-new-nft-wrapper-2-label">Category</span>
+            <span className="text-txt-2">(required)</span>
+          </div>
+          {categories !== null ? (
             <Select
-              title={category.name || category.label}
+              title={
+                category !== null ? category.label : "Please select a category"
+              }
               lists={categories}
               onClick2={handleSelect}
             />

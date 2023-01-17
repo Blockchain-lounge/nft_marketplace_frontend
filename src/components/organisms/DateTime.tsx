@@ -29,6 +29,7 @@ const DateTime = ({
   // const [timeSelected, setTimeSelected] = useState(
   //   new Date().toLocaleTimeString()
   // );
+  console.log({ startDate, endDate });
 
   return (
     <div className="bidder-date-wrapper">
@@ -36,6 +37,9 @@ const DateTime = ({
         ranges={[{ startDate, endDate, key: "selection" }]}
         onChange={handleRangeSelection}
         showMonthAndYearPickers={false}
+        calendarFocus="forwards"
+        focusedRange={[0, 1]}
+        initialFocusedRange={[0, 0]}
       />
       <div className="flex items-center justify-between">
         <span className="create-new-nft-wrapper-2-label">Select time</span>

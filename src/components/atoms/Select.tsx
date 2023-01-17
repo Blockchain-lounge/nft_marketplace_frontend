@@ -11,11 +11,13 @@ const Select = ({
   lists,
   onClick,
   onClick2,
+  required,
 }: {
   title: string;
   twClasses?: string;
   icon?: any;
   placeholder: string;
+  required?: boolean;
   lists: Array<any>;
   onClick: Dispatch<SetStateAction<string>>;
   onClick2?: (val: { label: string; id: string }) => void;
@@ -37,7 +39,7 @@ const Select = ({
     <div className={clsx("relative", twClasses)}>
       <div className="select" onClick={handleOpenSubmenu}>
         <span className="flex space-x-2 items-center">
-          {icon} {placeholder || title}
+          {icon} {title || placeholder}
         </span>
         <span
           className={clsx(

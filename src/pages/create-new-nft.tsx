@@ -290,7 +290,7 @@ const CreateNewNft = () => {
         <div className="center">
           <div className="earnings-title-btn">
             <ArrowBack onClick={() => Router.back()} />
-            <h1>Create New Item</h1>
+            <h1>Create New Nft</h1>
           </div>
           <ToastContainer />
           <div className="create-new-nft-wrapper">
@@ -332,15 +332,19 @@ const CreateNewNft = () => {
               <Input2
                 label="Item name"
                 name="itemName"
+                required
                 placeholder="Enter Item name"
                 onChange={handleFieldChange}
                 value={nftPayload.itemName}
               />
 
               <div className="create-new-nft-wrapper-2">
-                <span className="create-new-nft-wrapper-2-label">
-                  Description
-                </span>
+                <div className="flex gap-x-2">
+                  <span className="create-new-nft-wrapper-2-label">
+                    Description
+                  </span>{" "}
+                  <span className="text-txt-2">(required)</span>
+                </div>
                 <span className="create-new-nft-wrapper-2-label-type">
                   The description will be included on the item&apos;s detail
                   page underneath its image.
@@ -357,7 +361,10 @@ const CreateNewNft = () => {
               </div>
               <div className="create-new-nft-wrapper-2">
                 <div className="flex justify-between items-center">
-                  <span>Collection</span>
+                  <div className="flex items-center gap-x-2">
+                    <span>Collection </span>
+                    <span className="text-txt-2">(required)</span>
+                  </div>
                   <span
                     className="earnings-card-history cursor-pointer"
                     onClick={handleNavigateToCollection}
@@ -374,6 +381,7 @@ const CreateNewNft = () => {
               <Input2
                 label="Supply"
                 name="supply"
+                required
                 placeholder="1,000"
                 onChange={handleFieldChange}
                 value={nftPayload.supply}

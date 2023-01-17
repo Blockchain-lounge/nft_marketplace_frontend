@@ -103,6 +103,8 @@ const ListNft = () => {
     });
   };
 
+  // console.log({ date });
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let msg = "";
@@ -143,10 +145,12 @@ const ListNft = () => {
         return;
       }
     } else if (priceListingType === "auction") {
+      //@ts-ignore
       if (date.startDate.length === 0) {
         msg = "Auction end date is empty";
         toast(msg);
         return;
+        //@ts-ignore
       } else if (date.endDate.length === 0) {
         msg = "Auction start date is empty";
         toast(msg);
