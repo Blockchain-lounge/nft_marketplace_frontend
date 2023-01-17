@@ -36,6 +36,7 @@ const SwapCard = ({
   ];
 
   const handleEthChange = (e: ChangeEvent<HTMLInputElement>) => {
+    //@ts-ignore
     setEthValue(e.target.value);
   };
 
@@ -50,21 +51,18 @@ const SwapCard = ({
             if (ethValue < balance) {
               swapEthforWEth(ethValue);
             } else {
-              toast("Insufficent ETH")
+              toast("Insufficent ETH");
             }
-
           });
         } else {
-          toast("Connect your wallet")
+          toast("Connect your wallet");
         }
       });
-
     } else {
       // alert("You can't swap 0 eth")
-      toast("You can't swap 0 eth")
+      toast("You can't swap 0 eth");
     }
-
-  }
+  };
   return (
     <div className="">
       <ToastContainer />
