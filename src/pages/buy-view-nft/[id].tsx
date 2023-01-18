@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
 import * as moment from "moment";
-
 import {
   Button,
   Heading2,
@@ -35,7 +34,6 @@ import { findEvents } from "../../functions/onChain/generalFunction";
 import { connectedAccount } from "../../functions/onChain/authFunction";
 import { getWalletWEthBalance } from "../../functions/onChain/generalFunction";
 import { swapEthforWEth } from "../../functions/onChain/generalFunction";
-import { swapWEthforEth } from "../../functions/onChain/generalFunction";
 import { INftcard } from "@/src/components/molecules/NftMediumCard";
 import { BigNumber, ethers } from "ethers";
 import APPCONFIG from "@/src/constants/Config";
@@ -65,6 +63,11 @@ const ViewNft = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [nextPage, setNextPage] = useState(1);
   const [nftOfferPayload, setNftOfferPayload] = useState({
+    price: 0.0,
+    quantity: 1,
+  });
+
+  const [nftBidPayload, setBidPayload] = useState({
     price: 0.0,
     quantity: 1,
   });
@@ -118,6 +121,11 @@ const ViewNft = () => {
     const { name, value } = e.target;
     setNftOfferPayload({
       ...nftOfferPayload,
+      [name]: value,
+    });
+
+    setBidPayload({
+      ...nftBidPayload,
       [name]: value,
     });
     // console.log("Price", nftOfferPayload.price)
@@ -214,7 +222,6 @@ const ViewNft = () => {
       toast.error(
         "The quantity you specified is more than the listed item quantity"
       );
-      setNftOfferPayload({ ...nftOfferPayload, quantity: 1 });
       setIsTransLoading((prev) => !prev);
       setShowModal((prev) => !prev);
       return;
@@ -431,9 +438,96 @@ const ViewNft = () => {
     }
   };
 
-  const handleBid = async () => {
+  const handleBid = async (event) => {
     //Write bid function here
-    setShowModal((prev) => !prev);
+    event.preventDefault();
+
+    setIsTransLoading((prev) => !prev);
+    if (Number(nftBidPayload.quantity) > itemDetail.listing_remaining) {
+      toast.error(
+        "The quantity you specified is more than the listed item quantity"
+      );
+      setIsTransLoading((prev) => !prev);
+      return;
+    }
+    else if (nftBidPayload.price.length === 0) {
+      toast.error(
+        "Bidding price is required"
+      );
+      setIsTransLoading((prev) => !prev);
+      return;
+    }
+    else if (isNaN(parseFloat(nftBidPayload.price)) === true) {
+      toast.error(
+        "Bidding price must be a number"
+      );
+      setIsTransLoading((prev) => !prev);
+      return;
+    }
+    else {
+      //@ts-ignore
+    
+        const provider = new ethers.providers.Web3Provider(
+          (window as any).ethereum
+        );
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+          APPCONFIG.SmartContractAddress,
+          abi,
+          signer
+        );
+        var tnx = null;
+        var bid_id = null;
+
+        const bidding_price = ethers.utils.parseUnits(
+          nftBidPayload.price.toString()
+        );
+  
+          const transaction = await contract.makeBid(
+            nftBidPayload.quantity,
+            bidding_price,
+            itemDetail.listing_on_chain_id,
+            {
+              gasPrice: 74762514060
+              // maxFeePerGas: 20000000,
+              // baseFee: 54762514060
+            }
+          );
+  
+          tnx = await transaction.wait();
+          const events = findEvents('BidIsMade', tnx.events, true);
+          if (!events[0].toNumber()){
+            toast("We were unable to complete your transaction!");
+            setIsTransLoading(false);
+            return;
+          }
+          auction_id = events[0].toNumber();
+          console.log(events)
+
+        var formData = {
+          listing_id: itemDetail._id,
+          amount: nftBidPayload.price * nftBidPayload.quantity,
+          offer_quantity: nftBidPayload.quantity,
+          offer_expiration: bidingExpDates,
+        };
+        const HEADER = "authenticated";
+        const REQUEST_URL = "nft-offer/place_bid";
+        const METHOD = "POST";
+        const DATA = formData;
+        // toast("Finalizing the transaction...");
+        apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (
+          response
+        ) {
+          if (response.status == 200 || response.status == 201) {
+            toast(response.data.message);
+            setIsTransLoading(false);
+            push("");
+          } else {
+            toast(response.data.error);
+            setIsTransLoading(false);
+          }
+        });
+    }
   };
 
   // const handleOffer = async () => {
@@ -744,15 +838,21 @@ const ViewNft = () => {
                               setShowModal((prev) => !prev);
                             }}
                           />
-                          {/* <Button
-                            title="Place a bid"
-                            outline2
-                            wt="w-full"
-                            onClick={() => {
-                              setModaltype("bid");
-                              setShowModal((prev) => !prev);
-                            }}
-                          /> */}
+                          {
+                            itemDetail.listing_type && itemDetail.listing_type === 'auction'
+                            ?
+                            <Button
+                              title="Place a bid"
+                              outline2
+                              wt="w-full"
+                              onClick={() => {
+                                setModaltype("bid");
+                                setShowModal((prev) => !prev);
+                              }}
+                            />
+                            :
+                            ''
+                          }
                         </div>
                       ) : (
                         <Button
@@ -1191,11 +1291,11 @@ const ViewNft = () => {
               <div className="create-new-nft-wrapper-2 w-full">
                 {/* <Select title="ETH" icon={<CoinIcon />} /> */}
                 <Input2
-                  name="coinPrice"
+                  name="amount"
                   placeholder="0.00"
                   label="Your bid"
-                  // onChange={handleFieldChange}
-                  // value={nftPayload.coinPrice}
+                  onChange={handleFieldChange}
+                  value={nftBidPayload.amount}
                 />
               </div>
             </div>
@@ -1214,8 +1314,8 @@ const ViewNft = () => {
                 label="Quantity"
                 name="quantity"
                 placeholder="1"
-                // onChange={handleFieldChange}
-                // value={nftPayload.coinPrice}
+                onChange={handleFieldChange}
+                value={nftBidPayload.quantity}
               />
             </div>
             <div className="space-y-5 w-full">

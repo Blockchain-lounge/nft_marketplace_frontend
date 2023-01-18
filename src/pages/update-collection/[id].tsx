@@ -258,7 +258,6 @@ const UpdateCollection: FC<ICollectionProps> = () => {
       try {
         tnx = await transaction.wait();
         const events = findEvents('CollectionCreated', tnx.events, true);
-        console.log({events});
         // if (events !== undefined && events.length > 0 && events !== true) {
         //     trackId = events.trackId.toNumber();
         //     // token BASE URI (metadata URL). e.g. https://thrushapp.xyz/metadata/token/[ERC_TOKEN_TYPE]/[ARTISTE_ID]/[TRACK_ID]
