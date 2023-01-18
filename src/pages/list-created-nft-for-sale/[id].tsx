@@ -117,6 +117,8 @@ const ListNft = () => {
     });
   };
 
+  // console.log({ date });
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let msg = "";
@@ -146,7 +148,7 @@ const ListNft = () => {
     //   toast(msg);
     //   return;
     // }
-    if(priceListingType === 'fixed'){
+    if (priceListingType === "fixed") {
       if (nftListingPayload.listing_price.length === 0) {
         msg = "listing price is empty";
         toast(msg);
@@ -156,29 +158,26 @@ const ListNft = () => {
         toast(msg);
         return;
       }
-    }
-    else if(priceListingType === 'auction'){
+    } else if (priceListingType === "auction") {
+      //@ts-ignore
       if (date.startDate.length === 0) {
         msg = "Auction end date is empty";
         toast(msg);
         return;
-      }
-      else if (date.endDate.length === 0) {
+        //@ts-ignore
+      } else if (date.endDate.length === 0) {
         msg = "Auction start date is empty";
         toast(msg);
         return;
-      } 
-      else if (timeSelected.length === 0) {
+      } else if (timeSelected.length === 0) {
         msg = "Auction time is empty";
         toast(msg);
         return;
-      }
-      else if (nftListingPayload.reserved_bidding_price.length === 0) {
+      } else if (nftListingPayload.reserved_bidding_price.length === 0) {
         msg = "Auction reserved bidding price is empty";
         toast(msg);
         return;
-      } 
-      else if (nftListingPayload.starting_bidding_price.length === 0) {
+      } else if (nftListingPayload.starting_bidding_price.length === 0) {
         msg = "Auction starting bidding price is empty";
         toast(msg);
         return;
@@ -244,7 +243,7 @@ const ListNft = () => {
         }
         auction_id = events[0].toNumber();
     }
-    
+
     try {
       const HEADER = "authenticated";
       const REQUEST_URL = "nft-listing/store/" + id;
