@@ -20,7 +20,6 @@ import {
 } from "../../components/atoms/vectors";
 import { Footer, Modal } from "../../components/organisms";
 import DashboardLayout from "../../template/DashboardLayout";
-import EyeIcon from "@/src/components/atoms/vectors/eye-icon";
 import { apiRequest } from "../../functions/offChain/apiRequests";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -33,9 +32,9 @@ import { findEvents } from "../../functions/onChain/generalFunction";
 
 import { connectedAccount } from "../../functions/onChain/authFunction";
 import { getWalletWEthBalance } from "../../functions/onChain/generalFunction";
-import { swapEthforWEth } from "../../functions/onChain/generalFunction";
+
 import { INftcard } from "@/src/components/molecules/NftMediumCard";
-import { BigNumber, ethers } from "ethers";
+import { ethers } from "ethers";
 import APPCONFIG from "@/src/constants/Config";
 import { ActivityLoader } from "@/src/components/lazy-loaders";
 import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
@@ -58,7 +57,7 @@ const ViewNft = () => {
   const [dollarRate] = UseConvertEthToDollar();
   // const viewNftStages = ["overview", "properties", "bids", "history"];
   const [bidingExpDates, setBidingExpDates] = useState("1 day");
-  const viewNftStages = ["overview", "activities"];
+  const viewNftStages = ["overview", "offers", "activities"];
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [nextPage, setNextPage] = useState(1);
@@ -449,84 +448,75 @@ const ViewNft = () => {
       );
       setIsTransLoading((prev) => !prev);
       return;
-    }
-    else if (nftBidPayload.price.length === 0) {
-      toast.error(
-        "Bidding price is required"
-      );
+    } else if (nftBidPayload.price.length === 0) {
+      toast.error("Bidding price is required");
       setIsTransLoading((prev) => !prev);
       return;
-    }
-    else if (isNaN(parseFloat(nftBidPayload.price)) === true) {
-      toast.error(
-        "Bidding price must be a number"
-      );
+    } else if (isNaN(parseFloat(nftBidPayload.price)) === true) {
+      toast.error("Bidding price must be a number");
       setIsTransLoading((prev) => !prev);
       return;
-    }
-    else {
+    } else {
       //@ts-ignore
-    
-        const provider = new ethers.providers.Web3Provider(
-          (window as any).ethereum
-        );
-        const signer = provider.getSigner();
-        const contract = new ethers.Contract(
-          APPCONFIG.SmartContractAddress,
-          abi,
-          signer
-        );
-        var tnx = null;
-        var bid_id = null;
 
-        const bidding_price = ethers.utils.parseUnits(
-          nftBidPayload.price.toString()
-        );
-  
-          const transaction = await contract.makeBid(
-            nftBidPayload.quantity,
-            bidding_price,
-            itemDetail.listing_on_chain_id,
-            {
-              gasPrice: 74762514060
-              // maxFeePerGas: 20000000,
-              // baseFee: 54762514060
-            }
-          );
-  
-          tnx = await transaction.wait();
-          const events = findEvents('BidIsMade', tnx.events, true);
-          if (!events[0].toNumber()){
-            toast("We were unable to complete your transaction!");
-            setIsTransLoading(false);
-            return;
-          }
-          auction_id = events[0].toNumber();
-          console.log(events)
+      const provider = new ethers.providers.Web3Provider(
+        (window as any).ethereum
+      );
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(
+        APPCONFIG.SmartContractAddress,
+        abi,
+        signer
+      );
+      var tnx = null;
+      var bid_id = null;
 
-        var formData = {
-          listing_id: itemDetail._id,
-          amount: nftBidPayload.price * nftBidPayload.quantity,
-          offer_quantity: nftBidPayload.quantity,
-          offer_expiration: bidingExpDates,
-        };
-        const HEADER = "authenticated";
-        const REQUEST_URL = "nft-offer/place_bid";
-        const METHOD = "POST";
-        const DATA = formData;
-        // toast("Finalizing the transaction...");
-        apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (
-          response
-        ) {
-          if (response.status == 200 || response.status == 201) {
-            toast(response.data.message);
-            setIsTransLoading(false);
-            push("");
-          } else {
-            toast(response.data.error);
-            setIsTransLoading(false);
-          }
-        });
+      const bidding_price = ethers.utils.parseUnits(
+        nftBidPayload.price.toString()
+      );
+
+      const transaction = await contract.makeBid(
+        nftBidPayload.quantity,
+        bidding_price,
+        itemDetail.listing_on_chain_id,
+        {
+          gasPrice: 74762514060,
+          // maxFeePerGas: 20000000,
+          // baseFee: 54762514060
+        }
+      );
+
+      tnx = await transaction.wait();
+      const events = findEvents("BidIsMade", tnx.events, true);
+      if (!events[0].toNumber()) {
+        toast("We were unable to complete your transaction!");
+        setIsTransLoading(false);
+        return;
+      }
+      auction_id = events[0].toNumber();
+      console.log(events);
+
+      var formData = {
+        listing_id: itemDetail._id,
+        amount: nftBidPayload.price * nftBidPayload.quantity,
+        offer_quantity: nftBidPayload.quantity,
+        offer_expiration: bidingExpDates,
+      };
+      const HEADER = "authenticated";
+      const REQUEST_URL = "nft-offer/place_bid";
+      const METHOD = "POST";
+      const DATA = formData;
+      // toast("Finalizing the transaction...");
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
+        if (response.status == 200 || response.status == 201) {
+          toast(response.data.message);
+          setIsTransLoading(false);
+          push("");
+        } else {
+          toast(response.data.error);
+          setIsTransLoading(false);
+        }
+      });
     }
   };
 
@@ -599,6 +589,47 @@ const ViewNft = () => {
     }
   };
 
+  const offerLists = [
+    // {
+    //   address: "0x343wsewd022243",
+    //   _id: "01",
+    //   offer_price: 0.002,
+    //   item_id: { item_art_url: "/images/wwcc.webp" },
+    //   user_id: { username: "andrew" },
+    // },
+    // {
+    //   address: "0x343wsewd022243",
+    //   _id: "02",
+    //   offer_price: 0.002,
+    //   item_id: { item_art_url: "/images/wwcc.webp" },
+    //   user_id: { username: "andrew" },
+    // },
+    // {
+    //   address: "0x343wsewd022243",
+    //   _id: "03",
+    //   offer_price: 0.002,
+    //   item_id: { item_art_url: "/images/wwcc.webp" },
+    //   user_id: { username: "andrew" },
+    // },
+  ];
+
+  const shownOffer = {
+    user_id: {
+      username: "sacred",
+    },
+    item_id: {
+      item_title: "Cybox_001",
+    },
+    offer_price: 0.00231,
+  };
+
+  const acceptOffer = () => {};
+
+  const viewOffer = (offer_id) => {
+    setModaltype("accept-offer");
+    setShowModal((prev) => !prev);
+  };
+
   useEffect(() => {
     connectedAccount().then((response) => {
       if (response !== null) {
@@ -626,6 +657,11 @@ const ViewNft = () => {
       }
     }
 
+    // set ViewNftStage state to offer if there is an offer else it should
+    if (offerLists.length > 0) {
+      setViewNftStage("offers");
+    }
+
     // const itemData = {
     //   listing_price: 1.2,
     //   item: {
@@ -647,10 +683,8 @@ const ViewNft = () => {
 
   const isSufficient = async (price, balanceInWEth) => {
     if (price < balanceInWEth) {
-      // console.log("true")
       return true;
     } else {
-      // console.log("false")
       return false;
     }
   };
@@ -838,9 +872,8 @@ const ViewNft = () => {
                               setShowModal((prev) => !prev);
                             }}
                           />
-                          {
-                            itemDetail.listing_type && itemDetail.listing_type === 'auction'
-                            ?
+                          {itemDetail.listing_type &&
+                          itemDetail.listing_type === "auction" ? (
                             <Button
                               title="Place a bid"
                               outline2
@@ -850,9 +883,9 @@ const ViewNft = () => {
                                 setShowModal((prev) => !prev);
                               }}
                             />
-                            :
-                            ''
-                          }
+                          ) : (
+                            ""
+                          )}
                         </div>
                       ) : (
                         <Button
@@ -989,6 +1022,60 @@ const ViewNft = () => {
                     </div>
                   </div>
                 </div>
+              ) : viewNftStage === "offers" ? (
+                <>
+                  <div className="flex flex-col gap-y-6 overflow-auto">
+                    {/*if there is no offer show this*/}
+                    {offerLists && offerLists.length > 0 ? (
+                      <div className="flex flex-col h-full gap-y-4 scrollbar-hide">
+                        {offerLists.map((offer, i) => (
+                          <div
+                            key={"offer-list" + offer.address + i}
+                            className="flex justify-between items-center cursor-pointer bg-bg-5 hover:bg-bg-3 rounded-xl py-4 px-6"
+                            onClick={() => viewOffer(offer._id)}
+                          >
+                            <div className="flex items-center gap-x-4">
+                              <div className="relative h-14 w-14">
+                                <Image
+                                  src={offer.item_id.item_art_url}
+                                  alt={"offer-img" + i}
+                                  layout="fill"
+                                  objectFit="contain"
+                                  className="rounded-full"
+                                />
+                              </div>
+                              <span className="font-medium">
+                                {offer.user_id.username !== null &&
+                                offer.user_id.username !== ""
+                                  ? offer.user_id.username
+                                  : ""}
+                              </span>
+                            </div>
+                            <span className="font-bold flex items-center gap-x-2">
+                              <CoinIcon />
+                              {offer.offer_price}ETH
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex flex-col justify-center items-center gap-y-4 pt-4 h-[14rem]">
+                        <div className="relative h-[50%] w-[70%]">
+                          <Image
+                            priority
+                            src="/images/no-offer.svg"
+                            alt="buy-nft-sample"
+                            layout="fill"
+                            objectFit="contain"
+                          />
+                        </div>
+                        <span className="create-new-nft-wrapper-2-label">
+                          No offers yet
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </>
               ) : viewNftStage === "properties" ? (
                 <div className="flex items-center gap-x-5">
                   {nftProperties.map(({ label, trait, value }) => (
@@ -1239,6 +1326,8 @@ const ViewNft = () => {
             ? "Place a bid"
             : modalType === "addFunds"
             ? "Add funds"
+            : modalType === "accept-offer"
+            ? "Accept Offer"
             : "Make an offer"
         }
         openModal={showModal}
@@ -1464,7 +1553,7 @@ const ViewNft = () => {
                 value={nftPayload.coinPrice}
               />
             </div> */}
-              <div className="space-y-5 w-full mt-12">
+              {/* <div className="space-y-5 w-full mt-12">
                 <div className="flex justify-between items-center w-full">
                   <span className="text-txt-2">Balance</span>
                   <span className="flex gap-x-2 items-center">
@@ -1486,7 +1575,7 @@ const ViewNft = () => {
                     3.2
                   </span>
                 </div>
-              </div>
+              </div> */}
               <div className="mt-12 lg:mt-10 w-full">
                 <Button
                   title="Make offer"
@@ -1505,11 +1594,48 @@ const ViewNft = () => {
             setWETHvalue={setWETHInput}
             handleEthSwap={handleEthSwap}
           />
+        ) : modalType === "accept-offer" ? (
+          <div className="max-w-[80%] mx-auto">
+            <p className="font-medium text-lg text-center text-txt-3 max-w-[80%] mx-auto leading-loose">
+              <span className="font-bold text-lg">
+                {shownOffer && shownOffer.user_id && shownOffer.user_id.username
+                  ? shownOffer.user_id.username + " 💸"
+                  : ""}
+              </span>
+              placed an offer for{" "}
+              <span className="font-bold text-lg">
+                {shownOffer &&
+                shownOffer.item_id &&
+                shownOffer.item_id.item_title
+                  ? shownOffer.item_id.item_title
+                  : ""}
+              </span>
+            </p>
+            <span className="text-[2.375rem] font-bold flex justify-center gap-x-2 my-10">
+              <CoinIcon />
+              {shownOffer && shownOffer.offer_price
+                ? shownOffer.offer_price
+                : ""}
+            </span>
+            <div className="mt-4 w-full space-y-4">
+              <Button
+                title="Accept"
+                wt="w-full"
+                onClick={() => acceptOffer("accept")}
+              />
+              <Button
+                title="Decline"
+                danger
+                wt="w-full"
+                onClick={() => acceptOffer("decline")}
+              />
+            </div>
+          </div>
         ) : (
           <div className="flex flex-col items-center max-w-[65%] mx-auto gap-y-5 text-clip">
-            <p className="font-bold text-xl items-center">
+            <p className="font-bold text-xl items-center text-center">
               You are about to purchase{" "}
-              <span className="text-txt-2 font-bold  text-xl">
+              <span className="text-txt-2 font-bold text-xl">
                 {itemDetail !== null ? itemDetail.item.item_title : ""}
               </span>
               {/* from
