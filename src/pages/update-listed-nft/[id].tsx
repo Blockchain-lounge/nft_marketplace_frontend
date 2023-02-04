@@ -201,7 +201,7 @@ const CreateNewNft = () => {
       if (
         (nftListingPayload.listing_quantity &&
           nftListingPayload.listing_quantity.length === 0) ||
-        nftListingPayload.listing_quantity === 0
+        parseInt(nftListingPayload.listing_quantity) <= 0 
       ) {
         msg = "quantity listed is required";
         toast(msg);
@@ -260,7 +260,7 @@ const CreateNewNft = () => {
     if (
       (nftListingPayload.listing_price &&
         nftListingPayload.listing_price.length === 0) ||
-      nftListingPayload.listing_price === 0
+      parseInt(nftListingPayload.listing_price) <= 0
     ) {
       msg = "listed price is required";
       toast(msg);

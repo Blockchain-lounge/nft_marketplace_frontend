@@ -152,22 +152,22 @@ const ViewUserNft = () => {
       const offer_id = shownOffer[0]._id;
       const HEADER = "authenticated";
       const REQUEST_URL =
-        "nft-offer/accept_reject_offer" + offer_id + "?action=" + action;
+        "nft-offer/accept_reject_offer/" + offer_id + "?action=" + action;
       const METHOD = "GET";
       const DATA = {};
 
       await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-        if (response.status == 400 || response.status == 404) {
+        if (response.status === 400 || response.status === 404) {
           var error = response.data.error;
-          toast(error);
+          alert(error);
           setShowModal((prev) => !prev);
           // push("/");
           return;
-        } else if (response.status == 200) {
-          toast(response.data.message);
+        } else if (response.status === 200) {
           setShowModal((prev) => !prev);
+          alert(response.data.message ? response.data.message : response.data.error);
         } else {
-          toast("Something went wrong, please try again!");
+          alert("Something went wrong, please try again!");
           setShowModal((prev) => !prev);
           return;
         }

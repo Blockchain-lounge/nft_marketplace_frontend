@@ -208,17 +208,23 @@ const ViewUserNft = () => {
                     <div className="p-4 bg-bg-5 rounded-md w-full">
                       <div className="">
                         <span className="text-xl block mt-2">
-                          Item supply: {itemDetail.item_supply}
+                          Item supply: {itemDetail.item_remaining}
                         </span>
                       </div>
                     </div>
                     <div className="flex flex-col md:flex-row items-center justify-between gap-y-4 md:gap-y-0 gap-x-4 mt-4">
-                      <Button
-                        title="Edit"
-                        outline2
-                        wt="w-full"
-                        onClick={handleEditNft}
-                      />
+                      {
+                        itemDetail.item_supply === itemDetail.item_remaining
+                        ?
+                        <Button
+                          title="Edit"
+                          outline2
+                          wt="w-full"
+                          onClick={handleEditNft}
+                        />
+                        :
+                        ""
+                      }
                       <Button
                         title="Sell"
                         wt="w-full"

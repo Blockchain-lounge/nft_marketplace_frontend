@@ -29,8 +29,6 @@ const DateTime = ({
   // const [timeSelected, setTimeSelected] = useState(
   //   new Date().toLocaleTimeString()
   // );
-  console.log({ startDate, endDate });
-
   return (
     <div className="bidder-date-wrapper">
       <DateRange

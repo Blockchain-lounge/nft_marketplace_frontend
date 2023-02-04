@@ -144,7 +144,8 @@ const ListNft = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let msg = "";
-   if (!nftListingPayload.listing_price.trim() || parseFloat(nftListingPayload.listing_price) === 0) {
+   if (!nftListingPayload.listing_price.trim() 
+   || parseFloat(nftListingPayload.listing_price) <= 0) {
       msg = "listed price is empty";
       toast(msg);
       return;

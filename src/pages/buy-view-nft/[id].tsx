@@ -66,6 +66,9 @@ const ViewNft = () => {
     price: 0.0,
     quantity: 1,
   });
+  const [nftPurchasePayload, setNftPurchasePayload] = useState({
+    quantity: 1,
+  });
 
   const [nftBidPayload, setBidPayload] = useState({
     price: 0.0,
@@ -128,6 +131,7 @@ const ViewNft = () => {
       ...nftBidPayload,
       [name]: value,
     });
+
     // console.log("Price", nftOfferPayload.price)
     // console.log("balance", balanceInWEth)
     isSufficient(nftOfferPayload.price, balanceInWEth);
@@ -284,7 +288,7 @@ const ViewNft = () => {
             if (response.status == 200 || response.status == 201) {
               toast(response.data.message);
               setIsTransLoading(false);
-              push("");
+              // push("");
             } else {
               toast(response.data.error);
               setIsTransLoading(false);
@@ -362,11 +366,12 @@ const ViewNft = () => {
         const item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail._id}`;
         const transaction = await contract.buyItemCopy(
           itemDetail.listed_by.address,
-          priceListed,
-          itemDetail.item.item_supply,
-          itemDetail.listing_royalty,
+          itemDetail.item.collection.collection_on_chain_id,
           itemDetail.item._id,
           item_base_uri,
+          priceListed,
+          nftPurchasePayload.quantity,
+          itemDetail.item.item_supply,
           {
             value: price,
             // gasPrice: 20000000,
@@ -379,28 +384,10 @@ const ViewNft = () => {
         // var amount = price;
 
         try {
-          if (tnx.events[0]) {
-            if (tnx.events[4]) {
-              soldItemCopyId = tnx.events[3].args[0].toNumber();
+          if (tnx.events[1]) {
+              soldItemCopyId = tnx.events[1].args[5].toNumber();
               buyer = tnx.events[3].args[3];
-              trackCopyBaseUrl = tnx.events[3].args[5];
-              // console.log(
-              //   "Log 5: soldItemCopyIdTop",
-              //   tnx.events[3].args[0].toNumber()
-              // );
-              // console.log("buyer", tnx.events[3].args[3]);
-              // console.log("buytrackCopyBaseUrl", tnx.events[3].args[5]);
-            } else {
-              soldItemCopyId = tnx.events[1].args[0].toNumber();
-              buyer = tnx.events[1].args[3];
-              trackCopyBaseUrl = tnx.events[1].args[5];
-              // console.log(
-              //   "Log 3: soldItemCopyIdTop",
-              //   tnx.events[1].args[0].toNumber()
-              // );
-              // console.log("buyer", tnx.events[1].args[3]);
-              // console.log("buytrackCopyBaseUrl-2", tnx.events[1].args[5]);
-            }
+              trackCopyBaseUrl = 'lllllll';
           } else {
             toast("We were unable to complete your transaction!");
             setIsTransLoading((prev) => !prev);
@@ -502,7 +489,6 @@ const ViewNft = () => {
             return;
           }
           auction_id = events[0].toNumber();
-          console.log(events)
 
         var formData = {
           listing_id: itemDetail._id,
@@ -821,6 +807,10 @@ const ViewNft = () => {
                     <div className="flex gap-x-5 w-full">
                       {connectedAddress ? (
                         <div className="w-full space-y-4">
+                          {
+                            itemDetail.listing_type && itemDetail.listing_type === 'fixed'
+                            ?
+                            <>
                           <Button
                             title="Buy now"
                             wt="w-full"
@@ -838,8 +828,8 @@ const ViewNft = () => {
                               setShowModal((prev) => !prev);
                             }}
                           />
-                          {
-                            itemDetail.listing_type && itemDetail.listing_type === 'auction'
+                          </>
+                          : itemDetail.listing_type && itemDetail.listing_type === 'auction'
                             ?
                             <Button
                               title="Place a bid"
@@ -1520,8 +1510,13 @@ const ViewNft = () => {
                 name="quantity"
                 placeholder="1"
                 label="Item quantity"
-                onChange={handleFieldChange}
-                value={nftOfferPayload.quantity}
+                onChange={
+                  (e) => setNftPurchasePayload({
+                    quantity: e.target.value
+                  })
+                }
+              
+                value={nftPurchasePayload.quantity}
               />
             </div>
             {/* <div className="flex items-center justify-between w-full bg-bg-5 py-4 px-6 rounded-[1.25rem]">

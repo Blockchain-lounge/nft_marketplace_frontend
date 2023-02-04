@@ -11,6 +11,9 @@ const APPCONFIG = {
   IPFS_URL: "https://cloudax.infura-ipfs.io/ipfs/",
   OPENSEA_STORE_BASE_URL:
     process.env.NEXT_PUBLIC_ENV_BASE_URL + "metadata/contracts/", // E.g. https://cloudax.xyz/metadata/contracts/cloudax
+  APP_NETWORK: process.env.NEXT_PUBLIC_APP_NETWORK,
+  APP_NETWORK_CHAIN_ID: process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID,
+  
 };
 
 export default APPCONFIG;
