@@ -236,63 +236,61 @@ const ViewNft = () => {
         offer_time: timeSelected,
         // bidder: buyer,
       };
+    }
 
-      if (nftOfferPayload.price > balanceInWEth) {
-        toast(
-          "Insufficient balance " +
-            balanceInWEth +
-            " to complete an offer of " +
-            nftOfferPayload.price
+    if (nftOfferPayload.price > balanceInWEth) {
+      toast(
+        "Insufficient balance " +
+          balanceInWEth +
+          " to complete an offer of " +
+          nftOfferPayload.price
+      );
+      toast("Add or swap eth for wEth");
+      setIsTransLoading(false);
+      // alert("Insufficient wETh balance, add or swap eth for wEth")
+    } else {
+      if (nftOfferPayload.price != 0) {
+        toast("Approve wEth");
+        const provider = new ethers.providers.Web3Provider(
+          (window as any).ethereum
         );
-        toast("Add or swap eth for wEth");
-        setIsTransLoading(false);
-        // alert("Insufficient wETh balance, add or swap eth for wEth")
-      } else {
-        if (nftOfferPayload.price != 0) {
-          toast("Approve wEth");
-          const provider = new ethers.providers.Web3Provider(
-            (window as any).ethereum
-          );
-          const signer = provider.getSigner();
-          const contract = new ethers.Contract(
-            APPCONFIG.wEthAddress_testnet,
-            wEthAbi,
-            signer
-          );
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+          APPCONFIG.wEthAddress_testnet,
+          wEthAbi,
+          signer
+        );
 
-          var tnx = null;
-          try {
-            const transaction = await contract.approve(
-              APPCONFIG.SmartContractAddress,
-              ethers.utils.parseUnits(nftOfferPayload.price.toString(), "ether")
-            );
-            tnx = await transaction.wait();
-            toast("Approval Completed");
-          } catch (err) {
-            toast("Transaction cancelled!");
-            toast(err.message);
-          }
-          const HEADER = "authenticated";
-          const REQUEST_URL = "nft-offer/make_offer?type=listed";
-          const METHOD = "POST";
-          const DATA = formData;
-          // toast("Finalizing the transaction...");
-          apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (
-            response
-          ) {
-            if (response.status == 200 || response.status == 201) {
-              toast(response.data.message);
-              setIsTransLoading(false);
-              push("");
-            } else {
-              toast(response.data.error);
-              setIsTransLoading(false);
-            }
-          });
-        } else {
-          toast("You can place an offer of 0 ETH");
-          setIsTransLoading(false);
+        var tnx = null;
+        try {
+          const transaction = await contract.approve(
+            APPCONFIG.SmartContractAddress,
+            ethers.utils.parseUnits(nftOfferPayload.price.toString(), "ether")
+          );
+          tnx = await transaction.wait();
+          toast("Approval Completed");
+        } catch (err) {
+          toast("Transaction cancelled!");
+          toast(err.message);
         }
+        const HEADER = "authenticated";
+        const REQUEST_URL = "nft-offer/make_offer?type=listed";
+        const METHOD = "POST";
+        const DATA = formData;
+        // toast("Finalizing the transaction...");
+        apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
+          if (response.status == 200 || response.status == 201) {
+            toast(response.data.message);
+            setIsTransLoading(false);
+            push("");
+          } else {
+            toast(response.data.error);
+            setIsTransLoading(false);
+          }
+        });
+      } else {
+        toast("You can place an offer of 0 ETH");
+        setIsTransLoading(false);
       }
     }
 
@@ -459,6 +457,24 @@ const ViewNft = () => {
     } else {
       //@ts-ignore
 
+      if (nftBidPayload.price == 0) {
+        toast.error("Your bid is required");
+        setIsTransLoading(false);
+        return;
+      }
+
+      if (nftBidPayload.price > balanceInWEth) {
+        toast.error(
+          "Insufficient balance " +
+            balanceInWEth +
+            " to complete an offer of " +
+            nftBidPayload.price
+        );
+        toast("Add or swap eth for wEth");
+        setIsTransLoading(false);
+        return;
+      }
+
       const provider = new ethers.providers.Web3Provider(
         (window as any).ethereum
       );
@@ -494,7 +510,7 @@ const ViewNft = () => {
         return;
       }
       auction_id = events[0].toNumber();
-      console.log(events);
+      // console.log(events);
 
       var formData = {
         listing_id: itemDetail._id,
@@ -510,11 +526,11 @@ const ViewNft = () => {
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
         if (response.status == 200 || response.status == 201) {
           toast(response.data.message);
-          setIsTransLoading(false);
+          setIsTransLoading((prev) => !prev);
           push("");
         } else {
           toast(response.data.error);
-          setIsTransLoading(false);
+          setIsTransLoading((prev) => !prev);
         }
       });
     }
@@ -1380,13 +1396,29 @@ const ViewNft = () => {
               <div className="create-new-nft-wrapper-2 w-full">
                 {/* <Select title="ETH" icon={<CoinIcon />} /> */}
                 <Input2
-                  name="amount"
+                  name="price"
                   placeholder="0.00"
                   label="Your bid"
                   onChange={handleFieldChange}
-                  value={nftBidPayload.amount}
+                  value={nftBidPayload.price}
                 />
               </div>
+              <p className="mt-6">
+                {/* {!isSufficient && ( */}
+                {/* <div> */}
+                {/* <span className="font-bold text-txt-2 text-base">
+                        Insufficient wETH balance ?{" "}
+                      </span> */}
+                <span
+                  className="earnings-card-history cursor-pointer font-bold"
+                  onClick={() => setModaltype((prev) => "addFunds")}
+                >
+                  Add wEth funds or swap
+                </span>
+                {/* </div> */}
+                {/* )} */}
+                {/* {isSufficient && ("")} */}
+              </p>
             </div>
             <div className="create-new-nft-wrapper-2 w-full">
               <span className="create-new-nft-wrapper-2-label">
@@ -1407,7 +1439,7 @@ const ViewNft = () => {
                 value={nftBidPayload.quantity}
               />
             </div>
-            <div className="space-y-5 w-full">
+            {/* <div className="space-y-5 w-full">
               <div className="flex justify-between items-center w-full">
                 <span className="text-txt-2">Balance</span>
                 <span className="flex">
@@ -1428,7 +1460,7 @@ const ViewNft = () => {
                   6.95
                 </span>
               </div>
-            </div>
+            </div> */}
             <div className="mt-12 lg:mt-10 w-full">
               <Button
                 title="Place bid"
