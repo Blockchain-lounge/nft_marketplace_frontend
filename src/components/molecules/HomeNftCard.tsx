@@ -13,6 +13,8 @@ const HomeNftCard = ({
   status,
   item_id,
   resell_item_id,
+  starting_bidding_price,
+  listing_type
 }: //@ts-ignore
 Partial<INftcard>) => {
   const [dollarRate] = UseConvertEthToDollar();
@@ -105,7 +107,11 @@ Partial<INftcard>) => {
                   layout="fill"
                 />
               </span>
-              {listing_price}
+              {
+                listing_type === 'auction' ? starting_bidding_price 
+                : listing_type === 'fixed' ? listing_price
+                : ""
+              }
             </span>
             {dollarRate ? (
               <span className="grid grid-cols-[0.5fr_0.5fr] items-center w-max text-lg text-black font-bold">

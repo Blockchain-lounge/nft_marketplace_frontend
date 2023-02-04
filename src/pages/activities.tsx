@@ -141,21 +141,7 @@ const Activities = () => {
           return;
         } else if (response.status == 200) {
           setIsfetching((prev) => !prev);
-          if (activities.length > 0) {
-            for (
-              let index = 0;
-              index < response.data.data.activities.length;
-              index++
-            ) {
-              setActivities((prev) => [
-                ...prev,
-                response.data.data.activities[index],
-              ]);
-            }
-          } else {
-            setActivities(response.data.data.activities);
-          }
-
+          setActivities(response.data.data.activities);
           setTotalPages(response.data.data.totalPages);
           setCurrentPage(response.data.data.currentPage);
           setNextPage(response.data.data.nextPage);
@@ -253,7 +239,7 @@ const Activities = () => {
             ))}
           </div>
           <div className="total-earnings-history-wrapper ">
-            {activities.length === 0 && isFetching
+            {isFetching
               ? Array(8)
                   .fill(0)
                   .map((_, i) => (

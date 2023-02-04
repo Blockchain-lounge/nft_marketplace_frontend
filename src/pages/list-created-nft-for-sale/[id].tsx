@@ -177,13 +177,16 @@ const ListNft = () => {
         msg = "Auction starting bidding price is empty";
         toast(msg);
         return;
-      } 
-
-      else if (parseFloat(nftListingPayload.reserved_bidding_price) < parseFloat(nftListingPayload.starting_bidding_price)) {
+      } else if (
+        parseFloat(nftListingPayload.reserved_bidding_price) <
+        parseFloat(nftListingPayload.starting_bidding_price)
+      ) {
         msg = "Reserved price must be more than the starting price";
         toast(msg);
         return;
-      } 
+      }
+
+      setIsTransLoading((prev) => !prev);
 
       const provider = new ethers.providers.Web3Provider(
         (window as any).ethereum
@@ -198,9 +201,7 @@ const ListNft = () => {
       var auction_id = null;
       const timestamp = 22;
       toast("Please approve this transaction!");
-      const duration = ethers.utils.parseUnits(
-        timestamp.toString()
-      );
+      const duration = ethers.utils.parseUnits(timestamp.toString());
 
       const collection_on_chain_id = ethers.utils.parseUnits(
         itemDetail.collection_id.collection_on_chain_id.toString()
@@ -214,30 +215,30 @@ const ListNft = () => {
         nftListingPayload.reserved_bidding_price.toString()
       );
 
-        const transaction = await contract.listItemOnAuction(
-          collection_on_chain_id,
-          itemDetail._id,
-          connectedAddress,
-          starting_bidding_price,
-          reserved_bidding_price,
-          nftListingPayload.listing_quantity,
-          duration,
-          {
-            gasPrice: 74762514060
-            // maxFeePerGas: 20000000,
-            // baseFee: 54762514060
-          }
-        );
-
-        tnx = await transaction.wait();
-        const events = findEvents('StartAuction', tnx.events, true);
-        
-        if (!events[0].toNumber()){
-          toast("We were unable to complete your transaction!");
-          setIsTransLoading(false);
-          return;
+      const transaction = await contract.listItemOnAuction(
+        collection_on_chain_id,
+        itemDetail._id,
+        connectedAddress,
+        starting_bidding_price,
+        reserved_bidding_price,
+        nftListingPayload.listing_quantity,
+        duration,
+        {
+          gasPrice: 74762514060,
+          // maxFeePerGas: 20000000,
+          // baseFee: 54762514060
         }
-        auction_id = events[0].toNumber();
+      );
+
+      tnx = await transaction.wait();
+      const events = findEvents("StartAuction", tnx.events, true);
+
+      if (!events[0].toNumber()) {
+        toast("We were unable to complete your transaction!");
+        setIsTransLoading(false);
+        return;
+      }
+      auction_id = events[0].toNumber();
     }
 
     try {
@@ -254,26 +255,26 @@ const ListNft = () => {
         auction_start_date: date.startDate,
         auction_end_date: date.endDate,
         auction_time: timeSelected,
-        auction_id: auction_id
+        auction_id: auction_id,
       };
 
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
         if (response.status == 400) {
           var error = response.data.error;
           toast.error(error);
-          setIsTransLoading(false);
+          setIsTransLoading((prev) => !prev);
           return;
         } else if (response.status == 401) {
           toast("Unauthorized request!");
-          setIsTransLoading(false);
+          setIsTransLoading((prev) => !prev);
           return;
         } else if (response.status == 201) {
-          setIsTransLoading(false);
+          setIsTransLoading((prev) => !prev);
           toast(response.data.message);
           push("/profile");
         } else {
           toast("Something went wrong, please try again!");
-          setIsTransLoading(false);
+          setIsTransLoading((prev) => !prev);
           return;
         }
       });
