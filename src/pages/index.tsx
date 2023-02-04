@@ -2,9 +2,9 @@
 // @ts-nocheck
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { FeaturedIcon } from "@/src/components/atoms/vectors";
-import { ToastContainer, toast } from "react-toastify";
-import { HeroIndicator, Button, Heading, Tag } from "@/src/components/atoms";
+// import { FeaturedIcon } from "@/src/components/atoms/vectors";
+// import { ToastContainer, toast } from "react-toastify";
+import { HeroIndicator, Button, Heading } from "@/src/components/atoms";
 
 import {
   NftHeaderCard,
@@ -17,8 +17,6 @@ import {
 import DashboardLayout from "@/src/template/DashboardLayout";
 
 import { Footer } from "@/src/components/organisms";
-
-import { heroCards } from "@/src/store/data";
 
 import { useState, useEffect } from "react";
 import { NextPage } from "next";
@@ -188,43 +186,8 @@ const Home: NextPage = () => {
                     ))}
                 </div>
               )}
-
               <span className="mobile-see-all-btn">See All</span>
             </section>
-            {/* <section>
-              <NftHeaderCard
-                heading="In-Demand Collections"
-                selectTitle="All"
-              />
-              <NftSlider data={nft3Datas} />
-              <span className="mobile-see-all-btn">See All</span>
-            </section> */}
-            {/* <section>
-            <NftHeaderCard heading="Explore Art" />
-            <NftSlider data={launchPadDrops} />
-            <span
-              className="mobile-see-all-btn cursor-pointer"
-              onClick={() => push("/explore")}
-            >
-              See All
-            </span>
-          </section> */}
-
-            {/* <section>
-              <NftHeaderCard heading="Featured Collections" to="/explore" />
-              <NftSlider data={launchpadDropDatas} Card={NftMediumCard3} />
-              <span
-                className="mobile-see-all-btn cursor-pointer"
-                onClick={() => push("/explore")}
-              >
-                See All
-              </span>
-            </section> */}
-
-            {/* <section>
-            <NftHeaderCard heading="Explore" />
-            <NftSlider data={exploreItems} Card={CollectionCard} />
-          </section> */}
           </div>
         </div>
         <Footer />
