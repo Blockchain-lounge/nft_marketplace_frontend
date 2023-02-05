@@ -244,41 +244,41 @@ const [auctionEndDate, setAuctionEndDate] = useState(null);
         // bidder: buyer,
       };
 
-      // if (nftOfferPayload.price > balanceInWEth) {
-      //   toast(
-      //     "Insufficient balance " +
-      //       balanceInWEth +
-      //       " to complete an offer of " +
-      //       nftOfferPayload.price
-      //   );
-      //   toast("Add or swap eth for wEth");
-      //   setIsTransLoading(false);
-      //   // alert("Insufficient wETh balance, add or swap eth for wEth")
-      // } else {
+      if (nftOfferPayload.price > balanceInWEth) {
+        toast(
+          "Insufficient balance " +
+            balanceInWEth +
+            " to complete an offer of " +
+            nftOfferPayload.price
+        );
+        toast("Add or swap eth for wEth");
+        setIsTransLoading(false);
+        // alert("Insufficient wETh balance, add or swap eth for wEth")
+      } else {
         if (nftOfferPayload.price != 0) {
-          // toast("Approve wEth");
-          // const provider = new ethers.providers.Web3Provider(
-          //   (window as any).ethereum
-          // );
-          // const signer = provider.getSigner();
-          // const contract = new ethers.Contract(
-          //   APPCONFIG.wEthAddress_testnet,
-          //   wEthAbi,
-          //   signer
-          // );
+          toast("Approve wEth");
+          const provider = new ethers.providers.Web3Provider(
+            (window as any).ethereum
+          );
+          const signer = provider.getSigner();
+          const contract = new ethers.Contract(
+            APPCONFIG.wEthAddress_testnet,
+            wEthAbi,
+            signer
+          );
 
-          // var tnx = null;
-          // try {
-          //   const transaction = await contract.approve(
-          //     APPCONFIG.SmartContractAddress,
-          //     ethers.utils.parseUnits(nftOfferPayload.price.toString(), "ether")
-          //   );
-          //   tnx = await transaction.wait();
-          //   toast("Approval Completed");
-          // } catch (err) {
-          //   toast("Transaction cancelled!");
-          //   toast(err.message);
-          // }
+          var tnx = null;
+          try {
+            const transaction = await contract.approve(
+              APPCONFIG.SmartContractAddress,
+              ethers.utils.parseUnits(nftOfferPayload.price.toString(), "ether")
+            );
+            tnx = await transaction.wait();
+            toast("Approval Completed");
+          } catch (err) {
+            toast("Transaction cancelled!");
+            toast(err.message);
+          }
           const HEADER = "authenticated";
           const REQUEST_URL = "nft-offer/make_offer?type=listed";
           const METHOD = "POST";
@@ -300,7 +300,7 @@ const [auctionEndDate, setAuctionEndDate] = useState(null);
           toast("You can place an offer of 0 ETH");
           setIsTransLoading(false);
         }
-      // }
+      }
     }
 
     // setShowModal((prev) => !prev);

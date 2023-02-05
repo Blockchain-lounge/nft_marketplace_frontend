@@ -148,25 +148,36 @@ const ViewUserNft = () => {
   };
 
   const acceptOffer = async (action) => {
+    var amount = parseInt(shownOffer[0].offer_price) * parseInt(itemDetail.listing_quantity);
+
+      amount = ethers.utils.parseUnits(
+        amount.toString()
+      );
     if (shownOffer[0]._id && shownOffer[0]._id.length > 0) {
-      toast("Please approve this transaction!");
+      if(action === 'accept'){
+        toast("Please approve this transaction!");
         const item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail._id}`;
+        const provider = new ethers.providers.Web3Provider(
+          (window as any).ethereum
+        );
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+          APPCONFIG.SmartContractAddress,
+          abi,
+          signer
+        );
         const transaction = await contract.fulfillOfferOrder(
           itemDetail.listed_by.address,
           itemDetail.item.collection.collection_on_chain_id,
           itemDetail.item._id,
           item_base_uri,
-          nftPurchasePayload.quantity,
+          itemDetail.listing_quantity,
           itemDetail.item.item_supply,
           offerLists.length,
-          shownOffer[0].offer_price,
+          amount,
           connectedAddress,
           {
-            value: price,
-            // gasPrice: 20000000,
-            // gasPrice: 908462167791,
-            // maxFeePerGas:18462167791,
-            // baseFee: 18462167791
+            gasPrice: 3124913238
           }
         );
         tnx = await transaction.wait();
@@ -186,7 +197,7 @@ const ViewUserNft = () => {
           setIsTransLoading((prev) => !prev);
           return;
         }
-
+      }
       const offer_id = shownOffer[0]._id;
       const HEADER = "authenticated";
       const REQUEST_URL =
