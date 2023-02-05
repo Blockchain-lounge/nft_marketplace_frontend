@@ -84,7 +84,7 @@ const ViewNft = () => {
   const [timeSelected, setTimeSelected] = useState(
     new Date().toLocaleTimeString()
   );
-const [auctionEndDate, setAuctionEndDate] = useState(null);
+  const [auctionEndDate, setAuctionEndDate] = useState(null);
   //write your function to handle eth swap
   const handleEthSwap = (e) => {
     // setShowModal((prev) => !prev);
@@ -387,9 +387,9 @@ const [auctionEndDate, setAuctionEndDate] = useState(null);
 
         try {
           if (tnx.events[1]) {
-              soldItemCopyId = tnx.events[1].args[5].toNumber();
-              buyer = tnx.events[3].args[3];
-              trackCopyBaseUrl = 'lllllll';
+            soldItemCopyId = tnx.events[1].args[5].toNumber();
+            buyer = tnx.events[3].args[3];
+            trackCopyBaseUrl = "lllllll";
           } else {
             toast("We were unable to complete your transaction!");
             setIsTransLoading((prev) => !prev);
@@ -449,53 +449,51 @@ const [auctionEndDate, setAuctionEndDate] = useState(null);
     } else {
       //@ts-ignore
 
-        const bidding_price = ethers.utils.parseUnits(
-          nftBidPayload.price.toString()
-        );
-  
-          const transaction = await contract.makeBid(
-            nftBidPayload.quantity,
-            bidding_price,
-            itemDetail.listing_on_chain_id,
-            {
-              gasPrice: 74762514060
-              // maxFeePerGas: 20000000,
-              // baseFee: 54762514060
-            }
-          );
-  
-          tnx = await transaction.wait();
-          const events = findEvents('BidIsMade', tnx.events, true);
-          if (!events[0].toNumber()){
-            toast("We were unable to complete your transaction!");
-            setIsTransLoading(false);
-            return;
-          }
-          auction_id = events[0].toNumber();
+      const bidding_price = ethers.utils.parseUnits(
+        nftBidPayload.price.toString()
+      );
 
-        var formData = {
-          listing_id: itemDetail._id,
-          amount: nftBidPayload.price * nftBidPayload.quantity,
-          offer_quantity: nftBidPayload.quantity,
-          offer_expiration: bidingExpDates,
-        };
-        const HEADER = "authenticated";
-        const REQUEST_URL = "nft-offer/place_bid";
-        const METHOD = "POST";
-        const DATA = formData;
-        // toast("Finalizing the transaction...");
-        apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (
-          response
-        ) {
-          if (response.status == 200 || response.status == 201) {
-            toast(response.data.message);
-            setIsTransLoading(false);
-            // push("");
-          } else {
-            toast(response.data.error);
-            setIsTransLoading(false);
-          }
-        });
+      const transaction = await contract.makeBid(
+        nftBidPayload.quantity,
+        bidding_price,
+        itemDetail.listing_on_chain_id,
+        {
+          gasPrice: 74762514060,
+          // maxFeePerGas: 20000000,
+          // baseFee: 54762514060
+        }
+      );
+
+      tnx = await transaction.wait();
+      const events = findEvents("BidIsMade", tnx.events, true);
+      if (!events[0].toNumber()) {
+        toast("We were unable to complete your transaction!");
+        setIsTransLoading(false);
+        return;
+      }
+      auction_id = events[0].toNumber();
+
+      var formData = {
+        listing_id: itemDetail._id,
+        amount: nftBidPayload.price * nftBidPayload.quantity,
+        offer_quantity: nftBidPayload.quantity,
+        offer_expiration: bidingExpDates,
+      };
+      const HEADER = "authenticated";
+      const REQUEST_URL = "nft-offer/place_bid";
+      const METHOD = "POST";
+      const DATA = formData;
+      // toast("Finalizing the transaction...");
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
+        if (response.status == 200 || response.status == 201) {
+          toast(response.data.message);
+          setIsTransLoading(false);
+          // push("");
+        } else {
+          toast(response.data.error);
+          setIsTransLoading(false);
+        }
+      });
     }
   };
 
@@ -560,8 +558,14 @@ const [auctionEndDate, setAuctionEndDate] = useState(null);
             push("/");
           }
           setItemDetail(response.data.listing);
-          setAuctionEndDate(response.data.listing.auction_end_date ? moment(response.data.listing.auction_end_date).format("MMMM D YYYY"): null)
-          setOfferLists(response.data.listing.offers)
+          setAuctionEndDate(
+            response.data.listing.auction_end_date
+              ? moment(response.data.listing.auction_end_date).format(
+                  "MMMM D YYYY"
+                )
+              : null
+          );
+          setOfferLists(response.data.listing.offers);
         } else {
           toast("Something went wrong, please try again!");
           return;
@@ -753,183 +757,183 @@ const [auctionEndDate, setAuctionEndDate] = useState(null);
                     </div>
                   </div>
                 </div>
-                {
-                  itemDetail.listing_type 
-                  && itemDetail.listing_type === 'fixed'
-                  ?
+                {itemDetail.listing_type &&
+                itemDetail.listing_type === "fixed" ? (
                   <div className="view-hero-nft-cta-wrapper">
-                  <div className="flex w-full gap-x-6">
-                    <div className="p-4 bg-bg-5 rounded-md w-full">
-                      <span className="text-txt-2 text-xl block mb-4">
-                        Price
-                      </span>
-                      <div className="">
-                        <span className="flex items-center text-[1.75rem] gap-x-1">
-                          <CoinIcon />
-                          {
-                            itemDetail.listing_type === 'auction' ? itemDetail.starting_bidding_price 
-                            : itemDetail.listing_type === 'fixed' ? itemDetail.listing_price
-                            : ""
-                          }
+                    <div className="flex w-full gap-x-6">
+                      <div className="p-4 bg-bg-5 rounded-md w-full">
+                        <span className="text-txt-2 text-xl block mb-4">
+                          Price
                         </span>
-                        {dollarRate ? (
-                          <span className="text-xl font-medium block mt-2">
-                            ${
-                            (itemDetail.listing_price * dollarRate).toFixed(2)
-                          }
+                        <div className="">
+                          <span className="flex items-center text-[1.75rem] gap-x-1">
+                            <CoinIcon />
+                            {itemDetail.listing_type === "auction"
+                              ? itemDetail.starting_bidding_price
+                              : itemDetail.listing_type === "fixed"
+                              ? itemDetail.listing_price
+                              : ""}
                           </span>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                    </div>
-                    <div className="p-4 bg-bg-5 rounded-md w-full">
-                      <span className="text-txt-2 text-xl block mb-4">
-                        Quantity
-                      </span>
-                      <div className="">
-                        <span className="flex items-center text-[1.75rem] gap-x-1">
-                          {/* <CoinIcon /> */}
-                          {itemDetail.listing_remaining}/
-                          {itemDetail.listing_quantity}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  {/* <span className="text-lg font-medium">
-                    Last sale price 10.8 ETH
-                  </span> */}
-                  <div className="flex flex-col gap-y-4 w-full">
-                    <div className="flex gap-x-5 w-full">
-                      {connectedAddress ? (
-                        <div className="w-full space-y-4">
-                          {
-                            itemDetail.listing_type && itemDetail.listing_type === 'fixed'
-                            ?
-                            <>
-                          <Button
-                            title="Buy now"
-                            wt="w-full"
-                            onClick={() => {
-                              setModaltype("buy");
-                              setShowModal((prev) => !prev);
-                            }}
-                          />
-                          <Button
-                            title="Make an offer"
-                            outline2
-                            wt="w-full"
-                            onClick={() => {
-                              setModaltype("offer");
-                              setShowModal((prev) => !prev);
-                            }}
-                          />
-                          </>
-                         : (
+                          {dollarRate ? (
+                            <span className="text-xl font-medium block mt-2">
+                              $
+                              {(itemDetail.listing_price * dollarRate).toFixed(
+                                2
+                              )}
+                            </span>
+                          ) : (
                             ""
                           )}
                         </div>
-                      ) : (
-                        <Button
-                          title="You need to connect your wallet to continue"
-                          wt="w-full"
-                        />
-                      )}
-                      {/* <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
+                      </div>
+                      <div className="p-4 bg-bg-5 rounded-md w-full">
+                        <span className="text-txt-2 text-xl block mb-4">
+                          Quantity
+                        </span>
+                        <div className="">
+                          <span className="flex items-center text-[1.75rem] gap-x-1">
+                            {/* <CoinIcon /> */}
+                            {itemDetail.listing_remaining}/
+                            {itemDetail.listing_quantity}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    {/* <span className="text-lg font-medium">
+                    Last sale price 10.8 ETH
+                  </span> */}
+                    <div className="flex flex-col gap-y-4 w-full">
+                      <div className="flex gap-x-5 w-full">
+                        {connectedAddress ? (
+                          <div className="w-full space-y-4">
+                            {itemDetail.listing_type &&
+                            itemDetail.listing_type === "fixed" ? (
+                              <>
+                                <Button
+                                  title="Buy now"
+                                  wt="w-full"
+                                  onClick={() => {
+                                    setModaltype("buy");
+                                    setShowModal((prev) => !prev);
+                                  }}
+                                />
+                                <Button
+                                  title="Make an offer"
+                                  outline2
+                                  wt="w-full"
+                                  onClick={() => {
+                                    setModaltype("offer");
+                                    setShowModal((prev) => !prev);
+                                  }}
+                                />
+                              </>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        ) : (
+                          <Button
+                            title="You need to connect your wallet to continue"
+                            wt="w-full"
+                          />
+                        )}
+                        {/* <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
                         <CartIcon />
                       </span> */}
+                      </div>
                     </div>
                   </div>
-                </div>
-                : itemDetail.listing_type 
-                && itemDetail.listing_type === 'auction'
-                ?
-<div className="view-hero-nft-cta-wrapper">
-                  <div className="flex w-full gap-x-6">
-                    <div className="p-4 bg-bg-5 rounded-md w-1/2">
-                      <span className="text-txt-2 text-xl block mb-4">
-                        Time left
-                      </span>
-                      <div className="md:w-[70%]">
-                        <div className="grid items-center mt-2 grid-cols-[0.23fr_0.24fr_0.24fr_0.24fr]  md:grid-cols-[0.32fr_0.35fr_0.32fr_0.32fr]">
-                          <div className="flex gap-x-1">
-                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
-                              {time.days.toString().length < 2
-                                ? "0" + time.days
-                                : time.days}
-                            </span>
-                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
-                              :
-                            </span>
+                ) : itemDetail.listing_type &&
+                  itemDetail.listing_type === "auction" ? (
+                  <div className="view-hero-nft-cta-wrapper">
+                    <div className="flex w-full gap-x-6">
+                      <div className="p-4 bg-bg-5 rounded-md w-1/2">
+                        <span className="text-txt-2 text-xl block mb-4">
+                          Time left
+                        </span>
+                        <div className="md:w-[70%]">
+                          <div className="grid items-center mt-2 grid-cols-[0.23fr_0.24fr_0.24fr_0.24fr]  md:grid-cols-[0.32fr_0.35fr_0.32fr_0.32fr]">
+                            <div className="flex gap-x-1">
+                              <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                                {time.days.toString().length < 2
+                                  ? "0" + time.days
+                                  : time.days}
+                              </span>
+                              <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                                :
+                              </span>
+                            </div>
+                            <div className="flex gap-x-1">
+                              <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                                {time.hours.toString().length < 2
+                                  ? "0" + time.hours
+                                  : time.hours}
+                              </span>
+                              <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                                :
+                              </span>
+                            </div>
+                            <div className="flex gap-x-3">
+                              <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                                {time.minutes.toString().length < 2
+                                  ? "0" + time.minutes
+                                  : time.minutes}
+                              </span>
+                              <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                                :
+                              </span>
+                            </div>
+                            <div className="flex gap-x-1">
+                              <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                                {time.seconds.toString().length < 2
+                                  ? "0" + time.seconds
+                                  : time.seconds}
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex gap-x-1">
-                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
-                              {time.hours.toString().length < 2
-                                ? "0" + time.hours
-                                : time.hours}
-                            </span>
-                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
-                              :
-                            </span>
-                          </div>
-                          <div className="flex gap-x-3">
-                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
-                              {time.minutes.toString().length < 2
-                                ? "0" + time.minutes
-                                : time.minutes}
-                            </span>
-                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
-                              :
-                            </span>
-                          </div>
-                          <div className="flex gap-x-1">
-                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
-                              {time.seconds.toString().length < 2
-                                ? "0" + time.seconds
-                                : time.seconds}
-                            </span>
-                          </div>
-                        </div>
 
-                        <div className="grid items-center mt-2 grid-cols-[0.23fr_0.24fr_0.24fr_0.24fr]  md:grid-cols-[0.32fr_0.35fr_0.32fr_0.32fr]">
-                          <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
-                            d
+                          <div className="grid items-center mt-2 grid-cols-[0.23fr_0.24fr_0.24fr_0.24fr]  md:grid-cols-[0.32fr_0.35fr_0.32fr_0.32fr]">
+                            <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
+                              d
+                            </span>
+                            <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
+                              hrs
+                            </span>
+                            <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
+                              min
+                            </span>
+                            <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
+                              sec
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="p-4 bg-bg-5 rounded-md w-1/2">
+                        <span className="text-txt-2 text-xl block mb-4">
+                          Minimum bid
+                        </span>
+                        <div>
+                          <span className="flex items-center text-[1.3rem] md:text-[1.75rem] gap-x-1 font-bold">
+                            <CoinIcon />
+                            {itemDetail.starting_bidding_price}
                           </span>
-                          <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
-                            hrs
-                          </span>
-                          <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
-                            min
-                          </span>
-                          <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
-                            sec
+                          <span className="text-[1.2rem] md:text-xl font-medium flex items-center mt-2 text-txt-2 gap-x-2">
+                            $
+                            {(
+                              itemDetail.starting_bidding_price * dollarRate
+                            ).toFixed(2)}
                           </span>
                         </div>
                       </div>
                     </div>
-                    <div className="p-4 bg-bg-5 rounded-md w-1/2">
-                      <span className="text-txt-2 text-xl block mb-4">
-                        Minimum bid
-                      </span>
-                      <div>
-                        <span className="flex items-center text-[1.3rem] md:text-[1.75rem] gap-x-1 font-bold">
-                          <CoinIcon />
-                            {itemDetail.starting_bidding_price}
-                        </span>
-                        <span className="text-[1.2rem] md:text-xl font-medium flex items-center mt-2 text-txt-2 gap-x-2">
-                          ${(itemDetail.starting_bidding_price * dollarRate).toFixed(2)}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <span className="text-lg font-medium">
-                    Last sale price 10.8 ETH
-                  </span>
-                  <div className="flex flex-col gap-y-4 w-full">
-                    <div className="flex gap-x-5 w-full">
+                    <span className="text-lg font-medium">
+                      Last sale price 10.8 ETH
+                    </span>
+                    <div className="flex flex-col gap-y-4 w-full">
+                      <div className="flex gap-x-5 w-full">
                         {connectedAddress ? (
-                      <div className="w-full space-y-4">
-                      <Button
+                          <div className="w-full space-y-4">
+                            <Button
                               title="Place a bid"
                               outline2
                               wt="w-full"
@@ -938,23 +942,23 @@ const [auctionEndDate, setAuctionEndDate] = useState(null);
                                 setShowModal((prev) => !prev);
                               }}
                             />
-                      </div>
-                        ):(
-                        <Button
-                          title="You need to connect your wallet to continue"
-                          wt="w-full"
+                          </div>
+                        ) : (
+                          <Button
+                            title="You need to connect your wallet to continue"
+                            wt="w-full"
                           />
-                      )}
+                        )}
 
-                      {/* <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
+                        {/* <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
                         <CartIcon />
                       </span> */}
+                      </div>
                     </div>
                   </div>
-                </div>
-                :
-                ""
-                }
+                ) : (
+                  ""
+                )}
               </div>
               {/* <div className="flex gap-x-6 mt-6 items-center">
                 <span className="flex gap-x-2 items-center">
@@ -1079,7 +1083,11 @@ const [auctionEndDate, setAuctionEndDate] = useState(null);
                           <div
                             key={"offer-list" + offer.address + i}
                             className="flex justify-between items-center cursor-pointer bg-bg-5 hover:bg-bg-3 rounded-xl py-4 px-6"
-                            onClick={() => connectedAccount === offer.user_id._id ? viewOffer(offer._id) : null}
+                            onClick={() =>
+                              connectedAccount === offer.user_id._id
+                                ? viewOffer(offer._id)
+                                : null
+                            }
                           >
                             <div className="flex items-center gap-x-4">
                               <div className="relative h-14 w-14">
@@ -1454,7 +1462,7 @@ const [auctionEndDate, setAuctionEndDate] = useState(null);
                 value={nftBidPayload.quantity}
               />
             </div>
-            <div className="space-y-5 w-full">
+            {/* <div className="space-y-5 w-full">
               <div className="flex justify-between items-center w-full">
                 <span className="text-txt-2">Balance</span>
                 <span className="flex">
@@ -1475,7 +1483,7 @@ const [auctionEndDate, setAuctionEndDate] = useState(null);
                   6.95
                 </span>
               </div>
-            </div>
+            </div> */}
             <div className="mt-12 lg:mt-10 w-full">
               <Button
                 title="Place bid"
@@ -1693,12 +1701,11 @@ const [auctionEndDate, setAuctionEndDate] = useState(null);
                 name="quantity"
                 placeholder="1"
                 label="Item quantity"
-                onChange={
-                  (e) => setNftPurchasePayload({
-                    quantity: e.target.value
+                onChange={(e) =>
+                  setNftPurchasePayload({
+                    quantity: e.target.value,
                   })
                 }
-              
                 value={nftPurchasePayload.quantity}
               />
             </div>
