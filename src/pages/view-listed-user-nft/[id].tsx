@@ -228,6 +228,11 @@ const ViewUserNft = () => {
     }
   };
 
+  console.log({ itemDetail });
+
+  // console.log(offerLists[0].listing_id);
+  // console.log(new Date(offerLists[0].listing_id.auction_end_date).getTime());
+
   return (
     <DashboardLayout>
       {itemDetail !== null ? (

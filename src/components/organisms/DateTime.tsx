@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css";
@@ -21,16 +21,6 @@ const DateTime = ({
   handleRangeSelection,
   handleSelectedTime,
 }: IDateTimeProps) => {
-  // const [date, setDateSelected] = useState({
-  //   startDate: new Date(),
-  //   endDate: new Date(),
-  //   key: "selection",
-  // });
-  // const [timeSelected, setTimeSelected] = useState(
-  //   new Date().toLocaleTimeString()
-  // );
-  console.log({ startDate, endDate });
-
   return (
     <div className="bidder-date-wrapper">
       <DateRange

@@ -149,6 +149,7 @@ const ListNft = () => {
     //   return;
     // }
     if (priceListingType === "fixed") {
+      setPriceListingType((prev) => "fixed");
       if (nftListingPayload.listing_price.length === 0) {
         msg = "listing price is empty";
         toast(msg);
@@ -159,6 +160,7 @@ const ListNft = () => {
         return;
       }
     } else if (priceListingType === "auction") {
+      setPriceListingType((prev) => "auction");
       //@ts-ignore
       if (date.startDate.length === 0) {
         msg = "Auction end date is empty";
