@@ -119,7 +119,7 @@ const ListedNftCard = ({
                   layout="fill"
                 />
               </span>
-              <span>
+              <span className="text-black">
                 {item_price !== undefined
                   ? item_price
                   : listing_price !== undefined
