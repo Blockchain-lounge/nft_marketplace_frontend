@@ -79,8 +79,8 @@ const ListedNftCard = ({
             {resell_item_id && resell_item_id.item_title
               ? resell_item_id.item_title
               : item_id !== undefined && item_id !== null && item_id !== ""
-                ? item_id.item_title
-              : ''}
+              ? item_id.item_title
+              : ""}
           </span>
           <span className="nmc-sub-wrapper-2-owner justify-center">
             {listing_quantity !== undefined
@@ -110,23 +110,25 @@ const ListedNftCard = ({
             </div>
           </div>
         ) : (
-          <div className="flex flex-col">
-            <span className="text-black flex items-center justify-center text-lg">
+          <div className="flex flex-col justify-center px-2">
+            <div className="text-black flex items-center text-lg">
               <span className="h-6 w-3 relative">
-                {/* <Image
+                <Image
                   src="/icon-svg/eth-dark-icon.svg"
                   alt="ethereum coin"
                   layout="fill"
-                /> */}
+                />
               </span>
-              {item_price !== undefined
-                ? item_price
-                : listing_price !== undefined
-                ? listing_price
-                : 0}
-            </span>
+              <span>
+                {item_price !== undefined
+                  ? item_price
+                  : listing_price !== undefined
+                  ? listing_price
+                  : 0}
+              </span>
+            </div>
             {dollarRate ? (
-              <span className="text-black flex items-center text-lg ">
+              <span className="text-black flex items-center text-lg">
                 <span className="text-lg text-black font-bold">$</span>
                 {(
                   (item_price !== undefined
