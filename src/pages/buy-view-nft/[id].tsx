@@ -1746,7 +1746,7 @@ const ViewNft = () => {
               <span className="flex gap-x-1">
                 <CoinIcon />
                 {itemDetail !== null
-                  ? itemDetail.listing_price * nftOfferPayload.quantity
+                  ? itemDetail.listing_price * nftPurchasePayload.quantity
                   : ""}
               </span>
             </div>
