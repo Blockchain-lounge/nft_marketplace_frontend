@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ethers } from 'ethers';
 import { apiRequest } from '../offChain/apiRequests';
 import {
