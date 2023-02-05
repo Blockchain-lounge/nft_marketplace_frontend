@@ -149,6 +149,44 @@ const ViewUserNft = () => {
 
   const acceptOffer = async (action) => {
     if (shownOffer[0]._id && shownOffer[0]._id.length > 0) {
+      toast("Please approve this transaction!");
+        const item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail._id}`;
+        const transaction = await contract.fulfillOfferOrder(
+          itemDetail.listed_by.address,
+          itemDetail.item.collection.collection_on_chain_id,
+          itemDetail.item._id,
+          item_base_uri,
+          nftPurchasePayload.quantity,
+          itemDetail.item.item_supply,
+          offerLists.length,
+          shownOffer[0].offer_price,
+          connectedAddress,
+          {
+            value: price,
+            // gasPrice: 20000000,
+            // gasPrice: 908462167791,
+            // maxFeePerGas:18462167791,
+            // baseFee: 18462167791
+          }
+        );
+        tnx = await transaction.wait();
+        // var amount = price;
+
+        try {
+          if (tnx.events[1]) {
+              soldItemCopyId = tnx.events[1].args[5].toNumber();
+              buyer = tnx.events[3].args[3];
+              trackCopyBaseUrl = 'lllllll';
+          } else {
+            toast("We were unable to complete your transaction!");
+            setIsTransLoading((prev) => !prev);
+            return;
+          }
+        } catch (error) {
+          setIsTransLoading((prev) => !prev);
+          return;
+        }
+
       const offer_id = shownOffer[0]._id;
       const HEADER = "authenticated";
       const REQUEST_URL =
