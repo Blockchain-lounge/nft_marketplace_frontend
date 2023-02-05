@@ -84,7 +84,7 @@ const ViewNft = () => {
   const [timeSelected, setTimeSelected] = useState(
     new Date().toLocaleTimeString()
   );
-
+const [auctionEndDate, setAuctionEndDate] = useState(null);
   //write your function to handle eth swap
   const handleEthSwap = (e) => {
     // setShowModal((prev) => !prev);
@@ -94,7 +94,7 @@ const ViewNft = () => {
   const handleRangeSelection = (ranges: any) => {
     setDateSelected(ranges.selection);
   };
-  const { time } = useTimeCountDown("January 20, 2023");
+  const { time } = useTimeCountDown(auctionEndDate);
 
   const bidExpDates = [
     "1 day",
@@ -560,6 +560,7 @@ const ViewNft = () => {
             push("/");
           }
           setItemDetail(response.data.listing);
+          setAuctionEndDate(response.data.listing.auction_end_date ? moment(response.data.listing.auction_end_date).format("MMMM D YYYY"): null)
           setOfferLists(response.data.listing.offers)
         } else {
           toast("Something went wrong, please try again!");
