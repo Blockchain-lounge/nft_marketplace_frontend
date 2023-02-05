@@ -490,21 +490,24 @@ else if(itemDetail.listing_type === 'fixed'){
                       </div>
                     </div>
                     <div className="flex flex-col md:flex-row items-center justify-between gap-y-4 md:gap-y-0 gap-x-4 mt-4">
-                      <Button
+                      {
+                        itemDetail.listing_type === 'fixed'
+                        ?
+                        <>
+                        <Button
                         title="Edit"
                         outline2
                         wt="w-full"
                         onClick={handleEditNft}
                       />
-                      {
-                        itemDetail.listing_type === 'fixed'
-                        ?
+                      
                       <Button
                         title="Cancel listing"
                         wt="w-full"
                         isDisabled={isTransloading}
                         onClick={() => handleCancelNftListing()}
                       />
+                        </>
                         : itemDetail.listing_type === 'auction'
                         ? 
                         <Button
