@@ -121,7 +121,7 @@ const ListedNftCard = ({
               </span>
               {item_price !== undefined
                 ? item_price
-                : listing_price !== undefined
+                : listing_price
                 ? listing_price
                 : 0}
             </span>
@@ -131,7 +131,7 @@ const ListedNftCard = ({
                 {(
                   (item_price !== undefined
                     ? item_price
-                    : listing_price !== undefined
+                    : listing_price
                     ? listing_price
                     : 0) * dollarRate
                 ).toFixed(2)}

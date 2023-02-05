@@ -257,11 +257,7 @@ const CreateNewNft = () => {
     //     return;
     //   }
     // }
-    if (
-      (nftListingPayload.listing_price &&
-        nftListingPayload.listing_price.length === 0) ||
-      parseInt(nftListingPayload.listing_price) <= 0
-    ) {
+    if (nftListingPayload.listing_price && parseFloat(nftListingPayload.listing_price) <= 0) {
       msg = "listed price is required";
       toast(msg);
       return;
@@ -270,7 +266,6 @@ const CreateNewNft = () => {
       toast(msg);
       return;
     } else {
-      // console.log({ itemIPFSURL });
       setIsTransLoading(true);
       var formData = {
         listing_price: nftListingPayload.listing_price,
