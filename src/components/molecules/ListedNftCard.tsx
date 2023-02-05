@@ -115,11 +115,11 @@ const ListedNftCard = ({
           <div className="flex flex-col">
             <span className="text-black flex items-center justify-center text-lg">
               <span className="h-6 w-3 relative">
-                <Image
+                {/* <Image
                   src="/icon-svg/eth-dark-icon.svg"
                   alt="ethereum coin"
                   layout="fill"
-                />
+                /> */}
               </span>
               {item_price !== undefined
                 ? item_price
