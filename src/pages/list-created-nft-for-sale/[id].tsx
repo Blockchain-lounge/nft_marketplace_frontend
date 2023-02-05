@@ -123,8 +123,10 @@ const ListNft = () => {
     e.preventDefault();
     let msg = "";
 
-    if (parseInt(nftListingPayload.listing_quantity) <= 0 
-          || !nftListingPayload.listing_quantity.trim()) {
+    if (
+      parseInt(nftListingPayload.listing_quantity) <= 0 ||
+      !nftListingPayload.listing_quantity.trim()
+    ) {
       msg = "quantity listed is empty";
       toast(msg);
       return;
@@ -141,8 +143,11 @@ const ListNft = () => {
       return;
     }
     if (priceListingType === "fixed") {
-      if (nftListingPayload.listing_price.length === 0 
-        || parseFloat(nftListingPayload.listing_price) <= 0) {
+      setPriceListingType((prev) => "fixed");
+      if (
+        nftListingPayload.listing_price.length === 0 ||
+        parseFloat(nftListingPayload.listing_price) <= 0
+      ) {
         msg = "listing price is empty";
         toast(msg);
         return;
@@ -152,6 +157,7 @@ const ListNft = () => {
         return;
       }
     } else if (priceListingType === "auction") {
+      setPriceListingType((prev) => "auction");
       //@ts-ignore
       if (date.startDate.length === 0) {
         msg = "Auction end date is empty";
@@ -166,14 +172,17 @@ const ListNft = () => {
         msg = "Auction time is empty";
         toast(msg);
         return;
-      } else if (nftListingPayload.reserved_bidding_price.length === 0
-                || parseFloat(nftListingPayload.reserved_bidding_price) <= 0) {
+      } else if (
+        nftListingPayload.reserved_bidding_price.length === 0 ||
+        parseFloat(nftListingPayload.reserved_bidding_price) <= 0
+      ) {
         msg = "Auction reserved bidding price is empty";
         toast(msg);
         return;
-      } 
-      else if (nftListingPayload.starting_bidding_price.length === 0
-        || parseFloat(nftListingPayload.starting_bidding_price) <= 0) {
+      } else if (
+        nftListingPayload.starting_bidding_price.length === 0 ||
+        parseFloat(nftListingPayload.starting_bidding_price) <= 0
+      ) {
         msg = "Auction starting bidding price is empty";
         toast(msg);
         return;
