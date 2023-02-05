@@ -34,15 +34,9 @@ const ViewUserNft = () => {
   const [offerLists, setOfferLists] = useState([]);
   const [shownOffer, setShownOffer] = useState([]);
 
-  const handleCancelNftListing = async () => {
-    if (id !== undefined) {
-      setIsTransLoading(true);
-      if (
-        itemDetail.relisted &&
-        itemDetail.relisted === true &&
-        itemDetail.item.token_address &&
-        itemDetail.item.token_address !== null
-      ) {
+  const handleCancelAuction = async ()=>{
+    setIsTransLoading(true);
+      if (itemDetail.listing_type === 'auction') {
         const provider = new ethers.providers.Web3Provider(
           (window as any).ethereum
         );
@@ -52,13 +46,38 @@ const ViewUserNft = () => {
           abi,
           signer
         );
-        const tokenAddress = itemDetail.item.token_address;
-        const tokenId = itemDetail.item.token_id;
-
+        const tokenId = itemDetail.auction_id;
         try {
           toast("Please approve this transaction!");
-          const transaction = await contract.cancelListing(
-            tokenAddress,
+          const transaction = await contract.cancelAuction(
+            tokenId
+          );
+          const tnx = await transaction.wait();
+          push(`/profile`);
+        } catch (err) {
+          toast("Transaction cancelled!");
+          setIsTransLoading(false);
+          return;
+        }
+      }
+  }
+  const handleCancelNftListing = async () => {
+    if (id !== undefined) {
+      setIsTransLoading(true);
+      if (itemDetail.listing_type === 'auction') {
+        const provider = new ethers.providers.Web3Provider(
+          (window as any).ethereum
+        );
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+          APPCONFIG.SmartContractAddress,
+          abi,
+          signer
+        );
+        const tokenId = itemDetail.auction_id;
+        try {
+          toast("Please approve this transaction!");
+          const transaction = await contract.cancelAuction(
             tokenId
           );
           const tnx = await transaction.wait();
@@ -68,6 +87,39 @@ const ViewUserNft = () => {
           return;
         }
       }
+else if(itemDetail.listing_type === 'fixed'){
+  if (
+    itemDetail.relisted &&
+    itemDetail.relisted === true &&
+    itemDetail.item.token_address &&
+    itemDetail.item.token_address !== null
+  ) {
+    const provider = new ethers.providers.Web3Provider(
+      (window as any).ethereum
+    );
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(
+      APPCONFIG.SmartContractAddress,
+      abi,
+      signer
+    );
+    const tokenAddress = itemDetail.item.token_address;
+    const tokenId = itemDetail.item.token_id;
+
+    try {
+      toast("Please approve this transaction!");
+      const transaction = await contract.cancelListing(
+        tokenAddress,
+        tokenId
+      );
+      const tnx = await transaction.wait();
+    } catch (err) {
+      toast("Transaction cancelled!");
+      setIsTransLoading(false);
+      return;
+    }
+  }
+}
 
       const HEADER = "authenticated";
       const REQUEST_URL = "nft-listing/cancel/" + id;
@@ -277,8 +329,6 @@ const ViewUserNft = () => {
     }
   };
 
-  console.log({ itemDetail });
-
   // console.log(offerLists[0].listing_id);
   // console.log(new Date(offerLists[0].listing_id.auction_end_date).getTime());
 
@@ -446,13 +496,38 @@ const ViewUserNft = () => {
                         wt="w-full"
                         onClick={handleEditNft}
                       />
+                      {
+                        itemDetail.listing_type === 'fixed'
+                        ?
                       <Button
                         title="Cancel listing"
                         wt="w-full"
                         isDisabled={isTransloading}
                         onClick={() => handleCancelNftListing()}
                       />
+                        : itemDetail.listing_type === 'auction'
+                        ? 
+                        <Button
+                        title="Cancel auction"
+                        wt="w-full"
+                        isDisabled={isTransloading}
+                        onClick={() => handleCancelNftListing()}
+                      />
+                        : ""
+                      }
                     </div>
+                    <p>&nbsp;</p>
+                    {
+                      itemDetail.listing_type === 'auction'
+                      ? 
+                      <Button
+                      title="End auction"
+                      wt="w-full"
+                      isDisabled={isTransloading}
+                      onClick={() => handleCancelAuction()}
+                    />
+                      : ""
+                    }
                   </div>
                 </div>
               </div>
