@@ -123,7 +123,10 @@ const ListNft = () => {
     e.preventDefault();
     let msg = "";
 
-    if (!nftListingPayload.listing_quantity.trim()) {
+    if (
+      parseInt(nftListingPayload.listing_quantity) <= 0 ||
+      !nftListingPayload.listing_quantity.trim()
+    ) {
       msg = "quantity listed is empty";
       toast(msg);
       return;
@@ -139,18 +142,12 @@ const ListNft = () => {
       toast(msg);
       return;
     }
-    // if (!nftListingPayload.listing_royalty.trim()) {
-    //   msg = "listed royalty is empty";
-    //   toast(msg);
-    //   return;
-    // } else if (isNaN(parseFloat(nftListingPayload.listing_royalty)) === true) {
-    //   msg = "royalty must be a valid positive number";
-    //   toast(msg);
-    //   return;
-    // }
     if (priceListingType === "fixed") {
       setPriceListingType((prev) => "fixed");
-      if (nftListingPayload.listing_price.length === 0) {
+      if (
+        nftListingPayload.listing_price.length === 0 ||
+        parseFloat(nftListingPayload.listing_price) <= 0
+      ) {
         msg = "listing price is empty";
         toast(msg);
         return;
@@ -175,11 +172,17 @@ const ListNft = () => {
         msg = "Auction time is empty";
         toast(msg);
         return;
-      } else if (nftListingPayload.reserved_bidding_price.length === 0) {
+      } else if (
+        nftListingPayload.reserved_bidding_price.length === 0 ||
+        parseFloat(nftListingPayload.reserved_bidding_price) <= 0
+      ) {
         msg = "Auction reserved bidding price is empty";
         toast(msg);
         return;
-      } else if (nftListingPayload.starting_bidding_price.length === 0) {
+      } else if (
+        nftListingPayload.starting_bidding_price.length === 0 ||
+        parseFloat(nftListingPayload.starting_bidding_price) <= 0
+      ) {
         msg = "Auction starting bidding price is empty";
         toast(msg);
         return;
@@ -356,7 +359,7 @@ const ListNft = () => {
                           : nftListingPayload.listing_quantity
                       }
                       suffix={
-                        itemDetail !== null ? itemDetail?.item_supply : ""
+                        itemDetail !== null ? itemDetail?.item_remaining : ""
                       }
                     />
                   </>

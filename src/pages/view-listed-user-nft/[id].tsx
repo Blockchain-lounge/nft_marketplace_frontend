@@ -148,26 +148,75 @@ const ViewUserNft = () => {
   };
 
   const acceptOffer = async (action) => {
+    var amount = parseInt(shownOffer[0].offer_price) * parseInt(itemDetail.listing_quantity);
+
+      amount = ethers.utils.parseUnits(
+        amount.toString()
+      );
     if (shownOffer[0]._id && shownOffer[0]._id.length > 0) {
+      if(action === 'accept'){
+        toast("Please approve this transaction!");
+        const item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail._id}`;
+        const provider = new ethers.providers.Web3Provider(
+          (window as any).ethereum
+        );
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+          APPCONFIG.SmartContractAddress,
+          abi,
+          signer
+        );
+        const transaction = await contract.fulfillOfferOrder(
+          itemDetail.listed_by.address,
+          itemDetail.item.collection.collection_on_chain_id,
+          itemDetail.item._id,
+          item_base_uri,
+          itemDetail.listing_quantity,
+          itemDetail.item.item_supply,
+          offerLists.length,
+          amount,
+          connectedAddress,
+          {
+            gasPrice: 3124913238
+          }
+        );
+        tnx = await transaction.wait();
+        // var amount = price;
+
+        try {
+          if (tnx.events[1]) {
+              soldItemCopyId = tnx.events[1].args[5].toNumber();
+              buyer = tnx.events[3].args[3];
+              trackCopyBaseUrl = 'lllllll';
+          } else {
+            toast("We were unable to complete your transaction!");
+            setIsTransLoading((prev) => !prev);
+            return;
+          }
+        } catch (error) {
+          setIsTransLoading((prev) => !prev);
+          return;
+        }
+      }
       const offer_id = shownOffer[0]._id;
       const HEADER = "authenticated";
       const REQUEST_URL =
-        "nft-offer/accept_reject_offer" + offer_id + "?action=" + action;
+        "nft-offer/accept_reject_offer/" + offer_id + "?action=" + action;
       const METHOD = "GET";
       const DATA = {};
 
       await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-        if (response.status == 400 || response.status == 404) {
+        if (response.status === 400 || response.status === 404) {
           var error = response.data.error;
-          toast(error);
+          alert(error);
           setShowModal((prev) => !prev);
           // push("/");
           return;
-        } else if (response.status == 200) {
-          toast(response.data.message);
+        } else if (response.status === 200) {
           setShowModal((prev) => !prev);
+          alert(response.data.message ? response.data.message : response.data.error);
         } else {
-          toast("Something went wrong, please try again!");
+          alert("Something went wrong, please try again!");
           setShowModal((prev) => !prev);
           return;
         }

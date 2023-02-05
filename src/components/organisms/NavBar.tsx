@@ -109,6 +109,7 @@ const NavBar: FC<INav> = ({
   };
 
   useEffect(() => {
+    account_listener();
     connectedAccount().then((response) => {
       if (response !== null) {
         setConnectedAddress(response);

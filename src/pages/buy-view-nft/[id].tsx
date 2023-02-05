@@ -40,6 +40,7 @@ import { ActivityLoader } from "@/src/components/lazy-loaders";
 import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 import DateTime from "@/src/components/organisms/DateTime";
 import { SwapCard } from "@/src/components/molecules";
+import { useTimeCountDown } from "@/src/hooks/useTimeCountDown";
 
 const ViewNft = () => {
   const [showModal, setShowModal] = useState(false);
@@ -65,12 +66,16 @@ const ViewNft = () => {
     price: 0.0,
     quantity: 1,
   });
+  const [nftPurchasePayload, setNftPurchasePayload] = useState({
+    quantity: 1,
+  });
 
   const [nftBidPayload, setBidPayload] = useState({
     price: 0.0,
     quantity: 1,
   });
   const [balanceInWEth, setBalanceInWEth] = useState(0);
+  const [offerLists, setOfferLists] = useState([]);
 
   const [date, setDateSelected] = useState({
     startDate: new Date(),
@@ -79,7 +84,7 @@ const ViewNft = () => {
   const [timeSelected, setTimeSelected] = useState(
     new Date().toLocaleTimeString()
   );
-
+const [auctionEndDate, setAuctionEndDate] = useState(null);
   //write your function to handle eth swap
   const handleEthSwap = (e) => {
     // setShowModal((prev) => !prev);
@@ -89,6 +94,7 @@ const ViewNft = () => {
   const handleRangeSelection = (ranges: any) => {
     setDateSelected(ranges.selection);
   };
+  const { time } = useTimeCountDown(auctionEndDate);
 
   const bidExpDates = [
     "1 day",
@@ -127,6 +133,7 @@ const ViewNft = () => {
       ...nftBidPayload,
       [name]: value,
     });
+
     // console.log("Price", nftOfferPayload.price)
     // console.log("balance", balanceInWEth)
     isSufficient(nftOfferPayload.price, balanceInWEth);
@@ -236,61 +243,63 @@ const ViewNft = () => {
         offer_time: timeSelected,
         // bidder: buyer,
       };
-    }
 
-    if (nftOfferPayload.price > balanceInWEth) {
-      toast(
-        "Insufficient balance " +
-          balanceInWEth +
-          " to complete an offer of " +
-          nftOfferPayload.price
-      );
-      toast("Add or swap eth for wEth");
-      setIsTransLoading(false);
-      // alert("Insufficient wETh balance, add or swap eth for wEth")
-    } else {
-      if (nftOfferPayload.price != 0) {
-        toast("Approve wEth");
-        const provider = new ethers.providers.Web3Provider(
-          (window as any).ethereum
+      if (nftOfferPayload.price > balanceInWEth) {
+        toast(
+          "Insufficient balance " +
+            balanceInWEth +
+            " to complete an offer of " +
+            nftOfferPayload.price
         );
-        const signer = provider.getSigner();
-        const contract = new ethers.Contract(
-          APPCONFIG.wEthAddress_testnet,
-          wEthAbi,
-          signer
-        );
-
-        var tnx = null;
-        try {
-          const transaction = await contract.approve(
-            APPCONFIG.SmartContractAddress,
-            ethers.utils.parseUnits(nftOfferPayload.price.toString(), "ether")
-          );
-          tnx = await transaction.wait();
-          toast("Approval Completed");
-        } catch (err) {
-          toast("Transaction cancelled!");
-          toast(err.message);
-        }
-        const HEADER = "authenticated";
-        const REQUEST_URL = "nft-offer/make_offer?type=listed";
-        const METHOD = "POST";
-        const DATA = formData;
-        // toast("Finalizing the transaction...");
-        apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
-          if (response.status == 200 || response.status == 201) {
-            toast(response.data.message);
-            setIsTransLoading(false);
-            push("");
-          } else {
-            toast(response.data.error);
-            setIsTransLoading(false);
-          }
-        });
-      } else {
-        toast("You can place an offer of 0 ETH");
+        toast("Add or swap eth for wEth");
         setIsTransLoading(false);
+        // alert("Insufficient wETh balance, add or swap eth for wEth")
+      } else {
+        if (nftOfferPayload.price != 0) {
+          toast("Approve wEth");
+          const provider = new ethers.providers.Web3Provider(
+            (window as any).ethereum
+          );
+          const signer = provider.getSigner();
+          const contract = new ethers.Contract(
+            APPCONFIG.wEthAddress_testnet,
+            wEthAbi,
+            signer
+          );
+
+          var tnx = null;
+          try {
+            const transaction = await contract.approve(
+              APPCONFIG.SmartContractAddress,
+              ethers.utils.parseUnits(nftOfferPayload.price.toString(), "ether")
+            );
+            tnx = await transaction.wait();
+            toast("Approval Completed");
+          } catch (err) {
+            toast("Transaction cancelled!");
+            toast(err.message);
+          }
+          const HEADER = "authenticated";
+          const REQUEST_URL = "nft-offer/make_offer?type=listed";
+          const METHOD = "POST";
+          const DATA = formData;
+          // toast("Finalizing the transaction...");
+          apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (
+            response
+          ) {
+            if (response.status == 200 || response.status == 201) {
+              toast(response.data.message);
+              setIsTransLoading(false);
+              // push("");
+            } else {
+              toast(response.data.error);
+              setIsTransLoading(false);
+            }
+          });
+        } else {
+          toast("You can place an offer of 0 ETH");
+          setIsTransLoading(false);
+        }
       }
     }
 
@@ -359,11 +368,12 @@ const ViewNft = () => {
         const item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail._id}`;
         const transaction = await contract.buyItemCopy(
           itemDetail.listed_by.address,
-          priceListed,
-          itemDetail.item.item_supply,
-          itemDetail.listing_royalty,
+          itemDetail.item.collection.collection_on_chain_id,
           itemDetail.item._id,
           item_base_uri,
+          priceListed,
+          nftPurchasePayload.quantity,
+          itemDetail.item.item_supply,
           {
             value: price,
             // gasPrice: 20000000,
@@ -376,28 +386,10 @@ const ViewNft = () => {
         // var amount = price;
 
         try {
-          if (tnx.events[0]) {
-            if (tnx.events[4]) {
-              soldItemCopyId = tnx.events[3].args[0].toNumber();
+          if (tnx.events[1]) {
+              soldItemCopyId = tnx.events[1].args[5].toNumber();
               buyer = tnx.events[3].args[3];
-              trackCopyBaseUrl = tnx.events[3].args[5];
-              // console.log(
-              //   "Log 5: soldItemCopyIdTop",
-              //   tnx.events[3].args[0].toNumber()
-              // );
-              // console.log("buyer", tnx.events[3].args[3]);
-              // console.log("buytrackCopyBaseUrl", tnx.events[3].args[5]);
-            } else {
-              soldItemCopyId = tnx.events[1].args[0].toNumber();
-              buyer = tnx.events[1].args[3];
-              trackCopyBaseUrl = tnx.events[1].args[5];
-              // console.log(
-              //   "Log 3: soldItemCopyIdTop",
-              //   tnx.events[1].args[0].toNumber()
-              // );
-              // console.log("buyer", tnx.events[1].args[3]);
-              // console.log("buytrackCopyBaseUrl-2", tnx.events[1].args[5]);
-            }
+              trackCopyBaseUrl = 'lllllll';
           } else {
             toast("We were unable to complete your transaction!");
             setIsTransLoading((prev) => !prev);
@@ -457,82 +449,53 @@ const ViewNft = () => {
     } else {
       //@ts-ignore
 
-      if (nftBidPayload.price == 0) {
-        toast.error("Your bid is required");
-        setIsTransLoading(false);
-        return;
-      }
-
-      if (nftBidPayload.price > balanceInWEth) {
-        toast.error(
-          "Insufficient balance " +
-            balanceInWEth +
-            " to complete an offer of " +
-            nftBidPayload.price
+        const bidding_price = ethers.utils.parseUnits(
+          nftBidPayload.price.toString()
         );
-        toast("Add or swap eth for wEth");
-        setIsTransLoading(false);
-        return;
-      }
+  
+          const transaction = await contract.makeBid(
+            nftBidPayload.quantity,
+            bidding_price,
+            itemDetail.listing_on_chain_id,
+            {
+              gasPrice: 74762514060
+              // maxFeePerGas: 20000000,
+              // baseFee: 54762514060
+            }
+          );
+  
+          tnx = await transaction.wait();
+          const events = findEvents('BidIsMade', tnx.events, true);
+          if (!events[0].toNumber()){
+            toast("We were unable to complete your transaction!");
+            setIsTransLoading(false);
+            return;
+          }
+          auction_id = events[0].toNumber();
 
-      const provider = new ethers.providers.Web3Provider(
-        (window as any).ethereum
-      );
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(
-        APPCONFIG.SmartContractAddress,
-        abi,
-        signer
-      );
-      var tnx = null;
-      var bid_id = null;
-
-      const bidding_price = ethers.utils.parseUnits(
-        nftBidPayload.price.toString()
-      );
-
-      const transaction = await contract.makeBid(
-        nftBidPayload.quantity,
-        bidding_price,
-        itemDetail.listing_on_chain_id,
-        {
-          gasPrice: 74762514060,
-          // maxFeePerGas: 20000000,
-          // baseFee: 54762514060
-        }
-      );
-
-      tnx = await transaction.wait();
-      const events = findEvents("BidIsMade", tnx.events, true);
-      if (!events[0].toNumber()) {
-        toast("We were unable to complete your transaction!");
-        setIsTransLoading(false);
-        return;
-      }
-      auction_id = events[0].toNumber();
-      // console.log(events);
-
-      var formData = {
-        listing_id: itemDetail._id,
-        amount: nftBidPayload.price * nftBidPayload.quantity,
-        offer_quantity: nftBidPayload.quantity,
-        offer_expiration: bidingExpDates,
-      };
-      const HEADER = "authenticated";
-      const REQUEST_URL = "nft-offer/place_bid";
-      const METHOD = "POST";
-      const DATA = formData;
-      // toast("Finalizing the transaction...");
-      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
-        if (response.status == 200 || response.status == 201) {
-          toast(response.data.message);
-          setIsTransLoading((prev) => !prev);
-          push("");
-        } else {
-          toast(response.data.error);
-          setIsTransLoading((prev) => !prev);
-        }
-      });
+        var formData = {
+          listing_id: itemDetail._id,
+          amount: nftBidPayload.price * nftBidPayload.quantity,
+          offer_quantity: nftBidPayload.quantity,
+          offer_expiration: bidingExpDates,
+        };
+        const HEADER = "authenticated";
+        const REQUEST_URL = "nft-offer/place_bid";
+        const METHOD = "POST";
+        const DATA = formData;
+        // toast("Finalizing the transaction...");
+        apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (
+          response
+        ) {
+          if (response.status == 200 || response.status == 201) {
+            toast(response.data.message);
+            setIsTransLoading(false);
+            // push("");
+          } else {
+            toast(response.data.error);
+            setIsTransLoading(false);
+          }
+        });
     }
   };
 
@@ -597,6 +560,8 @@ const ViewNft = () => {
             push("/");
           }
           setItemDetail(response.data.listing);
+          setAuctionEndDate(response.data.listing.auction_end_date ? moment(response.data.listing.auction_end_date).format("MMMM D YYYY"): null)
+          setOfferLists(response.data.listing.offers)
         } else {
           toast("Something went wrong, please try again!");
           return;
@@ -604,31 +569,6 @@ const ViewNft = () => {
       });
     }
   };
-
-  const offerLists = [
-    // {
-    //   address: "0x343wsewd022243",
-    //   _id: "01",
-    //   offer_price: 0.002,
-    //   item_id: { item_art_url: "/images/wwcc.webp" },
-    //   user_id: { username: "andrew" },
-    // },
-    // {
-    //   address: "0x343wsewd022243",
-    //   _id: "02",
-    //   offer_price: 0.002,
-    //   item_id: { item_art_url: "/images/wwcc.webp" },
-    //   user_id: { username: "andrew" },
-    // },
-    // {
-    //   address: "0x343wsewd022243",
-    //   _id: "03",
-    //   offer_price: 0.002,
-    //   item_id: { item_art_url: "/images/wwcc.webp" },
-    //   user_id: { username: "andrew" },
-    // },
-  ];
-
   const shownOffer = {
     user_id: {
       username: "sacred",
@@ -813,7 +753,11 @@ const ViewNft = () => {
                     </div>
                   </div>
                 </div>
-                <div className="view-hero-nft-cta-wrapper">
+                {
+                  itemDetail.listing_type 
+                  && itemDetail.listing_type === 'fixed'
+                  ?
+                  <div className="view-hero-nft-cta-wrapper">
                   <div className="flex w-full gap-x-6">
                     <div className="p-4 bg-bg-5 rounded-md w-full">
                       <span className="text-txt-2 text-xl block mb-4">
@@ -822,12 +766,17 @@ const ViewNft = () => {
                       <div className="">
                         <span className="flex items-center text-[1.75rem] gap-x-1">
                           <CoinIcon />
-                          {itemDetail.listing_price}
+                          {
+                            itemDetail.listing_type === 'auction' ? itemDetail.starting_bidding_price 
+                            : itemDetail.listing_type === 'fixed' ? itemDetail.listing_price
+                            : ""
+                          }
                         </span>
                         {dollarRate ? (
                           <span className="text-xl font-medium block mt-2">
-                            $
-                            {(itemDetail.listing_price * dollarRate).toFixed(2)}
+                            ${
+                            (itemDetail.listing_price * dollarRate).toFixed(2)
+                          }
                           </span>
                         ) : (
                           ""
@@ -846,23 +795,6 @@ const ViewNft = () => {
                         </span>
                       </div>
                     </div>
-                    {/* <div className="p-4 bg-bg-5 rounded-md w-full">
-                      <span className="text-txt-2 text-xl block mb-4">
-                        Highest floor bid (Coming Soon)
-                      </span>
-                      <div>
-                        <span className="flex items-center  text-[1.5rem] gap-x-1">
-                          <CoinIcon />
-                          ----
-                        </span>
-                        <span className="text-xl font-medium flex items-center mt-2 text-txt-2 gap-x-2">
-                          by
-                          <span className="earnings-card-history">
-                            0x7a20d...9257
-                          </span>
-                        </span>
-                      </div>
-                    </div> */}
                   </div>
                   {/* <span className="text-lg font-medium">
                     Last sale price 10.8 ETH
@@ -871,6 +803,10 @@ const ViewNft = () => {
                     <div className="flex gap-x-5 w-full">
                       {connectedAddress ? (
                         <div className="w-full space-y-4">
+                          {
+                            itemDetail.listing_type && itemDetail.listing_type === 'fixed'
+                            ?
+                            <>
                           <Button
                             title="Buy now"
                             wt="w-full"
@@ -888,18 +824,8 @@ const ViewNft = () => {
                               setShowModal((prev) => !prev);
                             }}
                           />
-                          {itemDetail.listing_type &&
-                          itemDetail.listing_type === "auction" ? (
-                            <Button
-                              title="Place a bid"
-                              outline2
-                              wt="w-full"
-                              onClick={() => {
-                                setModaltype("bid");
-                                setShowModal((prev) => !prev);
-                              }}
-                            />
-                          ) : (
+                          </>
+                         : (
                             ""
                           )}
                         </div>
@@ -913,17 +839,122 @@ const ViewNft = () => {
                         <CartIcon />
                       </span> */}
                     </div>
-                    {/* <Button
-                      title="Place a bid"
-                      wt="w-full"
-                      outline2
-                      onClick={() => {
-                        setModaltype("bid");
-                        setShowModal((prev) => !prev);
-                      }}
-                    /> */}
                   </div>
                 </div>
+                : itemDetail.listing_type 
+                && itemDetail.listing_type === 'auction'
+                ?
+<div className="view-hero-nft-cta-wrapper">
+                  <div className="flex w-full gap-x-6">
+                    <div className="p-4 bg-bg-5 rounded-md w-1/2">
+                      <span className="text-txt-2 text-xl block mb-4">
+                        Time left
+                      </span>
+                      <div className="md:w-[70%]">
+                        <div className="grid items-center mt-2 grid-cols-[0.23fr_0.24fr_0.24fr_0.24fr]  md:grid-cols-[0.32fr_0.35fr_0.32fr_0.32fr]">
+                          <div className="flex gap-x-1">
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              {time.days.toString().length < 2
+                                ? "0" + time.days
+                                : time.days}
+                            </span>
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              :
+                            </span>
+                          </div>
+                          <div className="flex gap-x-1">
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              {time.hours.toString().length < 2
+                                ? "0" + time.hours
+                                : time.hours}
+                            </span>
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              :
+                            </span>
+                          </div>
+                          <div className="flex gap-x-3">
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              {time.minutes.toString().length < 2
+                                ? "0" + time.minutes
+                                : time.minutes}
+                            </span>
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              :
+                            </span>
+                          </div>
+                          <div className="flex gap-x-1">
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              {time.seconds.toString().length < 2
+                                ? "0" + time.seconds
+                                : time.seconds}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="grid items-center mt-2 grid-cols-[0.23fr_0.24fr_0.24fr_0.24fr]  md:grid-cols-[0.32fr_0.35fr_0.32fr_0.32fr]">
+                          <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
+                            d
+                          </span>
+                          <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
+                            hrs
+                          </span>
+                          <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
+                            min
+                          </span>
+                          <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
+                            sec
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-4 bg-bg-5 rounded-md w-1/2">
+                      <span className="text-txt-2 text-xl block mb-4">
+                        Minimum bid
+                      </span>
+                      <div>
+                        <span className="flex items-center text-[1.3rem] md:text-[1.75rem] gap-x-1 font-bold">
+                          <CoinIcon />
+                            {itemDetail.starting_bidding_price}
+                        </span>
+                        <span className="text-[1.2rem] md:text-xl font-medium flex items-center mt-2 text-txt-2 gap-x-2">
+                          ${(itemDetail.starting_bidding_price * dollarRate).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-lg font-medium">
+                    Last sale price 10.8 ETH
+                  </span>
+                  <div className="flex flex-col gap-y-4 w-full">
+                    <div className="flex gap-x-5 w-full">
+                        {connectedAddress ? (
+                      <div className="w-full space-y-4">
+                      <Button
+                              title="Place a bid"
+                              outline2
+                              wt="w-full"
+                              onClick={() => {
+                                setModaltype("bid");
+                                setShowModal((prev) => !prev);
+                              }}
+                            />
+                      </div>
+                        ):(
+                        <Button
+                          title="You need to connect your wallet to continue"
+                          wt="w-full"
+                          />
+                      )}
+
+                      {/* <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
+                        <CartIcon />
+                      </span> */}
+                    </div>
+                  </div>
+                </div>
+                :
+                ""
+                }
               </div>
               {/* <div className="flex gap-x-6 mt-6 items-center">
                 <span className="flex gap-x-2 items-center">
@@ -1048,7 +1079,7 @@ const ViewNft = () => {
                           <div
                             key={"offer-list" + offer.address + i}
                             className="flex justify-between items-center cursor-pointer bg-bg-5 hover:bg-bg-3 rounded-xl py-4 px-6"
-                            onClick={() => viewOffer(offer._id)}
+                            onClick={() => connectedAccount === offer.user_id._id ? viewOffer(offer._id) : null}
                           >
                             <div className="flex items-center gap-x-4">
                               <div className="relative h-14 w-14">
@@ -1396,29 +1427,13 @@ const ViewNft = () => {
               <div className="create-new-nft-wrapper-2 w-full">
                 {/* <Select title="ETH" icon={<CoinIcon />} /> */}
                 <Input2
-                  name="price"
+                  name="amount"
                   placeholder="0.00"
                   label="Your bid"
                   onChange={handleFieldChange}
-                  value={nftBidPayload.price}
+                  value={nftBidPayload.amount}
                 />
               </div>
-              <p className="mt-6">
-                {/* {!isSufficient && ( */}
-                {/* <div> */}
-                {/* <span className="font-bold text-txt-2 text-base">
-                        Insufficient wETH balance ?{" "}
-                      </span> */}
-                <span
-                  className="earnings-card-history cursor-pointer font-bold"
-                  onClick={() => setModaltype((prev) => "addFunds")}
-                >
-                  Add wEth funds or swap
-                </span>
-                {/* </div> */}
-                {/* )} */}
-                {/* {isSufficient && ("")} */}
-              </p>
             </div>
             <div className="create-new-nft-wrapper-2 w-full">
               <span className="create-new-nft-wrapper-2-label">
@@ -1439,7 +1454,7 @@ const ViewNft = () => {
                 value={nftBidPayload.quantity}
               />
             </div>
-            {/* <div className="space-y-5 w-full">
+            <div className="space-y-5 w-full">
               <div className="flex justify-between items-center w-full">
                 <span className="text-txt-2">Balance</span>
                 <span className="flex">
@@ -1460,7 +1475,7 @@ const ViewNft = () => {
                   6.95
                 </span>
               </div>
-            </div> */}
+            </div>
             <div className="mt-12 lg:mt-10 w-full">
               <Button
                 title="Place bid"
@@ -1678,8 +1693,13 @@ const ViewNft = () => {
                 name="quantity"
                 placeholder="1"
                 label="Item quantity"
-                onChange={handleFieldChange}
-                value={nftOfferPayload.quantity}
+                onChange={
+                  (e) => setNftPurchasePayload({
+                    quantity: e.target.value
+                  })
+                }
+              
+                value={nftPurchasePayload.quantity}
               />
             </div>
             {/* <div className="flex items-center justify-between w-full bg-bg-5 py-4 px-6 rounded-[1.25rem]">

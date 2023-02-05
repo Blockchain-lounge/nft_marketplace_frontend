@@ -90,7 +90,9 @@ const ListNft = () => {
     e.preventDefault();
     let msg = "";
 
-    if (!nftListingPayload.listing_quantity.trim()) {
+    if (!nftListingPayload.listing_quantity.trim()
+    || parseFloat(nftListingPayload.listing_quantity) <=0
+    ) {
       msg = "quantity listed is empty";
       toast(msg);
       return;
@@ -106,7 +108,8 @@ const ListNft = () => {
       toast(msg);
       return;
     }
-    if (!nftListingPayload.listing_royalty.trim()) {
+    if (!nftListingPayload.listing_royalty.trim()
+    || parseFloat(nftListingPayload.listing_royalty) < 0) {
       msg = "listed royalty is empty";
       toast(msg);
       return;
@@ -115,7 +118,8 @@ const ListNft = () => {
       toast(msg);
       return;
     }
-    if (!nftListingPayload.listing_price.trim()) {
+    if (!nftListingPayload.listing_price.trim() 
+      || parseFloat(nftListingPayload.listing_price) <= 0) {
       msg = "listed price is empty";
       toast(msg);
       return;

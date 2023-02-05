@@ -1,9 +1,11 @@
+// @ts-nocheck
 import { ethers } from 'ethers';
 import { apiRequest } from '../offChain/apiRequests';
 import {
   redirectUrl,
   signInMessage
 } from "../offChain/generalFunctions";
+import APPCONFIG from "../../constants/Config";
 
 
 export const connectedAccount = async () => {
@@ -121,6 +123,9 @@ export async function disconnectWallet() {
 }
 
 export async function connectUserWallet() {
+  const provider = new ethers.providers.InfuraProvider(APPCONFIG.APP_NETWORK, process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_ID);
+  const { chainId, name } = await provider.getNetwork();
+
   try {
     if (!(window as any).ethereum) {
       //check if Metamask wallet is not installed
@@ -133,6 +138,30 @@ export async function connectUserWallet() {
         method: "eth_requestAccounts",
       })
       .then((wallets: string[]) => {
+
+        var login = true;
+        console.log({APPCONFIG})
+
+  // const provider = new ethers.providers.Web3Provider(ethereum);
+
+  if((APPCONFIG.APP_NETWORK === 'mainnet' 
+        || name ==='homestead')
+        && chainId === parseInt(APPCONFIG.APP_NETWORK_CHAIN_ID)){
+          // Do nothing
+          login = true;
+        }
+  
+  else if(name !== APPCONFIG.APP_NETWORK || chainId !== parseInt(APPCONFIG.APP_NETWORK_CHAIN_ID)){
+      login = false;
+      console.log(name)
+      console.log(chainId)
+  }
+
+  if(login === false){
+    alert('Only '+APPCONFIG.APP_NETWORK+' addresses are allowed')
+      return
+  }
+
         if (wallets[0] && wallets[0] !== null) {
           const account = wallets[0];
           var formData = {

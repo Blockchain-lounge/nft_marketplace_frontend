@@ -81,8 +81,8 @@ const ListedNftCard = ({
                 ? item_id !== undefined && item_id !== null && item_id !== ""
                   ? item_id.item_title
                   : item_title
-                : ""
-              : ""}
+                : "ccccc"
+              : "xxxxx"}
           </span>
           <span className="nmc-sub-wrapper-2-owner justify-center">
             {listing_quantity !== undefined
