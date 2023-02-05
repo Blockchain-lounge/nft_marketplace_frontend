@@ -140,8 +140,6 @@ export async function connectUserWallet() {
       .then((wallets: string[]) => {
 
         var login = true;
-        console.log({APPCONFIG})
-
   // const provider = new ethers.providers.Web3Provider(ethereum);
 
   if((APPCONFIG.APP_NETWORK === 'mainnet' 
