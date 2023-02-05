@@ -162,7 +162,6 @@ const Home: NextPage = () => {
                 to="/explore"
                 // selectTitle="Last 24 hours"
               />
-
               <div className="hero-section-1-collection">
                 {collections ? (
                   collections.map((val, i) => <NftMiniCard {...val} key={i} />)
