@@ -4,8 +4,18 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import DashboardLayout from "@/src/template/DashboardLayout";
 import { Footer } from "@/src/components/organisms";
-import { EditIcon } from "@/src/components/atoms/vectors";
-import { Button, GradientButton } from "@/src/components/atoms";
+import {
+  CoinIcon,
+  CopyIcon,
+  EditIcon,
+  ProfileLinkIcon,
+} from "@/src/components/atoms/vectors";
+import {
+  Button,
+  GradientButton,
+  Heading2,
+  Loader,
+} from "@/src/components/atoms";
 import {
   UserActivityCard,
   ConnectWalletTab,
