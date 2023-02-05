@@ -196,21 +196,24 @@ const CreateNewNft = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     var msg = "";
+    setIsTransLoading((prev) => !prev);
 
     if (itemDetail.relisted && itemDetail.relisted === true) {
       if (
         (nftListingPayload.listing_quantity &&
           nftListingPayload.listing_quantity.length === 0) ||
-        parseInt(nftListingPayload.listing_quantity) <= 0 
+        parseInt(nftListingPayload.listing_quantity) <= 0
       ) {
         msg = "quantity listed is required";
         toast(msg);
+        setIsTransLoading((prev) => !prev);
         return;
       } else if (
         isNaN(parseFloat(nftListingPayload.listing_quantity)) === true
       ) {
         msg = "quantity to be listed must be a valid positive number";
         toast(msg);
+        setIsTransLoading((prev) => !prev);
         return;
       }
 
@@ -220,6 +223,7 @@ const CreateNewNft = () => {
       ) {
         msg = "quantity is greater than the total quantity you are holding";
         toast(msg);
+        setIsTransLoading((prev) => !prev);
         return;
       }
     } else if (
@@ -233,6 +237,7 @@ const CreateNewNft = () => {
       ) {
         msg = "quantity is greater than your supply total supply";
         toast(msg);
+        setIsTransLoading((prev) => !prev);
         return;
       }
     }
@@ -257,13 +262,18 @@ const CreateNewNft = () => {
     //     return;
     //   }
     // }
-    if (nftListingPayload.listing_price && parseFloat(nftListingPayload.listing_price) <= 0) {
+    if (
+      nftListingPayload.listing_price &&
+      parseFloat(nftListingPayload.listing_price) <= 0
+    ) {
       msg = "listed price is required";
       toast(msg);
+      setIsTransLoading((prev) => !prev);
       return;
     } else if (isNaN(parseFloat(nftListingPayload.listing_price)) === true) {
       msg = "price of listed must be a valid positive number";
       toast(msg);
+      setIsTransLoading((prev) => !prev);
       return;
     } else {
       setIsTransLoading(true);
@@ -310,7 +320,7 @@ const CreateNewNft = () => {
         } catch (err) {
           toast("Transaction cancelled!");
           setIsTransLoading(false);
-
+          setIsTransLoading((prev) => !prev);
           return;
         }
       }

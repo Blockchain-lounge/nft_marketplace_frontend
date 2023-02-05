@@ -1435,11 +1435,11 @@ const ViewNft = () => {
               <div className="create-new-nft-wrapper-2 w-full">
                 {/* <Select title="ETH" icon={<CoinIcon />} /> */}
                 <Input2
-                  name="amount"
+                  name="price"
                   placeholder="0.00"
                   label="Your bid"
                   onChange={handleFieldChange}
-                  value={nftBidPayload.amount}
+                  value={nftBidPayload.price}
                 />
               </div>
             </div>

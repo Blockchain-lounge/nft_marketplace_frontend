@@ -34,37 +34,35 @@ const ViewUserNft = () => {
   const [offerLists, setOfferLists] = useState([]);
   const [shownOffer, setShownOffer] = useState([]);
 
-  const handleCancelAuction = async ()=>{
+  const handleCancelAuction = async () => {
     setIsTransLoading(true);
-      if (itemDetail.listing_type === 'auction') {
-        const provider = new ethers.providers.Web3Provider(
-          (window as any).ethereum
-        );
-        const signer = provider.getSigner();
-        const contract = new ethers.Contract(
-          APPCONFIG.SmartContractAddress,
-          abi,
-          signer
-        );
-        const tokenId = itemDetail.auction_id;
-        try {
-          toast("Please approve this transaction!");
-          const transaction = await contract.cancelAuction(
-            tokenId
-          );
-          const tnx = await transaction.wait();
-          push(`/profile`);
-        } catch (err) {
-          toast("Transaction cancelled!");
-          setIsTransLoading(false);
-          return;
-        }
+    if (itemDetail.listing_type === "auction") {
+      const provider = new ethers.providers.Web3Provider(
+        (window as any).ethereum
+      );
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(
+        APPCONFIG.SmartContractAddress,
+        abi,
+        signer
+      );
+      const tokenId = itemDetail.auction_id;
+      try {
+        toast("Please approve this transaction!");
+        const transaction = await contract.cancelAuction(tokenId);
+        const tnx = await transaction.wait();
+        push(`/profile`);
+      } catch (err) {
+        toast("Transaction cancelled!");
+        setIsTransLoading(false);
+        return;
       }
-  }
+    }
+  };
   const handleCancelNftListing = async () => {
     if (id !== undefined) {
       setIsTransLoading(true);
-      if (itemDetail.listing_type === 'auction') {
+      if (itemDetail.listing_type === "auction") {
         const provider = new ethers.providers.Web3Provider(
           (window as any).ethereum
         );
@@ -77,49 +75,46 @@ const ViewUserNft = () => {
         const tokenId = itemDetail.auction_id;
         try {
           toast("Please approve this transaction!");
-          const transaction = await contract.cancelAuction(
-            tokenId
-          );
+          const transaction = await contract.cancelAuction(tokenId);
           const tnx = await transaction.wait();
         } catch (err) {
           toast("Transaction cancelled!");
           setIsTransLoading(false);
           return;
         }
-      }
-else if(itemDetail.listing_type === 'fixed'){
-  if (
-    itemDetail.relisted &&
-    itemDetail.relisted === true &&
-    itemDetail.item.token_address &&
-    itemDetail.item.token_address !== null
-  ) {
-    const provider = new ethers.providers.Web3Provider(
-      (window as any).ethereum
-    );
-    const signer = provider.getSigner();
-    const contract = new ethers.Contract(
-      APPCONFIG.SmartContractAddress,
-      abi,
-      signer
-    );
-    const tokenAddress = itemDetail.item.token_address;
-    const tokenId = itemDetail.item.token_id;
+      } else if (itemDetail.listing_type === "fixed") {
+        if (
+          itemDetail.relisted &&
+          itemDetail.relisted === true &&
+          itemDetail.item.token_address &&
+          itemDetail.item.token_address !== null
+        ) {
+          const provider = new ethers.providers.Web3Provider(
+            (window as any).ethereum
+          );
+          const signer = provider.getSigner();
+          const contract = new ethers.Contract(
+            APPCONFIG.SmartContractAddress,
+            abi,
+            signer
+          );
+          const tokenAddress = itemDetail.item.token_address;
+          const tokenId = itemDetail.item.token_id;
 
-    try {
-      toast("Please approve this transaction!");
-      const transaction = await contract.cancelListing(
-        tokenAddress,
-        tokenId
-      );
-      const tnx = await transaction.wait();
-    } catch (err) {
-      toast("Transaction cancelled!");
-      setIsTransLoading(false);
-      return;
-    }
-  }
-}
+          try {
+            toast("Please approve this transaction!");
+            const transaction = await contract.cancelListing(
+              tokenAddress,
+              tokenId
+            );
+            const tnx = await transaction.wait();
+          } catch (err) {
+            toast("Transaction cancelled!");
+            setIsTransLoading(false);
+            return;
+          }
+        }
+      }
 
       const HEADER = "authenticated";
       const REQUEST_URL = "nft-listing/cancel/" + id;
@@ -200,13 +195,13 @@ else if(itemDetail.listing_type === 'fixed'){
   };
 
   const acceptOffer = async (action) => {
-    var amount = parseInt(shownOffer[0].offer_price) * parseInt(itemDetail.listing_quantity);
+    var amount =
+      parseInt(shownOffer[0].offer_price) *
+      parseInt(itemDetail.listing_quantity);
 
-      amount = ethers.utils.parseUnits(
-        amount.toString()
-      );
+    amount = ethers.utils.parseUnits(amount.toString());
     if (shownOffer[0]._id && shownOffer[0]._id.length > 0) {
-      if(action === 'accept'){
+      if (action === "accept") {
         toast("Please approve this transaction!");
         const item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail._id}`;
         const provider = new ethers.providers.Web3Provider(
@@ -229,7 +224,7 @@ else if(itemDetail.listing_type === 'fixed'){
           amount,
           connectedAddress,
           {
-            gasPrice: 3124913238
+            gasPrice: 3124913238,
           }
         );
         tnx = await transaction.wait();
@@ -237,9 +232,9 @@ else if(itemDetail.listing_type === 'fixed'){
 
         try {
           if (tnx.events[1]) {
-              soldItemCopyId = tnx.events[1].args[5].toNumber();
-              buyer = tnx.events[3].args[3];
-              trackCopyBaseUrl = 'lllllll';
+            soldItemCopyId = tnx.events[1].args[5].toNumber();
+            buyer = tnx.events[3].args[3];
+            trackCopyBaseUrl = "lllllll";
           } else {
             toast("We were unable to complete your transaction!");
             setIsTransLoading((prev) => !prev);
@@ -266,7 +261,9 @@ else if(itemDetail.listing_type === 'fixed'){
           return;
         } else if (response.status === 200) {
           setShowModal((prev) => !prev);
-          alert(response.data.message ? response.data.message : response.data.error);
+          alert(
+            response.data.message ? response.data.message : response.data.error
+          );
         } else {
           alert("Something went wrong, please try again!");
           setShowModal((prev) => !prev);
@@ -490,44 +487,47 @@ else if(itemDetail.listing_type === 'fixed'){
                       </div>
                     </div>
                     <div className="flex flex-col md:flex-row items-center justify-between gap-y-4 md:gap-y-0 gap-x-4 mt-4">
-                      <Button
-                        title="Edit"
-                        outline2
-                        wt="w-full"
-                        onClick={handleEditNft}
-                      />
-                      {
-                        itemDetail.listing_type === 'fixed'
-                        ?
-                      <Button
-                        title="Cancel listing"
-                        wt="w-full"
-                        isDisabled={isTransloading}
-                        onClick={() => handleCancelNftListing()}
-                      />
-                        : itemDetail.listing_type === 'auction'
-                        ? 
-                        <Button
-                        title="Cancel auction"
-                        wt="w-full"
-                        isDisabled={isTransloading}
-                        onClick={() => handleCancelNftListing()}
-                      />
-                        : ""
-                      }
+                      {itemDetail.listing_type === "fixed" ? (
+                        <>
+                          <Button
+                            title="Edit"
+                            outline2
+                            wt="w-full"
+                            onClick={handleEditNft}
+                          />
+                          <Button
+                            title="Cancel listing"
+                            wt="w-full"
+                            isDisabled={isTransloading}
+                            onClick={() => handleCancelNftListing()}
+                          />
+                        </>
+                      ) : itemDetail.listing_type === "auction" ? (
+                        <>
+                          <Button
+                            title="Cancel auction"
+                            wt="w-full"
+                            isDisabled={isTransloading}
+                            onClick={() => handleCancelNftListing()}
+                          />
+                          <Button
+                            title="End auction"
+                            wt="w-full"
+                            danger
+                            isDisabled={isTransloading}
+                            onClick={() => handleCancelAuction()}
+                          />
+                        </>
+                      ) : (
+                        ""
+                      )}
                     </div>
-                    <p>&nbsp;</p>
-                    {
-                      itemDetail.listing_type === 'auction'
-                      ? 
-                      <Button
-                      title="End auction"
-                      wt="w-full"
-                      isDisabled={isTransloading}
-                      onClick={() => handleCancelAuction()}
-                    />
-                      : ""
-                    }
+                    {/* <p>&nbsp;</p>
+                    {itemDetail.listing_type === "auction" ? (
+                    
+                    ) : (
+                      ""
+                    )} */}
                   </div>
                 </div>
               </div>

@@ -40,6 +40,7 @@ const ListedNftCard = ({
     setAuctionEndDate(
       auction_end_date ? moment(auction_end_date).format("MMMM D YYYY") : null
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div
@@ -100,10 +101,10 @@ const ListedNftCard = ({
           </span>
         </div>
         {listing_type === "auction" ? (
-          <div className="flex flex-col gap-y-3 bg-[#F9F9FA] py-2 px-[0.625rem] rounded-lg w-[52%]">
+          <div className="flex flex-col gap-y-2 bg-[#F9F9FA] py-2 px-[0.625rem] rounded-lg w-[52%]">
             <div className="flex justify-between">
-              <span className="text-lg text-txt-4 font-bold">Time Left:</span>
-              <span className="text-lg text-black font-bold">{`${
+              <span className=" text-txt-4 font-bold">Time Left:</span>
+              <span className=" text-black font-bold">{`${
                 time.days.toString().length < 2 ? "0" + time.days : time.days
               }:${
                 time.hours.toString().length < 2 ? "0" + time.hours : time.hours
@@ -118,7 +119,7 @@ const ListedNftCard = ({
               }`}</span>
             </div>
             <div className="flex gap-x-1 justify-between">
-              <span className="text-lg text-txt-4 font-bold">Min bid:</span>
+              <span className=" text-txt-4 font-bold">Min bid:</span>
               <div className="flex gap-x-1 items-center w-max">
                 <span className="relative h-6 w-3">
                   <Image
@@ -127,7 +128,7 @@ const ListedNftCard = ({
                     layout="fill"
                   />
                 </span>
-                <span className="text-lg text-black font-bold">
+                <span className=" text-black font-bold">
                   {starting_bidding_price}
                 </span>
               </div>

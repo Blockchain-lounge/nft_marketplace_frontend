@@ -13,6 +13,7 @@ export { default as DisplayWallet } from "./DisplayWallet";
 export { default as EarningsCard } from "./EarningsCard";
 export { default as HeroCard } from "./HeroCard";
 export { default as HomeNftCard } from "./HomeNftCard";
+
 export { default as MiniUserProfile } from "./MiniUserProfile";
 export { default as MiniUserWallet } from "./MiniUserWallet";
 export { default as NavTab } from "./NavTab";

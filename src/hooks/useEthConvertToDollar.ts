@@ -10,7 +10,9 @@ export const UseConvertEthToDollar = () => {
         "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd&include_market_cap=true&precision=2"
       )
       .then((res) => setDollarRate(res.data.ethereum.usd))
-      .catch((err) => console.error(err.message));
+      .catch((err) => {
+        return;
+      });
   }, []);
 
   return [dollarRate];
