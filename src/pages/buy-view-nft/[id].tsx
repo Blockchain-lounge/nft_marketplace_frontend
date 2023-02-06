@@ -241,7 +241,7 @@ const ViewNft = () => {
         amount: nftOfferPayload.price * nftOfferPayload.quantity,
         offer_quantity: nftOfferPayload.quantity,
         offer_time: timeSelected,
-        buyer: buyer,
+        buyer: connectedAddress,
       };
 
       if (nftOfferPayload.price > balanceInWEth) {
@@ -344,6 +344,7 @@ const ViewNft = () => {
       var item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail._id}`;
       var startItemCopyId = 1;
       var quantityPurchased = 1;
+      var soldItemCopyId = 1;
       var amount = (itemDetail.listing_price * nftOfferPayload.quantity) as string;
 
       if (itemDetail.relisted && itemDetail.relisted === true) {
@@ -360,7 +361,6 @@ const ViewNft = () => {
         tnx = await transaction.wait();
 
         buyer = connectedAddress;
-        soldItemCopyId = itemDetail.item.token_id;
       } else if (!itemDetail.relisted || itemDetail.relisted === false) {
         toast("Please approve this transaction!");
 
