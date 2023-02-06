@@ -35,7 +35,7 @@ const ListNft = () => {
   const [modalType, setModalType] = useState("item");
   const [isTransloading, setIsTransLoading] = useState(false);
   const [nftListingPayload, setNftListingPayload] = useState({
-    listing_quantity: "",
+    listing_quantity: 1,
     listing_price: "",
     // listing_royalty: "",
     starting_bidding_price: "",
@@ -382,7 +382,7 @@ const ListNft = () => {
                       onChange={handleFieldChange}
                       value={nftListingPayload.reserved_bidding_price}
                     />
-                    <Input2
+                    {/* <Input2
                       label="Quantity to be listed"
                       name="listing_quantity"
                       placeholder="0"
@@ -397,7 +397,7 @@ const ListNft = () => {
                       suffix={
                         itemDetail !== null ? itemDetail?.item_supply : ""
                       }
-                    />
+                    /> */}
                     <Button
                       title="Set auction duration"
                       outline

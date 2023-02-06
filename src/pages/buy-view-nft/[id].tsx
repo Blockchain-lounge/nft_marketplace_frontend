@@ -241,7 +241,7 @@ const ViewNft = () => {
         amount: nftOfferPayload.price * nftOfferPayload.quantity,
         offer_quantity: nftOfferPayload.quantity,
         offer_time: timeSelected,
-        // bidder: buyer,
+        buyer: buyer,
       };
 
       if (nftOfferPayload.price > balanceInWEth) {
@@ -343,8 +343,7 @@ const ViewNft = () => {
       var buyer = connectedAddress;
       var trackCopyBaseUrl = "";
       var soldItemCopyId = "";
-      var amount = (itemDetail.listing_price *
-        nftOfferPayload.quantity) as string;
+      var amount = (itemDetail.listing_price * nftOfferPayload.quantity) as string;
 
       if (itemDetail.relisted && itemDetail.relisted === true) {
         toast("Please approve this transaction!");
@@ -383,19 +382,13 @@ const ViewNft = () => {
           }
         );
         tnx = await transaction.wait();
-        // var amount = price;
-
-        try {
-          if (tnx.events[1]) {
-            soldItemCopyId = tnx.events[1].args[5].toNumber();
-            buyer = tnx.events[3].args[3];
-            trackCopyBaseUrl = "lllllll";
-          } else {
-            toast("We were unable to complete your transaction!");
-            setIsTransLoading((prev) => !prev);
-            return;
-          }
-        } catch (error) {
+        if (tnx.events) {
+          const events = findEvents("ItemCopySold", tnx.events, true);
+          soldItemCopyId = events[0].toNumber();
+          buyer = events[2];
+          trackCopyBaseUrl = "lllllll";
+        } else {
+          toast("We were unable to complete your transaction!");
           setIsTransLoading((prev) => !prev);
           return;
         }
@@ -432,13 +425,14 @@ const ViewNft = () => {
     event.preventDefault();
 
     setIsTransLoading((prev) => !prev);
-    if (Number(nftBidPayload.quantity) > itemDetail.listing_remaining) {
-      toast.error(
-        "The quantity you specified is more than the listed item quantity"
-      );
-      setIsTransLoading((prev) => !prev);
-      return;
-    } else if (nftBidPayload.price.length === 0) {
+    // if (Number(nftBidPayload.quantity) > itemDetail.listing_remaining) {
+    //   toast.error(
+    //     "The quantity you specified is more than the listed item quantity"
+    //   );
+    //   setIsTransLoading((prev) => !prev);
+    //   return;
+    // } else 
+    if (nftBidPayload.price.length === 0) {
       toast.error("Bidding price is required");
       setIsTransLoading((prev) => !prev);
       return;
@@ -452,7 +446,15 @@ const ViewNft = () => {
       const bidding_price = ethers.utils.parseUnits(
         nftBidPayload.price.toString()
       );
-
+      const provider = new ethers.providers.Web3Provider(
+        (window as any).ethereum
+      );
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(
+        APPCONFIG.SmartContractAddress,
+        abi,
+        signer
+      );
       const transaction = await contract.makeBid(
         nftBidPayload.quantity,
         bidding_price,
@@ -1453,7 +1455,7 @@ const ViewNft = () => {
                 onClick={setBidingExpDates}
               />
             </div>
-            <div className="create-new-nft-wrapper-2 w-full">
+            {/* <div className="create-new-nft-wrapper-2 w-full">
               <Input2
                 label="Quantity"
                 name="quantity"
@@ -1461,7 +1463,7 @@ const ViewNft = () => {
                 onChange={handleFieldChange}
                 value={nftBidPayload.quantity}
               />
-            </div>
+            </div> */}
             {/* <div className="space-y-5 w-full">
               <div className="flex justify-between items-center w-full">
                 <span className="text-txt-2">Balance</span>
