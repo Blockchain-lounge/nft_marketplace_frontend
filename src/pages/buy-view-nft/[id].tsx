@@ -341,8 +341,10 @@ const ViewNft = () => {
 
       var tnx = null;
       var buyer = connectedAddress;
-      var trackCopyBaseUrl = "";
+      var item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail._id}`;
       var soldItemCopyId = "";
+      var startItemCopyId = 1;
+      var quantityPurchased = 1;
       var amount = (itemDetail.listing_price * nftOfferPayload.quantity) as string;
 
       if (itemDetail.relisted && itemDetail.relisted === true) {
@@ -359,12 +361,10 @@ const ViewNft = () => {
         tnx = await transaction.wait();
 
         buyer = connectedAddress;
-        trackCopyBaseUrl = "null";
         soldItemCopyId = itemDetail.item.token_id;
       } else if (!itemDetail.relisted || itemDetail.relisted === false) {
         toast("Please approve this transaction!");
 
-        const item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail._id}`;
         const transaction = await contract.buyItemCopy(
           itemDetail.listed_by.address,
           itemDetail.item.collection.collection_on_chain_id,
@@ -386,7 +386,7 @@ const ViewNft = () => {
           const events = findEvents("ItemCopySold", tnx.events, true);
           soldItemCopyId = events[0].toNumber();
           buyer = events[2];
-          trackCopyBaseUrl = "lllllll";
+          quantityPurchased = events[1].toNumber();
         } else {
           toast("We were unable to complete your transaction!");
           setIsTransLoading((prev) => !prev);
@@ -398,7 +398,8 @@ const ViewNft = () => {
       var formData = {
         listing_id: itemDetail._id,
         item_copy_id: soldItemCopyId,
-        item_copy_base_url: trackCopyBaseUrl,
+        item_copy_base_url: item_base_uri,
+        quantityPurchased: quantityPurchased,
         amount: amount,
         buyer: buyer,
       };

@@ -122,26 +122,6 @@ const ListNft = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let msg = "";
-
-    if (
-      parseInt(nftListingPayload.listing_quantity) <= 0 ||
-      !nftListingPayload.listing_quantity.trim()
-    ) {
-      msg = "quantity listed is empty";
-      toast(msg);
-      return;
-    } else if (isNaN(parseFloat(nftListingPayload.listing_quantity)) === true) {
-      msg = "quantity to be listed must be a valid positive number";
-      toast(msg);
-      return;
-    } else if (
-      Number(nftListingPayload.listing_quantity) >
-      Number(itemDetail?.item_supply)
-    ) {
-      msg = "quantity is greater than your item total supply";
-      toast(msg);
-      return;
-    }
     if (priceListingType === "fixed") {
       setPriceListingType((prev) => "fixed");
       if (
