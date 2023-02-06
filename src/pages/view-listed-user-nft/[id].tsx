@@ -60,8 +60,9 @@ const ViewUserNft = () => {
     }
   };
   const handleCancelNftListing = async () => {
+    setIsLoading((prev) => !prev);
     if (id !== undefined) {
-      setIsTransLoading(true);
+      setIsLoading((prev) => !prev);
       if (itemDetail.listing_type === "auction") {
         const provider = new ethers.providers.Web3Provider(
           (window as any).ethereum
@@ -79,7 +80,7 @@ const ViewUserNft = () => {
           const tnx = await transaction.wait();
         } catch (err) {
           toast("Transaction cancelled!");
-          setIsTransLoading(false);
+          setIsLoading((prev) => !prev);
           return;
         }
       } else if (itemDetail.listing_type === "fixed") {
@@ -110,7 +111,7 @@ const ViewUserNft = () => {
             const tnx = await transaction.wait();
           } catch (err) {
             toast("Transaction cancelled!");
-            setIsTransLoading(false);
+            setIsLoading((prev) => !prev);
             return;
           }
         }
@@ -124,12 +125,15 @@ const ViewUserNft = () => {
         if (response.status == 400) {
           var error = response.data.error;
           toast(error);
+          setIsLoading((prev) => !prev);
           return;
         } else if (response.status == 200) {
           toast(response.data.message);
+          setIsLoading((prev) => !prev);
           push(`/profile`);
         } else {
           toast(response.data.error);
+          setIsLoading((prev) => !prev);
           return;
         }
       });
@@ -150,6 +154,7 @@ const ViewUserNft = () => {
         if (response.status === 400) {
           var error = response.data.error;
           toast(error);
+          setIsLoading((prev) => !prev);
           return;
         } else if (response.status === 401) {
           toast("Unauthorized request!");
@@ -179,6 +184,7 @@ const ViewUserNft = () => {
         if (response.status == 400) {
           var error = response.data.error;
           toast(error);
+          setIsLoading((prev) => !prev);
           push("/");
           return;
         } else if (response.status == 200) {
@@ -283,6 +289,7 @@ const ViewUserNft = () => {
         if (response.status == 400) {
           var error = response.data.error;
           toast(error);
+          setIsLoading((prev) => !prev);
           // push("/");
           return;
         } else if (response.status == 200) {

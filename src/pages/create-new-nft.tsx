@@ -183,6 +183,7 @@ const CreateNewNft = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     var msg = "";
+    setIsLoading((prev) => !prev);
 
     if (!nftPayload.description.trim()) {
       msg = "Item description is still empty";
@@ -191,14 +192,17 @@ const CreateNewNft = () => {
     } else if (!nftPayload.itemName.trim()) {
       msg = "Item name is still empty";
       toast(msg);
+      setIsLoading((prev) => !prev);
       return;
     } else if (!nftPayload.supply.trim()) {
       msg = "Item supply is still empty";
       toast(msg);
+      setIsLoading((prev) => !prev);
       return;
     } else if (isNaN(parseFloat(nftPayload.supply)) === true) {
       msg = "Item supply must be a valid positive number";
       toast(msg);
+      setIsLoading((prev) => !prev);
       return;
     }
     //  else if (!nftPayload.royalty.trim()) {
@@ -213,12 +217,13 @@ const CreateNewNft = () => {
     else if (validationError === true) {
       msg = "Please check the uploaded Item image";
       toast(msg);
+      setIsLoading((prev) => !prev);
       return;
     } else {
       try {
         const IPFSItemres = await client.add(nftImage);
         const itemIPFSURL = IPFS_URL + IPFSItemres.path;
-        setIsTransLoading(true);
+        setIsLoading((prev) => !prev);
         var formData = {
           item_title: nftPayload.itemName,
           item_description: nftPayload.description,
@@ -243,25 +248,26 @@ const CreateNewNft = () => {
           if (response.status == 400) {
             var error = response.data.error;
             toast(error);
-            setIsTransLoading(false);
+            setIsLoading((prev) => !prev);
             return;
           } else if (response.status == 401) {
             toast("Unauthorized request!");
-            setIsTransLoading(false);
+            setIsLoading((prev) => !prev);
             return;
           } else if (response.status == 201) {
-            setIsTransLoading(false);
+            setIsLoading((prev) => !prev);
             toast(response.data.message);
             push("/profile");
             // setShowModal(true);
           } else {
             toast("Something went wrong, please try again!");
-            setIsTransLoading(false);
+            setIsLoading((prev) => !prev);
             return;
           }
         });
       } catch (error) {
         toast("Something went wrong, please try again!");
+        setIsLoading((prev) => !prev);
         return;
       }
     }

@@ -3,36 +3,16 @@
 import { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import clsx from "clsx";
-import {
-  AddIcon,
-  ArrowBack,
-  AuctionIcon,
-  BidIcon,
-  CheckIcon,
-  CloseIcon,
-  CoinIcon,
-  DiscordIcon,
-  FbIcon,
-  FixedPriceIcon,
-  ImgUploadIcon,
-  LikeIcon,
-  ProfileLinkIcon,
-  TwitterIcon,
-} from "../../components/atoms/vectors";
-import { CreateCollection, Footer, Modal } from "../../components/organisms";
-import DashboardLayout from "../../template/DashboardLayout";
+import { ImgUploadIcon } from "../../components/atoms/vectors";
+import { Modal } from "../../components/organisms";
+
 import { Button, Input2, Select } from "../../components/atoms";
-import { GetServerSideProps } from "next";
-import { requireAuthentication } from "../../utilities/auth/requireAuthentication";
 // const IPFSCLIENT = require('ipfs-http-client');
 import { create } from "ipfs-http-client";
 import APPCONFIG from "../../constants/Config";
-import abi from "../../artifacts/abi.json";
-import { ethers } from "ethers";
-import { findEvents } from "../../functions/onChain/generalFunction";
 import { apiRequest } from "../../functions/offChain/apiRequests";
 
 import { connectedAccount } from "../../functions/onChain/authFunction";
@@ -203,22 +183,27 @@ const CreateNewNft = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     var msg = "";
+    setIsLoading((prev) => !prev);
 
     if (!nftPayload.item_description.trim()) {
       msg = "Item item_description is still empty";
       toast(msg);
+      setIsLoading((prev) => !prev);
       return;
     } else if (!nftPayload.item_title.trim()) {
       msg = "Item name is still empty";
       toast(msg);
+      setIsLoading((prev) => !prev);
       return;
     } else if (!nftPayload.item_supply.trim()) {
       msg = "Item supply is still empty";
       toast(msg);
+      setIsLoading((prev) => !prev);
       return;
     } else if (isNaN(parseFloat(nftPayload.item_supply)) === true) {
       msg = "Item supply must be a valid positive number";
       toast(msg);
+      setIsLoading((prev) => !prev);
       return;
     }
     // else if (!nftPayload.item_royalty.trim()) {
@@ -234,13 +219,14 @@ const CreateNewNft = () => {
     else if (validationError === true) {
       msg = "Please check the uploaded Item image";
       toast(msg);
+      setIsLoading((prev) => !prev);
       return;
     } else {
       try {
         const IPFSItemres = await client.add(nftImage);
         const itemIPFSURL = IPFS_URL + IPFSItemres.path;
         // console.log({ itemIPFSURL });
-        setIsTransLoading(true);
+        setIsLoading((prev) => !prev);
         var formData = {
           item_title: nftPayload.item_title,
           item_description: nftPayload.item_description,
@@ -265,25 +251,26 @@ const CreateNewNft = () => {
           if (response.status == 400) {
             var error = response.data.error;
             toast.error(error);
-            setIsTransLoading(false);
+            setIsLoading((prev) => !prev);
             return;
           } else if (response.status == 401) {
             toast.error("Unauthorized request!");
-            setIsTransLoading(false);
+            setIsLoading((prev) => !prev);
             return;
           } else if (response.status == 200) {
-            setIsTransLoading(false);
+            setIsLoading((prev) => !prev);
             console.log(response.data.data);
             toast.success(response.data.message);
             push("/profile");
           } else {
             toast.error("Something went here wrong, please try again!");
-            setIsTransLoading(false);
+            setIsLoading((prev) => !prev);
             return;
           }
         });
       } catch (error) {
         toast.error("Something went wrong, please try again!");
+        setIsLoading((prev) => !prev);
         return;
       }
     }

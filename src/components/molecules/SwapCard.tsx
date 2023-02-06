@@ -30,6 +30,7 @@ const SwapCard = ({
   handleEthSwap,
 }: IPropsSwap) => {
   const [activeOfferTab, SetActiveOfferTab] = useState(0);
+  const [isTransloading, setIsTransLoading] = useState(false);
   const offerTab = [
     { text: "Swap for wETH", icon: SwapIcon },
     { text: "Deposit Crypto", icon: SwapIcon },
@@ -44,25 +45,35 @@ const SwapCard = ({
     setWETHvalue(e.target.value);
   };
   const handleWEthSwap = () => {
+    setIsTransLoading((prev) => !prev);
     if (ethValue != 0) {
       connectedAccount().then((response) => {
         if (response !== null) {
           getWalletWEthBalance(response).then((balance) => {
             if (ethValue < balance) {
               swapEthforWEth(ethValue);
+              setIsTransLoading((prev) => !prev);
+              return;
             } else {
               toast("Insufficent ETH");
+              setIsTransLoading((prev) => !prev);
+              return;
             }
           });
         } else {
           toast("Connect your wallet");
+          setIsTransLoading((prev) => !prev);
+          return;
         }
       });
     } else {
       // alert("You can't swap 0 eth")
       toast("You can't swap 0 eth");
+      setIsTransLoading((prev) => !prev);
+      return;
     }
   };
+
   return (
     <div className="">
       <ToastContainer />
@@ -115,6 +126,7 @@ const SwapCard = ({
                 title="Swap for Wrap ETH"
                 wt="w-full"
                 onClick={handleWEthSwap}
+                isDisabled={isTransloading}
               />
               <p className="text-center font-medium mt-5 text-txt-2 flex items-center justify-center gap-x-2">
                 <UniSwapGuardIcon />
@@ -141,7 +153,11 @@ const SwapCard = ({
               <span className="md:w-[80%] font-bold py-4 pl-6 rounded-lg bg-bg-6">
                 0xdE8cFsgre5y454754h545uu5u4u5u1C79
               </span>
-              <Button title="Copy" wt="  w-full md:w-[40%]" />
+              <Button
+                title="Copy"
+                wt="  w-full md:w-[40%]"
+                isDisabled={isTransloading}
+              />
             </div>
           </div>
         ) : null}
