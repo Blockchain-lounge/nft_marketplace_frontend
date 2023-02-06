@@ -1,24 +1,18 @@
 // @ts-nocheck
-import { Button, Select } from "@/src/components/atoms";
-import {
-  CaretDown,
-  CoinIcon,
-  ExternalLinkIcon,
-  LikeIcon,
-  StatIcon,
-} from "@/src/components/atoms/vectors";
-import EyeIcon from "@/src/components/atoms/vectors/eye-icon";
+import { Button } from "@/src/components/atoms";
+import { CoinIcon } from "@/src/components/atoms/vectors";
+
 import { Footer, Modal } from "@/src/components/organisms";
 import DashboardLayout from "@/src/template/DashboardLayout";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { apiRequest } from "../../functions/offChain/apiRequests";
-import { toast,ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import APPCONFIG from "@/src/constants/Config";
 import { ethers } from "ethers";
 import "react-toastify/dist/ReactToastify.css";
-import Link from 'next/link';
+import Link from "next/link";
 
 const ViewUserNft = () => {
   const { query, push } = useRouter();
@@ -36,7 +30,7 @@ const ViewUserNft = () => {
     "function ownerOf(uint256 tokenId) external view returns (address owner)",
     "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)",
     "event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId)",
-    "event ApprovalForAll(address indexed owner, address indexed operator, bool approved)"
+    "event ApprovalForAll(address indexed owner, address indexed operator, bool approved)",
   ];
 
   const handleSellNft = async () => {
@@ -48,33 +42,28 @@ const ViewUserNft = () => {
           (window as any).ethereum
         );
         const signer = provider.getSigner();
-        const contract = new ethers.Contract(
-          contractAddress,
-          nftAbi,
-          signer
-        );
-        
+        const contract = new ethers.Contract(contractAddress, nftAbi, signer);
+
         var tnx = null;
-        try{
+        try {
           const transaction = await contract.approve(
             APPCONFIG.SmartContractAddress,
             tokenId
           );
           tnx = await transaction.wait();
+        } catch (err) {
+          toast("Transaction cancelled!");
         }
-        catch(err){
-           toast("Transaction cancelled!");
-        }
-        if(tnx.events[0].event === "Approval"){
-            push(`/list-owned-nft-for-sale/${itemDetail.tokenAddress}?tokenId=${itemDetail.tokenId}`);
-        }
-        else{
+        if (tnx.events[0].event === "Approval") {
+          push(
+            `/list-owned-nft-for-sale/${itemDetail.tokenAddress}?tokenId=${itemDetail.tokenId}`
+          );
+        } else {
           toast("The approval process failed!");
         }
         setIsTransLoading(false);
-      }
-      else{
-        toast("Unable to verify the token details...")
+      } else {
+        toast("Unable to verify the token details...");
       }
     }
     return;
@@ -109,28 +98,29 @@ const ViewUserNft = () => {
     if (id !== undefined) {
       const contractAddress = id;
       const HEADER = "authenticated";
-      const REQUEST_URL = "nft-item/owned/detail/" + tokenId + "/" + contractAddress;
+      const REQUEST_URL =
+        "nft-item/owned/detail/" + tokenId + "/" + contractAddress;
       const METHOD = "GET";
       const DATA = {};
 
       await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
         if (response.status == 200) {
           setItemDetail(response.data.data);
-        }
-        else if (response.status !== 200 && response.data.error && response.data.error !== null) {
+        } else if (
+          response.status !== 200 &&
+          response.data.error &&
+          response.data.error !== null
+        ) {
           var error = response.data.error;
           toast(error);
           return;
-        }
-        else {
+        } else {
           toast("Something went wrong, please try again!");
           return;
         }
       });
     }
   };
-
-
 
   useEffect(() => {
     fetchItemDetail();
@@ -140,30 +130,32 @@ const ViewUserNft = () => {
   // console.log({ itemDetail });
   return (
     <DashboardLayout>
-        <ToastContainer />
+      <ToastContainer />
       {itemDetail !== null ? (
-        <div className="sub-layout-wrapper">
+        <div className="sub-layout-wrapper scrollbar-hide">
           <div className="center space-y-8 h-screen lg:h-[80vh]">
             <div className="grid lg:gap-x-8 lg:grid-cols-[0.35fr_0.3fr_0.35fr]">
               <div>
                 <div className="relative h-[23rem] lg:h-[100%]">
-                  {
-                    itemDetail.metadata &&
-                      itemDetail.metadata.image
-                      && itemDetail.metadata.image !== null
-                      ?
-                      <Image
-                        src={itemDetail.metadata && itemDetail.metadata.image}
-                        alt={itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : ""}
-                        layout="fill"
-                        objectFit="cover"
-                        className="rounded-xl"
-                        placeholder="blur"
-                        blurDataURL="/images/placeholder.png"
-                      />
-                      :
-                      ""
-                  }
+                  {itemDetail.metadata &&
+                  itemDetail.metadata.image &&
+                  itemDetail.metadata.image !== null ? (
+                    <Image
+                      src={itemDetail.metadata && itemDetail.metadata.image}
+                      alt={
+                        itemDetail.metadata && itemDetail.metadata.name
+                          ? itemDetail.metadata.name
+                          : ""
+                      }
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded-xl"
+                      placeholder="blur"
+                      blurDataURL="/images/placeholder.png"
+                    />
+                  ) : (
+                    ""
+                  )}
                 </div>
 
                 {/* <div className="flex gap-x-6 mt-4 items-center">
@@ -210,9 +202,13 @@ const ViewUserNft = () => {
                     {/*collection-logo*/}
                     <div className="flex items-center mb-4">
                       <span className="text-xl lg:mr-1">
-                    <Link href={`/on-chain-single-collection/${itemDetail.tokenAddress}`}>
-                    {itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : itemDetail.name + " - " + itemDetail.tokenId}
-                    </Link>
+                        <Link
+                          href={`/on-chain-single-collection/${itemDetail.tokenAddress}`}
+                        >
+                          {itemDetail.metadata && itemDetail.metadata.name
+                            ? itemDetail.metadata.name
+                            : itemDetail.name + " - " + itemDetail.tokenId}
+                        </Link>
                       </span>
                       <div className="h-6 w-6 relative">
                         <Image
@@ -226,7 +222,9 @@ const ViewUserNft = () => {
                     </div>
                   </div>
                   <span className="text-4xl font-bold capitalize">
-                    {itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : itemDetail.name + " - " + itemDetail.tokenId}
+                    {itemDetail.metadata && itemDetail.metadata.name
+                      ? itemDetail.metadata.name
+                      : itemDetail.name + " - " + itemDetail.tokenId}
                   </span>
                 </div>
                 <div className="view-hero-nft-owner">
@@ -260,7 +258,8 @@ const ViewUserNft = () => {
                           {itemDetail.item_price || 0}
                         </span> */}
                         <span className="text-xl block mt-2">
-                          Item quantity: {itemDetail.amount ? itemDetail.amount : 0}
+                          Item quantity:{" "}
+                          {itemDetail.amount ? itemDetail.amount : 0}
                         </span>
                       </div>
                     </div>
@@ -309,8 +308,11 @@ const ViewUserNft = () => {
             <div className=" space-y-3">
               <h2 className="text-2xl font-bold ">Description</h2>
               <div className="flex flex-col">
-                <p className="text-txt-2">{itemDetail.metadata && itemDetail.metadata.description
-                  ? itemDetail.metadata.description : itemDetail.name + " - " + itemDetail.tokenId}</p>
+                <p className="text-txt-2">
+                  {itemDetail.metadata && itemDetail.metadata.description
+                    ? itemDetail.metadata.description
+                    : itemDetail.name + " - " + itemDetail.tokenId}
+                </p>
               </div>
               {/* <span className="flex items-center gap-x-2 text-txt-3 font-medium">
               See more
@@ -325,7 +327,9 @@ const ViewUserNft = () => {
                   <div className="flex items-center gap-x-2">
                     <CoinIcon />{" "}
                     <span className="block font-medium ">Ethereum</span>{" "}
-                    <span className="text-txt-2">({itemDetail.contractType || "ERC-721"})</span>
+                    <span className="text-txt-2">
+                      ({itemDetail.contractType || "ERC-721"})
+                    </span>
                   </div>
                   {/* <div className="flex items-center gap-x-2 cursor-pointer">
                   <StatIcon />{" "}

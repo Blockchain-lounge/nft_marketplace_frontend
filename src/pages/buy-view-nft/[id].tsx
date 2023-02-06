@@ -342,7 +342,6 @@ const ViewNft = () => {
       var tnx = null;
       var buyer = connectedAddress;
       var item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail._id}`;
-      var soldItemCopyId = "";
       var startItemCopyId = 1;
       var quantityPurchased = 1;
       var amount = (itemDetail.listing_price * nftOfferPayload.quantity) as string;
@@ -432,7 +431,7 @@ const ViewNft = () => {
     //   );
     //   setIsTransLoading((prev) => !prev);
     //   return;
-    // } else 
+    // } else
     if (nftBidPayload.price.length === 0) {
       toast.error("Bidding price is required");
       setIsTransLoading((prev) => !prev);
@@ -738,27 +737,29 @@ const ViewNft = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-x-4">
-                    <div className="relative h-14 w-14">
-                      <Image
-                        src="/images/avatar.png"
-                        alt="owner-img"
-                        layout="fill"
-                        objectFit="cover"
-                        className="rounded-full"
-                      />
+                  {itemDetail && itemDetail.owned_by !== null ? (
+                    <div className="flex items-center gap-x-4">
+                      <div className="relative h-14 w-14">
+                        <Image
+                          src="/images/avatar.png"
+                          alt="owner-img"
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded-full"
+                        />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-txt-2">Current Owner</span>
+                        <span>
+                          {itemDetail.owned_by &&
+                          itemDetail.owned_by.username &&
+                          itemDetail.owned_by.username.length > 0
+                            ? itemDetail.owned_by.username
+                            : " ---- "}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex flex-col">
-                      <span className="text-txt-2">Current Owner</span>
-                      <span>
-                        {itemDetail.owned_by &&
-                        itemDetail.owned_by.username &&
-                        itemDetail.owned_by.username.length > 0
-                          ? itemDetail.owned_by.username
-                          : " ---- "}
-                      </span>
-                    </div>
-                  </div>
+                  ) : null}
                 </div>
                 {itemDetail.listing_type &&
                 itemDetail.listing_type === "fixed" ? (
@@ -855,7 +856,7 @@ const ViewNft = () => {
                           Time left
                         </span>
                         <div className="md:w-[70%]">
-                          <div className="grid items-center mt-2 grid-cols-[0.23fr_0.24fr_0.24fr_0.24fr]  md:grid-cols-[0.32fr_0.35fr_0.32fr_0.32fr]">
+                          <div className="grid items-center mt-2 grid-cols-[0.23fr_0.24fr_0.24fr_0.24fr]  md:grid-cols-[0.35fr_0.30fr_0.32fr_0.32fr]">
                             <div className="flex gap-x-1">
                               <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
                                 {time.days.toString().length < 2
@@ -876,7 +877,7 @@ const ViewNft = () => {
                                 :
                               </span>
                             </div>
-                            <div className="flex gap-x-3">
+                            <div className="flex gap-x-1">
                               <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
                                 {time.minutes.toString().length < 2
                                   ? "0" + time.minutes
@@ -886,7 +887,7 @@ const ViewNft = () => {
                                 :
                               </span>
                             </div>
-                            <div className="flex gap-x-1">
+                            <div className="flex ">
                               <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
                                 {time.seconds.toString().length < 2
                                   ? "0" + time.seconds
@@ -895,7 +896,7 @@ const ViewNft = () => {
                             </div>
                           </div>
 
-                          <div className="grid items-center mt-2 grid-cols-[0.23fr_0.24fr_0.24fr_0.24fr]  md:grid-cols-[0.32fr_0.35fr_0.32fr_0.32fr]">
+                          <div className="grid items-center mt-2 grid-cols-[0.23fr_0.24fr_0.24fr_0.24fr]  md:grid-cols-[0.35fr_0.30fr_0.32fr_0.32fr]">
                             <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
                               d
                             </span>
@@ -929,21 +930,21 @@ const ViewNft = () => {
                         </div>
                       </div>
                     </div>
-                    <span className="text-lg font-medium">
+                    {/* <span className="text-lg font-medium">
                       Last sale price 10.8 ETH
-                    </span>
+                    </span> */}
                     <div className="flex flex-col gap-y-4 w-full">
                       <div className="flex gap-x-5 w-full">
                         {connectedAddress ? (
                           <div className="w-full space-y-4">
                             <Button
                               title="Place a bid"
-                              outline2
                               wt="w-full"
                               onClick={() => {
                                 setModaltype("bid");
                                 setShowModal((prev) => !prev);
                               }}
+                              isDisabled={isTransloading}
                             />
                           </div>
                         ) : (

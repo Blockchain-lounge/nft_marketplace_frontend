@@ -122,6 +122,29 @@ const ListNft = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let msg = "";
+    setIsTransLoading((prev) => !prev);
+    if (
+      parseInt(nftListingPayload.listing_quantity) <= 0 ||
+      !nftListingPayload.listing_quantity.toString().trim()
+    ) {
+      msg = "quantity listed is empty";
+      toast(msg);
+      setIsTransLoading((prev) => !prev);
+      return;
+    } else if (isNaN(parseFloat(nftListingPayload.listing_quantity)) === true) {
+      msg = "quantity to be listed must be a valid positive number";
+      toast(msg);
+      setIsTransLoading((prev) => !prev);
+      return;
+    } else if (
+      Number(nftListingPayload.listing_quantity) >
+      Number(itemDetail?.item_supply)
+    ) {
+      msg = "quantity is greater than your item total supply";
+      toast(msg);
+      setIsTransLoading((prev) => !prev);
+      return;
+    }
     if (priceListingType === "fixed") {
       setPriceListingType((prev) => "fixed");
       if (
@@ -130,10 +153,12 @@ const ListNft = () => {
       ) {
         msg = "listing price is empty";
         toast(msg);
+        setIsTransLoading((prev) => !prev);
         return;
       } else if (isNaN(parseFloat(nftListingPayload.listing_price)) === true) {
         msg = "Price of listed must be a valid positive number";
         toast(msg);
+        setIsTransLoading((prev) => !prev);
         return;
       }
     } else if (priceListingType === "auction") {
@@ -142,15 +167,18 @@ const ListNft = () => {
       if (date.startDate.length === 0) {
         msg = "Auction end date is empty";
         toast(msg);
+        setIsTransLoading((prev) => !prev);
         return;
         //@ts-ignore
       } else if (date.endDate.length === 0) {
         msg = "Auction start date is empty";
         toast(msg);
+        setIsTransLoading((prev) => !prev);
         return;
       } else if (timeSelected.length === 0) {
         msg = "Auction time is empty";
         toast(msg);
+        setIsTransLoading((prev) => !prev);
         return;
       } else if (
         nftListingPayload.reserved_bidding_price.length === 0 ||
@@ -158,6 +186,7 @@ const ListNft = () => {
       ) {
         msg = "Auction reserved bidding price is empty";
         toast(msg);
+        setIsTransLoading((prev) => !prev);
         return;
       } else if (
         nftListingPayload.starting_bidding_price.length === 0 ||
@@ -165,6 +194,7 @@ const ListNft = () => {
       ) {
         msg = "Auction starting bidding price is empty";
         toast(msg);
+        setIsTransLoading((prev) => !prev);
         return;
       } else if (
         parseFloat(nftListingPayload.reserved_bidding_price) <
@@ -172,6 +202,7 @@ const ListNft = () => {
       ) {
         msg = "Reserved price must be more than the starting price";
         toast(msg);
+        setIsTransLoading((prev) => !prev);
         return;
       }
 
@@ -224,7 +255,7 @@ const ListNft = () => {
 
       if (!events[0].toNumber()) {
         toast("We were unable to complete your transaction!");
-        setIsTransLoading(false);
+        setIsTransLoading((prev) => !prev);
         return;
       }
       auction_id = events[0].toNumber();
@@ -269,6 +300,7 @@ const ListNft = () => {
       });
     } catch (error) {
       toast("Something went wrong, please try again!");
+      setIsTransLoading((prev) => !prev);
       return;
     }
   };
