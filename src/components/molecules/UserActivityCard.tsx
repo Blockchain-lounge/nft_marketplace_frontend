@@ -14,6 +14,8 @@ const UserActivityCard = ({
   collection_id,
   created_item_listed,
   resell_item_id,
+  reserved_bidding_price,
+  listing_type
 }: {
   to_user_id: string;
   from_user_id: string;
@@ -24,6 +26,8 @@ const UserActivityCard = ({
   collection_id: string;
   activity_type: string;
   createdAt: string;
+  reserved_bidding_price: string;
+  listing_type: string;
 }) => {
   var item = null;
   var item_price = null;
@@ -31,7 +35,12 @@ const UserActivityCard = ({
 
   if (listed_item && listed_item !== null) {
     item = listed_item;
-    item_price = listed_item.listing_price;
+    if(listed_item.listing_type === 'fixed'){
+      item_price = listed_item.listing_price;
+    }
+   else if(listed_item.listing_type === 'auction'){
+      item_price = listed_item.starting_bidding_price;
+    }
   }
   if (created_item && created_item !== null) {
     item = created_item;
