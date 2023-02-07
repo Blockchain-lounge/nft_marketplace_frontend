@@ -24,7 +24,7 @@ const OnChainCollectionCard: NextPage<Partial<ICollectionCard>> = ({
         }
       >
         <Image
-          src="/default/collection_banner_placeholder.jpg"
+          src={APPCONFIG.DEFAULT_COLLECTION_ART}
           alt={name}
           layout="fill"
           objectFit="cover"
@@ -36,7 +36,7 @@ const OnChainCollectionCard: NextPage<Partial<ICollectionCard>> = ({
       <div className="bg-white h-[20%] rounded-b-lg flex justify-center gap-x-4 items-center">
         <div className="relative h-14 w-14">
           <Image
-            src="/default/collection_logo_placeholder.svg"
+            src={APPCONFIG.DEFAULT_COLLECTION_ART}
             alt={name}
             layout="fill"
             objectFit="cover"

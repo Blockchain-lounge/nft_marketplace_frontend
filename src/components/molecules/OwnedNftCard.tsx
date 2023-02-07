@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { LikeIcon } from "@/src/components/atoms/vectors";
 // import { Nftcard } from "./NftMediumCard";
 import Image from "next/image";
+import APPCONFIG from "../../constants/Config";
 
 // Partial<Pick<INftcard, "name" | "imgUrl" | "price">> & {
 //   time?: boolean;
@@ -46,7 +47,7 @@ const OwnedNftCard = ({
                 metadata.image !== undefined &&
                 metadata.image !== null 
                   ? metadata.image
-                  : ""
+                  : APPCONFIG.DEFAULT_NFT_ART
               }
               alt={metadata &&
                 metadata.image !== undefined &&
