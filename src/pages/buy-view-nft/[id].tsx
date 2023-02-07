@@ -44,7 +44,9 @@ import { useTimeCountDown } from "@/src/hooks/useTimeCountDown";
 
 const ViewNft = () => {
   const [showModal, setShowModal] = useState(false);
-  const [modalType, setModaltype] = useState<"buy" | "addFunds">("buy");
+  const [modalType, setModaltype] = useState<
+    "buy" | "addFunds" | "bid" | "offer" | "accept-offer"
+  >("buy");
   const [ethInput, setEthInput] = useState("0.0");
   const [wETHInput, setWETHInput] = useState("0.0");
   const [itemDetail, setItemDetail] = useState<INftcard | null>(null);
@@ -85,11 +87,13 @@ const ViewNft = () => {
     new Date().toLocaleTimeString()
   );
   const [auctionEndDate, setAuctionEndDate] = useState(null);
-  //write your function to handle eth swap
-  const handleEthSwap = (e) => {
-    // setShowModal((prev) => !prev);
-    setModaltype("buy");
-  };
+
+  //write your function to handle change of modal after eth swap
+  // const handleEthModalSwap = () => {
+  //   let currentModal = modalType;
+  //   console.log({ currentModal, prevState });
+  //   setModaltype((prev) => prevState);
+  // };
   //this function handles the date selection
   const handleRangeSelection = (ranges: any) => {
     setDateSelected(ranges.selection);
@@ -345,7 +349,8 @@ const ViewNft = () => {
       var startItemCopyId = 1;
       var quantityPurchased = 1;
       var soldItemCopyId = 1;
-      var amount = (itemDetail.listing_price * nftOfferPayload.quantity) as string;
+      var amount = (itemDetail.listing_price *
+        nftOfferPayload.quantity) as string;
 
       if (itemDetail.relisted && itemDetail.relisted === true) {
         toast("Please approve this transaction!");
@@ -425,19 +430,21 @@ const ViewNft = () => {
     event.preventDefault();
 
     setIsTransLoading((prev) => !prev);
-    // if (Number(nftBidPayload.quantity) > itemDetail.listing_remaining) {
-    //   toast.error(
-    //     "The quantity you specified is more than the listed item quantity"
-    //   );
-    //   setIsTransLoading((prev) => !prev);
-    //   return;
-    // } else
+
     if (nftBidPayload.price.length === 0) {
       toast.error("Bidding price is required");
       setIsTransLoading((prev) => !prev);
       return;
-    } else if (isNaN(parseFloat(nftBidPayload.price)) === true) {
+    } else if (isNaN(parseFloat(nftBidPayload.price))) {
       toast.error("Bidding price must be a number");
+      setIsTransLoading((prev) => !prev);
+      return;
+    } else if (
+      itemDetail.starting_bidding_price > Number(nftBidPayload.price)
+    ) {
+      toast.error(
+        "Your bidding price is below the last bid, kindly place a higher bid"
+      );
       setIsTransLoading((prev) => !prev);
       return;
     } else {
@@ -470,7 +477,7 @@ const ViewNft = () => {
       const events = findEvents("BidIsMade", tnx.events, true);
       if (!events[0].toNumber()) {
         toast("We were unable to complete your transaction!");
-        setIsTransLoading(false);
+        setIsTransLoading((prev) => !prev);
         return;
       }
       auction_id = events[0].toNumber();
@@ -489,11 +496,11 @@ const ViewNft = () => {
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
         if (response.status == 200 || response.status == 201) {
           toast(response.data.message);
-          setIsTransLoading(false);
+          setIsTransLoading((prev) => !prev);
           // push("");
         } else {
           toast(response.data.error);
-          setIsTransLoading(false);
+          setIsTransLoading((prev) => !prev);
         }
       });
     }
@@ -1404,15 +1411,17 @@ const ViewNft = () => {
       >
         {modalType === "bid" ? (
           <div className="flex flex-col items-center max-w-[85%] mx-auto gap-y-5">
-            <span className="font-bold text-txt-2 text-base max-w-[80%] text-center">
+            <p className="font-bold text-xl text-txt-2 text-center">
               You are about to place a bid for{" "}
-              <span className="text-white">{itemDetail.item.item_title} </span>
+              <span className="text-white font-bold text-xl">
+                {itemDetail.item.item_title}{" "}
+              </span>
               from{" "}
-              <span className="text-white">
+              <span className="text-white font-bold text-xl">
                 {itemDetail.item.collection.name}
               </span>{" "}
-              collection
-            </span>
+              collection.
+            </p>
             {/* <div className="flex items-center justify-between w-full bg-bg-5 py-4 px-6 rounded-[1.25rem]">
               <div className="flex gap-x-3 items-center">
                 <span className="block relative h-14 w-14">
@@ -1445,9 +1454,20 @@ const ViewNft = () => {
                   onChange={handleFieldChange}
                   value={nftBidPayload.price}
                 />
+                <p className="mt-6">
+                  <span className="font-bold text-txt-2 text-base">
+                    Insufficient wETH balance ?{" "}
+                  </span>
+                  <span
+                    className="earnings-card-history cursor-pointer font-bold"
+                    onClick={() => setModaltype((prev) => "addFunds")}
+                  >
+                    Add wEth funds or swap
+                  </span>
+                </p>
               </div>
             </div>
-            <div className="create-new-nft-wrapper-2 w-full">
+            {/* <div className="create-new-nft-wrapper-2 w-full">
               <span className="create-new-nft-wrapper-2-label">
                 Bid expiration
               </span>
@@ -1456,7 +1476,7 @@ const ViewNft = () => {
                 lists={bidExpDates}
                 onClick={setBidingExpDates}
               />
-            </div>
+            </div> */}
             {/* <div className="create-new-nft-wrapper-2 w-full">
               <Input2
                 label="Quantity"
@@ -1466,15 +1486,17 @@ const ViewNft = () => {
                 value={nftBidPayload.quantity}
               />
             </div> */}
-            {/* <div className="space-y-5 w-full">
-              <div className="flex justify-between items-center w-full">
-                <span className="text-txt-2">Balance</span>
-                <span className="flex">
-                  <CoinIcon />
-                  47.8
-                </span>
-              </div>
-              <div className="flex justify-between items-center w-full">
+            <div className="space-y-5 w-full">
+              {itemDetail && (
+                <div className="flex justify-between items-center w-full">
+                  <span className="text-txt-2">Last Bid</span>
+                  <span className=" font-semibold ">
+                    {/* <CoinIcon /> */}
+                    {itemDetail.starting_bidding_price} ETH
+                  </span>
+                </div>
+              )}
+              {/* <div className="flex justify-between items-center w-full">
                 <span className="text-txt-2">Service Fee (0%)</span>
                 <span className="flex">
                   <CoinIcon />0
@@ -1486,9 +1508,9 @@ const ViewNft = () => {
                   <CoinIcon />
                   6.95
                 </span>
-              </div>
-            </div> */}
-            <div className="mt-12 lg:mt-10 w-full">
+              </div> */}
+            </div>
+            <div className="mt-8 lg:mt-4 w-full">
               <Button
                 title="Place bid"
                 onClick={handleBid}
@@ -1557,9 +1579,9 @@ const ViewNft = () => {
                   <p className="mt-6">
                     {/* {!isSufficient && ( */}
                     {/* <div> */}
-                    {/* <span className="font-bold text-txt-2 text-base">
-                        Insufficient wETH balance ?{" "}
-                      </span> */}
+                    <span className="font-bold text-txt-2 text-base">
+                      Insufficient wETH balance ?{" "}
+                    </span>
                     <span
                       className="earnings-card-history cursor-pointer font-bold"
                       onClick={() => setModaltype((prev) => "addFunds")}
@@ -1651,7 +1673,7 @@ const ViewNft = () => {
             wETHvalue={wETHInput}
             setEthValue={setEthInput}
             setWETHvalue={setWETHInput}
-            handleEthSwap={handleEthSwap}
+            handleShowModal={setShowModal}
           />
         ) : modalType === "accept-offer" ? (
           <div className="max-w-[80%] mx-auto">

@@ -1,5 +1,4 @@
 // @ts-nocheck
-import React, { useState } from "react";
 import { ethers } from "ethers";
 import { disconnectWallet } from "./authFunction";
 import APPCONFIG from "@/src/constants/Config";
@@ -11,26 +10,30 @@ export const getNetworkDetails = async () => {
   return chainId;
 };
 
-  export const findEvents = (eventName: string,eventsList: [],addArgs: boolean)=>{
-    if(eventsList.length>0){
-      for(var i = 0; i <= eventsList.length; i++)
-      {
-          if(eventsList[i]
-            && eventsList[i] !== undefined
-            && eventsList[i].event
-            && eventsList[i].event !==undefined
-            && eventsList[i].event == eventName){
-              if(addArgs !== undefined && addArgs == true){
-                return eventsList[i].args
-              }
-              else{
-                return true
-              }
-            }
+export const findEvents = (
+  eventName: string,
+  eventsList: [],
+  addArgs: boolean
+) => {
+  if (eventsList.length > 0) {
+    for (var i = 0; i <= eventsList.length; i++) {
+      if (
+        eventsList[i] &&
+        eventsList[i] !== undefined &&
+        eventsList[i].event &&
+        eventsList[i].event !== undefined &&
+        eventsList[i].event == eventName
+      ) {
+        if (addArgs !== undefined && addArgs == true) {
+          return eventsList[i].args;
+        } else {
+          return true;
+        }
       }
-      return false;
+    }
+    return false;
   }
-  }
+};
 
 //@ts-ignore
 export const findTrnxHash = (eventName, eventsList) => {
@@ -110,10 +113,8 @@ export const getWalletBalance = async (address: string) => {
 
 export const getWalletWEthBalance = async (address: string) => {
   var balanceInEth = 0 + " WETH";
-  
-  const provider = new ethers.providers.Web3Provider(
-    (window as any).ethereum
-  );
+
+  const provider = new ethers.providers.Web3Provider((window as any).ethereum);
   const signer = provider.getSigner();
   const contract = new ethers.Contract(
     APPCONFIG.wEthAddress_testnet,
@@ -125,22 +126,21 @@ export const getWalletWEthBalance = async (address: string) => {
     return contract.balanceOf(address).then((balance) => {
       // convert a currency unit from wei to ether
       balanceInEth = ethers.utils.formatEther(balance);
+
       balanceInEth = Number(
         Math.round(parseFloat(balanceInEth + "e" + 5)) + "e-" + 5
       ).toFixed(5); //Balance in 5 decimal places
       // balanceInEth = balanceInEth + " ETH";
+
       return balanceInEth;
     });
   } else {
     return balanceInEth;
   }
- 
 };
 
 export const swapEthforWEth = async (amount: number) => {
-  const provider = new ethers.providers.Web3Provider(
-    (window as any).ethereum
-  );
+  const provider = new ethers.providers.Web3Provider((window as any).ethereum);
   const signer = provider.getSigner();
   const contract = new ethers.Contract(
     APPCONFIG.wEthAddress_testnet,
@@ -148,17 +148,14 @@ export const swapEthforWEth = async (amount: number) => {
     signer
   );
   if (amount !== null) {
-    const coreAmount = ethers.utils.parseUnits(amount.toString(),"ether");
-    const transaction = await contract.deposit({value: coreAmount})
+    const coreAmount = ethers.utils.parseUnits(amount.toString(), "ether");
+    const transaction = await contract.deposit({ value: coreAmount });
     const tnx = await transaction.wait();
-  } 
- 
+  }
 };
 
 export const swapWEthforEth = async (amount: number) => {
-  const provider = new ethers.providers.Web3Provider(
-    (window as any).ethereum
-  );
+  const provider = new ethers.providers.Web3Provider((window as any).ethereum);
   const signer = provider.getSigner();
   const contract = new ethers.Contract(
     APPCONFIG.wEthAddress_testnet,
@@ -166,8 +163,8 @@ export const swapWEthforEth = async (amount: number) => {
     signer
   );
   if (amount !== null) {
-    const coreAmount = ethers.utils.parseUnits(amount.toString(),"ether");
-    const transaction = await contract.withdraw(coreAmount)
+    const coreAmount = ethers.utils.parseUnits(amount.toString(), "ether");
+    const transaction = await contract.withdraw(coreAmount);
     const tnx = await transaction.wait();
   }
 };

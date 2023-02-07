@@ -34,7 +34,8 @@ const Settings = () => {
     FileList | string
   >("");
   const [myProfile, setMyProfile] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isTransLoading, setIsTransLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [userDetailsPayload, setUserDetailsPayload] = useState({
     username: "",
     userEmail: "",
@@ -140,6 +141,7 @@ const Settings = () => {
   };
 
   const handleSubmit = async () => {
+    setIsLoading((prev) => !prev);
     var profileData = {
       username: userDetailsPayload.username,
       email: userDetailsPayload.userEmail,
@@ -157,21 +159,26 @@ const Settings = () => {
         if (response.status === 400 || response.status === 404) {
           var error = response.data.error;
           toast(error);
+          setIsLoading((prev) => !prev);
           return;
         }
         if (response.status === 401) {
           toast("Unauthorized request!");
+          setIsLoading((prev) => !prev);
           return;
         } else if (response.status === 200) {
           toast("Profile updated");
+          setIsLoading((prev) => !prev);
           push("/profile");
         } else {
           toast("Something went wrong, please try again!");
+          setIsLoading((prev) => !prev);
           return;
         }
       });
     } catch (error) {
       toast("Internal server occured!");
+      setIsLoading((prev) => !prev);
       return;
     }
   };
@@ -197,7 +204,7 @@ const Settings = () => {
           bannerImg: response.data.data.userBannerImg,
           profileImg: response.data.data.userProfileImg,
         });
-        setIsLoading(false);
+        setIsTransLoading(false);
       } else {
         toast("Something went wrong, please try again!");
         return;
@@ -206,7 +213,7 @@ const Settings = () => {
   }, [myProfile]);
 
   return (
-    <DashboardLayout isLoading={isLoading}>
+    <DashboardLayout isLoading={isTransLoading}>
       <div className="sub-layout-wrapper scrollbar-hide">
         <div className="center mx-auto max-w-[90%] lg:max-w-[70%] w-full">
           {/* <div className="settings-tab">
@@ -371,7 +378,11 @@ const Settings = () => {
                     value={userDetailsPayload.bio}
                   ></textarea>
                 </div>
-                <Button title="Update profile" onClick={handleSubmit} />
+                <Button
+                  title="Update profile"
+                  onClick={handleSubmit}
+                  isDisabled={isLoading}
+                />
               </div>
             </div>
           ) : settingStage === "my-links" ? (
