@@ -140,7 +140,7 @@ const Activities = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
-          setIsfetching((prev) => !prev);
+          setIsfetching(false);
           setActivities(response.data.data.activities);
           setTotalPages(response.data.data.totalPages);
           setCurrentPage(response.data.data.currentPage);

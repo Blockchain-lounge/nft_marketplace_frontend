@@ -87,26 +87,33 @@ export const getWalletBalance = async (address: string) => {
       // const provider = new ethers.providers.JsonRpcProvider('');
       // [In reply to Boniface]
       // const provider = new ethers.providers.AlchemyProvider("rinkeby", 'g5UObLj-OFZHyAD_nrEmGZNS0zPiPFKz')
-      const provider = new ethers.providers.InfuraProvider(
-        "goerli",
-        process.env.NEXT_PUBLIC_INFURA_ID
-      );
-      if (address !== null) {
-        return provider.getBalance(address).then((balance) => {
-          // convert a currency unit from wei to ether
-          balanceInEth = ethers.utils.formatEther(balance);
-          balanceInEth = Number(
-            Math.round(parseFloat(balanceInEth + "e" + 5)) + "e-" + 5
-          ).toFixed(5); //Balance in 5 decimal places
-          balanceInEth = balanceInEth + " ETH";
+      try{
+        const provider = new ethers.providers.InfuraProvider(
+          "goerli",
+          process.env.NEXT_PUBLIC_INFURA_ID
+        );
+        if (address !== null) {
+          return provider.getBalance(address).then((balance) => {
+            // convert a currency unit from wei to ether
+            balanceInEth = ethers.utils.formatEther(balance);
+            balanceInEth = Number(
+              Math.round(parseFloat(balanceInEth + "e" + 5)) + "e-" + 5
+            ).toFixed(5); //Balance in 5 decimal places
+            balanceInEth = balanceInEth + " ETH";
+            return balanceInEth;
+          });
+        } else {
           return balanceInEth;
-        });
-      } else {
+        }
+      }
+      catch(err){
         return balanceInEth;
       }
-    } else {
-      return balanceInEth;
-    }
+      }
+      else {
+        return balanceInEth;
+      }
+      
   });
   return balance; //Response from the variable chainId is assigned to the right variable
 };

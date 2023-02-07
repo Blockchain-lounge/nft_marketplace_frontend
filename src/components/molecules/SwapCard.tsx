@@ -24,6 +24,7 @@ interface IPropsSwap {
   setWETHvalue: Dispatch<SetStateAction<string>>;
   handleShowModal: Dispatch<SetStateAction<boolean>>;
   showModal: boolean;
+  connectedAddress: string;
 }
 
 const SwapCard = ({
@@ -32,12 +33,11 @@ const SwapCard = ({
   setEthValue,
   setWETHvalue,
   handleShowModal,
+  connectedAddress
 }: IPropsSwap) => {
   const [activeOfferTab, SetActiveOfferTab] = useState(0);
   const [isTransloading, setIsTransLoading] = useState(false);
-  const [walletAddress, setWalletAddress] = useState(
-    "0xdE8cFsgre5y454754h545uu5u4u5u1C79"
-  );
+  const [walletAddress, setWalletAddress] = useState("");
   const offerTab = [
     { text: "Swap for wETH", icon: SwapIcon },
     { text: "Deposit Crypto", icon: SwapIcon },
@@ -56,6 +56,7 @@ const SwapCard = ({
     setIsTransLoading((prev) => !prev);
     if (ethValue != 0) {
       connectedAccount().then((response) => {
+        console.log({response})
         if (response !== null) {
           getWalletBalance(response).then((balance) => {
             const currentEthBal = balance.split(" ")[0];
@@ -90,7 +91,7 @@ const SwapCard = ({
 
   const handleCopyToClipboard = () => {
     navigator.clipboard
-      .writeText(walletAddress)
+      .writeText(connectedAddress)
       .then(() => {
         toast.success("Your wallet address has been copied successfully");
       })
@@ -176,7 +177,7 @@ const SwapCard = ({
             </div>
             <div className="flex flex-col md:flex-row gap-y-6 md:gap-y-0 gap-x-6 mt-12 w-full">
               <span className="md:w-[80%] font-bold py-4 pl-6 rounded-lg bg-bg-6">
-                {walletAddress}
+                {connectedAddress}
               </span>
               <Button
                 title="Copy"

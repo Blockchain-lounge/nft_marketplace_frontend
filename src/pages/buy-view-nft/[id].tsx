@@ -416,7 +416,7 @@ const ViewNft = () => {
         if (response.status == 200 || response.status == 201) {
           toast(response.data.message);
           setIsTransLoading(false);
-          push("/profile");
+          // push("/profile");
         } else {
           toast(response.data.error);
           setIsTransLoading(false);
@@ -1670,6 +1670,7 @@ const ViewNft = () => {
         ) : modalType === "addFunds" ? (
           <SwapCard
             ethValue={ethInput}
+            connectedAddress={connectedAddress}
             wETHvalue={wETHInput}
             setEthValue={setEthInput}
             setWETHvalue={setWETHInput}
