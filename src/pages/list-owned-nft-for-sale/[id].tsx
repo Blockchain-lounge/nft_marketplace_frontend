@@ -50,20 +50,23 @@ const ListNft = () => {
     if (id !== undefined && !itemDetail) {
       const contractAddress = id;
       const HEADER = "authenticated";
-      const REQUEST_URL = "nft-item/owned/detail/" + tokenId + "/" + contractAddress;
+      const REQUEST_URL =
+        "nft-item/owned/detail/" + tokenId + "/" + contractAddress;
       const METHOD = "GET";
       const DATA = {};
 
       await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
         if (response.status == 200) {
           setItemDetail(response.data.data);
-        }
-        else if (response.status !== 200 && response.data.error && response.data.error !== null) {
+        } else if (
+          response.status !== 200 &&
+          response.data.error &&
+          response.data.error !== null
+        ) {
           var error = response.data.error;
           toast(error);
           return;
-        }
-        else {
+        } else {
           toast("Something went wrong, please try again!");
           return;
         }
@@ -96,7 +99,7 @@ const ListNft = () => {
   };
 
   const fetchCollections = async () => {
-    if(!collections || collections === [] || collections.length ===0){
+    if (!collections || collections === [] || collections.length === 0) {
       try {
         const HEADER = "authenticated";
         const REQUEST_URL = "nft-collection/mine";
@@ -121,7 +124,6 @@ const ListNft = () => {
         toast("Something went wrong, please try again!");
         return;
       }
-
     }
   };
 
@@ -132,7 +134,7 @@ const ListNft = () => {
   };
 
   useEffect(() => {
-    if(!connectedAddress){
+    if (!connectedAddress) {
       connectedAccount().then((response) => {
         if (response !== null) {
           setConnectedAddress(response);
@@ -144,7 +146,7 @@ const ListNft = () => {
     fetchCollections();
     fetchItemDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id,collections]);
+  }, [id, collections]);
 
   const priceListingTypes = [
     { type: "Fixed price", icon: <FixedPriceIcon /> },
@@ -170,6 +172,7 @@ const ListNft = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsTransLoading((prev) => !prev);
     let msg = "";
     let collection_id = itemDetail.metadata
     && itemDetail.metadata.cloudax_token 
@@ -178,8 +181,13 @@ const ListNft = () => {
 
    if (!nftListingPayload.listing_price.trim() 
    || parseFloat(nftListingPayload.listing_price) <= 0) {
+    if (
+      !nftListingPayload.listing_price.trim() ||
+      parseFloat(nftListingPayload.listing_price) <= 0
+    ) {
       msg = "listed price is empty";
       toast(msg);
+      setIsTransLoading((prev) => !prev);
       return;
     }
     if(itemDetail
@@ -201,27 +209,32 @@ const ListNft = () => {
       }
 
     if (isNaN(parseFloat(nftListingPayload.listing_price)) === true) {
+    // else if (!nftPayloadselect.id || nftPayloadselect.id.length === 0) {
+    //   msg = "listed collection is empty";
+    //   toast(msg);
+    //   return;
+    // }
+    else if (isNaN(parseFloat(nftListingPayload.listing_price)) === true) {
       msg = "price of listed must be a valid positive number";
       toast(msg);
+      setIsTransLoading((prev) => !prev);
       return;
     } else {
-      setIsTransLoading(true);
       try {
-
         const provider = new ethers.providers.Web3Provider(
-              (window as any).ethereum
-            );
+          (window as any).ethereum
+        );
         const signer = provider.getSigner();
         const contract = new ethers.Contract(
-                              APPCONFIG.SmartContractAddress,
-                              abi,
-                              signer
-                            );
+          APPCONFIG.SmartContractAddress,
+          abi,
+          signer
+        );
         const tokenAddress = id;
         const listing_price = ethers.utils.parseUnits(
           nftListingPayload.listing_price.toString()
         );
-        try{
+        try {
           toast("Please approve this transaction!");
         const transaction = await contract.listToken(
           tokenAddress,
@@ -234,10 +247,19 @@ const ListNft = () => {
         }
         catch(err){
           setIsTransLoading(false);
+          const transaction = await contract.listToken(
+            tokenAddress,
+            tokenId,
+            listing_price,
+            connectedAddress
+          );
+          const tnx = await transaction.wait();
+        } catch (err) {
           toast("Transaction cancelled!");
+          setIsTransLoading((prev) => !prev);
+          return;
         }
 
-        
         var formData = {
           listing_price: nftListingPayload.listing_price,
           listing_quantity: 1,
@@ -256,31 +278,31 @@ const ListNft = () => {
           if (response.status == 400) {
             var error = response.data.error;
             toast(error);
-            setIsTransLoading(false);
+            setIsTransLoading((prev) => !prev);
             return;
           } else if (response.status == 401) {
             toast("Unauthorized request!");
-            setIsTransLoading(false);
+            setIsTransLoading((prev) => !prev);
             return;
-          }
-          else if (response.status == 200) {
-            setIsTransLoading(false);
-            toast(response.data.message);
-          } else if (response.status == 201) {
-            setIsTransLoading(false);
+          } else if (response.status == 200) {
             toast(response.data.message);
             push("/profile");
+            setIsTransLoading((prev) => !prev);
+          } else if (response.status == 201) {
+            toast(response.data.message);
+            push("/profile");
+            setIsTransLoading((prev) => !prev);
           } else {
             toast("Something went wrong, please try again!");
-            setIsTransLoading(false);
+            setIsTransLoading((prev) => !prev);
             return;
           }
         });
-       } catch (error) {
-        setIsTransLoading(false);
-         toast("Something went wrong, please try again!");
-         return;
-       }
+      } catch (error) {
+        toast("Something went wrong, please try again!");
+        setIsTransLoading((prev) => !prev);
+        return;
+      }
     }
   };
 
@@ -289,9 +311,7 @@ const ListNft = () => {
       <div className="flex flex-col-reverse gap-y-20 lg:gap-0 lg:flex-row lg:h-[70vh]">
         <div className="space-y-8 lg:w-[70%]">
           <ToastContainer />
-          <form className="space-y-8" 
-          onSubmit={handleSubmit}
-          >
+          <form className="space-y-8" onSubmit={handleSubmit}>
             <div className="space-y-2">
               <div className="lg:w-[80%] space-y-8">
                 {/* <Select title="ETH" icon={<CoinIcon />} /> */}
@@ -302,24 +322,22 @@ const ListNft = () => {
                   onChange={handleFieldChange}
                   value={nftListingPayload.listing_price}
                 />
-                {
-                  itemDetail
-                  && itemDetail.metadata
-                  && itemDetail.metadata !== null
-                  && itemDetail.metadata.cloudax_token
-                  && itemDetail.metadata.cloudax_token !== null 
-                  && itemDetail.metadata.cloudax_token._id
-                  && itemDetail.metadata.cloudax_token._id !== null
-                  && itemDetail.metadata.cloudax_token._id.lenght > 0
-                  ?
-                  ''
-                  :
+                {itemDetail &&
+                itemDetail.metadata &&
+                itemDetail.metadata !== null &&
+                itemDetail.metadata.cloudax_token &&
+                itemDetail.metadata.cloudax_token !== null &&
+                itemDetail.metadata.cloudax_token._id &&
+                itemDetail.metadata.cloudax_token._id !== null &&
+                itemDetail.metadata.cloudax_token._id.lenght > 0 ? (
+                  ""
+                ) : (
                   <Select
                     title={nftPayloadselect.label}
                     lists={collections}
                     onClick2={handleSelect}
                   />
-                }
+                )}
               </div>
             </div>
             <div className="create-new-nft-gas-fee-wrapper ">
@@ -339,8 +357,8 @@ const ListNft = () => {
             <Button
               isDisabled={isTransloading}
               title="Complete listing"
-              onClick={async (e) => await handleSubmit(e)}
-            // onClick={() => setShowModal((prev) => !prev)}
+              // onClick={async (e) => await handleSubmit(e)}
+              // onClick={() => setShowModal((prev) => !prev)}
             />
           </form>
         </div>
@@ -363,6 +381,16 @@ const ListNft = () => {
                 <Image
                   src={itemDetail.metadata && itemDetail.metadata.image ? itemDetail.metadata.image : APPCONFIG.DEFAULT_NFT_ART}
                   alt={itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : ""}
+                  src={
+                    itemDetail.metadata && itemDetail.metadata.image
+                      ? itemDetail.metadata.image
+                      : APPCONFIG.DEFAULT_NFT_ART
+                  }
+                  alt={
+                    itemDetail.metadata && itemDetail.metadata.name
+                      ? itemDetail.metadata.name
+                      : `${itemDetail.name}-${itemDetail.tokednId}-image`
+                  }
                   layout="fill"
                   objectFit="cover"
                   className="rounded-t-2xl"
@@ -374,7 +402,9 @@ const ListNft = () => {
               <div className="w-full bg-white rounded-b-2xl p-4 flex flex-col">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-black text-[1.3rem]">
-                    {itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : itemDetail.name + " - " + itemDetail.tokenId}
+                    {itemDetail.metadata && itemDetail.metadata.name
+                      ? itemDetail.metadata.name
+                      : itemDetail.name + " - " + itemDetail.tokenId}
                   </span>
                 </div>
               </div>
@@ -392,8 +422,16 @@ const ListNft = () => {
           <div className="create-new-nft-success">
             <div className="mt-4 h-40 w-40 relative">
               <Image
-                src={itemDetail.metadata && itemDetail.metadata.image ? itemDetail.metadata.image : ""}
-                alt={itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : ""}
+                src={
+                  itemDetail.metadata && itemDetail.metadata.image
+                    ? itemDetail.metadata.image
+                    : APPCONFIG.DEFAULT_NFT_ART
+                }
+                alt={
+                  itemDetail.metadata && itemDetail.metadata.name
+                    ? itemDetail.metadata.name
+                    : `${itemDetail.name}-${itemDetail.tokednId}-image`
+                }
                 layout="fill"
                 objectFit="cover"
                 className="rounded-2xl"

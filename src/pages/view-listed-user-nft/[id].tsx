@@ -33,9 +33,10 @@ const ViewUserNft = () => {
   const [connectedAddress, setConnectedAddress] = useState(null);
   const [offerLists, setOfferLists] = useState([]);
   const [shownOffer, setShownOffer] = useState([]);
-
+  const [cancelType, setCancelType] = useState<"cancel" | "end">("cancel");
   const handleCancelAuction = async () => {
     setIsTransLoading(true);
+    setCancelType((prev) => "end");
     if (itemDetail.listing_type === "auction") {
       const provider = new ethers.providers.Web3Provider(
         (window as any).ethereum
@@ -60,9 +61,10 @@ const ViewUserNft = () => {
     }
   };
   const handleCancelNftListing = async () => {
-    setIsLoading((prev) => !prev);
+    setIsTransLoading((prev) => !prev);
+    setCancelType((prev) => "cancel");
     if (id !== undefined) {
-      setIsLoading((prev) => !prev);
+      setIsTransLoading((prev) => !prev);
       if (itemDetail.listing_type === "auction") {
         const provider = new ethers.providers.Web3Provider(
           (window as any).ethereum
@@ -80,7 +82,7 @@ const ViewUserNft = () => {
           const tnx = await transaction.wait();
         } catch (err) {
           toast("Transaction cancelled!");
-          setIsLoading((prev) => !prev);
+          setIsTransLoading((prev) => !prev);
           return;
         }
       } else if (itemDetail.listing_type === "fixed") {
@@ -111,7 +113,7 @@ const ViewUserNft = () => {
             const tnx = await transaction.wait();
           } catch (err) {
             toast("Transaction cancelled!");
-            setIsLoading((prev) => !prev);
+            setIsTransLoading((prev) => !prev);
             return;
           }
         }
@@ -125,15 +127,15 @@ const ViewUserNft = () => {
         if (response.status == 400) {
           var error = response.data.error;
           toast(error);
-          setIsLoading((prev) => !prev);
+          setIsTransLoading((prev) => !prev);
           return;
         } else if (response.status == 200) {
           toast(response.data.message);
-          setIsLoading((prev) => !prev);
+          setIsTransLoading((prev) => !prev);
           push(`/profile`);
         } else {
           toast(response.data.error);
-          setIsLoading((prev) => !prev);
+          setIsTransLoading((prev) => !prev);
           return;
         }
       });
@@ -154,7 +156,7 @@ const ViewUserNft = () => {
         if (response.status === 400) {
           var error = response.data.error;
           toast(error);
-          setIsLoading((prev) => !prev);
+          setIsTransLoading((prev) => !prev);
           return;
         } else if (response.status === 401) {
           toast("Unauthorized request!");
@@ -184,7 +186,7 @@ const ViewUserNft = () => {
         if (response.status == 400) {
           var error = response.data.error;
           toast(error);
-          setIsLoading((prev) => !prev);
+          setIsTransLoading((prev) => !prev);
           push("/");
           return;
         } else if (response.status == 200) {
@@ -289,7 +291,7 @@ const ViewUserNft = () => {
         if (response.status == 400) {
           var error = response.data.error;
           toast(error);
-          setIsLoading((prev) => !prev);
+          setIsTransLoading((prev) => !prev);
           // push("/");
           return;
         } else if (response.status == 200) {
@@ -505,7 +507,9 @@ const ViewUserNft = () => {
                           <Button
                             title="Cancel listing"
                             wt="w-full"
-                            isDisabled={isTransloading}
+                            isDisabled={
+                              isTransloading && cancelType === "cancel"
+                            }
                             onClick={() => handleCancelNftListing()}
                           />
                         </>
@@ -514,14 +518,16 @@ const ViewUserNft = () => {
                           <Button
                             title="Cancel auction"
                             wt="w-full"
-                            isDisabled={isTransloading}
+                            isDisabled={
+                              isTransloading && cancelType === "cancel"
+                            }
                             onClick={() => handleCancelNftListing()}
                           />
                           <Button
                             title="End auction"
                             wt="w-full"
                             danger
-                            isDisabled={isTransloading}
+                            isDisabled={isTransloading && cancelType === "end"}
                             onClick={() => handleCancelAuction()}
                           />
                         </>

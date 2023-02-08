@@ -5,6 +5,7 @@ import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import Button from "@/src/components/atoms/Button";
+import { toast } from "react-toastify";
 
 import InputField from "@/src/components/atoms/Input";
 
@@ -70,6 +71,7 @@ const NavBar: FC<INav> = ({
   const [myProfile, setMyProfile] = useState<null | Record<string, string>>(
     null
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   // const [isConnected, setIsConnected] = useState(false);
 
@@ -109,11 +111,11 @@ const NavBar: FC<INav> = ({
   };
 
   useEffect(() => {
-    account_listener();
+    setIsLoading((prev) => !prev);
+
     connectedAccount().then((response) => {
       if (response !== null) {
         setConnectedAddress(response);
-        // setIsConnected(true);
         fetchUser();
         dispatch(handleLoggedInUser({ isLoggedIn: true }));
       }
@@ -141,6 +143,25 @@ const NavBar: FC<INav> = ({
   ];
 
   const handleLogin = () => {
+    // toast("Please wait for your sign in process");
+    try {
+      connectUserWallet();
+      setIsLoading((prev) => !prev);
+    } catch (error) {
+      console.log(error);
+    }
+
+    // then((res) => {
+    //   console.log(res);
+    //   setSignInStage((prev) => prev + 1);
+    // })
+    // .catch((err) => {
+    //   console.log(err.msg);
+    //   toast.error(err.msg);
+    // });
+  };
+  // console.log({ signInStage });
+  const handleProfileDisplay = () => {
     setShowProfile(false);
     setShowBal(false);
   };
@@ -250,7 +271,7 @@ const NavBar: FC<INav> = ({
               <MiniUserProfile
                 showProfile={showProfile}
                 onClick={setShowProfile}
-                handleSignOut={handleLogin}
+                handleSignOut={handleProfileDisplay}
               />
               <CreateNftNavOptions
                 showOptions={showCreateNft}
@@ -264,7 +285,8 @@ const NavBar: FC<INav> = ({
               title="Connect Wallet"
               prefix={<WalletIcon />}
               outline
-              onClick={connectUserWallet}
+              onClick={handleLogin}
+              isDisabled={isLoading}
               twClasses="hidden lg:flex"
             />
           )}
