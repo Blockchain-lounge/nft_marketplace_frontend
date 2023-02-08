@@ -291,10 +291,11 @@ const ViewNft = () => {
           apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (
             response
           ) {
-            if (response.status == 200 || response.status == 201) {
+            if (response.status == 201) {
               toast.success(response.data.message);
-              setIsTransLoading(false);
               push("/profile");
+              setShowModal((prev) => !prev);
+              setIsTransLoading(false);
             } else {
               toast(response.data.error);
               setIsTransLoading(false);
@@ -413,9 +414,10 @@ const ViewNft = () => {
       const DATA = formData;
       toast("Finalizing the transaction...");
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
-        if (response.status == 200 || response.status == 201) {
-          toast(response.data.message);
+        if (response.status === 201) {
           push("/profile");
+          toast(response.data.message);
+          setShowModal((prev) => !prev);
           setIsTransLoading(false);
         } else {
           toast(response.data.error);
@@ -494,10 +496,11 @@ const ViewNft = () => {
       const DATA = formData;
       // toast("Finalizing the transaction...");
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
-        if (response.status == 200 || response.status == 201) {
+        if (response.status == 201) {
+          setShowModal((prev) => !prev);
           toast(response.data.message);
+          push("/profile");
           setIsTransLoading((prev) => !prev);
-          // push("");
         } else {
           toast(response.data.error);
           setIsTransLoading((prev) => !prev);
