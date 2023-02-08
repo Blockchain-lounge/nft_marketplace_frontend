@@ -33,7 +33,7 @@ const SwapCard = ({
   setEthValue,
   setWETHvalue,
   handleShowModal,
-  connectedAddress
+  connectedAddress,
 }: IPropsSwap) => {
   const [activeOfferTab, SetActiveOfferTab] = useState(0);
   const [isTransloading, setIsTransLoading] = useState(false);
@@ -56,7 +56,7 @@ const SwapCard = ({
     setIsTransLoading((prev) => !prev);
     if (ethValue != 0) {
       connectedAccount().then((response) => {
-        console.log({response})
+        console.log({ response });
         if (response !== null) {
           getWalletBalance(response).then((balance) => {
             const currentEthBal = balance.split(" ")[0];
@@ -176,7 +176,7 @@ const SwapCard = ({
               </p>
             </div>
             <div className="flex flex-col md:flex-row gap-y-6 md:gap-y-0 gap-x-6 mt-12 w-full">
-              <span className="md:w-[80%] font-bold py-4 pl-6 rounded-lg bg-bg-6">
+              <span className="md:w-[80%] font-bold py-4 px-6 rounded-lg bg-bg-6 truncate">
                 {connectedAddress}
               </span>
               <Button

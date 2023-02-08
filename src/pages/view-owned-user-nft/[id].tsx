@@ -34,6 +34,7 @@ const ViewUserNft = () => {
   ];
 
   const handleSellNft = async () => {
+    setIsTransLoading((prev) => !prev);
     if (itemDetail) {
       if (itemDetail && itemDetail.tokenAddress && itemDetail.tokenId) {
         const contractAddress = itemDetail.tokenAddress;
@@ -53,19 +54,25 @@ const ViewUserNft = () => {
           tnx = await transaction.wait();
         } catch (err) {
           toast("Transaction cancelled!");
+          setIsTransLoading((prev) => !prev);
         }
         if (tnx.events[0].event === "Approval") {
+          toast.success("Approval Successful, proceed to listing.");
           push(
             `/list-owned-nft-for-sale/${itemDetail.tokenAddress}?tokenId=${itemDetail.tokenId}`
           );
+          setIsTransLoading((prev) => !prev);
         } else {
-          toast("The approval process failed!");
+          toast.error("The approval process failed!");
+          setIsTransLoading((prev) => !prev);
         }
-        setIsTransLoading(false);
+        setIsTransLoading((prev) => !prev);
       } else {
-        toast("Unable to verify the token details...");
+        toast.error("Unable to verify the token details...");
+        setIsTransLoading((prev) => !prev);
       }
     }
+    setIsTransLoading((prev) => !prev);
     return;
   };
 
@@ -127,7 +134,7 @@ const ViewUserNft = () => {
     fetchUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
-  // console.log({ itemDetail });
+
   return (
     <DashboardLayout>
       <ToastContainer />
@@ -137,15 +144,17 @@ const ViewUserNft = () => {
             <div className="grid lg:gap-x-8 lg:grid-cols-[0.35fr_0.3fr_0.35fr]">
               <div>
                 <div className="relative h-[23rem] lg:h-[100%]">
-                  {itemDetail.metadata &&
-                  itemDetail.metadata.image &&
-                  itemDetail.metadata.image !== null ? (
+                  {itemDetail !== null ? (
                     <Image
-                      src={itemDetail.metadata && itemDetail.metadata.image}
+                      src={
+                        itemDetail.metadata && itemDetail.metadata.image
+                          ? itemDetail.metadata.image
+                          : APPCONFIG.DEFAULT_NFT_ART
+                      }
                       alt={
                         itemDetail.metadata && itemDetail.metadata.name
                           ? itemDetail.metadata.name
-                          : ""
+                          : `${itemDetail.name}-${itemDetail.tokednId}-image`
                       }
                       layout="fill"
                       objectFit="cover"
@@ -314,12 +323,6 @@ const ViewUserNft = () => {
                     : itemDetail.name + " - " + itemDetail.tokenId}
                 </p>
               </div>
-              {/* <span className="flex items-center gap-x-2 text-txt-3 font-medium">
-              See more
-              <span>
-                <CaretDown color="lightgray" />
-              </span>
-            </span> */}
 
               <div className="view-nft-details">
                 <h2 className="text-2xl font-bold my-4">Details</h2>
