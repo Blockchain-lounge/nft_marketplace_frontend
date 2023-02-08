@@ -7,6 +7,7 @@ import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 import { INftcard } from "./NftMediumCard";
 import { useTimeCountDown } from "@/src/hooks/useTimeCountDown";
 import * as moment from "moment";
+import APPCONFIG from "@/src/constants/Config";
 
 const HomeNftCard = ({
   _id,
@@ -43,7 +44,7 @@ Partial<INftcard>) => {
           />
         ) : resell_item_id ? (
           <Image
-            src={resell_item_id.item_art_url ? resell_item_id.item_art_url : ""}
+            src={resell_item_id.item_art_url ? resell_item_id.item_art_url : APPCONFIG.DEFAULT_NFT_ART}
             alt={resell_item_id.item_title}
             objectFit="cover"
             layout="fill"
@@ -72,12 +73,14 @@ Partial<INftcard>) => {
               <span className="font-bold text-black text-xl">
                 {resell_item_id && resell_item_id.item_title
                   ? resell_item_id.item_title
+                  : resell_item_id && resell_item_id.item_title == null
+                  ? resell_item_id.token_id
                   : item_id !== undefined && item_id !== null && item_id !== ""
                   ? item_id.item_title
                   : ""}
               </span>
               <span className="nmc-sub-wrapper-2-owner justify-center">
-                {listing_quantity !== undefined
+                { listing_quantity !== undefined
                   ? listing_remaining + "/" + listing_quantity
                   : listing_remaining + "/" + listing_quantity}
               </span>
@@ -172,7 +175,7 @@ Partial<INftcard>) => {
                   src={
                     resell_item_id.item_art_url
                       ? resell_item_id.item_art_url
-                      : ""
+                      : APPCONFIG.DEFAULT_NFT_ART
                   }
                   alt={resell_item_id.item_title}
                   layout="fill"
@@ -189,6 +192,8 @@ Partial<INftcard>) => {
               <span className="text-2xl font-bold text-black">
                 {item_id
                   ? item_id.item_title
+                  : resell_item_id && resell_item_id.item_title == null
+                  ? resell_item_id.token_id
                   : resell_item_id
                   ? resell_item_id.item_title
                   : ""}

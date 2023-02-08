@@ -137,11 +137,8 @@ const ViewUserNft = () => {
             <div className="grid lg:gap-x-8 lg:grid-cols-[0.35fr_0.3fr_0.35fr]">
               <div>
                 <div className="relative h-[23rem] lg:h-[100%]">
-                  {itemDetail.metadata &&
-                  itemDetail.metadata.image &&
-                  itemDetail.metadata.image !== null ? (
-                    <Image
-                      src={itemDetail.metadata && itemDetail.metadata.image}
+                <Image
+                      src={itemDetail.metadata && itemDetail.metadata.image ? itemDetail.metadata.image : APPCONFIG.DEFAULT_NFT_ART}
                       alt={
                         itemDetail.metadata && itemDetail.metadata.name
                           ? itemDetail.metadata.name
@@ -153,9 +150,6 @@ const ViewUserNft = () => {
                       placeholder="blur"
                       blurDataURL="/images/placeholder.png"
                     />
-                  ) : (
-                    ""
-                  )}
                 </div>
 
                 {/* <div className="flex gap-x-6 mt-4 items-center">

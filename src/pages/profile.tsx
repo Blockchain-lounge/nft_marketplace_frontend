@@ -392,20 +392,21 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    connectedAccount().then((response) => {
+    connectedAccount().then( async (response) => {
       if (response !== null) {
-        fetchTokenOwned(response);
+        await fetchTokenOwned(response);
       }
-      fetchCollections();
-    });
-    if (tokenCreatedCurrentPage) {
-      fetchTokenCreated(tokenCreatedCurrentPage);
-    }
+      await fetchCollections();
 
-    if (tokenListedCurrentPage) {
-      fetchTokenListed(tokenListedCurrentPage);
-    }
-    fetchUser();
+      if (tokenCreatedCurrentPage) {
+        await fetchTokenCreated(tokenCreatedCurrentPage);
+      }
+  
+      if (tokenListedCurrentPage) {
+        await fetchTokenListed(tokenListedCurrentPage);
+      }
+      await fetchUser();
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, tokenCreatedCurrentPage, tokenListedCurrentPage]);
 

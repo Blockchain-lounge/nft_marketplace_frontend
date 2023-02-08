@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { LikeIcon } from "@/src/components/atoms/vectors";
 // import { Nftcard } from "./NftMediumCard";
 import Image from "next/image";
+import APPCONFIG from "@/src/constants/Config";
 import UseConvertEthToDollar from "@/src/hooks/useEthConvertToDollar";
 import { useTimeCountDown } from "@/src/hooks/useTimeCountDown";
 import * as moment from "moment";
@@ -48,14 +49,14 @@ const ListedNftCard = ({
       onClick={() => push(`/${to}/${_id}`)}
     >
       <div className="nmc-wrapper-img">
-        {resell_item_id && resell_item_id.item_art_url ? (
+        {resell_item_id? (
           <Image
             src={
               resell_item_id.item_art_url !== undefined &&
               resell_item_id.item_art_url !== null &&
               resell_item_id.item_art_url !== ""
                 ? resell_item_id.item_art_url
-                : ""
+                : APPCONFIG.DEFAULT_NFT_ART
             }
             alt={resell_item_id.item_title}
             layout="fill"
