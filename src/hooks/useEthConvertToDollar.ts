@@ -13,7 +13,7 @@ export const UseConvertEthToDollar = () => {
       setDollarRate(res.data.ethereum.usd);
     } catch (error) {
       //@ts-ignore
-      console.log(error);
+      // console.log(error);
     }
   };
 

@@ -72,7 +72,6 @@ const NavBar: FC<INav> = ({
     null
   );
   const [isLoading, setIsLoading] = useState(false);
-  const [signInStage, setSignInStage] = useState(0);
 
   // const [isConnected, setIsConnected] = useState(false);
 
@@ -112,11 +111,11 @@ const NavBar: FC<INav> = ({
   };
 
   useEffect(() => {
-    account_listener();
+    setIsLoading((prev) => !prev);
+
     connectedAccount().then((response) => {
       if (response !== null) {
         setConnectedAddress(response);
-        // setIsConnected(true);
         fetchUser();
         dispatch(handleLoggedInUser({ isLoggedIn: true }));
       }
@@ -144,7 +143,7 @@ const NavBar: FC<INav> = ({
   ];
 
   const handleLogin = () => {
-    toast("Please wait for your sign in process");
+    // toast("Please wait for your sign in process");
     try {
       connectUserWallet();
       setIsLoading((prev) => !prev);

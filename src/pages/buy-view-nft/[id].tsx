@@ -278,7 +278,7 @@ const ViewNft = () => {
               ethers.utils.parseUnits(nftOfferPayload.price.toString(), "ether")
             );
             tnx = await transaction.wait();
-            toast("Approval Completed");
+            toast.success("Approval Completed");
           } catch (err) {
             toast("Transaction cancelled!");
             toast(err.message);
@@ -292,9 +292,9 @@ const ViewNft = () => {
             response
           ) {
             if (response.status == 200 || response.status == 201) {
-              toast(response.data.message);
+              toast.success(response.data.message);
               setIsTransLoading(false);
-              // push("");
+              push("/profile");
             } else {
               toast(response.data.error);
               setIsTransLoading(false);
@@ -415,8 +415,8 @@ const ViewNft = () => {
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
         if (response.status == 200 || response.status == 201) {
           toast(response.data.message);
+          push("/profile");
           setIsTransLoading(false);
-          // push("/profile");
         } else {
           toast(response.data.error);
           setIsTransLoading(false);
@@ -611,8 +611,7 @@ const ViewNft = () => {
       // Get wETH balance
       if (connectedAddress !== null) {
         getWalletWEthBalance(connectedAddress).then((response) => {
-          setBalanceInWEth(response);
-          // console.log(balanceInWEth)
+          setBalanceInWEth(Number(response));
         });
         const amount = 0.1;
         // swapEthforWEth(amount)
