@@ -4,6 +4,7 @@ import Image from "next/image";
 import React from "react";
 import { CoinIcon } from "../atoms/vectors";
 import * as moment from "moment";
+import APPCONFIG from "@/src/constants/Config";
 
 const TransactionCard = ({
   listed_item,
@@ -81,7 +82,7 @@ const TransactionCard = ({
                 created_item !== undefined &&
                 created_item !== null
                   ? created_item.item_art_url
-                  : ""
+                  : APPCONFIG.DEFAULT_NFT_ART
               }
               alt=""
               layout="fill"
@@ -94,9 +95,9 @@ const TransactionCard = ({
               src={
                 resell_item_id &&
                 resell_item_id !== undefined &&
-                resell_item_id !== null
+                resell_item_id.item_art_url
                   ? resell_item_id.item_art_url
-                  : ""
+                  : APPCONFIG.DEFAULT_NFT_ART
               }
               alt=""
               layout="fill"
@@ -115,7 +116,6 @@ const TransactionCard = ({
               }
               alt=""
               layout="fill"
-              // objectFit="contain"
               className="rounded-full"
               placeholder="blur"
               blurDataURL="/images/placeholder.png"

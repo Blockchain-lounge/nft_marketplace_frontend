@@ -409,7 +409,7 @@ const Profile = () => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, tokenCreatedCurrentPage, tokenListedCurrentPage]);
-  console.log({ userListedProfileData });
+
   return (
     <DashboardLayout isLoading={isLoading}>
       <div className="sub-layout-wrapper scrollbar-hide">
@@ -481,7 +481,7 @@ const Profile = () => {
                     <div className="user-profile-owned-nfts">
                       {userOwnedProfileData.map((val, i) => (
                         <OwnedNftCard
-                          key={val._id}
+                          key={"user-owned-profile-data" + val._id + i}
                           {...val}
                           to="view-owned-user-nft"
                         />
