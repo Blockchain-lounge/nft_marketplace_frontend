@@ -670,7 +670,9 @@ const ViewNft = () => {
               <div className="view-hero-img">
                 <Image
                   priority
-                  src={itemDetail.item.item_art_url}
+                  src={
+                    itemDetail.item.item_art_url || APPCONFIG.DEFAULT_NFT_ART
+                  }
                   alt={itemDetail.item.item_title}
                   layout="fill"
                   objectFit="cover"
