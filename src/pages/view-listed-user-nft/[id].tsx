@@ -347,7 +347,9 @@ const ViewUserNft = () => {
               <div>
                 <div className="relative h-[35rem] lg:h-[100%]">
                   <Image
-                    src={itemDetail.item.item_art_url}
+                    src={
+                      itemDetail.item.item_art_url || APPCONFIG.DEFAULT_NFT_ART
+                    }
                     alt={itemDetail.item.item_title}
                     layout="fill"
                     objectFit="cover"

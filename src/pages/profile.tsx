@@ -392,7 +392,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    connectedAccount().then( async (response) => {
+    connectedAccount().then(async (response) => {
       if (response !== null) {
         await fetchTokenOwned(response);
       }
@@ -401,7 +401,7 @@ const Profile = () => {
       if (tokenCreatedCurrentPage) {
         await fetchTokenCreated(tokenCreatedCurrentPage);
       }
-  
+
       if (tokenListedCurrentPage) {
         await fetchTokenListed(tokenListedCurrentPage);
       }
@@ -409,7 +409,7 @@ const Profile = () => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, tokenCreatedCurrentPage, tokenListedCurrentPage]);
-
+  console.log({ userListedProfileData });
   return (
     <DashboardLayout isLoading={isLoading}>
       <div className="sub-layout-wrapper scrollbar-hide">
