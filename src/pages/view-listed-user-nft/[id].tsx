@@ -32,9 +32,11 @@ const ViewUserNft = () => {
   const [isTransloading, setIsTransLoading] = useState(false);
   const [connectedAddress, setConnectedAddress] = useState(null);
   const [offerLists, setOfferLists] = useState([]);
+  const [lastBid, setLastBid] = useState(null);
   const [shownOffer, setShownOffer] = useState([]);
   const [cancelType, setCancelType] = useState<"cancel" | "end">("cancel");
-  const handleCancelAuction = async () => {
+  
+  const handleEndAuction = async () => {
     setIsTransLoading(true);
     setCancelType((prev) => "end");
     if (itemDetail.listing_type === "auction") {
@@ -47,45 +49,87 @@ const ViewUserNft = () => {
         abi,
         signer
       );
-      const tokenId = itemDetail.auction_id;
+      const tokenId = itemDetail.listing_on_chain_id;
+      const bidding_price = ethers.utils.parseUnits(
+        lastBid.offer_price.toString(),
+        "ether"
+        );
+        
       try {
         toast("Please approve this transaction!");
-        const transaction = await contract.cancelAuction(tokenId);
+        const transaction = await contract.finishAuction(
+          tokenId,
+          {
+            gasPrice: 74762514060,
+            value: bidding_price
+          });
         const tnx = await transaction.wait();
         push(`/profile`);
       } catch (err) {
+        alert('Unable to close this Auction. Please ensure that this auction have ended.')
         toast("Transaction cancelled!");
         setIsTransLoading(false);
         return;
       }
     }
   };
+
+  
+  const handleCancelAuction = async () => {
+    setIsTransLoading(true);
+    setCancelType((prev) => "cancelAuction");
+    const provider = new ethers.providers.Web3Provider(
+      (window as any).ethereum
+    );
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(
+      APPCONFIG.SmartContractAddress,
+      abi,
+      signer
+    );
+    
+    const tokenId = itemDetail.listing_on_chain_id;
+    try {
+      toast("Please approve this transaction!");
+      const transaction = await contract.cancelAuction(tokenId);
+      const tnx = await transaction.wait();
+
+      const HEADER = "authenticated";
+      const REQUEST_URL = "nft-listing/cancel/" + id;
+      const METHOD = "DELETE";
+      const DATA = {};
+      await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          setIsTransLoading((prev) => !prev);
+          return;
+        } else if (response.status == 200) {
+          toast(response.data.message);
+          setIsTransLoading((prev) => !prev);
+          push(`/profile`);
+        } else {
+          toast(response.data.error);
+          setIsTransLoading((prev) => !prev);
+          return;
+        }
+      });
+
+    } catch (err) {
+      alert('You can not cancel the auction which already has a bidder!')
+      toast("Transaction cancelled!");
+      setIsTransLoading((prev) => !prev);
+      return;
+    }
+
+  };
+
   const handleCancelNftListing = async () => {
     setIsTransLoading((prev) => !prev);
     setCancelType((prev) => "cancel");
     if (id !== undefined) {
       setIsTransLoading((prev) => !prev);
-      if (itemDetail.listing_type === "auction") {
-        const provider = new ethers.providers.Web3Provider(
-          (window as any).ethereum
-        );
-        const signer = provider.getSigner();
-        const contract = new ethers.Contract(
-          APPCONFIG.SmartContractAddress,
-          abi,
-          signer
-        );
-        const tokenId = itemDetail.auction_id;
-        try {
-          toast("Please approve this transaction!");
-          const transaction = await contract.cancelAuction(tokenId);
-          const tnx = await transaction.wait();
-        } catch (err) {
-          toast("Transaction cancelled!");
-          setIsTransLoading((prev) => !prev);
-          return;
-        }
-      } else if (itemDetail.listing_type === "fixed") {
+      if (itemDetail.listing_type === "fixed") {
         if (
           itemDetail.relisted &&
           itemDetail.relisted === true &&
@@ -112,8 +156,9 @@ const ViewUserNft = () => {
             );
             const tnx = await transaction.wait();
           } catch (err) {
-            toast("Transaction cancelled!");
             setIsTransLoading((prev) => !prev);
+            alert('Unable to cancel this Auction. Please ensure that this auction does not have bids yet.')
+            toast("Transaction cancelled!");
             return;
           }
         }
@@ -295,7 +340,8 @@ const ViewUserNft = () => {
           // push("/");
           return;
         } else if (response.status == 200) {
-          setOfferLists(response.data.data);
+          setOfferLists(response.data.data.listedItems);
+          setLastBid(response.data.data.lastBided);
         } else {
           toast("Something went wrong, please try again!");
           return;
@@ -324,6 +370,9 @@ const ViewUserNft = () => {
   };
 
   const viewOffer = (offer_id) => {
+    if(itemDetail.listing_type === 'auction'){
+      return
+    }
     var selectedOffer = [];
     for (var i = 0, len = offerLists.length; i < len; i++) {
       if (offerLists[i]._id === offer_id) {
@@ -347,7 +396,9 @@ const ViewUserNft = () => {
               <div>
                 <div className="relative h-[35rem] lg:h-[100%]">
                   <Image
-                    src={itemDetail.item.item_art_url}
+                    src={
+                      itemDetail.item.item_art_url || APPCONFIG.DEFAULT_NFT_ART
+                    }
                     alt={itemDetail.item.item_title}
                     layout="fill"
                     objectFit="cover"
@@ -470,12 +521,19 @@ const ViewUserNft = () => {
                           </span>
                           <span className="flex items-center text-[1.5rem] gap-x-1">
                             <CoinIcon />
-                            {itemDetail.listing_price || 0}
+                            { 
+                              itemDetail.listing_type === 'auction' ? itemDetail.starting_bidding_price
+                              : itemDetail.listing_type === 'fixed' ? itemDetail.listing_price
+                              : 0.00
+                              }
                           </span>
                           {dollarRate ? (
                             <span className="flex items-center text-xl mt-2">
                               <span className="text-xl font-bold">$</span>
-                              {(itemDetail.listing_price * dollarRate).toFixed(
+                              {
+                              (itemDetail.listing_type === 'auction' ? itemDetail.starting_bidding_price  * dollarRate
+                              : itemDetail.listing_type === 'fixed' ? itemDetail.listing_price  * dollarRate
+                              : 0.00).toFixed(
                                 2
                               )}
                             </span>
@@ -519,16 +577,16 @@ const ViewUserNft = () => {
                             title="Cancel auction"
                             wt="w-full"
                             isDisabled={
-                              isTransloading && cancelType === "cancel"
+                              isTransloading && cancelType === "cancelAuction"
                             }
-                            onClick={() => handleCancelNftListing()}
+                            onClick={() => handleCancelAuction()}
                           />
                           <Button
                             title="End auction"
                             wt="w-full"
                             danger
                             isDisabled={isTransloading && cancelType === "end"}
-                            onClick={() => handleCancelAuction()}
+                            onClick={() => handleEndAuction()}
                           />
                         </>
                       ) : (

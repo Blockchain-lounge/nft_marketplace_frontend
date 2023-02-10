@@ -212,7 +212,7 @@ const Activities = () => {
                   {val.img && (
                     <span className="relative h-[2.375rem] w-[2.375rem]">
                       <Image
-                        src={val.img as string}
+                        src={(val.img as string) || APPCONFIG.DEFAULT_NFT_ART}
                         alt={val.label}
                         layout="fill"
                         objectFit="cover"

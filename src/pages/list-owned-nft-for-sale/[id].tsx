@@ -83,14 +83,21 @@ const ListNft = () => {
 
       await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
         if (response.status == 200) {
-          setOnchainCollectionID(response.data.data.collection_on_chain_id && parseInt(response.data.data.collection_on_chain_id) >0 ? response.data.data.collection_on_chain_id : null);
-        }
-        else if (response.status !== 200 && response.data.error && response.data.error !== null) {
+          setOnchainCollectionID(
+            response.data.data.collection_on_chain_id &&
+              parseInt(response.data.data.collection_on_chain_id) > 0
+              ? response.data.data.collection_on_chain_id
+              : null
+          );
+        } else if (
+          response.status !== 200 &&
+          response.data.error &&
+          response.data.error !== null
+        ) {
           var error = response.data.error;
           toast(error);
           return;
-        }
-        else {
+        } else {
           toast("Something went wrong, please try again!");
           return;
         }
@@ -128,7 +135,7 @@ const ListNft = () => {
   };
 
   const handleSelect = async (file) => {
-    const {id} = file;
+    const { id } = file;
     await fetchCollectionDetail(id);
     setNftPayloadSelect({ ...nftPayloadselect, ...file });
   };
@@ -174,13 +181,14 @@ const ListNft = () => {
     e.preventDefault();
     setIsTransLoading((prev) => !prev);
     let msg = "";
-    let collection_id = itemDetail.metadata
-    && itemDetail.metadata.cloudax_token 
-    && itemDetail.metadata.cloudax_token.coludax_collection_id
-    && itemDetail.metadata.cloudax_token.coludax_collection_id.lenght > 0 ? itemDetail.metadata.cloudax_token.coludax_collection_id : nftPayloadselect.id;
+    let collection_id =
+      itemDetail.metadata &&
+      itemDetail.metadata.cloudax_token &&
+      itemDetail.metadata.cloudax_token.coludax_collection_id &&
+      itemDetail.metadata.cloudax_token.coludax_collection_id.lenght > 0
+        ? itemDetail.metadata.cloudax_token.coludax_collection_id
+        : nftPayloadselect.id;
 
-   if (!nftListingPayload.listing_price.trim() 
-   || parseFloat(nftListingPayload.listing_price) <= 0) {
     if (
       !nftListingPayload.listing_price.trim() ||
       parseFloat(nftListingPayload.listing_price) <= 0
@@ -191,23 +199,23 @@ const ListNft = () => {
       return;
     }
   }
-    if(itemDetail
-      && itemDetail.metadata
-      && itemDetail.metadata !== null
-      && itemDetail.metadata.cloudax_token
-      && itemDetail.metadata.cloudax_token !== null 
-      && itemDetail.metadata.cloudax_token._id
-      && itemDetail.metadata.cloudax_token._id !== null
-      && itemDetail.metadata.cloudax_token._id.lenght > 0){
-
+    if (
+      itemDetail &&
+      itemDetail.metadata &&
+      itemDetail.metadata !== null &&
+      itemDetail.metadata.cloudax_token &&
+      itemDetail.metadata.cloudax_token !== null &&
+      itemDetail.metadata.cloudax_token._id &&
+      itemDetail.metadata.cloudax_token._id !== null &&
+      itemDetail.metadata.cloudax_token._id.lenght > 0
+    ) {
+    } else {
+      if (!onchainCollectionID || onchainCollectionID.length === 0) {
+        msg = "listed collection is empty";
+        toast(msg);
+        return;
       }
-      else{
-          if (!onchainCollectionID || onchainCollectionID.length === 0) {
-          msg = "listed collection is empty";
-          toast(msg);
-          return;
-        } 
-      }
+    }
 
     if (isNaN(parseFloat(nftListingPayload.listing_price)) === true) {
       msg = "price of listed must be a valid positive number";
@@ -219,16 +227,19 @@ const ListNft = () => {
         const provider = new ethers.providers.Web3Provider(
           (window as any).ethereum
         );
+
         const signer = provider.getSigner();
         const contract = new ethers.Contract(
           APPCONFIG.SmartContractAddress,
           abi,
           signer
         );
+
         const tokenAddress = id;
         const listing_price = ethers.utils.parseUnits(
           nftListingPayload.listing_price.toString()
         );
+
         try {
           toast("Please approve this transaction!");
         const transaction = await contract.listToken(
@@ -241,6 +252,16 @@ const ListNft = () => {
         const tnx = await transaction.wait();
         }
         catch(err){
+          const transaction = await contract.listToken(
+            tokenAddress,
+            tokenId,
+            listing_price,
+            onchainCollectionID,
+            connectedAddress
+          );
+
+          const tnx = await transaction.wait();
+        } catch (err) {
           toast("Transaction cancelled!");
           setIsTransLoading((prev) => !prev);
         } 
@@ -251,7 +272,7 @@ const ListNft = () => {
           token_address: tokenAddress,
           token_id: tokenId,
           collection_id: collection_id,
-          listing_type: 'fixed'
+          listing_type: "fixed",
         };
 
         const HEADER = "authenticated";

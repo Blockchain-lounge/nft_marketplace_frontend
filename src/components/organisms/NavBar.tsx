@@ -111,7 +111,7 @@ const NavBar: FC<INav> = ({
   };
 
   useEffect(() => {
-    setIsLoading((prev) => !prev);
+    // setIsLoading((prev) => !prev);
 
     connectedAccount().then((response) => {
       if (response !== null) {

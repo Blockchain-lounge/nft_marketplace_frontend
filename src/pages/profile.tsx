@@ -392,7 +392,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    connectedAccount().then( async (response) => {
+    connectedAccount().then(async (response) => {
       if (response !== null) {
         await fetchTokenOwned(response);
       }
@@ -402,7 +402,7 @@ const Profile = () => {
       if (tokenCreatedCurrentPage) {
         await fetchTokenCreated(tokenCreatedCurrentPage);
       }
-  
+
       if (tokenListedCurrentPage) {
         await fetchTokenListed(tokenListedCurrentPage);
       }
@@ -484,7 +484,7 @@ const Profile = () => {
                     <div className="user-profile-owned-nfts">
                       {userOwnedProfileData.map((val, i) => (
                         <OwnedNftCard
-                          key={val._id}
+                          key={"user-owned-profile-data" + val._id + i}
                           {...val}
                           to="view-owned-user-nft"
                         />

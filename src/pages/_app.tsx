@@ -7,8 +7,6 @@ import { SkeletonTheme } from "react-loading-skeleton";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
-
-
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
@@ -17,6 +15,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0"
         />
+        <title>Cloudax - NFT Marketplacee</title>
       </Head>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <SkeletonTheme baseColor="#313131" highlightColor="#525252">

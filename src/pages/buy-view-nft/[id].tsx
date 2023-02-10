@@ -443,7 +443,8 @@ const ViewNft = () => {
     event.preventDefault();
 
     setIsTransLoading((prev) => !prev);
-
+    var tnx = null;
+    var transaction = null;
     if (nftBidPayload.price.length === 0) {
       toast.error("Bidding price is required");
       setIsTransLoading((prev) => !prev);
@@ -453,7 +454,7 @@ const ViewNft = () => {
       setIsTransLoading((prev) => !prev);
       return;
     } else if (
-      itemDetail.starting_bidding_price > Number(nftBidPayload.price)
+      itemDetail.starting_bidding_price > parseFloat(nftBidPayload.price)
     ) {
       toast.error(
         "Your bidding price is below the last bid, kindly place a higher bid"
@@ -464,7 +465,8 @@ const ViewNft = () => {
       //@ts-ignore
 
       const bidding_price = ethers.utils.parseUnits(
-        nftBidPayload.price.toString()
+        nftBidPayload.price.toString(),
+        "ether"
       );
       const provider = new ethers.providers.Web3Provider(
         (window as any).ethereum
@@ -475,48 +477,64 @@ const ViewNft = () => {
         abi,
         signer
       );
-      const transaction = await contract.makeBid(
-        nftBidPayload.quantity,
-        bidding_price,
-        itemDetail.listing_on_chain_id,
-        {
-          gasPrice: 74762514060,
-          // maxFeePerGas: 20000000,
-          // baseFee: 54762514060
-        }
-      );
-
+      try{
+          transaction = await contract.makeBid(
+          nftBidPayload.quantity,
+          bidding_price,
+          itemDetail.listing_on_chain_id,
+          {
+            gasPrice: 74762514060,
+            value: bidding_price
+            // maxFeePerGas: 20000000,
+            // baseFee: 54762514060
+          }
+        );
+      }
+      catch(err){
+        setIsTransLoading((prev) => !prev);
+        toast("Unable to complete this onchain transaction!");
+        return
+      }
+      
       tnx = await transaction.wait();
       const events = findEvents("BidIsMade", tnx.events, true);
-      if (!events[0].toNumber()) {
+      if (!events[2].toNumber()) {
         toast("We were unable to complete your transaction!");
         setIsTransLoading((prev) => !prev);
         return;
       }
-      auction_id = events[0].toNumber();
+
+      const bid_on_chain_id = events[2].toNumber();
 
       var formData = {
         listing_id: itemDetail._id,
         amount: nftBidPayload.price * nftBidPayload.quantity,
         offer_quantity: nftBidPayload.quantity,
-        offer_expiration: bidingExpDates,
+        bid_on_chain_id: bid_on_chain_id
+        // offer_expiration: bidingExpDates,
       };
       const HEADER = "authenticated";
       const REQUEST_URL = "nft-offer/place_bid";
       const METHOD = "POST";
       const DATA = formData;
-      // toast("Finalizing the transaction...");
-      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
-        if (response.status == 201) {
-          setShowModal((prev) => !prev);
-          toast(response.data.message);
-          push("/profile");
-          setIsTransLoading((prev) => !prev);
-        } else {
-          toast(response.data.error);
-          setIsTransLoading((prev) => !prev);
-        }
-      });
+      try{
+        apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then(function (response) {
+          if (response.status == 201) {
+            setShowModal((prev) => !prev);
+            toast(response.data.message);
+            push("/profile");
+            setIsTransLoading((prev) => !prev);
+          } else {
+            toast(response.data.error);
+            setIsTransLoading((prev) => !prev);
+          }
+        });
+      }
+      catch(err){
+        setIsTransLoading((prev) => !prev);
+        toast("Unable to complete this offchain transaction!");
+        return
+      }
     }
   };
 
@@ -677,403 +695,417 @@ const ViewNft = () => {
         <ToastContainer />
         {itemDetail !== null ? (
           <div className="center space-y-8">
-            <div className="view-wrapper-hero">
-              <div className="view-hero-img">
-                <Image
-                  priority
-                  src={
-                    itemDetail.item.item_art_url
-                    ? itemDetail.item.item_art_url
-                    : APPCONFIG.DEFAULT_NFT_ART
-                    }
-                  alt={itemDetail.item.item_title}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-2xl"
-                  placeholder="blur"
-                  blurDataURL="/images/placeholder.png"
-                />
-              </div>
-              <div className="space-y-6 lg:space-y-7 flex flex-col">
-                <>
-                  <div className="flex items-center">
-                    <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
-                      <Image
-                        src={
-                          itemDetail.item.collection
-                            ? itemDetail.item.collection.logo_image
-                            : "/images/placeholder.png"
-                        }
-                        alt="colx-img"
-                        layout="fill"
-                        objectFit="cover"
-                        className="rounded-full"
-                        placeholder="blur"
-                        blurDataURL="/images/placeholder.png"
-                      />
-                    </div>
-                    <span className="text-xl  lg:text-3xl lg:mr-1">
-                      <Link
-                        href={`/single-collection/${itemDetail.item.collection._id}`}
-                      >
-                        {itemDetail.item.collection.name}
-                      </Link>
-                    </span>
-                    <div className="h-6 w-6 relative">
-                      <Image
-                        src="/images/verify.svg"
-                        alt="colx-img"
-                        layout="fill"
-                        objectFit="contain"
-                        className="rounded-full"
-                      />
-                    </div>
+          <div className="view-wrapper-hero">
+            <div className="view-hero-img">
+              <Image
+                priority
+                src={
+                  itemDetail.item.item_art_url
+                  ? itemDetail.item.item_art_url
+                  : APPCONFIG.DEFAULT_NFT_ART
+                  }
+                alt={itemDetail.item.item_title}
+                layout="fill"
+                objectFit="cover"
+                className="rounded-2xl"
+                placeholder="blur"
+                blurDataURL="/images/placeholder.png"
+              />
+            </div>
+            <div className="space-y-6 lg:space-y-7 flex flex-col">
+              <>
+                <div className="flex items-center">
+                  <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
+                    <Image
+                      src={
+                        itemDetail.item.collection
+                          ? itemDetail.item.collection.logo_image
+                          : "/images/placeholder.png"
+                      }
+                      alt="colx-img"
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded-full"
+                      placeholder="blur"
+                      blurDataURL="/images/placeholder.png"
+                    />
                   </div>
-                  <span className="text-2xl lg:text-3xl font-bold">
-                    {itemDetail.item.item_title}
+                  <span className="text-xl  lg:text-3xl lg:mr-1">
+                    <Link
+                      href={`/single-collection/${itemDetail.item.collection._id}`}
+                    >
+                      {itemDetail.item.collection.name}
+                    </Link>
                   </span>
-                </>
-                <div className="view-hero-nft-owner">
-                  <div className="flex items-center gap-x-4 w-1/3">
+                  <div className="h-6 w-6 relative">
+                    <Image
+                      src="/images/verify.svg"
+                      alt="colx-img"
+                      layout="fill"
+                      objectFit="contain"
+                      className="rounded-full"
+                    />
+                  </div>
+                </div>
+                <span className="text-2xl lg:text-3xl font-bold">
+                  {itemDetail.item.item_title}
+                </span>
+              </>
+              <div className="view-hero-nft-owner">
+                <div className="flex items-center gap-x-4 w-1/3">
+                  <div className="relative h-14 w-14">
+                    <Image
+                      src="/images/avatar.png"
+                      alt="creator-img"
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded-full"
+                    />
+                    {/* itemDetail.item.creator 
+                        && itemDetail.item.creator.username 
+                        && itemDetail.item.creator.username > 0
+                        ?
+                        : 'cc' */}
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-txt-2">Creator</span>
+                    <span>
+                      {itemDetail.item &&
+                      itemDetail.item.creator &&
+                      itemDetail.item.creator.username &&
+                      itemDetail.item.creator.username.length > 0
+                        ? itemDetail.item.creator.username
+                        : " ---- "}
+                    </span>
+                  </div>
+                </div>
+                {itemDetail && itemDetail.owned_by !== null ? (
+                  <div className="flex items-center gap-x-4">
                     <div className="relative h-14 w-14">
                       <Image
                         src="/images/avatar.png"
-                        alt="creator-img"
+                        alt="owner-img"
                         layout="fill"
                         objectFit="cover"
                         className="rounded-full"
                       />
-                      {/* itemDetail.item.creator 
-                          && itemDetail.item.creator.username 
-                          && itemDetail.item.creator.username > 0
-                          ?
-                          : 'cc' */}
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-txt-2">Creator</span>
+                      <span className="text-txt-2">Current Owner</span>
                       <span>
-                        {itemDetail.item &&
-                        itemDetail.item.creator &&
-                        itemDetail.item.creator.username &&
-                        itemDetail.item.creator.username.length > 0
-                          ? itemDetail.item.creator.username
+                        {itemDetail.owned_by &&
+                        itemDetail.owned_by.username &&
+                        itemDetail.owned_by.username.length > 0
+                          ? itemDetail.owned_by.username
                           : " ---- "}
                       </span>
                     </div>
                   </div>
-                  {itemDetail && itemDetail.owned_by !== null ? (
-                    <div className="flex items-center gap-x-4">
-                      <div className="relative h-14 w-14">
-                        <Image
-                          src="/images/avatar.png"
-                          alt="owner-img"
-                          layout="fill"
-                          objectFit="cover"
-                          className="rounded-full"
-                        />
+                ) : null}
+              </div>
+              {itemDetail.listing_type &&
+              itemDetail.listing_type === "fixed" ? (
+                <div className="view-hero-nft-cta-wrapper">
+                  <div className="flex w-full gap-x-6">
+                    <div className="p-4 bg-bg-5 rounded-md w-full">
+                      <span className="text-txt-2 text-xl block mb-4">
+                        Price
+                      </span>
+                      <div className="">
+                        <span className="flex items-center text-[1.75rem] gap-x-1">
+                          <CoinIcon />
+                          {itemDetail.listing_type === "auction"
+                            ? itemDetail.starting_bidding_price
+                            : itemDetail.listing_type === "fixed"
+                            ? itemDetail.listing_price
+                            : ""}
+                        </span>
+                        {dollarRate ? (
+                          <span className="text-xl font-medium block mt-2">
+                            $
+                            {(itemDetail.listing_price * dollarRate).toFixed(
+                              2
+                            )}
+                          </span>
+                        ) : (
+                          ""
+                        )}
                       </div>
-                      <div className="flex flex-col">
-                        <span className="text-txt-2">Current Owner</span>
-                        <span>
-                          {itemDetail.owned_by &&
-                          itemDetail.owned_by.username &&
-                          itemDetail.owned_by.username.length > 0
-                            ? itemDetail.owned_by.username
-                            : " ---- "}
+                    </div>
+                    <div className="p-4 bg-bg-5 rounded-md w-full">
+                      <span className="text-txt-2 text-xl block mb-4">
+                        Quantity
+                      </span>
+                      <div className="">
+                        <span className="flex items-center text-[1.75rem] gap-x-1">
+                          {/* <CoinIcon /> */}
+                          {itemDetail.listing_remaining}/
+                          {itemDetail.listing_quantity}
                         </span>
                       </div>
                     </div>
-                  ) : null}
-                </div>
-                {itemDetail.listing_type &&
-                itemDetail.listing_type === "fixed" ? (
-                  <div className="view-hero-nft-cta-wrapper">
-                    <div className="flex w-full gap-x-6">
-                      <div className="p-4 bg-bg-5 rounded-md w-full">
-                        <span className="text-txt-2 text-xl block mb-4">
-                          Price
-                        </span>
-                        <div className="">
-                          <span className="flex items-center text-[1.75rem] gap-x-1">
-                            <CoinIcon />
-                            {itemDetail.listing_type === "auction"
-                              ? itemDetail.starting_bidding_price
-                              : itemDetail.listing_type === "fixed"
-                              ? itemDetail.listing_price
-                              : ""}
-                          </span>
-                          {dollarRate ? (
-                            <span className="text-xl font-medium block mt-2">
-                              $
-                              {(itemDetail.listing_price * dollarRate).toFixed(
-                                2
-                              )}
-                            </span>
+                  </div>
+                  {/* <span className="text-lg font-medium">
+                  Last sale price 10.8 ETH
+                </span> */}
+                  <div className="flex flex-col gap-y-4 w-full">
+                    <div className="flex gap-x-5 w-full">
+                      {connectedAddress ? (
+                        <div className="w-full space-y-4">
+                          {itemDetail.listing_type &&
+                          itemDetail.listing_type === "fixed" ? (
+                            <>
+                              <Button
+                                title="Buy now"
+                                wt="w-full"
+                                onClick={() => {
+                                  setModaltype("buy");
+                                  setShowModal((prev) => !prev);
+                                }}
+                              />
+                              {/* <Button
+                                title="Make an offer"
+                                outline2
+                                wt="w-full"
+                                onClick={() => {
+                                  setModaltype("offer");
+                                  setShowModal((prev) => !prev);
+                                }}
+                              /> */}
+                            </>
                           ) : (
                             ""
                           )}
                         </div>
-                      </div>
-                      <div className="p-4 bg-bg-5 rounded-md w-full">
-                        <span className="text-txt-2 text-xl block mb-4">
-                          Quantity
-                        </span>
-                        <div className="">
-                          <span className="flex items-center text-[1.75rem] gap-x-1">
-                            {/* <CoinIcon /> */}
-                            {itemDetail.listing_remaining}/
-                            {itemDetail.listing_quantity}
+                      ) : (
+                        <Button
+                          title="You need to connect your wallet to continue"
+                          wt="w-full"
+                        />
+                      )}
+                      {/* <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
+                      <CartIcon />
+                    </span> */}
+                    </div>
+                  </div>
+                </div>
+              ) : itemDetail.listing_type &&
+                itemDetail.listing_type === "auction" ? (
+                <div className="view-hero-nft-cta-wrapper">
+                  <div className="flex w-full gap-x-6">
+                    <div className="p-4 bg-bg-5 rounded-md w-1/2">
+                      <span className="text-txt-2 text-xl block mb-4">
+                        Time left
+                      </span>
+                      <div className="md:w-[70%]">
+                        <div className="grid items-center mt-2 grid-cols-[0.23fr_0.24fr_0.24fr_0.24fr]  md:grid-cols-[0.35fr_0.30fr_0.32fr_0.32fr]">
+                          <div className="flex gap-x-1">
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              {time.days.toString().length < 2
+                                ? "0" + time.days
+                                : time.days}
+                            </span>
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              :
+                            </span>
+                          </div>
+                          <div className="flex gap-x-1">
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              {time.hours.toString().length < 2
+                                ? "0" + time.hours
+                                : time.hours}
+                            </span>
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              :
+                            </span>
+                          </div>
+                          <div className="flex gap-x-1">
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              {time.minutes.toString().length < 2
+                                ? "0" + time.minutes
+                                : time.minutes}
+                            </span>
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              :
+                            </span>
+                          </div>
+                          <div className="flex ">
+                            <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
+                              {time.seconds.toString().length < 2
+                                ? "0" + time.seconds
+                                : time.seconds}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="grid items-center mt-2 grid-cols-[0.23fr_0.24fr_0.24fr_0.24fr]  md:grid-cols-[0.35fr_0.30fr_0.32fr_0.32fr]">
+                          <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
+                            d
+                          </span>
+                          <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
+                            hrs
+                          </span>
+                          <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
+                            min
+                          </span>
+                          <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
+                            sec
                           </span>
                         </div>
                       </div>
                     </div>
-                    {/* <span className="text-lg font-medium">
+                    <div className="p-4 bg-bg-5 rounded-md w-1/2">
+                      <span className="text-txt-2 text-xl block mb-4">
+                        Minimum bid
+                      </span>
+                      <div>
+                        <span className="flex items-center text-[1.3rem] md:text-[1.75rem] gap-x-1 font-bold">
+                          <CoinIcon />
+                          {itemDetail.starting_bidding_price}
+                        </span>
+                        <span className="text-[1.2rem] md:text-xl font-medium flex items-center mt-2 text-txt-2 gap-x-2">
+                          $
+                          {(
+                            itemDetail.starting_bidding_price * dollarRate
+                          ).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  {/* <span className="text-lg font-medium">
                     Last sale price 10.8 ETH
                   </span> */}
-                    <div className="flex flex-col gap-y-4 w-full">
-                      <div className="flex gap-x-5 w-full">
-                        {connectedAddress ? (
-                          <div className="w-full space-y-4">
-                            {itemDetail.listing_type &&
-                            itemDetail.listing_type === "fixed" ? (
-                              <>
-                                <Button
-                                  title="Buy now"
-                                  wt="w-full"
-                                  onClick={() => {
-                                    setModaltype("buy");
-                                    setShowModal((prev) => !prev);
-                                  }}
-                                />
-                                {/* <Button
-                                  title="Make an offer"
-                                  outline2
-                                  wt="w-full"
-                                  onClick={() => {
-                                    setModaltype("offer");
-                                    setShowModal((prev) => !prev);
-                                  }}
-                                /> */}
-                              </>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                        ) : (
+                  <div className="flex flex-col gap-y-4 w-full">
+                    <div className="flex gap-x-5 w-full">
+                      {connectedAddress ? (
+                        <div className="w-full space-y-4">
                           <Button
-                            title="You need to connect your wallet to continue"
+                            title="Place a bid"
                             wt="w-full"
+                            onClick={() => {
+                              setModaltype("bid");
+                              setShowModal((prev) => !prev);
+                            }}
+                            isDisabled={isTransloading}
                           />
-                        )}
-                        {/* <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
-                        <CartIcon />
-                      </span> */}
-                      </div>
-                    </div>
-                  </div>
-                ) : itemDetail.listing_type &&
-                  itemDetail.listing_type === "auction" ? (
-                  <div className="view-hero-nft-cta-wrapper">
-                    <div className="flex w-full gap-x-6">
-                      <div className="p-4 bg-bg-5 rounded-md w-1/2">
-                        <span className="text-txt-2 text-xl block mb-4">
-                          Time left
-                        </span>
-                        <div className="md:w-[70%]">
-                          <div className="grid items-center mt-2 grid-cols-[0.23fr_0.24fr_0.24fr_0.24fr]  md:grid-cols-[0.35fr_0.30fr_0.32fr_0.32fr]">
-                            <div className="flex gap-x-1">
-                              <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
-                                {time.days.toString().length < 2
-                                  ? "0" + time.days
-                                  : time.days}
-                              </span>
-                              <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
-                                :
-                              </span>
-                            </div>
-                            <div className="flex gap-x-1">
-                              <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
-                                {time.hours.toString().length < 2
-                                  ? "0" + time.hours
-                                  : time.hours}
-                              </span>
-                              <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
-                                :
-                              </span>
-                            </div>
-                            <div className="flex gap-x-1">
-                              <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
-                                {time.minutes.toString().length < 2
-                                  ? "0" + time.minutes
-                                  : time.minutes}
-                              </span>
-                              <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
-                                :
-                              </span>
-                            </div>
-                            <div className="flex ">
-                              <span className="text-[1.3rem] md:text-[1.75rem] font-bold">
-                                {time.seconds.toString().length < 2
-                                  ? "0" + time.seconds
-                                  : time.seconds}
-                              </span>
-                            </div>
-                          </div>
+                        </div>
+                      ) : (
+                        <Button
+                          title="You need to connect your wallet to continue"
+                          wt="w-full"
+                        />
+                      )}
 
-                          <div className="grid items-center mt-2 grid-cols-[0.23fr_0.24fr_0.24fr_0.24fr]  md:grid-cols-[0.35fr_0.30fr_0.32fr_0.32fr]">
-                            <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
-                              d
-                            </span>
-                            <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
-                              hrs
-                            </span>
-                            <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
-                              min
-                            </span>
-                            <span className="text-[1.2rem] md:text-xl font-medium text-txt-2">
-                              sec
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="p-4 bg-bg-5 rounded-md w-1/2">
-                        <span className="text-txt-2 text-xl block mb-4">
-                          Minimum bid
-                        </span>
-                        <div>
-                          <span className="flex items-center text-[1.3rem] md:text-[1.75rem] gap-x-1 font-bold">
-                            <CoinIcon />
-                            {itemDetail.starting_bidding_price}
-                          </span>
-                          <span className="text-[1.2rem] md:text-xl font-medium flex items-center mt-2 text-txt-2 gap-x-2">
-                            $
-                            {(
-                              itemDetail.starting_bidding_price * dollarRate
-                            ).toFixed(2)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    {/* <span className="text-lg font-medium">
-                      Last sale price 10.8 ETH
+                      {/* <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
+                      <CartIcon />
                     </span> */}
-                    <div className="flex flex-col gap-y-4 w-full">
-                      <div className="flex gap-x-5 w-full">
-                        {connectedAddress ? (
-                          <div className="w-full space-y-4">
-                            <Button
-                              title="Place a bid"
-                              wt="w-full"
-                              onClick={() => {
-                                setModaltype("bid");
-                                setShowModal((prev) => !prev);
-                              }}
-                              isDisabled={isTransloading}
-                            />
-                          </div>
-                        ) : (
-                          <Button
-                            title="You need to connect your wallet to continue"
-                            wt="w-full"
-                          />
-                        )}
-
-                        {/* <span className="h-[3.625rem] w-[3.625rem] grid place-items-center bg-bg-5 rounded-md">
-                        <CartIcon />
-                      </span> */}
-                      </div>
                     </div>
                   </div>
-                ) : (
-                  ""
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+            {/* <div className="flex gap-x-6 mt-6 items-center">
+              <span className="flex gap-x-2 items-center">
+                <LikeIcon /> 298
+              </span>
+              <span className="view-hero-nft-link">
+                <Image
+                  src="/icon-svg/discord.svg"
+                  alt="view-nft-links"
+                  layout="fill"
+                  objectFit="contain"
+                />
+              </span>
+              <span className="view-hero-nft-link">
+                <Image
+                  src="/icon-svg/twitter.svg"
+                  alt="view-nft-links"
+                  layout="fill"
+                  objectFit="contain"
+                />
+              </span>
+              <span className="view-hero-nft-link">
+                <Image
+                  src="/icon-svg/telegram.svg"
+                  alt="view-nft-links"
+                  layout="fill"
+                  objectFit="contain"
+                />
+              </span>
+              <span className="view-hero-nft-link border border-border-1-line p-4 rounded-md">
+                <Image
+                  src="/icon-svg/options.svg"
+                  alt="view-nft-links"
+                  layout="fill"
+                  objectFit="cover"
+                />
+              </span>
+            </div> */}
+          </div>
+          {/*Stages Mode*/}
+          <div className="flex gap-x-10 items-center border-b-[0.1px] border-border-2-line">
+            {viewNftStages.map((stage) => (
+              <span
+                key={stage}
+                onClick={() => setViewNftStage(stage)}
+                className={clsx(
+                  "view-nft-stage",
+                  stage === viewNftStage && "text-white border-b-[2.5px]"
                 )}
-              </div>
-              {/* <div className="flex gap-x-6 mt-6 items-center">
-                <span className="flex gap-x-2 items-center">
-                  <LikeIcon /> 298
-                </span>
-                <span className="view-hero-nft-link">
-                  <Image
-                    src="/icon-svg/discord.svg"
-                    alt="view-nft-links"
-                    layout="fill"
-                    objectFit="contain"
-                  />
-                </span>
-                <span className="view-hero-nft-link">
-                  <Image
-                    src="/icon-svg/twitter.svg"
-                    alt="view-nft-links"
-                    layout="fill"
-                    objectFit="contain"
-                  />
-                </span>
-                <span className="view-hero-nft-link">
-                  <Image
-                    src="/icon-svg/telegram.svg"
-                    alt="view-nft-links"
-                    layout="fill"
-                    objectFit="contain"
-                  />
-                </span>
-                <span className="view-hero-nft-link border border-border-1-line p-4 rounded-md">
-                  <Image
-                    src="/icon-svg/options.svg"
-                    alt="view-nft-links"
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                </span>
-              </div> */}
-            </div>
-            {/*Stages Mode*/}
-            <div className="flex gap-x-10 items-center border-b-[0.1px] border-border-2-line">
-              {viewNftStages.map((stage) => (
-                <span
-                  key={stage}
-                  onClick={() => setViewNftStage(stage)}
-                  className={clsx(
-                    "view-nft-stage",
-                    stage === viewNftStage && "text-white border-b-[2.5px]"
-                  )}
-                >
-                  {stage}
-                </span>
-              ))}
-            </div>
-            <div className="view-nft-stages">
-              {viewNftStage === "overview" ? (
-                <div>
-                  <div className="view-nft-description space-y-3">
-                    <h2 className="text-2xl font-bold">Description</h2>
-                    <div className="flex flex-col lg:w-1/2">
-                      <p className="text-txt-2">
-                        {/*@ts-ignore*/}
-                        {itemDetail.item.item_description}
-                      </p>
-                    </div>
-                    {/* <span className="flex items-center gap-x-2 text-txt-3 font-medium">
-                      See more
-                      <span>
-                        <CaretDown color="lightgray" />
-                      </span>
-                    </span> */}
+              >
+                {stage}
+              </span>
+            ))}
+          </div>
+          <div className="view-nft-stages">
+            {viewNftStage === "overview" ? (
+              <div>
+                <div className="view-nft-description space-y-3">
+                  <h2 className="text-2xl font-bold">Description</h2>
+                  <div className="flex flex-col lg:w-1/2">
+                    <p className="text-txt-2">
+                      {/*@ts-ignore*/}
+                      {itemDetail.item.item_description}
+                    </p>
+                  </div>
+                  {/* <span className="flex items-center gap-x-2 text-txt-3 font-medium">
+                    See more
+                    <span>
+                      <CaretDown color="lightgray" />
+                    </span>
+                  </span> */}
 
-                    <div className="view-nft-details">
-                      <h2 className="text-2xl font-bold my-4">Details</h2>
-                      <div className="space-y-4">
-                        <div className="flex items-center gap-x-2">
-                          <CoinIcon />{" "}
-                          <span className="block font-medium ml-2">
-                            Ethereum
-                          </span>{" "}
-                          <span className="text-txt-2">(ERC-721)</span>
-                        </div>
-                        {/* <div className="flex items-center gap-x-2">
-                        <StatIcon />{" "}
+                  <div className="view-nft-details">
+                    <h2 className="text-2xl font-bold my-4">Details</h2>
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-x-2">
+                        <CoinIcon />{" "}
+                        <span className="block font-medium ml-2">
+                          Ethereum
+                        </span>{" "}
+                        <span className="text-txt-2">(ERC-721)</span>
+                      </div>
+                      {/* <div className="flex items-center gap-x-2">
+                      <StatIcon />{" "}
+                      <span className="block font-medium">
+                        View on Etherscan
+                      </span>
+                      <span className="relative h-5 w-5 cursor-pointer">
+                        <Image
+                          src="/vectors/export.svg"
+                          alt="external link"
+                          layout="fill"
+                          objectFit="cover"
+                        />
+                      </span>
+                    </div> */}
+                      {/* <div className="flex items-center gap-x-2">
+                        <EyeIcon />{" "}
                         <span className="block font-medium">
-                          View on Etherscan
-                        </span>
+                          Open original
+                        </span>{" "}
                         <span className="relative h-5 w-5 cursor-pointer">
                           <Image
                             src="/vectors/export.svg"
@@ -1083,321 +1115,307 @@ const ViewNft = () => {
                           />
                         </span>
                       </div> */}
-                        {/* <div className="flex items-center gap-x-2">
-                          <EyeIcon />{" "}
-                          <span className="block font-medium">
-                            Open original
-                          </span>{" "}
-                          <span className="relative h-5 w-5 cursor-pointer">
-                            <Image
-                              src="/vectors/export.svg"
-                              alt="external link"
-                              layout="fill"
-                              objectFit="cover"
-                            />
-                          </span>
-                        </div> */}
-                      </div>
                     </div>
                   </div>
                 </div>
-              ) : viewNftStage === "offers" ? (
-                <>
-                  <div className="flex flex-col gap-y-6 overflow-auto">
-                    {/*if there is no offer show this*/}
-                    {offerLists && offerLists.length > 0 ? (
-                      <div className="flex flex-col h-full gap-y-4 scrollbar-hide">
-                        {offerLists.map((offer, i) => (
-                          <div
-                            key={"offer-list" + offer.address + i}
-                            className="flex justify-between items-center cursor-pointer bg-bg-5 hover:bg-bg-3 rounded-xl py-4 px-6"
-                            onClick={() =>
-                              connectedAccount === offer.user_id._id
-                                ? viewOffer(offer._id)
-                                : null
-                            }
-                          >
-                            <div className="flex items-center gap-x-4">
-                              <div className="relative h-14 w-14">
-                                <Image
-                                  src={offer.item_id.item_art_url}
-                                  alt={"offer-img" + i}
-                                  layout="fill"
-                                  objectFit="contain"
-                                  className="rounded-full"
-                                />
-                              </div>
-                              <span className="font-medium">
-                                {offer.user_id.username !== null &&
-                                offer.user_id.username !== ""
-                                  ? offer.user_id.username
-                                  : ""}
-                              </span>
-                            </div>
-                            <span className="font-bold flex items-center gap-x-2">
-                              <CoinIcon />
-                              {offer.offer_price}ETH
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="flex flex-col justify-center items-center gap-y-4 pt-4 h-[14rem]">
-                        <div className="relative h-[50%] w-[70%]">
-                          <Image
-                            priority
-                            src="/images/no-offer.svg"
-                            alt="buy-nft-sample"
-                            layout="fill"
-                            objectFit="contain"
-                          />
-                        </div>
-                        <span className="create-new-nft-wrapper-2-label">
-                          No offers yet
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </>
-              ) : viewNftStage === "properties" ? (
-                <div className="flex items-center gap-x-5">
-                  {nftProperties.map(({ label, trait, value }) => (
-                    <div
-                      key={value}
-                      className="flex flex-col items-center bg-bg-5 p-4 rounded-lg"
-                    >
-                      <span className="uppercase text-xs font-medium earnings-card-history">
-                        {label}
-                      </span>
-                      <span className="capitalize text-lg font-medium ">
-                        {value}
-                      </span>
-                      <span className=" text-[0.625rem] text-txt-2">
-                        {trait}% have this trait
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              ) : viewNftStage === "bids" ? (
-                <div className="flex flex-col gap-y-6">
-                  {/* {nftBids.map(({ bidder, expiresIn, imgUrl, time }) => (
-                    <div
-                      key={bidder}
-                      className="flex items-center justify-between bg-bg-5 py-4 pl-6 pr-8 rounded-xl"
-                    >
-                      <div className="flex items-center gap-x-4">
-                        <div className="h-16 w-16 relative">
-                          <Image
-                            src={imgUrl}
-                            alt={bidder}
-                            layout="fill"
-                            objectFit="contain"
-                            className="rounded-full"
-                          />
-                        </div>
-                        <div>
-                          <span className="text-xl font-bold">{bidder}</span>
-                          <div className="flex items-center gap-x-1">
-                            <span className="font-medium text-txt-2">
-                              {time} ago
-                            </span>
-                            <span className="h-1 w-1 rounded-full bg-txt-2"></span>
-                            <span className="font-medium text-txt-2">
-                              Expires in {expiresIn}
-                            </span>
-                            <span className="h-1 w-1 rounded-full bg-txt-2"></span>
-                            <span className="font-medium earnings-card-history">
-                              Floor bid
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <span className="flex text-xl font-bold">
-                          <CoinIcon /> 4.5k
-                        </span>
-                        <span className="text-txt-2">$5,954,532</span>
-                      </div>
-                    </div>
-                  ))} */}
-                  <Heading2 title="There's no bidding" />
-                </div>
-              ) : viewNftStage === "activities" ? (
+              </div>
+            ) : viewNftStage === "offers" ? (
+              <>
                 <div className="flex flex-col gap-y-6 overflow-auto">
-                  {activities === null ? (
-                    Array(12)
-                      .fill(0)
-                      .map((_, i) => (
-                        <ActivityLoader
-                          key={"buy-nft-activity-skeleton-key" + i}
-                        />
-                      ))
-                  ) : activities.length === 0 ? (
-                    <Heading2 title="No activities!!!" />
-                  ) : activities.length > 0 ? (
-                    activities.map(
-                      ({
-                        _id,
-                        listed_item,
-                        to_user_id,
-                        from_user_id,
-                        created_item,
-                        resell_item_id,
-                        activity_type,
-                        createdAt,
-                        created_item_listed,
-                      }) => (
+                  {/*if there is no offer show this*/}
+                  {offerLists && offerLists.length > 0 ? (
+                    <div className="flex flex-col h-full gap-y-4 scrollbar-hide">
+                      {offerLists.map((offer, i) => (
                         <div
-                          key={_id}
-                          className="flex items-center justify-between bg-bg-5 py-4 pl-6 pr-8 rounded-xl"
+                          key={"offer-list" + offer.address + i}
+                          className="flex justify-between items-center cursor-pointer bg-bg-5 hover:bg-bg-3 rounded-xl py-4 px-6"
+                          onClick={() =>
+                            connectedAccount === offer.user_id._id
+                              ? viewOffer(offer._id)
+                              : null
+                          }
                         >
                           <div className="flex items-center gap-x-4">
-                            <div className="h-16 w-16 relative">
-                              {resell_item_id ? (
-                                <Image
-                                  src={
-                                    resell_item_id &&
-                                    resell_item_id !== undefined &&
-                                    resell_item_id !== null
-                                      ? resell_item_id.item_art_url
-                                      : ""
-                                  }
-                                  alt=""
-                                  layout="fill"
-                                  objectFit="contain"
-                                  className="rounded-full"
-                                />
-                              ) : created_item ? (
-                                <Image
-                                  src={
-                                    created_item &&
-                                    created_item !== undefined &&
-                                    created_item !== null
-                                      ? created_item.item_art_url
-                                      : ""
-                                  }
-                                  alt=""
-                                  layout="fill"
-                                  objectFit="contain"
-                                  className="rounded-full"
-                                />
-                              ) : listed_item ? (
-                                <Image
-                                  src={
-                                    created_item_listed &&
-                                    created_item_listed !== undefined &&
-                                    created_item_listed !== null
-                                      ? created_item_listed.item_art_url
-                                      : ""
-                                  }
-                                  alt=""
-                                  layout="fill"
-                                  objectFit="contain"
-                                  className="rounded-full"
-                                />
-                              ) : (
-                                ""
-                              )}
+                            <div className="relative h-14 w-14">
+                              <Image
+                                src={offer.item_id.item_art_url}
+                                alt={"offer-img" + i}
+                                layout="fill"
+                                objectFit="contain"
+                                className="rounded-full"
+                              />
                             </div>
-                            <div>
-                              <div className="flex items-center gap-x-2">
-                                <span className="text-xl font-bold">
-                                  {from_user_id &&
-                                  from_user_id !== undefined &&
-                                  from_user_id.username &&
-                                  from_user_id.username !== undefined
-                                    ? from_user_id.username
-                                    : "----"}
-                                </span>
-                                <span className="lg:text-xl font-bold text-txt-2">
-                                  {activity_type === "newly_created_item"
-                                    ? "created"
-                                    : activity_type === "updated_item"
-                                    ? "updated"
-                                    : activity_type === "newly_listed_item"
-                                    ? "listed"
-                                    : activity_type === "updated_listing"
-                                    ? "bupdated a listed"
-                                    : activity_type === "new_mint"
-                                    ? "minted"
-                                    : activity_type === "new_sales"
-                                    ? "purchased"
-                                    : activity_type === "new_mint"
-                                    ? "minted"
-                                    : activity_type === "cancelled_listing"
-                                    ? "delisted"
-                                    : ""}
-                                </span>
-                                <span className="transaction-card-span">
-                                  <b>
-                                    {resell_item_id &&
-                                    resell_item_id !== undefined &&
-                                    resell_item_id !== null
-                                      ? resell_item_id.item_title
-                                      : created_item_listed &&
-                                        created_item_listed !== undefined &&
-                                        created_item_listed !== null
-                                      ? created_item_listed.item_title
-                                      : ""}
-                                  </b>
-                                </span>
-                                {to_user_id && (
-                                  <span className="text-xl font-bold">
-                                    {to_user_id &&
-                                    to_user_id !== undefined &&
-                                    to_user_id.username &&
-                                    to_user_id.username !== undefined
-                                      ? to_user_id.username
-                                      : "----"}
-                                  </span>
-                                )}
-                              </div>
-                              <div className="flex items-center gap-x-2">
-                                <span className="font-medium text-txt-2">
-                                  {moment(createdAt).format(
-                                    "ddd, MMM Do YYYY, hh:mm:ss"
-                                  )}
-                                </span>
-                                <span className="font-medium text-txt-2">
-                                  {/* {time} */}
-                                </span>
-                                {/* {icon && ( */}
-                                {/*   <span className="relative h-5 w-5 cursor-pointer"> */}
-                                {/*     <Image */}
-                                {/*       src={icon} */}
-                                {/*       alt={txn} */}
-                                {/*       layout="fill" */}
-                                {/*       objectFit="cover" */}
-                                {/*     /> */}
-                                {/*   </span> */}
-                                {/* )} */}
-                              </div>
-                            </div>
+                            <span className="font-medium">
+                              {offer.user_id.username !== null &&
+                              offer.user_id.username !== ""
+                                ? offer.user_id.username
+                                : ""}
+                            </span>
+                          </div>
+                          <span className="font-bold flex items-center gap-x-2">
+                            <CoinIcon />
+                            {offer.offer_price}ETH
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex flex-col justify-center items-center gap-y-4 pt-4 h-[14rem]">
+                      <div className="relative h-[50%] w-[70%]">
+                        <Image
+                          priority
+                          src="/images/no-offer.svg"
+                          alt="buy-nft-sample"
+                          layout="fill"
+                          objectFit="contain"
+                        />
+                      </div>
+                      <span className="create-new-nft-wrapper-2-label">
+                        No offers yet
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : viewNftStage === "properties" ? (
+              <div className="flex items-center gap-x-5">
+                {nftProperties.map(({ label, trait, value }) => (
+                  <div
+                    key={value}
+                    className="flex flex-col items-center bg-bg-5 p-4 rounded-lg"
+                  >
+                    <span className="uppercase text-xs font-medium earnings-card-history">
+                      {label}
+                    </span>
+                    <span className="capitalize text-lg font-medium ">
+                      {value}
+                    </span>
+                    <span className=" text-[0.625rem] text-txt-2">
+                      {trait}% have this trait
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : viewNftStage === "bids" ? (
+              <div className="flex flex-col gap-y-6">
+                {/* {nftBids.map(({ bidder, expiresIn, imgUrl, time }) => (
+                  <div
+                    key={bidder}
+                    className="flex items-center justify-between bg-bg-5 py-4 pl-6 pr-8 rounded-xl"
+                  >
+                    <div className="flex items-center gap-x-4">
+                      <div className="h-16 w-16 relative">
+                        <Image
+                          src={imgUrl}
+                          alt={bidder}
+                          layout="fill"
+                          objectFit="contain"
+                          className="rounded-full"
+                        />
+                      </div>
+                      <div>
+                        <span className="text-xl font-bold">{bidder}</span>
+                        <div className="flex items-center gap-x-1">
+                          <span className="font-medium text-txt-2">
+                            {time} ago
+                          </span>
+                          <span className="h-1 w-1 rounded-full bg-txt-2"></span>
+                          <span className="font-medium text-txt-2">
+                            Expires in {expiresIn}
+                          </span>
+                          <span className="h-1 w-1 rounded-full bg-txt-2"></span>
+                          <span className="font-medium earnings-card-history">
+                            Floor bid
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="flex text-xl font-bold">
+                        <CoinIcon /> 4.5k
+                      </span>
+                      <span className="text-txt-2">$5,954,532</span>
+                    </div>
+                  </div>
+                ))} */}
+                <Heading2 title="There's no bidding" />
+              </div>
+            ) : viewNftStage === "activities" ? (
+              <div className="flex flex-col gap-y-6 overflow-auto">
+                {activities === null ? (
+                  Array(12)
+                    .fill(0)
+                    .map((_, i) => (
+                      <ActivityLoader
+                        key={"buy-nft-activity-skeleton-key" + i}
+                      />
+                    ))
+                ) : activities.length === 0 ? (
+                  <Heading2 title="No activities!!!" />
+                ) : activities.length > 0 ? (
+                  activities.map(
+                    ({
+                      _id,
+                      listed_item,
+                      to_user_id,
+                      from_user_id,
+                      created_item,
+                      resell_item_id,
+                      activity_type,
+                      createdAt,
+                      created_item_listed,
+                    }) => (
+                      <div
+                        key={_id}
+                        className="flex items-center justify-between bg-bg-5 py-4 pl-6 pr-8 rounded-xl"
+                      >
+                        <div className="flex items-center gap-x-4">
+                          <div className="h-16 w-16 relative">
+                            {resell_item_id ? (
+                              <Image
+                                src={
+                                  resell_item_id &&
+                                  resell_item_id !== undefined &&
+                                  resell_item_id !== null
+                                    ? resell_item_id.item_art_url
+                                    : ""
+                                }
+                                alt=""
+                                layout="fill"
+                                objectFit="contain"
+                                className="rounded-full"
+                              />
+                            ) : created_item ? (
+                              <Image
+                                src={
+                                  created_item &&
+                                  created_item !== undefined &&
+                                  created_item !== null
+                                    ? created_item.item_art_url
+                                    : ""
+                                }
+                                alt=""
+                                layout="fill"
+                                objectFit="contain"
+                                className="rounded-full"
+                              />
+                            ) : listed_item ? (
+                              <Image
+                                src={
+                                  created_item_listed &&
+                                  created_item_listed !== undefined &&
+                                  created_item_listed !== null
+                                    ? created_item_listed.item_art_url
+                                    : ""
+                                }
+                                alt=""
+                                layout="fill"
+                                objectFit="contain"
+                                className="rounded-full"
+                              />
+                            ) : (
+                              ""
+                            )}
                           </div>
                           <div>
-                            {/* <span className="flex text-xl font-bold"> */}
-                            {/*   <CoinIcon /> 4.5k */}
-                            {/* </span> */}
-                            {/* <span className="text-txt-2">$5,954,532</span> */}
+                            <div className="flex items-center gap-x-2">
+                              <span className="text-xl font-bold">
+                                {from_user_id &&
+                                from_user_id !== undefined &&
+                                from_user_id.username &&
+                                from_user_id.username !== undefined
+                                  ? from_user_id.username
+                                  : "----"}
+                              </span>
+                              <span className="lg:text-xl font-bold text-txt-2">
+                                {activity_type === "newly_created_item"
+                                  ? "created"
+                                  : activity_type === "updated_item"
+                                  ? "updated"
+                                  : activity_type === "newly_listed_item"
+                                  ? "listed"
+                                  : activity_type === "updated_listing"
+                                  ? "bupdated a listed"
+                                  : activity_type === "new_mint"
+                                  ? "minted"
+                                  : activity_type === "new_sales"
+                                  ? "purchased"
+                                  : activity_type === "new_mint"
+                                  ? "minted"
+                                  : activity_type === "cancelled_listing"
+                                  ? "delisted"
+                                  : ""}
+                              </span>
+                              <span className="transaction-card-span">
+                                <b>
+                                  {resell_item_id &&
+                                  resell_item_id !== undefined &&
+                                  resell_item_id !== null
+                                    ? resell_item_id.item_title
+                                    : created_item_listed &&
+                                      created_item_listed !== undefined &&
+                                      created_item_listed !== null
+                                    ? created_item_listed.item_title
+                                    : ""}
+                                </b>
+                              </span>
+                              {to_user_id && (
+                                <span className="text-xl font-bold">
+                                  {to_user_id &&
+                                  to_user_id !== undefined &&
+                                  to_user_id.username &&
+                                  to_user_id.username !== undefined
+                                    ? to_user_id.username
+                                    : "----"}
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-x-2">
+                              <span className="font-medium text-txt-2">
+                                {moment(createdAt).format(
+                                  "ddd, MMM Do YYYY, hh:mm:ss"
+                                )}
+                              </span>
+                              <span className="font-medium text-txt-2">
+                                {/* {time} */}
+                              </span>
+                              {/* {icon && ( */}
+                              {/*   <span className="relative h-5 w-5 cursor-pointer"> */}
+                              {/*     <Image */}
+                              {/*       src={icon} */}
+                              {/*       alt={txn} */}
+                              {/*       layout="fill" */}
+                              {/*       objectFit="cover" */}
+                              {/*     /> */}
+                              {/*   </span> */}
+                              {/* )} */}
+                            </div>
                           </div>
                         </div>
-                      )
+                        <div>
+                          {/* <span className="flex text-xl font-bold"> */}
+                          {/*   <CoinIcon /> 4.5k */}
+                          {/* </span> */}
+                          {/* <span className="text-txt-2">$5,954,532</span> */}
+                        </div>
+                      </div>
                     )
-                  ) : null}
-                </div>
-              ) : null}
-              <div className="mt-8">
-                {nextPage < totalPages ? (
-                  <Button
-                    title="Load More"
-                    onClick={() => setCurrentPage(currentPage + 1)}
-                  />
-                ) : (
-                  ""
-                )}
+                  )
+                ) : null}
               </div>
+            ) : null}
+            <div className="mt-8">
+              {nextPage < totalPages ? (
+                <Button
+                  title="Load More"
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                />
+              ) : (
+                ""
+              )}
             </div>
           </div>
+        </div>
         ) : null}
         <Footer />
       </div>
