@@ -198,7 +198,6 @@ const ListNft = () => {
       setIsTransLoading((prev) => !prev);
       return;
     }
-  }
     if (
       itemDetail &&
       itemDetail.metadata &&
@@ -216,70 +215,58 @@ const ListNft = () => {
         return;
       }
     }
-
     if (isNaN(parseFloat(nftListingPayload.listing_price)) === true) {
       msg = "price of listed must be a valid positive number";
       toast(msg);
       setIsTransLoading((prev) => !prev);
       return;
     } else {
+
+      const provider = new ethers.providers.Web3Provider(
+        (window as any).ethereum
+      );
+
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(
+        APPCONFIG.SmartContractAddress,
+        abi,
+        signer
+      );
+
+      const tokenAddress = id;
+      const listing_price = ethers.utils.parseUnits(
+        nftListingPayload.listing_price.toString()
+      );
+
       try {
-        const provider = new ethers.providers.Web3Provider(
-          (window as any).ethereum
-        );
+        toast("Please approve this transaction!");
+      const transaction = await contract.listToken(
+        tokenAddress,
+        tokenId,
+        listing_price,
+        onchainCollectionID,
+        connectedAddress
+      );
+      const tnx = await transaction.wait();
+      } catch (err) {
+        toast("Transaction cancelled!");
+        setIsTransLoading((prev) => !prev);
+      } 
 
-        const signer = provider.getSigner();
-        const contract = new ethers.Contract(
-          APPCONFIG.SmartContractAddress,
-          abi,
-          signer
-        );
+      var formData = {
+        listing_price: nftListingPayload.listing_price,
+        listing_quantity: 1,
+        token_address: tokenAddress,
+        token_id: tokenId,
+        collection_id: collection_id,
+        listing_type: "fixed",
+      };
 
-        const tokenAddress = id;
-        const listing_price = ethers.utils.parseUnits(
-          nftListingPayload.listing_price.toString()
-        );
-
-        try {
-          toast("Please approve this transaction!");
-        const transaction = await contract.listToken(
-          tokenAddress,
-          tokenId,
-          listing_price,
-          onchainCollectionID,
-          connectedAddress
-        );
-        const tnx = await transaction.wait();
-        }
-        catch(err){
-          const transaction = await contract.listToken(
-            tokenAddress,
-            tokenId,
-            listing_price,
-            onchainCollectionID,
-            connectedAddress
-          );
-
-          const tnx = await transaction.wait();
-        } catch (err) {
-          toast("Transaction cancelled!");
-          setIsTransLoading((prev) => !prev);
-        } 
-
-        var formData = {
-          listing_price: nftListingPayload.listing_price,
-          listing_quantity: 1,
-          token_address: tokenAddress,
-          token_id: tokenId,
-          collection_id: collection_id,
-          listing_type: "fixed",
-        };
-
-        const HEADER = "authenticated";
-        const REQUEST_URL = "nft-resell/list-token";
-        const METHOD = "POST";
-        const DATA = formData;
-
+      const HEADER = "authenticated";
+      const REQUEST_URL = "nft-resell/list-token";
+      const METHOD = "POST";
+      const DATA = formData;
+try{
         apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
           if (response.status == 400) {
             var error = response.data.error;
@@ -310,7 +297,9 @@ const ListNft = () => {
         return;
       }
     }
-  };
+
+
+  }
 
   return (
     <EarningLayout title="List item for sale" isLoading={itemDetail === null}>
