@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { apiRequest } from "../../functions/offChain/apiRequests";
 import { toast } from "react-toastify";
+import APPCONFIG from "@/src/constants/Config";
 
 const ViewUserNft = () => {
   const { query, push } = useRouter();
@@ -86,6 +87,8 @@ const ViewUserNft = () => {
     push(`/single-collection/${itemDetail.collection_id._id}`);
   };
 
+  // console.log(itemDetail);
+
   return (
     <DashboardLayout>
       {itemDetail !== null ? (
@@ -95,7 +98,7 @@ const ViewUserNft = () => {
               <div>
                 <div className="relative h-[35rem] lg:h-[100%]">
                   <Image
-                    src={itemDetail.item_art_url}
+                    src={itemDetail.item_art_url || APPCONFIG.DEFAULT_NFT_ART}
                     alt={itemDetail.item_title}
                     layout="fill"
                     objectFit="cover"
@@ -213,18 +216,16 @@ const ViewUserNft = () => {
                       </div>
                     </div>
                     <div className="flex flex-col md:flex-row items-center justify-between gap-y-4 md:gap-y-0 gap-x-4 mt-4">
-                      {
-                        itemDetail.item_supply === itemDetail.item_remaining
-                        ?
+                      {itemDetail.item_supply === itemDetail.item_remaining ? (
                         <Button
                           title="Edit"
                           outline2
                           wt="w-full"
                           onClick={handleEditNft}
                         />
-                        :
+                      ) : (
                         ""
-                      }
+                      )}
                       <Button
                         title="Sell"
                         wt="w-full"
