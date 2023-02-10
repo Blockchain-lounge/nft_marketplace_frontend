@@ -122,6 +122,8 @@ const ListNft = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let msg = "";
+    var item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail._id}`;
+
     setIsTransLoading((prev) => !prev);
     if (
       parseInt(nftListingPayload.listing_quantity) <= 0 ||
@@ -236,9 +238,10 @@ const ListNft = () => {
       );
 
       const transaction = await contract.listItemOnAuction(
-        collection_on_chain_id,
+        itemDetail.collection_id.collection_on_chain_id,
         itemDetail._id,
         connectedAddress,
+        item_base_uri,
         starting_bidding_price,
         reserved_bidding_price,
         nftListingPayload.listing_quantity,

@@ -145,9 +145,6 @@ const ViewUserNft = () => {
               <div>
                 <div className="relative h-[23rem] lg:h-[100%]">
                 <Image
-                      src={itemDetail.metadata && itemDetail.metadata.image ? itemDetail.metadata.image : APPCONFIG.DEFAULT_NFT_ART}
-                  {itemDetail !== null ? (
-                    <Image
                       src={
                         itemDetail.metadata && itemDetail.metadata.image
                           ? itemDetail.metadata.image

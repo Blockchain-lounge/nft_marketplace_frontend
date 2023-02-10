@@ -3,7 +3,7 @@ const APPCONFIG = {
   DEFAULT_USER_AVATAR: "/default/user_avatar.jpg",
   DEFAULT_NFT_ART: "/default/collection_banner_placeholder.jpg",
   DEFAULT_COLLECTION_ART: "/default/collection_banner_placeholder.jpg",
-  SmartContractAddress: "0xcCF468f0f239Be7BC59EEB39046039b810131dF2",
+  SmartContractAddress: "0xbe71282191fa19BEfB48F7d0Fb5Fd4D18F738494",
   wEthAddress_testnet: "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
   TOKEN_BASE_URL: process.env.NEXT_PUBLIC_ENV_BASE_URL + "metadata/tokens",
   ITEM_BASE_URL: process.env.NEXT_PUBLIC_ENV_BASE_URL + "metadata",

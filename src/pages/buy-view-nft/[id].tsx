@@ -350,42 +350,53 @@ const ViewNft = () => {
       var startItemCopyId = 1;
       var quantityPurchased = 1;
       var soldItemCopyId = 1;
+      var transaction = null;
       var amount = (itemDetail.listing_price *
         nftOfferPayload.quantity) as string;
 
       if (itemDetail.relisted && itemDetail.relisted === true) {
-        toast("Please approve this transaction!");
-        const transaction = await contract.buyNft(
-          itemDetail.item.token_address,
-          itemDetail.item.token_id,
-          {
-            value: price,
-            // gasPrice: 20000000,
-            // gasPrice: 3124913238,
-          }
-        );
-        tnx = await transaction.wait();
+        try{
+          toast("Please approve this transaction!");
+            transaction = await contract.buyNft(
+            itemDetail.item.token_address,
+            itemDetail.item.token_id,
+            {
+              value: price,
+              // gasPrice: 20000000,
+              // gasPrice: 3124913238,
+            }
+          );
+        }
+        catch(err){
+          toast("Unable to complete this onchain transaction!");
+        }
 
+        tnx = await transaction.wait();
         buyer = connectedAddress;
       } else if (!itemDetail.relisted || itemDetail.relisted === false) {
-        toast("Please approve this transaction!");
+        try{
+            toast("Please approve this transaction!");
+            transaction = await contract.buyItemCopy(
+            itemDetail.listed_by.address,
+            itemDetail.item.collection.collection_on_chain_id,
+            itemDetail.item._id,
+            item_base_uri,
+            priceListed,
+            nftPurchasePayload.quantity,
+            itemDetail.item.item_supply,
+            {
+              value: price,
+              // gasPrice: 20000000,
+              // gasPrice: 908462167791,
+              // maxFeePerGas:18462167791,
+              // baseFee: 18462167791
+            }
+          );
+        }
+        catch(err){
+          toast("Unable to complete this onchain transaction!");
+        }
 
-        const transaction = await contract.buyItemCopy(
-          itemDetail.listed_by.address,
-          itemDetail.item.collection.collection_on_chain_id,
-          itemDetail.item._id,
-          item_base_uri,
-          priceListed,
-          nftPurchasePayload.quantity,
-          itemDetail.item.item_supply,
-          {
-            value: price,
-            // gasPrice: 20000000,
-            // gasPrice: 908462167791,
-            // maxFeePerGas:18462167791,
-            // baseFee: 18462167791
-          }
-        );
         tnx = await transaction.wait();
         if (tnx.events) {
           const events = findEvents("ItemCopySold", tnx.events, true);
@@ -670,7 +681,11 @@ const ViewNft = () => {
               <div className="view-hero-img">
                 <Image
                   priority
-                  src={itemDetail.item.item_art_url}
+                  src={
+                    itemDetail.item.item_art_url
+                    ? itemDetail.item.item_art_url
+                    : APPCONFIG.DEFAULT_NFT_ART
+                    }
                   alt={itemDetail.item.item_title}
                   layout="fill"
                   objectFit="cover"
@@ -830,7 +845,7 @@ const ViewNft = () => {
                                     setShowModal((prev) => !prev);
                                   }}
                                 />
-                                <Button
+                                {/* <Button
                                   title="Make an offer"
                                   outline2
                                   wt="w-full"
@@ -838,7 +853,7 @@ const ViewNft = () => {
                                     setModaltype("offer");
                                     setShowModal((prev) => !prev);
                                   }}
-                                />
+                                /> */}
                               </>
                             ) : (
                               ""

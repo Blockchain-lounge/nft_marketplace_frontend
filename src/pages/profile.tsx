@@ -396,8 +396,9 @@ const Profile = () => {
       if (response !== null) {
         await fetchTokenOwned(response);
       }
-      await fetchCollections();
-
+      if(!collections || collections === []) {
+        await fetchCollections();
+      }
       if (tokenCreatedCurrentPage) {
         await fetchTokenCreated(tokenCreatedCurrentPage);
       }
@@ -405,7 +406,9 @@ const Profile = () => {
       if (tokenListedCurrentPage) {
         await fetchTokenListed(tokenListedCurrentPage);
       }
-      await fetchUser();
+      if(!myProfile || myProfile === null){
+        await fetchUser();
+      }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, tokenCreatedCurrentPage, tokenListedCurrentPage]);

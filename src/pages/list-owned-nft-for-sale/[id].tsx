@@ -190,6 +190,7 @@ const ListNft = () => {
       setIsTransLoading((prev) => !prev);
       return;
     }
+  }
     if(itemDetail
       && itemDetail.metadata
       && itemDetail.metadata !== null
@@ -209,12 +210,6 @@ const ListNft = () => {
       }
 
     if (isNaN(parseFloat(nftListingPayload.listing_price)) === true) {
-    // else if (!nftPayloadselect.id || nftPayloadselect.id.length === 0) {
-    //   msg = "listed collection is empty";
-    //   toast(msg);
-    //   return;
-    // }
-    else if (isNaN(parseFloat(nftListingPayload.listing_price)) === true) {
       msg = "price of listed must be a valid positive number";
       toast(msg);
       setIsTransLoading((prev) => !prev);
@@ -246,19 +241,9 @@ const ListNft = () => {
         const tnx = await transaction.wait();
         }
         catch(err){
-          setIsTransLoading(false);
-          const transaction = await contract.listToken(
-            tokenAddress,
-            tokenId,
-            listing_price,
-            connectedAddress
-          );
-          const tnx = await transaction.wait();
-        } catch (err) {
           toast("Transaction cancelled!");
           setIsTransLoading((prev) => !prev);
-          return;
-        }
+        } 
 
         var formData = {
           listing_price: nftListingPayload.listing_price,
@@ -379,8 +364,6 @@ const ListNft = () => {
               </div> */}
 
                 <Image
-                  src={itemDetail.metadata && itemDetail.metadata.image ? itemDetail.metadata.image : APPCONFIG.DEFAULT_NFT_ART}
-                  alt={itemDetail.metadata && itemDetail.metadata.name ? itemDetail.metadata.name : ""}
                   src={
                     itemDetail.metadata && itemDetail.metadata.image
                       ? itemDetail.metadata.image
