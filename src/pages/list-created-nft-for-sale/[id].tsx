@@ -121,10 +121,11 @@ const ListNft = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsTransLoading((prev) => !prev);
+
     let msg = "";
     var item_base_uri = `${APPCONFIG.TOKEN_BASE_URL}/${itemDetail._id}`;
 
-    setIsTransLoading((prev) => !prev);
     if (
       parseInt(nftListingPayload.listing_quantity) <= 0 ||
       !nftListingPayload.listing_quantity.toString().trim()
@@ -165,6 +166,7 @@ const ListNft = () => {
       }
     } else if (priceListingType === "auction") {
       setPriceListingType((prev) => "auction");
+      setIsTransLoading((prev) => !prev);
       //@ts-ignore
       if (date.startDate.length === 0) {
         msg = "Auction end date is empty";
@@ -207,8 +209,6 @@ const ListNft = () => {
         setIsTransLoading((prev) => !prev);
         return;
       }
-
-      setIsTransLoading((prev) => !prev);
 
       const provider = new ethers.providers.Web3Provider(
         (window as any).ethereum
