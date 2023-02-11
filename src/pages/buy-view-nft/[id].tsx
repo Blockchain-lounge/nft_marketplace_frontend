@@ -366,15 +366,16 @@ const ViewNft = () => {
               // gasPrice: 3124913238,
             }
           );
+          tnx = await transaction.wait();
         }
         catch(err){
           toast("Unable to complete this onchain transaction!");
         }
 
-        tnx = await transaction.wait();
         buyer = connectedAddress;
       } else if (!itemDetail.relisted || itemDetail.relisted === false) {
-        try{
+        console.log(nftPurchasePayload.quantity)
+        // try{
             toast("Please approve this transaction!");
             transaction = await contract.buyItemCopy(
             itemDetail.listed_by.address,
@@ -392,12 +393,13 @@ const ViewNft = () => {
               // baseFee: 18462167791
             }
           );
-        }
-        catch(err){
-          toast("Unable to complete this onchain transaction!");
-        }
+          tnx = await transaction.wait();
+          console.log({tnx})
+        // }
+        // catch(err){
+        //   toast("Unable to complete this onchain transaction!");
+        // }
 
-        tnx = await transaction.wait();
         if (tnx.events) {
           const events = findEvents("ItemCopySold", tnx.events, true);
           soldItemCopyId = events[0].toNumber();
