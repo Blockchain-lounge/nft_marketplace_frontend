@@ -3,6 +3,7 @@ import { CoinIcon } from "@/src/components/atoms/vectors";
 import Image from "next/image";
 import APPCONFIG from "../../constants/Config";
 import { useRouter } from "next/router";
+import { textShortener } from "@/src/utilities/helper";
 
 interface IHerocard {
   _id: string;
@@ -43,7 +44,7 @@ const HeroCard = ({
           // onClick={() => push(`/single-collection/${_id}`)}
         />
       </div>
-      <span className="title">{name || title}</span>
+      <span className="title">{textShortener(name || title)}</span>
       {/* <div className="flex items-center gap-x-1 my-1">
         <span className="relative h-5 w-3  block">
           <Image src="/icon-svg/coin-case.svg" alt="coin-svg" layout="fill" />

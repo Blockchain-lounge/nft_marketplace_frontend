@@ -1,6 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 // import { useState } from "react";
-import { connectUserWallet } from "@/src/functions/onChain/authFunction";
+import {
+  connectedAccount,
+  connectUserWallet,
+} from "@/src/functions/onChain/authFunction";
 import { useRouter } from "next/router";
 import { SidebarLink, Button } from "@/src/components/atoms";
 import {
@@ -25,9 +28,17 @@ import { RootState } from "@/src/store/store";
 import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
+import { useEffect, useState } from "react";
+import { apiRequest } from "@/src/functions/offChain/apiRequests";
+import { toast } from "react-toastify";
+import { handleLoggedInUser } from "@/src/reducers/authReducer";
 
 const SideBar = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const [myProfile, setMyProfile] = useState<null | Record<string, string>>(
+    null
+  );
+  const [connectedAddress, setConnectedAddress] = useState(null);
   const dispatch = useDispatch();
   const { push } = useRouter();
 
@@ -39,6 +50,46 @@ const SideBar = () => {
     push("/profile");
     dispatch(toggleMobileModal());
   };
+
+  const fetchUser = async () => {
+    const HEADER = "authenticated";
+    const REQUEST_URL = "user/my_profile";
+    const METHOD = "GET";
+    const DATA = {};
+    apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+      if (response.status == 400) {
+        var error = response.data.error;
+        toast(error);
+        return;
+      } else if (response.status == 401) {
+        toast("Unauthorized request!");
+        return;
+      } else if (response.status == 200) {
+        setMyProfile({
+          username: response.data.data.username,
+          userEmail: response.data.data.email,
+          bio: response.data.data.bio,
+          bannerImg: response.data.data.userBannerImg,
+          profileImg: response.data.data.userProfileImg,
+        });
+      } else {
+        toast("Something went wrong, please try again!");
+        return;
+      }
+    });
+  };
+
+  useEffect(() => {
+    // setIsLoading((prev) => !prev);
+    connectedAccount().then((response) => {
+      if (response !== null) {
+        setConnectedAddress(response);
+        fetchUser();
+        dispatch(handleLoggedInUser({ isLoggedIn: true }));
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connectedAddress, isLoggedIn]);
 
   const sidebarLinks = [
     // {
@@ -133,9 +184,17 @@ const SideBar = () => {
               onClick={handleNavigatetoProfile}
             >
               <Image
-                src="/images/avatar.png"
+                src={
+                  myProfile !== null &&
+                  myProfile.profileImg !== undefined &&
+                  myProfile.profileImg !== ""
+                    ? myProfile.profileImg
+                    : "/images/avatar.png"
+                }
                 alt="user-img"
                 layout="fill"
+                placeholder="blur"
+                blurDataURL="/images/avatar.png"
                 className="rounded-full"
               />
             </div>
@@ -149,26 +208,28 @@ const SideBar = () => {
           )}
         </div>
       </div>
-      <div className="mb-4 flex items-center gap-x-2 lg:hidden">
-        <span
-          className="p-3 bg-bg-5 rounded-lg cursor-pointer"
-          onClick={() => {
-            push("/create-new-nft");
-            dispatch(toggleMobileModal());
-          }}
-        >
-          Create NFT
-        </span>
-        <span
-          className="p-3 bg-bg-5 rounded-lg cursor-pointer"
-          onClick={() => {
-            push("/create-collection");
-            dispatch(toggleMobileModal());
-          }}
-        >
-          Create Collection
-        </span>
-      </div>
+      {isLoggedIn && (
+        <div className="mb-4 flex items-center gap-x-2 lg:hidden">
+          <span
+            className="p-3 bg-bg-5 rounded-lg cursor-pointer"
+            onClick={() => {
+              push("/create-new-nft");
+              dispatch(toggleMobileModal());
+            }}
+          >
+            Create NFT
+          </span>
+          <span
+            className="p-3 bg-bg-5 rounded-lg cursor-pointer"
+            onClick={() => {
+              push("/create-collection");
+              dispatch(toggleMobileModal());
+            }}
+          >
+            Create Collection
+          </span>
+        </div>
+      )}
       {sidebarLinks.map((item) =>
         item.label === "Blog" ? (
           <a className="sidebar-menu" href={item.to} key={item.label}>

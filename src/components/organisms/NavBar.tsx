@@ -241,7 +241,9 @@ const NavBar: FC<INav> = ({
               >
                 <Image
                   src={
-                    myProfile !== null && myProfile.profileImg !== undefined
+                    myProfile !== null &&
+                    myProfile.profileImg !== undefined &&
+                    myProfile.profileImg !== ""
                       ? myProfile.profileImg
                       : "/images/avatar.png"
                   }

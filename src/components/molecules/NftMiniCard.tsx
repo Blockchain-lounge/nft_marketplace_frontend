@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { CoinIcon } from "@/src/components/atoms/vectors";
 import Image from "next/image";
 import APPCONFIG from "../../constants/Config";
+import { textShortener } from "@/src/utilities/helper";
 
 interface INftminicards {
   _id: string;
@@ -28,7 +29,7 @@ const NftMiniCards = ({
   const handleNavigate = () => {
     push(`/single-collection/${_id}`);
   };
-  // const floorPrice = 4.6; 
+  // const floorPrice = 4.6;
   // const fetchCollectionFloorPrice = async () => {
   //   if (_id !== undefined) {
   //     const HEADER = {};
@@ -73,8 +74,8 @@ const NftMiniCards = ({
           />
         </div>
         <div className="">
-          <span className="nft-mini-cards-title">{name}</span>
-          
+          <span className="nft-mini-cards-title">{textShortener(name)}</span>
+
           {/* <div className="nft-mini-cards-wrapper2">
             <span className="nft-mini-cards-sub">Floor</span> <CoinIcon />
             <span className="nft-mini-cards-val">floorPrice</span>
@@ -83,8 +84,8 @@ const NftMiniCards = ({
       </div>
 
       {/* <div> */}
-        {/* <span className="nft-mini-cards-val2">+5.67</span> */}
-        {/* <div className="flex w-full justify-between">
+      {/* <span className="nft-mini-cards-val2">+5.67</span> */}
+      {/* <div className="flex w-full justify-between">
           <CoinIcon color="#BDBFC7" />
           <span className="nft-mini-cards-val3">{price}</span>
         </div> */}
