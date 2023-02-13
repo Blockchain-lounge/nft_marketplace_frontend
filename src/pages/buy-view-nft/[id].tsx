@@ -148,14 +148,14 @@ const ViewNft = () => {
     const METHOD = "GET";
     const DATA = {};
     apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-      if (response.status == 400) {
+      if (response.status === 400) {
         var error = response.data.error;
         toast(error);
         return;
-      } else if (response.status == 401) {
+      } else if (response.status === 401) {
         toast("Unauthorized request!");
         return;
-      } else if (response.status == 200) {
+      } else if (response.status === 200) {
         setUserId(response.data.data._id);
       } else {
         toast("Something went wrong, please try again!");
@@ -335,12 +335,13 @@ const ViewNft = () => {
         signer
       );
 
+      var totalPrice = parseInt(nftPurchasePayload.quantity) * parseFloat(itemDetail.listing_price);
       const priceListed = ethers.utils.parseUnits(
         itemDetail.listing_price.toString()
       );
 
       const price = ethers.utils.parseUnits(
-        itemDetail.listing_price.toString(),
+        totalPrice.toString(),
         "ether"
       );
 
@@ -366,12 +367,12 @@ const ViewNft = () => {
               // gasPrice: 3124913238,
             }
           );
+          tnx = await transaction.wait();
         }
         catch(err){
           toast("Unable to complete this onchain transaction!");
         }
 
-        tnx = await transaction.wait();
         buyer = connectedAddress;
       } else if (!itemDetail.relisted || itemDetail.relisted === false) {
         try{
@@ -392,12 +393,12 @@ const ViewNft = () => {
               // baseFee: 18462167791
             }
           );
+          tnx = await transaction.wait();
         }
         catch(err){
           toast("Unable to complete this onchain transaction!");
         }
 
-        tnx = await transaction.wait();
         if (tnx.events) {
           const events = findEvents("ItemCopySold", tnx.events, true);
           soldItemCopyId = events[0].toNumber();
