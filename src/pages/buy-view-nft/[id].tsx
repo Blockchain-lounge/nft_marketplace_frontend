@@ -236,6 +236,13 @@ const ViewNft = () => {
       setShowModal((prev) => !prev);
       return;
     }
+    const offerAmount = parseFloat(nftOfferPayload.price) * parseInt(nftOfferPayload.quantity);
+    if(isSufficient(offerAmount, balanceInWEth) === false){
+      toast.error(
+        "Insufficient funds"
+      );
+      return
+    }
     {
       //@ts-ignore
       var formData = {
@@ -336,6 +343,12 @@ const ViewNft = () => {
       );
 
       var totalPrice = parseInt(nftPurchasePayload.quantity) * parseFloat(itemDetail.listing_price);
+      if(isSufficient(totalPrice, balanceInWEth) === false){
+        toast.error(
+          "Insufficient funds"
+        );
+        return
+      }
       const priceListed = ethers.utils.parseUnits(
         itemDetail.listing_price.toString()
       );
@@ -371,6 +384,7 @@ const ViewNft = () => {
         }
         catch(err){
           toast("Unable to complete this onchain transaction!");
+          return;
         }
 
         buyer = connectedAddress;
@@ -397,6 +411,7 @@ const ViewNft = () => {
         }
         catch(err){
           toast("Unable to complete this onchain transaction!");
+          return;
         }
 
         if (tnx.events) {
@@ -462,7 +477,14 @@ const ViewNft = () => {
       );
       setIsTransLoading((prev) => !prev);
       return;
-    } else {
+    } 
+    else if(isSufficient(parseFloat(nftBidPayload.price), balanceInWEth) === false){
+        toast.error(
+          "Insufficient funds"
+        );
+        return
+      }
+      else {
       //@ts-ignore
 
       const bidding_price = ethers.utils.parseUnits(
@@ -683,10 +705,10 @@ const ViewNft = () => {
   }, [id, currentPage]);
 
   const isSufficient = async (price, balanceInWEth) => {
-    if (price < balanceInWEth) {
-      return true;
-    } else {
+    if (price >= balanceInWEth) {
       return false;
+    } else {
+      return true;
     }
   };
 
