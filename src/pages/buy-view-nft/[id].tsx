@@ -342,7 +342,7 @@ const ViewNft = () => {
         signer
       );
 
-      var totalPrice = parseInt(nftPurchasePayload.quantity) * parseFloat(itemDetail.listing_price);
+      var totalPrice = (parseInt(nftPurchasePayload.quantity) * parseFloat(itemDetail.listing_price)).toFixed(18);
       if(isSufficient(totalPrice, balanceInWEth) === false){
         toast.error(
           "Insufficient funds"
@@ -354,7 +354,7 @@ const ViewNft = () => {
       );
 
       const price = ethers.utils.parseUnits(
-        totalPrice.toString(),
+        totalPrice,
         "ether"
       );
 
