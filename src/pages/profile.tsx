@@ -227,6 +227,7 @@ const Profile = () => {
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        
         if (response.status == 400) {
           var error = response.data.error;
           toast(error);
@@ -262,6 +263,8 @@ const Profile = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
+          console.log('response.data',response.data.data)
+
           setOnChainCollections(response.data.data);
           setIsLoading(false);
         } else {
@@ -396,9 +399,7 @@ const Profile = () => {
       if (response !== null) {
         await fetchTokenOwned(response);
       }
-      if(!collections || collections === []) {
-        await fetchCollections();
-      }
+      
       if (tokenCreatedCurrentPage) {
         await fetchTokenCreated(tokenCreatedCurrentPage);
       }
@@ -410,6 +411,8 @@ const Profile = () => {
         await fetchUser();
       }
     });
+    
+    fetchCollections();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, tokenCreatedCurrentPage, tokenListedCurrentPage]);
 
@@ -656,6 +659,9 @@ const Profile = () => {
                         )}
                       </div>
                     </div>
+                    {
+                      console.log({collections})
+                    }
                   </>
                 ) : profileActiveTab === 4 ? (
                   collections &&
@@ -678,22 +684,20 @@ const Profile = () => {
                     ) : (
                       ""
                     )
-                  ) : (collections &&
+                  ) : collections &&
                       collections.length > 0 &&
-                      !onChainCollections) ||
-                    onChainCollections.length === 0 ? (
-                    collections.length > 0 ? (
-                      <div className="explore-items-wrapper">
-                        {collections.map((item) => (
-                          <CollectionCard key={item._id} {...item} />
-                        ))}
-                      </div>
+                      onChainCollections.length === 0 ? (
+                      collections.length > 0 ? (
+                        <div className="explore-items-wrapper">
+                          {collections.map((item) => (
+                            <CollectionCard key={item._id} {...item} />
+                          ))}
+                        </div>
                     ) : (
                       ""
                     )
                   ) : onChainCollections &&
                     onChainCollections.length > 0 &&
-                    !collections &&
                     collections.length === 0 ? (
                     onChainCollections.length > 0 ? (
                       <div className="explore-items-wrapper">
