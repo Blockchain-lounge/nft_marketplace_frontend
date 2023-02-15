@@ -563,13 +563,13 @@ const ViewUnlistedNFT = () => {
                 {/* <div className="flex flex-col gap-y-4 w-full"> */}
                 {/* <div className="flex gap-x-5 w-full"> */}
                 {/* <div className="w-full space-y-4"> */}
-                <Button
+                {/* <Button
                   title="Make an offer"
                   wt="w-full"
                   onClick={() => {
                     setShowModal((prev) => !prev);
                   }}
-                />
+                /> */}
                 {/* <Button
                             title="Place a bid"
                             outline2
