@@ -142,6 +142,7 @@ const Settings = () => {
 
   const handleSubmit = async () => {
     setIsLoading((prev) => !prev);
+    console.log({ userBannerImgPreview });
     var profileData = {
       username: userDetailsPayload.username,
       email: userDetailsPayload.userEmail,
