@@ -45,7 +45,11 @@ import { useTimeCountDown } from "@/src/hooks/useTimeCountDown";
 const ViewNft = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModaltype] = useState<
-    "buy" | "addFunds" | "bid" | "offer" | "accept-offer"
+    | "buy"
+    // | "addFunds"
+    | "bid"
+    | "offer"
+    | "accept-offer"
   >("buy");
   const [ethInput, setEthInput] = useState("0.0");
   const [wETHInput, setWETHInput] = useState("0.0");
@@ -236,6 +240,12 @@ const ViewNft = () => {
       setShowModal((prev) => !prev);
       return;
     }
+    const offerAmount =
+      parseFloat(nftOfferPayload.price) * parseInt(nftOfferPayload.quantity);
+    if (isSufficient(offerAmount, balanceInWEth) === false) {
+      toast.error("Insufficient funds");
+      return;
+    }
     {
       //@ts-ignore
       var formData = {
@@ -335,14 +345,19 @@ const ViewNft = () => {
         signer
       );
 
-      var totalPrice =
+      var totalPrice = (
         parseInt(nftPurchasePayload.quantity) *
-        parseFloat(itemDetail.listing_price);
+        parseFloat(itemDetail.listing_price)
+      ).toFixed(18);
+      if (isSufficient(totalPrice, balanceInWEth) === false) {
+        toast.error("Insufficient funds");
+        return;
+      }
       const priceListed = ethers.utils.parseUnits(
         itemDetail.listing_price.toString()
       );
 
-      const price = ethers.utils.parseUnits(totalPrice.toString(), "ether");
+      const price = ethers.utils.parseUnits(totalPrice, "ether");
 
       var tnx = null;
       var buyer = connectedAddress;
@@ -369,6 +384,7 @@ const ViewNft = () => {
           tnx = await transaction.wait();
         } catch (err) {
           toast("Unable to complete this onchain transaction!");
+          return;
         }
 
         buyer = connectedAddress;
@@ -394,6 +410,7 @@ const ViewNft = () => {
           tnx = await transaction.wait();
         } catch (err) {
           toast("Unable to complete this onchain transaction!");
+          return;
         }
 
         if (tnx.events) {
@@ -458,6 +475,11 @@ const ViewNft = () => {
         "Your bidding price is below the last bid, kindly place a higher bid"
       );
       setIsTransLoading((prev) => !prev);
+      return;
+    } else if (
+      isSufficient(parseFloat(nftBidPayload.price), balanceInWEth) === false
+    ) {
+      toast.error("Insufficient funds");
       return;
     } else {
       //@ts-ignore
@@ -678,10 +700,10 @@ const ViewNft = () => {
   }, [id, currentPage]);
 
   const isSufficient = async (price, balanceInWEth) => {
-    if (price < balanceInWEth) {
-      return true;
-    } else {
+    if (price >= balanceInWEth) {
       return false;
+    } else {
+      return true;
     }
   };
 
@@ -1421,9 +1443,9 @@ const ViewNft = () => {
             ? "Checkout"
             : modalType === "bid"
             ? "Place a bid"
-            : modalType === "addFunds"
-            ? "Add funds"
-            : modalType === "accept-offer"
+            : // : modalType === "addFunds"
+            // ? "Add funds"
+            modalType === "accept-offer"
             ? "Accept Offer"
             : "Make an offer"
         }
@@ -1435,9 +1457,9 @@ const ViewNft = () => {
             ? "h-full sm:h-[60%] my-auto md:h-fit overflow-y-auto"
             : modalType === "offer"
             ? "h-full sm:h-[60%] my-auto md:h-fit lg:h-[80%] overflow-y-auto"
-            : modalType === "addFunds"
-            ? "h-full sm:h-[60%] my-auto md:h-fit overflow-y-auto"
-            : "h-fit mt-28"
+            : // : modalType === "addFunds"
+              // ? "h-full sm:h-[60%] my-auto md:h-fit overflow-y-auto"
+              "h-fit mt-28"
         }
       >
         {modalType === "bid" ? (
@@ -1485,7 +1507,7 @@ const ViewNft = () => {
                   onChange={handleFieldChange}
                   value={nftBidPayload.price}
                 />
-                <p className="mt-6">
+                {/* <p className="mt-6">
                   <span className="font-bold text-txt-2 text-base">
                     Insufficient wETH balance ?{" "}
                   </span>
@@ -1495,7 +1517,7 @@ const ViewNft = () => {
                   >
                     Add wEth funds or swap
                   </span>
-                </p>
+                </p> */}
               </div>
             </div>
             {/* <div className="create-new-nft-wrapper-2 w-full">
@@ -1607,10 +1629,10 @@ const ViewNft = () => {
                     />
                   </div>
 
-                  <p className="mt-6">
-                    {/* {!isSufficient && ( */}
-                    {/* <div> */}
-                    <span className="font-bold text-txt-2 text-base">
+                  {/* <p className="mt-6"> */}
+                  {/* {!isSufficient && ( */}
+                  {/* <div> */}
+                  {/* <span className="font-bold text-txt-2 text-base">
                       Insufficient wETH balance ?{" "}
                     </span>
                     <span
@@ -1618,11 +1640,11 @@ const ViewNft = () => {
                       onClick={() => setModaltype((prev) => "addFunds")}
                     >
                       Add wEth funds or swap
-                    </span>
-                    {/* </div> */}
-                    {/* )} */}
-                    {/* {isSufficient && ("")} */}
-                  </p>
+                    </span> */}
+                  {/* </div> */}
+                  {/* )} */}
+                  {/* {isSufficient && ("")} */}
+                  {/* </p> */}
                 </div>
               </div>
               {/* <div className="create-new-nft-wrapper-2 w-full">
@@ -1815,7 +1837,7 @@ const ViewNft = () => {
               onClick={handleBuy}
               isDisabled={isTransloading}
             />
-            <p>
+            {/* <p>
               <span className="font-bold text-txt-2 text-base">
                 Insufficient wETH balance ?{" "}
               </span>
@@ -1826,7 +1848,7 @@ const ViewNft = () => {
               >
                 Add funds or swap
               </span>
-            </p>
+            </p> */}
           </div>
         )}
       </Modal>
