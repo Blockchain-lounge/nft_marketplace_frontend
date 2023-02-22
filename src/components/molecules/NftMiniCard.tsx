@@ -29,8 +29,11 @@ const NftMiniCards = ({
   const [imgError, setOnImageError] = useState(false);
   const { push } = useRouter();
   const handleImgError = () => {
-    setOnImageError((prev) => !prev);
+    setTimeout(() => {
+      setOnImageError((prev) => !prev);
+    }, 500);
   };
+
   const handleNavigate = () => {
     push(`/single-collection/${_id}`);
   };

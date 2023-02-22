@@ -1507,7 +1507,7 @@ const ViewNft = () => {
                   onChange={handleFieldChange}
                   value={nftBidPayload.price}
                 />
-                {/* <p className="mt-6">
+                <p className="mt-6">
                   <span className="font-bold text-txt-2 text-base">
                     Insufficient wETH balance ?{" "}
                   </span>
@@ -1517,7 +1517,7 @@ const ViewNft = () => {
                   >
                     Add wEth funds or swap
                   </span>
-                </p> */}
+                </p>
               </div>
             </div>
             {/* <div className="create-new-nft-wrapper-2 w-full">
@@ -1631,8 +1631,8 @@ const ViewNft = () => {
 
                   {/* <p className="mt-6"> */}
                   {/* {!isSufficient && ( */}
-                  {/* <div> */}
-                  {/* <span className="font-bold text-txt-2 text-base">
+                  <div>
+                    <span className="font-bold text-txt-2 text-base">
                       Insufficient wETH balance ?{" "}
                     </span>
                     <span
@@ -1640,8 +1640,8 @@ const ViewNft = () => {
                       onClick={() => setModaltype((prev) => "addFunds")}
                     >
                       Add wEth funds or swap
-                    </span> */}
-                  {/* </div> */}
+                    </span>
+                  </div>
                   {/* )} */}
                   {/* {isSufficient && ("")} */}
                   {/* </p> */}
@@ -1837,7 +1837,7 @@ const ViewNft = () => {
               onClick={handleBuy}
               isDisabled={isTransloading}
             />
-            {/* <p>
+            <p>
               <span className="font-bold text-txt-2 text-base">
                 Insufficient wETH balance ?{" "}
               </span>
@@ -1848,7 +1848,7 @@ const ViewNft = () => {
               >
                 Add funds or swap
               </span>
-            </p> */}
+            </p>
           </div>
         )}
       </Modal>

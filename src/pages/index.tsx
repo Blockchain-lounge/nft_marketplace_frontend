@@ -42,7 +42,9 @@ const Home: NextPage = () => {
   const [imgError, setOnImageError] = useState(false);
 
   const handleImgError = () => {
-    setOnImageError((prev) => !prev);
+    setTimeout(() => {
+      setOnImageError((prev) => !prev);
+    }, 500);
   };
 
   /**

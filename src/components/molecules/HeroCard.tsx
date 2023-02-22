@@ -33,8 +33,11 @@ const HeroCard = ({
 }: IHerocard) => {
   const [imgError, setOnImageError] = useState(false);
   const handleImgError = () => {
-    setOnImageError((prev) => !prev);
+    setTimeout(() => {
+      setOnImageError((prev) => !prev);
+    }, 500);
   };
+
   return (
     <div className="hero-card-wrapper" onClick={onClick}>
       <div className="h-[80%] w-[100%] relative mb-2">
