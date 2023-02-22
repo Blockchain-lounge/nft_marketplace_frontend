@@ -44,7 +44,7 @@ const Home: NextPage = () => {
   const handleImgError = () => {
     setTimeout(() => {
       setOnImageError((prev) => !prev);
-    }, 500);
+    }, 700);
   };
 
   /**
