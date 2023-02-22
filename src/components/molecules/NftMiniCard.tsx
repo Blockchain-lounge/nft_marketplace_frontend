@@ -31,7 +31,7 @@ const NftMiniCards = ({
   const handleImgError = () => {
     setTimeout(() => {
       setOnImageError((prev) => !prev);
-    }, 700);
+    }, 300);
   };
 
   const handleNavigate = () => {

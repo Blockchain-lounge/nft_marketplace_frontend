@@ -35,7 +35,7 @@ const HeroCard = ({
   const handleImgError = () => {
     setTimeout(() => {
       setOnImageError((prev) => !prev);
-    }, 700);
+    }, 300);
   };
 
   return (
