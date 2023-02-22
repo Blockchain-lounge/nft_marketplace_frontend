@@ -29,6 +29,7 @@ import {
 } from "../components/lazy-loaders";
 import { ICollection } from "../utilities/types";
 import Skeleton from "react-loading-skeleton";
+import APPCONFIG from "../constants/Config";
 
 const Home: NextPage = () => {
   const [heroData, setHeroData] = useState<Array<ICollection>>([]);
@@ -38,6 +39,11 @@ const Home: NextPage = () => {
   const [items, setItems] = useState(null);
   const [collections, setCollections] = useState(null);
   const [featuredCollections, setFeaturedCollections] = useState([]);
+  const [imgError, setOnImageError] = useState(false);
+
+  const handleImgError = () => {
+    setOnImageError((prev) => !prev);
+  };
 
   /**
    * This function fetches all homepage data
@@ -106,11 +112,16 @@ const Home: NextPage = () => {
                   <Image
                     layout="fill"
                     objectFit="cover"
-                    src={activeCard.collectionFeaturedImage}
+                    src={
+                      imgError
+                        ? APPCONFIG.DEFAULT_NFT_ART
+                        : activeCard.collectionFeaturedImage
+                    }
                     alt={activeCard.name}
                     className="rounded-2xl"
                     placeholder="blur"
                     blurDataURL="/images/placeholder.png"
+                    onError={handleImgError}
                   />
                 </div>
                 <div className="hero-cards">

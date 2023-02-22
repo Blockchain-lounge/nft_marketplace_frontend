@@ -56,7 +56,7 @@ const SwapCard = ({
     setIsTransLoading((prev) => !prev);
     if (ethValue != 0) {
       connectedAccount().then((response) => {
-        console.log({ response });
+        // console.log({ response });
         if (response !== null) {
           getWalletBalance(response).then((balance) => {
             const currentEthBal = balance.split(" ")[0];
