@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 // @ts-nocheck
+
 import { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import clsx from "clsx";
 
@@ -99,12 +100,11 @@ const Settings = () => {
           toast(msg);
           return false;
         }
+
         setUserImg(URL.createObjectURL(files[0]));
 
         const { imgUrl } = await uploadFile(files[0], toast);
         setUserImgPreview(imgUrl);
-
-        // setUserImgPreview(URL.createObjectURL(files[0]));
       }
     } else if (name === "userBannerImg") {
       if (files[0] && files[0].size > 0 && files[0].size !== null) {
@@ -130,9 +130,8 @@ const Settings = () => {
         }
         setUserBannerImg(URL.createObjectURL(files[0]));
         const { imgUrl } = await uploadFile(files[0], toast);
-        setUserBannerImgPreview(imgUrl);
 
-        // setUserBannerImgPreview(URL.createObjectURL(files[0]));
+        setUserBannerImgPreview(imgUrl);
       }
     }
 
@@ -142,7 +141,7 @@ const Settings = () => {
 
   const handleSubmit = async () => {
     setIsLoading((prev) => !prev);
-    console.log({ userBannerImgPreview });
+
     var profileData = {
       username: userDetailsPayload.username,
       email: userDetailsPayload.userEmail,

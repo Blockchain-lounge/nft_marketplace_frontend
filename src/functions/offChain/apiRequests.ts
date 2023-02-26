@@ -1,8 +1,11 @@
 import axios from "axios";
+
+import FormData from "form-data";
+
 import APPCONFIG from "../../constants/Config";
 import { checkAuth, disconnectWallet } from "../onChain/authFunction";
 
-const API_URL = APPCONFIG.API_BASE_URL;
+const { API_BASE_URL } = APPCONFIG;
 
 export function apiRequest(
   REQUEST_URL: string,
@@ -39,7 +42,7 @@ export function apiRequest(
   }
   return axios({
     method: METHOD,
-    url: API_URL + REQUEST_URL,
+    url: API_BASE_URL + REQUEST_URL,
     data: DATA,
     headers: HEADER,
     withCredentials: false,
@@ -55,28 +58,37 @@ export function apiRequest(
   // return response;
 }
 
-export const uploadFile = async (
-  file: { name: string; type: string },
-  toast: any
-) => {
-  let { data } = await axios.post("/api/s3/uploadFile", {
-    name: file.name,
-    type: file.type,
+export const uploadFile = async (file: File, toast: any) => {
+  const reader = new FileReader();
+  //creating a promise to process the conversion of the image to base 64
+  const base64DataPromise = new Promise<string>((resolve, reject) => {
+    reader.onload = () => {
+      const base64Data = reader.result?.toString().split(",")[1] ?? "";
+      resolve(base64Data);
+    };
+    reader.onerror = () => {
+      reject(reader.error);
+    };
   });
-  //fetching out an URL
-  const url = data.url;
 
-  if (url) {
-    toast("Please wait, while your image load");
+  reader.readAsDataURL(file);
+
+  const base64Data = await base64DataPromise;
+
+  if (base64Data) {
+    toast("Please wait while your image load");
   }
-  //uploading file
-  let res = await axios.put(url, file, {
+
+  // Send the base64-encoded file to the server
+  const response = await fetch("/api/upload", {
+    method: "POST",
     headers: {
-      "Content-type": file.type,
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify({ fileName: file.name, data: base64Data }),
   });
 
-  const imgUrl = url.split("?")[0];
+  const { imgUrl } = await response.json();
 
   return { imgUrl };
 };

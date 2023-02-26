@@ -41,3 +41,7 @@ export function collectionVolume(purchasedItems: Array<{ amount: number }>) {
   }
   return price;
 }
+
+export function generateUniqueName() {
+  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
