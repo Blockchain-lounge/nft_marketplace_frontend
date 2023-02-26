@@ -33,9 +33,7 @@ const HeroCard = ({
 }: IHerocard) => {
   const [imgError, setOnImageError] = useState(false);
   const handleImgError = () => {
-    setTimeout(() => {
-      setOnImageError((prev) => !prev);
-    }, 500);
+    setOnImageError((prev) => !prev);
   };
 
   return (

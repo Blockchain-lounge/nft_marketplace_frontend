@@ -17,13 +17,10 @@
     "@mui/material": "^5.11.0",
     "@mui/x-date-pickers": "^5.0.11",
     "@reduxjs/toolkit": "^1.8.6",
-    "aws-sdk": "^2.1244.0",
     "axios": "^1.1.2",
     "clsx": "^1.2.1",
     "date-fns": "^2.29.3",
     "ethers": "^5.7.1",
-    "form-data": "^4.0.0",
-    "formidable": "^2.1.1",
     "ipfs-http-client": "^59.0.0",
     "moment": "^2.29.4",
     "moralis": "^2.7.4",
@@ -43,8 +40,6 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@types/aws-sdk": "^2.7.0",
-    "@types/formidable": "^2.0.5",
     "@types/moment": "^2.13.0",
     "@types/node": "18.8.3",
     "@types/react": "18.0.21",

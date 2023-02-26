@@ -134,9 +134,6 @@ const Settings = () => {
         setUserBannerImgPreview(imgUrl);
       }
     }
-
-    // if (userBannerImg !== null && userImg !== null) {
-    // }
   };
 
   const handleSubmit = async () => {
