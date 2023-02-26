@@ -1,7 +1,5 @@
 import axios from "axios";
 
-import FormData from "form-data";
-
 import APPCONFIG from "../../constants/Config";
 import { checkAuth, disconnectWallet } from "../onChain/authFunction";
 
