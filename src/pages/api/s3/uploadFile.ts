@@ -1,11 +1,19 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import S3 from "aws-sdk/clients/s3";
 
+// const s3 = new S3({
+//   region: process.env.NEXT_PUBLIC_AWS_DEFAULT_REGION,
+//   accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
+//   secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
+//   signatureVersion: "v4",
+// });
+
 const s3 = new S3({
-  region: process.env.NEXT_PUBLIC_AWS_DEFAULT_REGION,
+  endpoint: process.env.NEXT_PUBLIC_ENV_DO_URL,
+  secretAccessKey: process.env.NEXT_PUBLIC_DO_SECRET_ACCESS_KEY,
   accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
-  signatureVersion: "v4",
+  region: process.env.NEXT_PUBLIC_AWS_DEFAULT_REGION,
+  // signatureVersion: "v4",
 });
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -32,6 +40,26 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(400).json({ message: err });
   }
 };
+
+// export default async function handler(
+//   req: NextApiRequest,
+//   res: NextApiResponse
+// ) {
+//   const file = req.body;
+
+//   // Upload the file to S3
+//   const uploadResult = await s3
+//     .upload({
+//       Bucket: "cloudaxnftmarketplace",
+//       Key: file.name,
+//       Body: file.data,
+//       ACL: "public-read",
+//     })
+//     .promise();
+
+//   // Return the URL of the uploaded file
+//   res.status(200).json({ url: uploadResult.Location });
+// }
 
 export const config = {
   api: {
