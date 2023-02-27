@@ -73,7 +73,7 @@ const NftMiniCards = ({
                 ? APPCONFIG.DEFAULT_NFT_ART
                 : collectionLogoImage
                 ? collectionLogoImage
-                : ""
+                : APPCONFIG.DEFAULT_NFT_ART
             }
             alt={name}
             layout="fill"

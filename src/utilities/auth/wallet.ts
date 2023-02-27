@@ -19,7 +19,7 @@ export const connectWallet = async (): Promise<string | any> => {
   if (!window.ethereum) {
     const failMessage = "Kindly Install Metamask and connect your wallet";
     alert(failMessage);
-    console.log(failMessage);
+    // console.log(failMessage);
     return;
   }
 
@@ -40,13 +40,13 @@ export const connectWallet = async (): Promise<string | any> => {
         }
       );
 
-      console.log("connect address successful : ", data);
-      console.log(walletAddress);
+      // console.log("connect address successful : ", data);
+      // console.log(walletAddress);
 
       // should return true.
       return walletAddress;
     } catch (e: any) {
-      console.log("error connecting to address : ", e.message);
+      // console.log("error connecting to address : ", e.message);
       return e.message;
     }
   }
@@ -61,10 +61,10 @@ export const getAddressProfile = async () => {
         `${baseUrl}/api/user/auth/address_details/${walletAddress}`
       );
 
-      console.log("get address profile successful : ", data);
-      console.log(data);
+      // console.log("get address profile successful : ", data);
+      // console.log(data);
     } catch (e: any) {
-      console.log("error getting address profile : ", e.message);
+      // console.log("error getting address profile : ", e.message);
       return e.message;
     }
   }
@@ -77,7 +77,7 @@ export const signMessage = async (address: string) => {
 
     const signer = provider.getSigner();
     const signature = await signer.signMessage(message);
-    console.log("signature : ", signature);
+    // console.log("signature : ", signature);
 
     return signature;
   }
@@ -107,6 +107,6 @@ export const verifySignature = async () => {
     // console.log(data);
     return data;
   } catch (e: any) {
-    console.log("e", e.message);
+    // console.log("e", e.message);
   }
 };

@@ -15,8 +15,8 @@ if (typeof window !== "undefined") {
 }
 
 const apiPost = async (endpoint: string, params: Record<string, unknown>) => {
-  console.log({ token });
-  console.log({ params });
+  // console.log({ token });
+  // console.log({ params });
   const result = await axios.post(`${baseUrl}/api${endpoint}`, params, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -27,7 +27,7 @@ const apiPost = async (endpoint: string, params: Record<string, unknown>) => {
 };
 
 const apiGet = async (endpoint: string) => {
-  console.log({ token });
+  // console.log({ token });
 
   const result = await axios.post(`${baseUrl}/api${endpoint}`, {
     headers: {

@@ -1,12 +1,11 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
-export const UseHandleImgError = (endpoint: string) => {
+export const UseHandleImgError = () => {
   const [imgError, setOnImageError] = useState(false);
 
-  const handleImgError = useCallback(() => {
-    setOnImageError((prev) => !prev);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imgError]);
+  const handleImgError = () => {
+    setOnImageError(true);
+  };
 
   return { handleImgError, imgError };
 };

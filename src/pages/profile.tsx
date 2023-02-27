@@ -658,7 +658,7 @@ const Profile = () => {
                         )}
                       </div>
                     </div>
-                    {console.log({ collections })}
+                    {/* {console.log({ collections })} */}
                   </>
                 ) : profileActiveTab === 4 ? (
                   collections &&

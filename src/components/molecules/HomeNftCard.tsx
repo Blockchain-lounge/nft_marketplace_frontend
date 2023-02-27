@@ -41,7 +41,7 @@ Partial<INftcard>) => {
                 ? APPCONFIG.DEFAULT_NFT_ART
                 : item_id.item_art_url
                 ? item_id.item_art_url
-                : ""
+                : APPCONFIG.DEFAULT_NFT_ART
             }
             alt={item_id.item_title}
             objectFit="cover"
@@ -58,7 +58,7 @@ Partial<INftcard>) => {
                 ? APPCONFIG.DEFAULT_NFT_ART
                 : resell_item_id.item_art_url
                 ? resell_item_id.item_art_url
-                : ""
+                : APPCONFIG.DEFAULT_NFT_ART
             }
             alt={resell_item_id.item_title}
             objectFit="cover"
@@ -196,7 +196,7 @@ Partial<INftcard>) => {
                       ? APPCONFIG.DEFAULT_NFT_ART
                       : resell_item_id.item_art_url
                       ? resell_item_id.item_art_url
-                      : ""
+                      : APPCONFIG.DEFAULT_NFT_ART
                   }
                   alt={resell_item_id.item_title}
                   layout="fill"

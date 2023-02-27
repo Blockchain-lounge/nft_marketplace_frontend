@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import { apiRequest } from "../offChain/apiRequests";
 import { redirectUrl, signInMessage } from "../offChain/generalFunctions";
 import APPCONFIG from "../../constants/Config";
-const activeChainId = '0x'+APPCONFIG.APP_NETWORK_CHAIN_ID;
+const activeChainId = "0x" + APPCONFIG.APP_NETWORK_CHAIN_ID;
 
 export const connectedAccount = async () => {
   return BasicAuth().then((response) => {
@@ -117,27 +117,26 @@ export async function disconnectWallet() {
   window.location.href = "/";
 }
 
-export async function validateNetworkChainId(){
+export async function validateNetworkChainId() {
   return (window as any).ethereum
-      .request({
-        method: "eth_chainId",
-      })
-      .then((currentChainId) => {
-        if (currentChainId !== activeChainId) {
-           autoSwitchNetwork();
-           return false
-        }
-        return true
-      });
+    .request({
+      method: "eth_chainId",
+    })
+    .then((currentChainId) => {
+      if (currentChainId !== activeChainId) {
+        autoSwitchNetwork();
+        return false;
+      }
+      return true;
+    });
 }
 
 export async function autoSwitchNetwork() {
-  (window as any).ethereum
-  .request({
-    method: 'wallet_switchEthereumChain',
+  (window as any).ethereum.request({
+    method: "wallet_switchEthereumChain",
     params: [{ chainId: activeChainId }],
   });
-};
+}
 
 export async function connectUserWallet() {
   const provider = new ethers.providers.InfuraProvider(
@@ -146,7 +145,7 @@ export async function connectUserWallet() {
   );
   const { chainId, name } = await provider.getNetwork();
   const res = await validateNetworkChainId();
-  if(res === false) return
+  if (res === false) return;
   try {
     if (!(window as any).ethereum) {
       //check if Metamask wallet is not installed
@@ -171,8 +170,8 @@ export async function connectUserWallet() {
           chainId !== parseInt(APPCONFIG.APP_NETWORK_CHAIN_ID)
         ) {
           login = false;
-          console.log(name);
-          console.log(chainId);
+          // console.log(name);
+          // console.log(chainId);
         }
 
         if (login === false) {

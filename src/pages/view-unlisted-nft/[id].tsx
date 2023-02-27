@@ -335,7 +335,7 @@ const ViewUnlistedNFT = () => {
               //   tnx.events[1].args[0].toNumber()
               // );
               // console.log("buyer", tnx.events[1].args[3]);
-              console.log("buytrackCopyBaseUrl-2", tnx.events[1].args[5]);
+              // console.log("buytrackCopyBaseUrl-2", tnx.events[1].args[5]);
             }
           } else {
             toast("We were unable to complete your transaction!");

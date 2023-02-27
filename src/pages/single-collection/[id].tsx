@@ -34,6 +34,7 @@ import {
 } from "../../functions/offChain/generalFunctions";
 import APPCONFIG from "../../constants/Config";
 import { connectedAccount } from "../../functions/onChain/authFunction";
+import UseHandleImgError from "@/src/hooks/useHandleImgError";
 
 const ViewCollection = () => {
   // const [collectionImg, setCollectionImg] = useState("");
@@ -78,6 +79,7 @@ const ViewCollection = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [nextPage, setNextPage] = useState(1);
+  const { handleImgError, imgError } = UseHandleImgError();
 
   const fetchCollectionItems = async () => {
     if (id !== undefined) {
@@ -260,6 +262,7 @@ const ViewCollection = () => {
     typeof window !== "undefined" && window.location.origin
       ? window.location.origin
       : "";
+
   return (
     <DashboardLayout isLoading={isLoading}>
       <ToastContainer />
@@ -271,11 +274,13 @@ const ViewCollection = () => {
                 <div className={`h-full w-full rounded-full relative`}>
                   <Image
                     src={
-                      singleCollectionDetail &&
-                      singleCollectionDetail.collectionLogoImage !==
-                        undefined &&
-                      singleCollectionDetail.collectionLogoImage !== "" &&
-                      singleCollectionDetail.collectionLogoImage !== null
+                      imgError
+                        ? APPCONFIG.DEFAULT_NFT_ART
+                        : singleCollectionDetail &&
+                          singleCollectionDetail.collectionLogoImage !==
+                            undefined &&
+                          singleCollectionDetail.collectionLogoImage !== "" &&
+                          singleCollectionDetail.collectionLogoImage !== null
                         ? singleCollectionDetail.collectionLogoImage
                         : "/images/avatar.png"
                     }
@@ -285,6 +290,7 @@ const ViewCollection = () => {
                     placeholder="blur"
                     blurDataURL="/images/placeholder.png"
                     className="rounded-full"
+                    onError={handleImgError}
                   />
                 </div>
               </div>
@@ -295,12 +301,17 @@ const ViewCollection = () => {
               singleCollectionDetail.cover_image_id !== null ? (
                 <Image
                   priority
-                  src={singleCollectionDetail.cover_image_id}
+                  src={
+                    imgError
+                      ? APPCONFIG.DEFAULT_NFT_ART
+                      : singleCollectionDetail.cover_image_id
+                  }
                   alt="collection-img-banner"
                   objectFit="cover"
                   layout="fill"
                   placeholder="blur"
                   blurDataURL="/images/placeholder.png"
+                  onError={handleImgError}
                 />
               ) : (
                 <label className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d49]">

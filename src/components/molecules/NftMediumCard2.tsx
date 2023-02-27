@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import { apiRequest } from "@/src/functions/offChain/apiRequests";
 import { useTimeCountDown } from "@/src/hooks/useTimeCountDown";
 import * as moment from "moment";
+import APPCONFIG from "@/src/constants/Config";
+import UseHandleImgError from "@/src/hooks/useHandleImgError";
 // Partial<Pick<INftcard, "name" | "imgUrl" | "price">> & {
 //   time?: boolean;
 
@@ -39,10 +41,11 @@ const NftCard2 = ({
   user_id?: string;
 }) => {
   const [userId, setUserId] = useState("");
+  const [auctionEndDate, setAuctionEndDate] = useState(null);
+  const { handleImgError, imgError } = UseHandleImgError();
+  const { time } = useTimeCountDown(auctionEndDate);
   const [dollarRate] = UseConvertEthToDollar();
   const { push } = useRouter();
-  const [auctionEndDate, setAuctionEndDate] = useState(null);
-  const { time } = useTimeCountDown(auctionEndDate);
 
   const fetchUserId = async () => {
     // try {
@@ -72,6 +75,7 @@ const NftCard2 = ({
     fetchUserId();
     // return () => {
     // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -99,46 +103,57 @@ const NftCard2 = ({
         {item_id ? (
           <Image
             src={
-              item_art_url === undefined ||
-              item_art_url === null ||
-              (item_art_url === "" &&
-                item_id !== undefined &&
-                item_id !== null &&
-                item_id !== "")
+              imgError
+                ? APPCONFIG.DEFAULT_NFT_ART
+                : item_art_url === undefined ||
+                  item_art_url === null ||
+                  (item_art_url === "" &&
+                    item_id !== undefined &&
+                    item_id !== null &&
+                    item_id !== "")
                 ? item_id.item_art_url
-                : item_art_url
+                : APPCONFIG.DEFAULT_NFT_ART
             }
             alt={item_title}
             layout="fill"
             placeholder="blur"
             blurDataURL="/images/placeholder.png"
             className="rounded-t-xl"
+            onError={handleImgError}
           />
         ) : resell_item_id ? (
           <Image
             src={
-              resell_item_id !== undefined || resell_item_id !== null
+              imgError
+                ? APPCONFIG.DEFAULT_NFT_ART
+                : resell_item_id.item_art_url !== undefined &&
+                  resell_item_id.item_art_url !== null &&
+                  resell_item_id.item_art_url !== ""
                 ? resell_item_id.item_art_url
-                : ""
+                : APPCONFIG.DEFAULT_NFT_ART
             }
             alt={resell_item_id.item_title}
             layout="fill"
             placeholder="blur"
             blurDataURL="/images/placeholder.png"
             className="rounded-t-xl"
+            onError={handleImgError}
           />
         ) : item_art_url ? (
           <Image
             src={
-              item_art_url !== undefined || item_art_url !== null
+              imgError
+                ? APPCONFIG.DEFAULT_NFT_ART
+                : item_art_url !== undefined || item_art_url !== null
                 ? item_art_url
-                : ""
+                : APPCONFIG.DEFAULT_NFT_ART
             }
             alt={item_title}
             layout="fill"
             placeholder="blur"
             blurDataURL="/images/placeholder.png"
             className="rounded-t-xl"
+            onError={handleImgError}
           />
         ) : (
           ""

@@ -152,7 +152,7 @@ const NavBar: FC<INav> = ({
       connectUserWallet();
       setIsLoading((prev) => !prev);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

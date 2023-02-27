@@ -259,7 +259,7 @@ const CreateNewNft = () => {
             return;
           } else if (response.status == 200) {
             setIsLoading((prev) => !prev);
-            console.log(response.data.data);
+            // console.log(response.data.data);
             toast.success(response.data.message);
             push("/profile");
           } else {
