@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { useRouter } from "next/router";
-// import React, { useState, useEffect } from "react";
+import useHandleImgError from "@/src/hooks/useHandleImgError";
 
 import { CoinIcon } from "@/src/components/atoms/vectors";
 import Image from "next/image";
@@ -26,11 +26,9 @@ const NftMiniCards = ({
   collectionFeaturedImage,
   collectionLogoImage,
 }: INftminicards) => {
-  const [imgError, setOnImageError] = useState(false);
+  const { handleImgError, imgError } = useHandleImgError();
+
   const { push } = useRouter();
-  const handleImgError = () => {
-    setOnImageError((prev) => !prev);
-  };
 
   const handleNavigate = () => {
     push(`/single-collection/${_id}`);

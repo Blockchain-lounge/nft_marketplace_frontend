@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 // import { FeaturedIcon } from "@/src/components/atoms/vectors";
 // import { ToastContainer, toast } from "react-toastify";
+import useHandleImgError from "@/src/hooks/useHandleImgError";
 import { HeroIndicator, Button, Heading } from "@/src/components/atoms";
 
 import {
@@ -32,18 +33,14 @@ import Skeleton from "react-loading-skeleton";
 import APPCONFIG from "../constants/Config";
 
 const Home: NextPage = () => {
-  const [heroData, setHeroData] = useState<Array<ICollection>>([]);
-  const [activeCard, setActiveCard] = useState<ICollection | null>(null);
-  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
-  const { push } = useRouter();
   const [items, setItems] = useState(null);
   const [collections, setCollections] = useState(null);
+  const [heroData, setHeroData] = useState<Array<ICollection>>([]);
+  const [activeCard, setActiveCard] = useState<ICollection | null>(null);
   const [featuredCollections, setFeaturedCollections] = useState([]);
-  const [imgError, setOnImageError] = useState(false);
-
-  const handleImgError = () => {
-    setOnImageError((prev) => !prev);
-  };
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const { push } = useRouter();
+  const { handleImgError, imgError } = useHandleImgError();
 
   /**
    * This function fetches all homepage data

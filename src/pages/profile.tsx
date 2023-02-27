@@ -49,7 +49,7 @@ const Profile = () => {
   // const [user, setUser] = useState<null | Record<string, string>>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [myProfile, setMyProfile] = useState<IUserProps | null>(null);
-  // const [data, isLoading] = UseFetch("/user/my_profile");
+
   const { push } = useRouter();
   const [userProfileImg, setUserProfileImg] = useState("");
   const [userBannerImg, setUserBannerImg] = useState("");
