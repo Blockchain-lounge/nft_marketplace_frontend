@@ -2,7 +2,7 @@ import { ReactNode, useCallback, useState } from "react";
 
 import clsx from "clsx";
 
-import { NavBar } from "@/src/components/organisms";
+import { Footer, NavBar } from "@/src/components/organisms";
 import { MiniUserWallet, Sidebar } from "@/src/components/molecules";
 
 import { useSelector } from "react-redux";
@@ -38,7 +38,7 @@ const DashboardLayout = ({
   }, []);
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="h-screen flex flex-col overflow-hidden w-full">
       <NavBar
         showProfile={showProfile}
         setShowProfile={setShowProfile}
@@ -76,7 +76,10 @@ const DashboardLayout = ({
               <Loader2 />
             </div>
           ) : (
-            <div className="h-full overflow-hidden">{children}</div>
+            <>
+              <div className="scrollbar-hide pt-4 center">{children}</div>
+              <Footer />
+            </>
           )}
         </div>
       </div>

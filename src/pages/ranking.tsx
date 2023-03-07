@@ -23,34 +23,24 @@ const Ranking = () => {
   const listHeadings = ["collection", "volume", "floor price"];
   return (
     <DashboardLayout>
-      <div className="sub-layout-wrapper scrollbar-hide">
-        <div className="center">
-          <div className="collection-page-top">
-            <div className="collection-page-sub-top">
-              <Heading2 title="Ranking" />
-              <Select
-                title="All chains"
-                lists={chainSelect}
-                onClick={setCurrentChain}
-                placeholder={currentChain}
-              />
-            </div>
-            <Tab2
-              tabs={tabs}
-              activeTab={currentTab}
-              setActiveTab={setCurrentTab}
-            />
-          </div>
-          <div className="collection-page-lists">
-            <NftList
-              headings={listHeadings}
-              lists={rankings}
-              url="/single-collection"
-            />
-          </div>
+      <div className="collection-page-top">
+        <div className="collection-page-sub-top">
+          <Heading2 title="Ranking" />
+          <Select
+            title="All chains"
+            lists={chainSelect}
+            onClick={setCurrentChain}
+            placeholder={currentChain}
+          />
         </div>
-
-        <Footer />
+        <Tab2 tabs={tabs} activeTab={currentTab} setActiveTab={setCurrentTab} />
+      </div>
+      <div className="collection-page-lists">
+        <NftList
+          headings={listHeadings}
+          lists={rankings}
+          url="/single-collection"
+        />
       </div>
     </DashboardLayout>
   );

@@ -77,87 +77,82 @@ const Index = () => {
   };
   return (
     <DashboardLayout>
-      <div className="sub-layout-wrapper scrollbar-hide">
-        <div className="center">
-          <div className="space-y-[6rem]">
-            <section className="category-hero">
-              <div className="w-[30%]">
-                <span className="uppercase font-bold tracking-widest earnings-card-history">
-                  nft academy
-                </span>
-                <Heading
-                  title="Intro to NFTs on Cloudax"
-                  twClasses="mt-4 mb-[2.5rem]"
-                />
+      <div className="space-y-[6rem]">
+        <section className="category-hero">
+          <div className="w-[30%]">
+            <span className="uppercase font-bold tracking-widest earnings-card-history">
+              nft academy
+            </span>
+            <Heading
+              title="Intro to NFTs on Cloudax"
+              twClasses="mt-4 mb-[2.5rem]"
+            />
 
-                <Button title="Start Learning" />
-              </div>
-              <div className="h-[40vh] sm:h-[80vh] relative w-full lg:h-[65vh] lg:w-[67%] 2xl:w-[50%] justify-self-end">
-                <div className="hero-img">
+            <Button title="Start Learning" />
+          </div>
+          <div className="h-[40vh] sm:h-[80vh] relative w-full lg:h-[65vh] lg:w-[67%] 2xl:w-[50%] justify-self-end">
+            <div className="hero-img">
+              <Image
+                layout="fill"
+                objectFit="cover"
+                src="/images/nft-academy-img.svg"
+                alt="nft-academy"
+                placeholder="blur"
+                blurDataURL="/images/placeholder.png"
+              />
+            </div>
+          </div>
+        </section>
+        <section>
+          <div id="nft-tutorial-section">
+            <Heading2 title="NFT 101" />
+            <span className="text-xl font-medium text-txt-2 block mb-10">
+              Get Comfortable With The Basics
+            </span>
+          </div>
+          <NftSlider
+            /*@ts-ignore*/
+            Card={NftAcadCard}
+            data={nftAcadData}
+            pos="top-[35%]"
+          />
+        </section>
+        <section>
+          <div>
+            <Heading2 title="Watch and learn" />
+            <span className="text-xl font-medium text-txt-2 block mb-10">
+              Hear from the NFT community on a variety of topics.
+            </span>
+          </div>
+          <div className="grid grid-cols-1">
+            <Slider {...sliderSettings} arrows={false}>
+              {nftAcadVid.map((val, i) => (
+                <div
+                  className="relative h-[35rem] w-full cursor-pointer"
+                  key={val.label + i}
+                  onClick={() => push("/nft-academy/" + i + 1)}
+                >
                   <Image
-                    layout="fill"
-                    objectFit="cover"
-                    src="/images/nft-academy-img.svg"
-                    alt="nft-academy"
+                    src={val.img}
+                    alt={"acad-video" + i}
                     placeholder="blur"
                     blurDataURL="/images/placeholder.png"
+                    objectFit="cover"
+                    layout="fill"
+                    className="rounded-xl"
                   />
+                  <div className="absolute bottom-[10%] flex justify-between items-center w-full px-12">
+                    <Heading2 title={val.label} />
+                    <span className="text-xl text-black font-bold flex items-center gap-x-2 bg-white rounded-xl py-4 px-6">
+                      <PlayIcon />
+                      Play
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </section>
-            <section>
-              <div id="nft-tutorial-section">
-                <Heading2 title="NFT 101" />
-                <span className="text-xl font-medium text-txt-2 block mb-10">
-                  Get Comfortable With The Basics
-                </span>
-              </div>
-              <NftSlider
-                /*@ts-ignore*/
-                Card={NftAcadCard}
-                data={nftAcadData}
-                pos="top-[35%]"
-              />
-            </section>
-            <section>
-              <div>
-                <Heading2 title="Watch and learn" />
-                <span className="text-xl font-medium text-txt-2 block mb-10">
-                  Hear from the NFT community on a variety of topics.
-                </span>
-              </div>
-              <div className="grid grid-cols-1">
-                <Slider {...sliderSettings} arrows={false}>
-                  {nftAcadVid.map((val, i) => (
-                    <div
-                      className="relative h-[35rem] w-full cursor-pointer"
-                      key={val.label + i}
-                      onClick={() => push("/nft-academy/" + i + 1)}
-                    >
-                      <Image
-                        src={val.img}
-                        alt={"acad-video" + i}
-                        placeholder="blur"
-                        blurDataURL="/images/placeholder.png"
-                        objectFit="cover"
-                        layout="fill"
-                        className="rounded-xl"
-                      />
-                      <div className="absolute bottom-[10%] flex justify-between items-center w-full px-12">
-                        <Heading2 title={val.label} />
-                        <span className="text-xl text-black font-bold flex items-center gap-x-2 bg-white rounded-xl py-4 px-6">
-                          <PlayIcon />
-                          Play
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </Slider>
-              </div>
-            </section>
+              ))}
+            </Slider>
           </div>
-        </div>
-        <Footer />
+        </section>
       </div>
     </DashboardLayout>
   );

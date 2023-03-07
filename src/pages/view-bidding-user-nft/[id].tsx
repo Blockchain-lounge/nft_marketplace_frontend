@@ -212,23 +212,22 @@ const ViewUserNft = () => {
   return (
     <DashboardLayout>
       {itemDetail !== null ? (
-        <div className="sub-layout-wrapper scrollbar-hide">
-          <div className="center space-y-8 lg:h-[80vh]">
-            <div className="grid lg:gap-x-8 lg:grid-cols-[0.35fr_0.3fr_0.35fr]">
-              <div>
-                <div className="relative h-[35rem] lg:h-[100%]">
-                  <Image
-                    src={itemDetail.item.item_art_url}
-                    alt={itemDetail.item.item_title}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-xl"
-                    placeholder="blur"
-                    blurDataURL="/images/placeholder.png"
-                  />
-                </div>
+        <div className=" space-y-8">
+          <div className="grid lg:gap-x-8 lg:grid-cols-[0.35fr_0.3fr_0.35fr]">
+            <div>
+              <div className="relative h-[35rem] lg:h-[100%]">
+                <Image
+                  src={itemDetail.item.item_art_url}
+                  alt={itemDetail.item.item_title}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-xl"
+                  placeholder="blur"
+                  blurDataURL="/images/placeholder.png"
+                />
+              </div>
 
-                {/* <div className="flex gap-x-6 mt-4 items-center">
+              {/* <div className="flex gap-x-6 mt-4 items-center">
                   <span className="flex gap-x-2 items-center">
                     <LikeIcon /> 298
                   </span>
@@ -265,96 +264,94 @@ const ViewUserNft = () => {
                     />
                   </span>
                 </div> */}
-              </div>
-              <div className="mt-4 md:mt-0 space-y-4 pt-4">
-                <div>
-                  {itemDetail.item.collection ? (
-                    <div className="flex items-center mb-5">
-                      {/*collection-logo*/}
-                      <div
-                        className="flex items-center mb-4 cursor-pointer"
-                        onClick={handleNavigateToCollection}
-                      >
-                        <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
-                          <Image
-                            src={
-                              itemDetail.item.collection
-                                ? itemDetail.item.collection.logo_image
-                                : "/images/placeholder.png"
-                            }
-                            alt="colx-img"
-                            layout="fill"
-                            objectFit="cover"
-                            className="rounded-full"
-                            placeholder="blur"
-                            blurDataURL="/images/placeholder.png"
-                          />
-                        </div>
-                        <span className="text-xl lg:mr-1">
-                          {itemDetail.item.collection.name}
-                        </span>
-                        <div className="h-6 w-6 relative">
-                          <Image
-                            src="/images/verify.svg"
-                            alt="colx-img"
-                            layout="fill"
-                            objectFit="contain"
-                            className="rounded-full"
-                          />
-                        </div>
+            </div>
+            <div className="mt-4 md:mt-0 space-y-4 pt-4">
+              <div>
+                {itemDetail.item.collection ? (
+                  <div className="flex items-center mb-5">
+                    {/*collection-logo*/}
+                    <div
+                      className="flex items-center mb-4 cursor-pointer"
+                      onClick={handleNavigateToCollection}
+                    >
+                      <div className="h-[3.125rem] w-[3.125rem] relative mr-4">
+                        <Image
+                          src={
+                            itemDetail.item.collection
+                              ? itemDetail.item.collection.logo_image
+                              : "/images/placeholder.png"
+                          }
+                          alt="colx-img"
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded-full"
+                          placeholder="blur"
+                          blurDataURL="/images/placeholder.png"
+                        />
+                      </div>
+                      <span className="text-xl lg:mr-1">
+                        {itemDetail.item.collection.name}
+                      </span>
+                      <div className="h-6 w-6 relative">
+                        <Image
+                          src="/images/verify.svg"
+                          alt="colx-img"
+                          layout="fill"
+                          objectFit="contain"
+                          className="rounded-full"
+                        />
                       </div>
                     </div>
-                  ) : (
-                    ""
-                  )}
+                  </div>
+                ) : (
+                  ""
+                )}
 
-                  <span className="text-4xl font-bold capitalize">
-                    {itemDetail.item.item_title}
-                  </span>
-                </div>
-                <div className="view-hero-nft-owner">
-                  <div className="flex items-center gap-x-4">
-                    <div className="relative h-14 w-14">
-                      <Image
-                        src={owner || "/images/avatar.png"}
-                        alt="nft-img"
-                        layout="fill"
-                        objectFit="cover"
-                        className="rounded-full"
-                        placeholder="blur"
-                        blurDataURL="/images/placeholder.png"
-                      />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-txt-2"> Current Owner</span>
-                      <span>Owned by you</span>
-                    </div>
+                <span className="text-4xl font-bold capitalize">
+                  {itemDetail.item.item_title}
+                </span>
+              </div>
+              <div className="view-hero-nft-owner">
+                <div className="flex items-center gap-x-4">
+                  <div className="relative h-14 w-14">
+                    <Image
+                      src={owner || "/images/avatar.png"}
+                      alt="nft-img"
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded-full"
+                      placeholder="blur"
+                      blurDataURL="/images/placeholder.png"
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-txt-2"> Current Owner</span>
+                    <span>Owned by you</span>
                   </div>
                 </div>
-                <div className="view-hero-nft-cta-wrapper">
-                  <div className="flex flex-col w-full gap-x-6">
-                    <div className="p-4 bg-bg-5 rounded-md w-full ">
-                      <div className="flex justify-between">
-                        <div className="">
-                          <span className="text-txt-2 block mb-4 text-xl">
-                            Price
+              </div>
+              <div className="view-hero-nft-cta-wrapper">
+                <div className="flex flex-col w-full gap-x-6">
+                  <div className="p-4 bg-bg-5 rounded-md w-full ">
+                    <div className="flex justify-between">
+                      <div className="">
+                        <span className="text-txt-2 block mb-4 text-xl">
+                          Price
+                        </span>
+                        <span className="flex items-center text-[1.5rem] gap-x-1">
+                          <CoinIcon />
+                          {itemDetail.listing_price || 0}
+                        </span>
+                        {dollarRate ? (
+                          <span className="flex items-center text-xl mt-2">
+                            <span className="text-xl font-bold">$</span>
+                            {(itemDetail.listing_price * dollarRate).toFixed(2)}
                           </span>
-                          <span className="flex items-center text-[1.5rem] gap-x-1">
-                            <CoinIcon />
-                            {itemDetail.listing_price || 0}
-                          </span>
-                          {dollarRate ? (
-                            <span className="flex items-center text-xl mt-2">
-                              <span className="text-xl font-bold">$</span>
-                              {(itemDetail.listing_price * dollarRate).toFixed(
-                                2
-                              )}
-                            </span>
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                        {/* <div className="">
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                      {/* <div className="">
                           <span className="text-txt-2 block text-xl mb-4">
                             Item quantity
                           </span>
@@ -364,119 +361,119 @@ const ViewUserNft = () => {
                               itemDetail.listing_quantity}
                           </span>
                         </div> */}
-                      </div>
                     </div>
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-y-4 md:gap-y-0 gap-x-4 mt-4">
-                      {/* <Button
+                  </div>
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-y-4 md:gap-y-0 gap-x-4 mt-4">
+                    {/* <Button
                         title="Edit"
                         outline2
                         wt="w-full"
                         onClick={handleEditNft}
                       /> */}
-                      <Button
-                        title="Resell"
-                        wt="w-full"
-                        isDisabled={isTransloading}
-                        onClick={() => handleResellNftBiding()}
-                      />
-                    </div>
+                    <Button
+                      title="Resell"
+                      wt="w-full"
+                      isDisabled={isTransloading}
+                      onClick={() => handleResellNftBiding()}
+                    />
                   </div>
                 </div>
-                <p className="py-4 lg:py-0 font-medium text-txt-2 text-center lg:text-left">
-                  Your listing will expire in:{" "}
-                  <span className="font-medium">
-                    {time.days}:{time.hours}:{time.minutes}:{time.seconds}
-                  </span>
-                </p>
               </div>
-              <div className="create-new-nft-wrapper-2 border border-border-1-line p-4 rounded-[1.25rem] h-[35vh] lg:block lg:h-[55vh]">
-                <span className="create-new-nft-wrapper-2-label  pb-2 border-b border-border-1-line">
-                  Offers
+              <p className="py-4 lg:py-0 font-medium text-txt-2 text-center lg:text-left">
+                Your listing will expire in:{" "}
+                <span className="font-medium">
+                  {time.days}:{time.hours}:{time.minutes}:{time.seconds}
                 </span>
-                <div className="pt-4 h-[90%] overflow-auto scrollbar-hide">
-                  {/*if there is no offer show this*/}
-                  {[1].length > 0 ? (
-                    // <>
-                    //   {offerLists.map((offer, i) => (
-                    //     <div
-                    //       key={"offer-list" + offer.address + i}
-                    //       className="flex justify-between items-center cursor-pointer hover:bg-bg-3 p-3 rounded-md"
-                    //       onClick={() => viewOffer(offer._id)}
-                    //     >
-                    //       <div className="flex items-center gap-x-4">
-                    //         <div className="relative h-14 w-14">
-                    //           <Image
-                    //             src={offer.item_id.item_art_url}
-                    //             alt={"offer-img" + i}
-                    //             layout="fill"
-                    //             objectFit="contain"
-                    //             className="rounded-full"
-                    //           />
-                    //         </div>
-                    //         <span className="font-medium">
-                    //           {offer.user_id.username !== null &&
-                    //           offer.user_id.username !== ""
-                    //             ? offer.user_id.username
-                    //             : ""}
-                    //         </span>
-                    //       </div>
-                    //       <span className="font-bold flex items-center gap-x-2">
-                    //         <CoinIcon />
-                    //         {offer.offer_price}ETH
-                    //       </span>
-                    //     </div>
-                    //   ))}
-                    // </>
-                    <div className="flex flex-col h-full gap-y-4 scrollbar-hide">
-                      {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((offer, i) => (
-                        <NftBidCard key={"bidding-list" + i} />
-                      ))}
+              </p>
+            </div>
+            <div className="create-new-nft-wrapper-2 border border-border-1-line p-4 rounded-[1.25rem] h-[35vh] lg:block lg:h-[55vh]">
+              <span className="create-new-nft-wrapper-2-label  pb-2 border-b border-border-1-line">
+                Offers
+              </span>
+              <div className="pt-4 h-[90%] overflow-auto scrollbar-hide">
+                {/*if there is no offer show this*/}
+                {[1].length > 0 ? (
+                  // <>
+                  //   {offerLists.map((offer, i) => (
+                  //     <div
+                  //       key={"offer-list" + offer.address + i}
+                  //       className="flex justify-between items-center cursor-pointer hover:bg-bg-3 p-3 rounded-md"
+                  //       onClick={() => viewOffer(offer._id)}
+                  //     >
+                  //       <div className="flex items-center gap-x-4">
+                  //         <div className="relative h-14 w-14">
+                  //           <Image
+                  //             src={offer.item_id.item_art_url}
+                  //             alt={"offer-img" + i}
+                  //             layout="fill"
+                  //             objectFit="contain"
+                  //             className="rounded-full"
+                  //           />
+                  //         </div>
+                  //         <span className="font-medium">
+                  //           {offer.user_id.username !== null &&
+                  //           offer.user_id.username !== ""
+                  //             ? offer.user_id.username
+                  //             : ""}
+                  //         </span>
+                  //       </div>
+                  //       <span className="font-bold flex items-center gap-x-2">
+                  //         <CoinIcon />
+                  //         {offer.offer_price}ETH
+                  //       </span>
+                  //     </div>
+                  //   ))}
+                  // </>
+                  <div className="flex flex-col h-full gap-y-4 scrollbar-hide">
+                    {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((offer, i) => (
+                      <NftBidCard key={"bidding-list" + i} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-col justify-center items-center gap-y-4 pt-4 h-full lg:h-[85%]">
+                    <div className="relative h-[50%] w-[70%]">
+                      <Image
+                        priority
+                        src="/images/no-offer.svg"
+                        alt="buy-nft-sample"
+                        layout="fill"
+                        objectFit="contain"
+                      />
                     </div>
-                  ) : (
-                    <div className="flex flex-col justify-center items-center gap-y-4 pt-4 h-full lg:h-[85%]">
-                      <div className="relative h-[50%] w-[70%]">
-                        <Image
-                          priority
-                          src="/images/no-offer.svg"
-                          alt="buy-nft-sample"
-                          layout="fill"
-                          objectFit="contain"
-                        />
-                      </div>
-                      <span className="create-new-nft-wrapper-2-label">
-                        No offers yet
-                      </span>
-                    </div>
-                  )}
-                </div>
+                    <span className="create-new-nft-wrapper-2-label">
+                      No offers yet
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
-            <div className=" space-y-3">
-              <h2 className="text-2xl font-bold ">Description</h2>
-              <div className="flex flex-col lg:w-1/2">
-                <p className="text-txt-2">
-                  {/*@ts-ignore*/}
-                  {itemDetail.item.item_description}
-                </p>
-              </div>
+          </div>
+          <div className=" space-y-3">
+            <h2 className="text-2xl font-bold ">Description</h2>
+            <div className="flex flex-col lg:w-1/2">
+              <p className="text-txt-2">
+                {/*@ts-ignore*/}
+                {itemDetail.item.item_description}
+              </p>
+            </div>
 
-              {/* <span className="flex items-center gap-x-2 text-txt-3 font-medium">
+            {/* <span className="flex items-center gap-x-2 text-txt-3 font-medium">
               See more
               <span>
                 <CaretDown color="lightgray" />
               </span>
             </span> */}
 
-              <div className="view-nft-details">
-                <h2 className="text-2xl font-bold my-4">Details</h2>
+            <div className="view-nft-details">
+              <h2 className="text-2xl font-bold my-4">Details</h2>
 
-                <div className="space-y-4">
-                  <div className="flex items-center gap-x-2">
-                    <CoinIcon />{" "}
-                    <span className="block font-medium ">Ethereum</span>{" "}
-                    <span className="text-txt-2">(ERC-721)</span>
-                  </div>
-                  {/* <div className="flex items-center gap-x-2 cursor-pointer">
+              <div className="space-y-4">
+                <div className="flex items-center gap-x-2">
+                  <CoinIcon />{" "}
+                  <span className="block font-medium ">Ethereum</span>{" "}
+                  <span className="text-txt-2">(ERC-721)</span>
+                </div>
+                {/* <div className="flex items-center gap-x-2 cursor-pointer">
                   <StatIcon />{" "}
                   <span className="block font-medium">View on Etherscan</span>
                   <ExternalLinkIcon />
@@ -486,11 +483,9 @@ const ViewUserNft = () => {
                   <span className="block font-medium">Open original</span>{" "}
                   <ExternalLinkIcon />{" "}
                 </div> */}
-                </div>
               </div>
             </div>
           </div>
-          <Footer />
         </div>
       ) : (
         ""

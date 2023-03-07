@@ -132,7 +132,6 @@ const AboutUs = () => {
             </div>
           </section> */}
         </div>
-        <Footer />
       </div>
     </DashboardLayout>
   );

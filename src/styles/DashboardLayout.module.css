@@ -1,5 +1,5 @@
 .layout-wrapper {
-  @apply h-full lg:grid grid-cols-[19rem_1fr] lg:z-0;
+  @apply flex-1 flex lg:z-0 overflow-hidden;
 }
 
 .layout-overlay {
@@ -21,5 +21,5 @@
 }
 
 .aside-2 {
-  @apply lg:mt-[0.8rem];
+  @apply lg:mt-[0.8rem] flex-1 flex flex-col justify-between overflow-auto;
 }

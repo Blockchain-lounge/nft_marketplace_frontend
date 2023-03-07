@@ -292,107 +292,103 @@ const CreateNewNft = () => {
 
   return (
     <DashboardLayout isLoading={isLoading}>
-      <div className="sub-layout-wrapper scrollbar-hide">
-        <div className="center">
-          <div className="earnings-title-btn">
-            <ArrowBack onClick={() => Router.back()} />
-            <h1>Create New Nft</h1>
+      <div className="earnings-title-btn">
+        <ArrowBack onClick={() => Router.back()} />
+        <h1>Create New Nft</h1>
+      </div>
+      <ToastContainer />
+      <div className="create-new-nft-wrapper">
+        <form onSubmit={handleSubmit} className="create-new-nft-form">
+          <div className="create-new-nft-wrapper-2">
+            <span className="create-new-nft-wrapper-2-label">File/Media</span>
+            <span className="create-new-nft-wrapper-2-label-type">
+              File types supported: JPG, JPEG, PNG, SVG, WEBP and GIF. Max size:
+              20 MB
+            </span>
+            <input
+              type="file"
+              id="file"
+              onChange={(e) => handleImageFieldChange(e)}
+              className="hidden"
+              name="img"
+            />
+            <div className="disp-img w-[25rem] h-[27rem] relative">
+              <label
+                htmlFor="file"
+                className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d7f]"
+              >
+                <ImgUploadIcon />
+                <span className={clsx(nftCoverImage ? "hidden" : "block")}>
+                  Click to add a file or drag file here
+                </span>
+              </label>
+              <img
+                src={nftCoverImage ? nftCoverImage : ""}
+                alt=""
+                className={`object-cover h-full w-full ${
+                  !nftCoverImage ? "hidden" : "block"
+                }`}
+              />
+            </div>
           </div>
-          <ToastContainer />
-          <div className="create-new-nft-wrapper">
-            <form onSubmit={handleSubmit} className="create-new-nft-form">
-              <div className="create-new-nft-wrapper-2">
-                <span className="create-new-nft-wrapper-2-label">
-                  File/Media
-                </span>
-                <span className="create-new-nft-wrapper-2-label-type">
-                  File types supported: JPG, JPEG, PNG, SVG, WEBP and GIF. Max
-                  size: 20 MB
-                </span>
-                <input
-                  type="file"
-                  id="file"
-                  onChange={(e) => handleImageFieldChange(e)}
-                  className="hidden"
-                  name="img"
-                />
-                <div className="disp-img w-[25rem] h-[27rem] relative">
-                  <label
-                    htmlFor="file"
-                    className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d7f]"
-                  >
-                    <ImgUploadIcon />
-                    <span className={clsx(nftCoverImage ? "hidden" : "block")}>
-                      Click to add a file or drag file here
-                    </span>
-                  </label>
-                  <img
-                    src={nftCoverImage ? nftCoverImage : ""}
-                    alt=""
-                    className={`object-cover h-full w-full ${
-                      !nftCoverImage ? "hidden" : "block"
-                    }`}
-                  />
-                </div>
-              </div>
-              <Input2
-                label="Item name"
-                name="itemName"
-                required
-                placeholder="Enter Item name"
-                onChange={handleFieldChange}
-                value={nftPayload.itemName}
-              />
+          <Input2
+            label="Item name"
+            name="itemName"
+            required
+            placeholder="Enter Item name"
+            onChange={handleFieldChange}
+            value={nftPayload.itemName}
+          />
 
-              <div className="create-new-nft-wrapper-2">
-                <div className="flex gap-x-2">
-                  <span className="create-new-nft-wrapper-2-label">
-                    Description
-                  </span>{" "}
-                  <span className="text-txt-2">(required)</span>
-                </div>
-                <span className="create-new-nft-wrapper-2-label-type">
-                  The description will be included on the item&apos;s detail
-                  page underneath its image.
-                </span>
-                <textarea
-                  name="description"
-                  className="w-full bg-transparent  outline-none select"
-                  placeholder="Provide a detailed description of your item..."
-                  rows={5}
-                  maxLength={250}
-                  onChange={handleFieldChange}
-                  value={nftPayload.description}
-                ></textarea>
+          <div className="create-new-nft-wrapper-2">
+            <div className="flex gap-x-2">
+              <span className="create-new-nft-wrapper-2-label">
+                Description
+              </span>{" "}
+              <span className="text-txt-2">(required)</span>
+            </div>
+            <span className="create-new-nft-wrapper-2-label-type">
+              The description will be included on the item&apos;s detail page
+              underneath its image.
+            </span>
+            <textarea
+              name="description"
+              className="w-full bg-transparent  outline-none select"
+              placeholder="Provide a detailed description of your item..."
+              rows={5}
+              maxLength={250}
+              onChange={handleFieldChange}
+              value={nftPayload.description}
+            ></textarea>
+          </div>
+          <div className="create-new-nft-wrapper-2">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-x-2">
+                <span>Collection </span>
+                <span className="text-txt-2">(required)</span>
               </div>
-              <div className="create-new-nft-wrapper-2">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-x-2">
-                    <span>Collection </span>
-                    <span className="text-txt-2">(required)</span>
-                  </div>
-                  <span
-                    className="earnings-card-history cursor-pointer"
-                    onClick={handleNavigateToCollection}
-                  >
-                    Create collection
-                  </span>
-                </div>
-                <Select
-                  title={nftPayloadselect.label}
-                  lists={collections}
-                  onClick2={handleSelect}
-                />
-              </div>
-              <Input2
-                label="Supply"
-                name="supply"
-                required
-                placeholder="1,000"
-                onChange={handleFieldChange}
-                value={nftPayload.supply}
-              />
-              {/* <Input2
+              <span
+                className="earnings-card-history cursor-pointer"
+                onClick={handleNavigateToCollection}
+              >
+                Create collection
+              </span>
+            </div>
+            <Select
+              title={nftPayloadselect.label}
+              lists={collections}
+              onClick2={handleSelect}
+            />
+          </div>
+          <Input2
+            label="Supply"
+            name="supply"
+            required
+            placeholder="1,000"
+            onChange={handleFieldChange}
+            value={nftPayload.supply}
+          />
+          {/* <Input2
                 label="Royalties"
                 name="royalties"
                 placeholder="10"
@@ -402,7 +398,7 @@ const CreateNewNft = () => {
                 onChange={handleFieldChange}
                 value={nftPayload.royalties}
               /> */}
-              {/* <div className="create-new-nft-wrapper-2">
+          {/* <div className="create-new-nft-wrapper-2">
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="create-new-nft-wrapper-2-label">
@@ -433,66 +429,64 @@ const CreateNewNft = () => {
                   ))}
                 </div>
               </div> */}
-              <Button title="Create" isDisabled={isTransloading} />
-            </form>
-            <div className="create-new-nft-wrapper-preview max-w-[60%] hidden lg:block">
-              <div className="create-new-nft-wrapper-2">
-                <span className="create-new-nft-wrapper-2-label">Preview</span>
-                <span className="create-new-nft-wrapper-2-label-type">
-                  This is how your item will be displayed
-                </span>
-              </div>
-              <div className="w-full h-[27rem] mt-4">
-                <div className="h-[100%] relative">
-                  {file && (
-                    <div className="nmc-wrapper-likes nmc-wrapper2-likes z-10">
-                      <LikeIcon />
-                      <span>298</span>
-                    </div>
-                  )}
-                  <span
-                    className={clsx(
-                      !file
-                        ? "absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d7f] rounded-t-2xl"
-                        : "hidden"
-                    )}
-                  >
-                    {nftCoverImage.length > 0 ? (
-                      <Image
-                        src={nftCoverImage ? nftCoverImage : ""}
-                        layout="fill"
-                        alt={nftPayload.itemName}
-                        objectFit="cover"
-                        className={`rounded-t-2xl ${
-                          !nftCoverImage ? "hidden" : "block"
-                        }`}
-                      />
-                    ) : (
-                      <ImgUploadIcon />
-                    )}
-                  </span>
+          <Button title="Create" isDisabled={isTransloading} />
+        </form>
+        <div className="create-new-nft-wrapper-preview max-w-[60%] hidden lg:block">
+          <div className="create-new-nft-wrapper-2">
+            <span className="create-new-nft-wrapper-2-label">Preview</span>
+            <span className="create-new-nft-wrapper-2-label-type">
+              This is how your item will be displayed
+            </span>
+          </div>
+          <div className="w-full h-[27rem] mt-4">
+            <div className="h-[100%] relative">
+              {file && (
+                <div className="nmc-wrapper-likes nmc-wrapper2-likes z-10">
+                  <LikeIcon />
+                  <span>298</span>
                 </div>
-                <div className="w-full bg-white rounded-b-2xl p-4 flex flex-col ">
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-black text-[1.3rem]">
-                      {nftPayload.itemName || "Untitled"}
-                    </span>
-                    {/* <span className="flex text-black text-[1.3rem] gap-x-1">
+              )}
+              <span
+                className={clsx(
+                  !file
+                    ? "absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d7f] rounded-t-2xl"
+                    : "hidden"
+                )}
+              >
+                {nftCoverImage.length > 0 ? (
+                  <Image
+                    src={nftCoverImage ? nftCoverImage : ""}
+                    layout="fill"
+                    alt={nftPayload.itemName}
+                    objectFit="cover"
+                    className={`rounded-t-2xl ${
+                      !nftCoverImage ? "hidden" : "block"
+                    }`}
+                  />
+                ) : (
+                  <ImgUploadIcon />
+                )}
+              </span>
+            </div>
+            <div className="w-full bg-white rounded-b-2xl p-4 flex flex-col ">
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-black text-[1.3rem]">
+                  {nftPayload.itemName || "Untitled"}
+                </span>
+                {/* <span className="flex text-black text-[1.3rem] gap-x-1">
                       <CoinIcon color="black" />
                       {nftPayload.coinPrice || "-"}
                     </span> */}
-                  </div>
-                  <span className="text-[1.1rem] text-black ">
-                    {/*replace with collection name*/}
-                    {nftPayloadselect.label || "Uncategorized"}
-                  </span>
-                </div>
               </div>
+              <span className="text-[1.1rem] text-black ">
+                {/*replace with collection name*/}
+                {nftPayloadselect.label || "Uncategorized"}
+              </span>
             </div>
           </div>
         </div>
-        <Footer />
       </div>
+
       <Modal openModal={showModal} closeModal={setShowModal}>
         {/* <div className="create-new-nft-success">
           <div className="mt-4 h-40 w-40 relative">

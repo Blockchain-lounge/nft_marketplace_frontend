@@ -139,31 +139,30 @@ const ViewUserNft = () => {
     <DashboardLayout>
       <ToastContainer />
       {itemDetail !== null ? (
-        <div className="sub-layout-wrapper scrollbar-hide">
-          <div className="center space-y-8 h-screen lg:h-[80vh]">
-            <div className="grid lg:gap-x-8 lg:grid-cols-[0.35fr_0.3fr_0.35fr]">
-              <div>
-                <div className="relative h-[23rem] lg:h-[100%]">
+        <div className="space-y-8">
+          <div className="grid lg:gap-x-8 lg:grid-cols-[0.35fr_0.3fr_0.35fr]">
+            <div>
+              <div className="relative h-[23rem] lg:h-[100%]">
                 <Image
-                      src={
-                        itemDetail.metadata && itemDetail.metadata.image
-                          ? itemDetail.metadata.image
-                          : APPCONFIG.DEFAULT_NFT_ART
-                      }
-                      alt={
-                        itemDetail.metadata && itemDetail.metadata.name
-                          ? itemDetail.metadata.name
-                          : `${itemDetail.name}-${itemDetail.tokednId}-image`
-                      }
-                      layout="fill"
-                      objectFit="cover"
-                      className="rounded-xl"
-                      placeholder="blur"
-                      blurDataURL="/images/placeholder.png"
-                    />
-                </div>
+                  src={
+                    itemDetail.metadata && itemDetail.metadata.image
+                      ? itemDetail.metadata.image
+                      : APPCONFIG.DEFAULT_NFT_ART
+                  }
+                  alt={
+                    itemDetail.metadata && itemDetail.metadata.name
+                      ? itemDetail.metadata.name
+                      : `${itemDetail.name}-${itemDetail.tokednId}-image`
+                  }
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-xl"
+                  placeholder="blur"
+                  blurDataURL="/images/placeholder.png"
+                />
+              </div>
 
-                {/* <div className="flex gap-x-6 mt-4 items-center">
+              {/* <div className="flex gap-x-6 mt-4 items-center">
                   <span className="flex gap-x-2 items-center">
                     <LikeIcon /> 298
                   </span>
@@ -200,86 +199,86 @@ const ViewUserNft = () => {
                     />
                   </span>
                 </div> */}
-              </div>
-              <div className="space-y-8 py-4">
-                <div>
-                  <div className="flex items-center mb-5">
-                    {/*collection-logo*/}
-                    <div className="flex items-center mb-4">
-                      <span className="text-xl lg:mr-1">
-                        <Link
-                          href={`/on-chain-single-collection/${itemDetail.tokenAddress}`}
-                        >
-                          {itemDetail.metadata && itemDetail.metadata.name
-                            ? itemDetail.metadata.name
-                            : itemDetail.name + " - " + itemDetail.tokenId}
-                        </Link>
-                      </span>
-                      <div className="h-6 w-6 relative">
-                        <Image
-                          src="/images/verify.svg"
-                          alt="colx-img"
-                          layout="fill"
-                          objectFit="contain"
-                          className="rounded-full"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <span className="text-4xl font-bold capitalize">
-                    {itemDetail.metadata && itemDetail.metadata.name
-                      ? itemDetail.metadata.name
-                      : itemDetail.name + " - " + itemDetail.tokenId}
-                  </span>
-                </div>
-                <div className="view-hero-nft-owner">
-                  <div className="flex items-center gap-x-4">
-                    <div className="relative h-14 w-14">
+            </div>
+            <div className="space-y-8 py-4">
+              <div>
+                <div className="flex items-center mb-5">
+                  {/*collection-logo*/}
+                  <div className="flex items-center mb-4">
+                    <span className="text-xl lg:mr-1">
+                      <Link
+                        href={`/on-chain-single-collection/${itemDetail.tokenAddress}`}
+                      >
+                        {itemDetail.metadata && itemDetail.metadata.name
+                          ? itemDetail.metadata.name
+                          : itemDetail.name + " - " + itemDetail.tokenId}
+                      </Link>
+                    </span>
+                    <div className="h-6 w-6 relative">
                       <Image
-                        src={"/images/avatar.png"}
-                        alt="nft-img"
+                        src="/images/verify.svg"
+                        alt="colx-img"
                         layout="fill"
-                        objectFit="cover"
+                        objectFit="contain"
                         className="rounded-full"
-                        placeholder="blur"
-                        blurDataURL="/images/placeholder.png"
                       />
                     </div>
-                    <div className="flex flex-col">
-                      <span className="text-txt-2"> Current Owner</span>
-                      <span>Owned by you</span>
-                    </div>
                   </div>
                 </div>
-                <div className="view-hero-nft-cta-wrapper">
-                  <div className="flex flex-col w-full gap-x-6">
-                    <div className="p-4 bg-bg-5 rounded-md w-full">
-                      {/* <span className="text-txt-2 block mb-4 text-xl">
+                <span className="text-4xl font-bold capitalize">
+                  {itemDetail.metadata && itemDetail.metadata.name
+                    ? itemDetail.metadata.name
+                    : itemDetail.name + " - " + itemDetail.tokenId}
+                </span>
+              </div>
+              <div className="view-hero-nft-owner">
+                <div className="flex items-center gap-x-4">
+                  <div className="relative h-14 w-14">
+                    <Image
+                      src={"/images/avatar.png"}
+                      alt="nft-img"
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded-full"
+                      placeholder="blur"
+                      blurDataURL="/images/placeholder.png"
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-txt-2"> Current Owner</span>
+                    <span>Owned by you</span>
+                  </div>
+                </div>
+              </div>
+              <div className="view-hero-nft-cta-wrapper">
+                <div className="flex flex-col w-full gap-x-6">
+                  <div className="p-4 bg-bg-5 rounded-md w-full">
+                    {/* <span className="text-txt-2 block mb-4 text-xl">
                         Purchase price
                       </span> */}
-                      <div className="">
-                        {/* <span className="flex items-center text-[1.5rem] gap-x-1">
+                    <div className="">
+                      {/* <span className="flex items-center text-[1.5rem] gap-x-1">
                           <CoinIcon />
                           {itemDetail.item_price || 0}
                         </span> */}
-                        <span className="text-xl block mt-2">
-                          Item quantity:{" "}
-                          {itemDetail.amount ? itemDetail.amount : 0}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between gap-x-4 mt-4">
-                      <Button
-                        title="Approve & Sell"
-                        wt="w-full"
-                        onClick={handleSellNft}
-                        isDisabled={isTransloading}
-                      />
+                      <span className="text-xl block mt-2">
+                        Item quantity:{" "}
+                        {itemDetail.amount ? itemDetail.amount : 0}
+                      </span>
                     </div>
                   </div>
+                  <div className="flex items-center justify-between gap-x-4 mt-4">
+                    <Button
+                      title="Approve & Sell"
+                      wt="w-full"
+                      onClick={handleSellNft}
+                      isDisabled={isTransloading}
+                    />
+                  </div>
+                </div>
 
-                  {/* <Button title="Edit" wt="w-full" outline2 /> */}
-                  {/* <div className="w-full flex flex-col gap-y-4">
+                {/* <Button title="Edit" wt="w-full" outline2 /> */}
+                {/* <div className="w-full flex flex-col gap-y-4">
                     <div className="flex gap-x-5">
                       <Button
                         title="Sell"
@@ -288,49 +287,49 @@ const ViewUserNft = () => {
                       />
                     </div>
                   </div> */}
-                </div>
-              </div>
-              <div className="create-new-nft-wrapper-2 border border-border-1-line p-4 rounded-[1.25rem] hidden lg:block">
-                <span className="create-new-nft-wrapper-2-label  pb-2 border-b border-border-1-line">
-                  Offers
-                </span>
-                <div className="flex flex-col justify-center items-center h-[90%] gap-y-4">
-                  <div className="relative h-[50%] w-[70%] ">
-                    <Image
-                      priority
-                      src="/images/no-offer.svg"
-                      alt="buy-nft-sample"
-                      layout="fill"
-                      objectFit="contain"
-                    />
-                  </div>
-                  <span className="create-new-nft-wrapper-2-label">
-                    No offers yet
-                  </span>
-                </div>
               </div>
             </div>
-            <div className=" space-y-3">
-              <h2 className="text-2xl font-bold ">Description</h2>
-              <div className="flex flex-col">
-                <p className="text-txt-2">
-                  {itemDetail.metadata && itemDetail.metadata.description
-                    ? itemDetail.metadata.description
-                    : itemDetail.name + " - " + itemDetail.tokenId}
-                </p>
+            <div className="create-new-nft-wrapper-2 border border-border-1-line p-4 rounded-[1.25rem] hidden lg:block">
+              <span className="create-new-nft-wrapper-2-label  pb-2 border-b border-border-1-line">
+                Offers
+              </span>
+              <div className="flex flex-col justify-center items-center h-[90%] gap-y-4">
+                <div className="relative h-[50%] w-[70%] ">
+                  <Image
+                    priority
+                    src="/images/no-offer.svg"
+                    alt="buy-nft-sample"
+                    layout="fill"
+                    objectFit="contain"
+                  />
+                </div>
+                <span className="create-new-nft-wrapper-2-label">
+                  No offers yet
+                </span>
               </div>
+            </div>
+          </div>
+          <div className=" space-y-3">
+            <h2 className="text-2xl font-bold ">Description</h2>
+            <div className="flex flex-col">
+              <p className="text-txt-2">
+                {itemDetail.metadata && itemDetail.metadata.description
+                  ? itemDetail.metadata.description
+                  : itemDetail.name + " - " + itemDetail.tokenId}
+              </p>
+            </div>
 
-              <div className="view-nft-details">
-                <h2 className="text-2xl font-bold my-4">Details</h2>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-x-2">
-                    <CoinIcon />{" "}
-                    <span className="block font-medium ">Ethereum</span>{" "}
-                    <span className="text-txt-2">
-                      ({itemDetail.contractType || "ERC-721"})
-                    </span>
-                  </div>
-                  {/* <div className="flex items-center gap-x-2 cursor-pointer">
+            <div className="view-nft-details">
+              <h2 className="text-2xl font-bold my-4">Details</h2>
+              <div className="space-y-4">
+                <div className="flex items-center gap-x-2">
+                  <CoinIcon />{" "}
+                  <span className="block font-medium ">Ethereum</span>{" "}
+                  <span className="text-txt-2">
+                    ({itemDetail.contractType || "ERC-721"})
+                  </span>
+                </div>
+                {/* <div className="flex items-center gap-x-2 cursor-pointer">
                   <StatIcon />{" "}
                   <span className="block font-medium">View on Etherscan</span>
                   <ExternalLinkIcon />
@@ -340,11 +339,9 @@ const ViewUserNft = () => {
                   <span className="block font-medium">Open original</span>{" "}
                   <ExternalLinkIcon />{" "}
                 </div> */}
-                </div>
               </div>
             </div>
           </div>
-          <Footer />
         </div>
       ) : (
         ""

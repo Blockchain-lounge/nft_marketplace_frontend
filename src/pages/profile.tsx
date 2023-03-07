@@ -417,321 +417,301 @@ const Profile = () => {
 
   return (
     <DashboardLayout isLoading={isLoading}>
-      <div className="sub-layout-wrapper scrollbar-hide">
-        <div className="center">
-          <div className="profile-banner">
-            {userBannerImg ? (
-              <Image
-                src={myProfile?.bannerImg}
-                alt="collection-img-banner"
-                objectFit="cover"
-                layout="fill"
-                placeholder="blur"
-                blurDataURL="/images/placeholder.png"
-              />
-            ) : (
-              <label className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d49]">
-                <Image
-                  src="/images/banner-placeholder.svg"
-                  alt="banner-img-svg"
-                  width="64px"
-                  height="64px"
-                  objectFit="cover"
-                />
-              </label>
-            )}
-            <div className="profile-user-img">
-              <Image
-                src={myProfile?.profileImg || "/images/avatar.svg"}
-                alt="user-img"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-full"
-                placeholder="blur"
-                blurDataURL="/images/placeholder.png"
-              />
-            </div>
+      <div className="profile-banner">
+        {userBannerImg ? (
+          <Image
+            src={myProfile?.bannerImg}
+            alt="collection-img-banner"
+            objectFit="cover"
+            layout="fill"
+            placeholder="blur"
+            blurDataURL="/images/placeholder.png"
+          />
+        ) : (
+          <label className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d49]">
+            <Image
+              src="/images/banner-placeholder.svg"
+              alt="banner-img-svg"
+              width="64px"
+              height="64px"
+              objectFit="cover"
+            />
+          </label>
+        )}
+        <div className="profile-user-img">
+          <Image
+            src={myProfile?.profileImg || "/images/avatar.svg"}
+            alt="user-img"
+            layout="fill"
+            objectFit="cover"
+            className="rounded-full"
+            placeholder="blur"
+            blurDataURL="/images/placeholder.png"
+          />
+        </div>
+      </div>
+      <div className="profile-actions">
+        <div className="profile-action">
+          <div
+            className="rounded-lg border-border-3-line border p-3 cursor-pointer"
+            onClick={() => push("/settings")}
+          >
+            <EditIcon />
           </div>
-          <div className="profile-actions">
-            <div className="profile-action">
-              <div
-                className="rounded-lg border-border-3-line border p-3 cursor-pointer"
-                onClick={() => push("/settings")}
-              >
-                <EditIcon />
-              </div>
 
-              {/* <Button title="Sell NFT" /> */}
-            </div>
-            <div className="profile-user-info">
-              <span className="profile-user-name">{myProfile?.username}</span>
-              {/* <div className="profile-user-address">
+          {/* <Button title="Sell NFT" /> */}
+        </div>
+        <div className="profile-user-info">
+          <span className="profile-user-name">{myProfile?.username}</span>
+          {/* <div className="profile-user-address">
                 <span>0xdE8cF...1C79</span> <CopyIcon />
               </div> */}
-            </div>
+        </div>
+      </div>
+      <div className="profile-tab scrollbar-hide">
+        {/* Profile tab*/}
+        <ConnectWalletTab
+          tabs={profileTab}
+          activeTab={profileActiveTab}
+          setActiveTab={setProfileActiveTab}
+        />
+      </div>
+      <div className="profile-nft-section">
+        {openTab ? (
+          <div>
+            {profileActiveTab === 0 ? (
+              userOwnedProfileData.length > 0 ? (
+                <div className="user-profile-owned-nfts">
+                  {userOwnedProfileData.map((val, i) => (
+                    <OwnedNftCard
+                      key={"user-owned-profile-data" + val._id + i}
+                      {...val}
+                      to="view-owned-user-nft"
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="profile-user-nfts">
+                  <img src="/images/404-illustration.png" alt="empty-nfts" />
+                  <span className="profile-empty-nft-title">
+                    You do not own any NFT
+                  </span>
+                  <p className="profile-empty-nft-description">
+                    There&apos;s lots of other NFTs to explore
+                  </p>
+
+                  <GradientButton
+                    title="Explore NFTs"
+                    onClick={handleNavigateToHome}
+                  />
+                </div>
+              )
+            ) : profileActiveTab === 1 ? (
+              userCreatedProfileData ? (
+                userCreatedProfileData.length > 0 ? (
+                  <div className="user-profile-owned-nfts">
+                    {userCreatedProfileData.map((val, i) => (
+                      <CreatedNftCard
+                        key={val._id}
+                        {...val}
+                        to="view-created-user-nft"
+                      />
+                    ))}
+                    <div className="mt-8">
+                      {tokenCreatedNextPage < tokenCreatedTotalPages ? (
+                        <Button
+                          title="Load More"
+                          onClick={() =>
+                            setTokenCreatedCurrentPage(
+                              tokenCreatedCurrentPage + 1
+                            )
+                          }
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="profile-user-nfts">
+                    <img src="/images/404-illustration.png" alt="empty-nfts" />
+                    <span className="profile-empty-nft-title">
+                      You have not created any NFT
+                    </span>
+                    <p className="profile-empty-nft-description">
+                      There&apos;s lots of other NFTs to explore
+                    </p>
+
+                    <GradientButton
+                      title="Explore NFTs"
+                      onClick={handleNavigateToHome}
+                    />
+                  </div>
+                )
+              ) : (
+                Array(12)
+                  .fill(0)
+                  .map((_, i) => (
+                    <NftCardSkeleton key={i + "explore-skeleton-card"} />
+                  ))
+              )
+            ) : profileActiveTab === 2 ? (
+              userListedProfileData && userListedProfileData.length > 0 ? (
+                userListedProfileData.length > 0 ? (
+                  <div className="user-profile-owned-nfts">
+                    {userListedProfileData.map((val, i) => (
+                      <ListedNftCard
+                        key={val._id}
+                        {...val}
+                        to="view-listed-user-nft"
+                      />
+                    ))}
+
+                    <div className="mt-8">
+                      {tokenListedNextPage < tokenListedTotalPages ? (
+                        <Button
+                          title="Load More"
+                          onClick={() =>
+                            setTokenListedCurrentPage(
+                              tokenListedCurrentPage + 1
+                            )
+                          }
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="profile-user-nfts">
+                    <img src="/images/404-illustration.png" alt="empty-nfts" />
+                    <span className="profile-empty-nft-title">
+                      You do not own any NFT
+                    </span>
+                    <p className="profile-empty-nft-description">
+                      There&apos;s lots of other NFTs to explore
+                    </p>
+
+                    <GradientButton
+                      title="Explore NFTs"
+                      onClick={handleNavigateToHome}
+                    />
+                  </div>
+                )
+              ) : (
+                <div className="profile-user-nfts">
+                  <img src="/images/404-illustration.png" alt="empty-nfts" />
+                  <span className="profile-empty-nft-title">
+                    You have not listed any NFT
+                  </span>
+                  <p className="profile-empty-nft-description">
+                    There&apos;s lots of other NFTs to explore
+                  </p>
+
+                  <GradientButton
+                    title="Explore NFTs"
+                    onClick={handleNavigateToHome}
+                  />
+                </div>
+              )
+            ) : profileActiveTab === 3 ? (
+              <>
+                <div className="collection-activity-headers-tab">
+                  {profileActivityHeaders.map((header, i) => (
+                    <span key={header + i} className="profile-activity-header">
+                      {header}
+                    </span>
+                  ))}
+                </div>
+                {/*list of activities*/}
+                <div className="overflow-x-auto">
+                  {activities !== []
+                    ? activities.map((activity, i) => (
+                        <UserActivityCard {...activity} key={i} />
+                      ))
+                    : ""}
+                  <div className="mt-8">
+                    {nextPage < totalPages ? (
+                      <Button
+                        title="Load More"
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                </div>
+                {/* {console.log({ collections })} */}
+              </>
+            ) : profileActiveTab === 4 ? (
+              collections &&
+              onChainCollections &&
+              onChainCollections.length > 0 &&
+              collections.length > 0 ? (
+                collections.length > 0 ? (
+                  <div className="explore-items-wrapper">
+                    {collections.map((item) => (
+                      <CollectionCard key={item._id} {...item} />
+                    ))}
+
+                    {onChainCollections.map((item) => (
+                      <OnChainCollectionCard
+                        key={item.tokenAddress}
+                        {...item}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  ""
+                )
+              ) : collections &&
+                collections.length > 0 &&
+                onChainCollections.length === 0 ? (
+                collections.length > 0 ? (
+                  <div className="explore-items-wrapper">
+                    {collections.map((item) => (
+                      <CollectionCard key={item._id} {...item} />
+                    ))}
+                  </div>
+                ) : (
+                  ""
+                )
+              ) : onChainCollections &&
+                onChainCollections.length > 0 &&
+                collections.length === 0 ? (
+                onChainCollections.length > 0 ? (
+                  <div className="explore-items-wrapper">
+                    {onChainCollections.map((item) => (
+                      <OnChainCollectionCard
+                        key={item.tokenAddress}
+                        {...item}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  ""
+                )
+              ) : (
+                ""
+              )
+            ) : null}
           </div>
-          <div className="profile-tab scrollbar-hide">
-            {/* Profile tab*/}
-            <ConnectWalletTab
-              tabs={profileTab}
-              activeTab={profileActiveTab}
-              setActiveTab={setProfileActiveTab}
+        ) : (
+          <div className="profile-user-nfts">
+            <img src="/images/404-illustration.png" alt="empty-nfts" />
+            <span className="profile-empty-nft-title">
+              You do not own any NFT
+            </span>
+            <p className="profile-empty-nft-description">
+              There&apos;s lots of other NFTs to explore
+            </p>
+
+            <GradientButton
+              title="Explore NFTs"
+              onClick={handleNavigateToHome}
             />
           </div>
-          <div className="profile-nft-section">
-            {openTab ? (
-              <div>
-                {profileActiveTab === 0 ? (
-                  userOwnedProfileData.length > 0 ? (
-                    <div className="user-profile-owned-nfts">
-                      {userOwnedProfileData.map((val, i) => (
-                        <OwnedNftCard
-                          key={"user-owned-profile-data" + val._id + i}
-                          {...val}
-                          to="view-owned-user-nft"
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="profile-user-nfts">
-                      <img
-                        src="/images/404-illustration.png"
-                        alt="empty-nfts"
-                      />
-                      <span className="profile-empty-nft-title">
-                        You do not own any NFT
-                      </span>
-                      <p className="profile-empty-nft-description">
-                        There&apos;s lots of other NFTs to explore
-                      </p>
-
-                      <GradientButton
-                        title="Explore NFTs"
-                        onClick={handleNavigateToHome}
-                      />
-                    </div>
-                  )
-                ) : profileActiveTab === 1 ? (
-                  userCreatedProfileData ? (
-                    userCreatedProfileData.length > 0 ? (
-                      <div className="user-profile-owned-nfts">
-                        {userCreatedProfileData.map((val, i) => (
-                          <CreatedNftCard
-                            key={val._id}
-                            {...val}
-                            to="view-created-user-nft"
-                          />
-                        ))}
-                        <div className="mt-8">
-                          {tokenCreatedNextPage < tokenCreatedTotalPages ? (
-                            <Button
-                              title="Load More"
-                              onClick={() =>
-                                setTokenCreatedCurrentPage(
-                                  tokenCreatedCurrentPage + 1
-                                )
-                              }
-                            />
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="profile-user-nfts">
-                        <img
-                          src="/images/404-illustration.png"
-                          alt="empty-nfts"
-                        />
-                        <span className="profile-empty-nft-title">
-                          You have not created any NFT
-                        </span>
-                        <p className="profile-empty-nft-description">
-                          There&apos;s lots of other NFTs to explore
-                        </p>
-
-                        <GradientButton
-                          title="Explore NFTs"
-                          onClick={handleNavigateToHome}
-                        />
-                      </div>
-                    )
-                  ) : (
-                    Array(12)
-                      .fill(0)
-                      .map((_, i) => (
-                        <NftCardSkeleton key={i + "explore-skeleton-card"} />
-                      ))
-                  )
-                ) : profileActiveTab === 2 ? (
-                  userListedProfileData && userListedProfileData.length > 0 ? (
-                    userListedProfileData.length > 0 ? (
-                      <div className="user-profile-owned-nfts">
-                        {userListedProfileData.map((val, i) => (
-                          <ListedNftCard
-                            key={val._id}
-                            {...val}
-                            to="view-listed-user-nft"
-                          />
-                        ))}
-
-                        <div className="mt-8">
-                          {tokenListedNextPage < tokenListedTotalPages ? (
-                            <Button
-                              title="Load More"
-                              onClick={() =>
-                                setTokenListedCurrentPage(
-                                  tokenListedCurrentPage + 1
-                                )
-                              }
-                            />
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="profile-user-nfts">
-                        <img
-                          src="/images/404-illustration.png"
-                          alt="empty-nfts"
-                        />
-                        <span className="profile-empty-nft-title">
-                          You do not own any NFT
-                        </span>
-                        <p className="profile-empty-nft-description">
-                          There&apos;s lots of other NFTs to explore
-                        </p>
-
-                        <GradientButton
-                          title="Explore NFTs"
-                          onClick={handleNavigateToHome}
-                        />
-                      </div>
-                    )
-                  ) : (
-                    <div className="profile-user-nfts">
-                      <img
-                        src="/images/404-illustration.png"
-                        alt="empty-nfts"
-                      />
-                      <span className="profile-empty-nft-title">
-                        You have not listed any NFT
-                      </span>
-                      <p className="profile-empty-nft-description">
-                        There&apos;s lots of other NFTs to explore
-                      </p>
-
-                      <GradientButton
-                        title="Explore NFTs"
-                        onClick={handleNavigateToHome}
-                      />
-                    </div>
-                  )
-                ) : profileActiveTab === 3 ? (
-                  <>
-                    <div className="collection-activity-headers-tab">
-                      {profileActivityHeaders.map((header, i) => (
-                        <span
-                          key={header + i}
-                          className="profile-activity-header"
-                        >
-                          {header}
-                        </span>
-                      ))}
-                    </div>
-                    {/*list of activities*/}
-                    <div className="overflow-x-auto">
-                      {activities !== []
-                        ? activities.map((activity, i) => (
-                            <UserActivityCard {...activity} key={i} />
-                          ))
-                        : ""}
-                      <div className="mt-8">
-                        {nextPage < totalPages ? (
-                          <Button
-                            title="Load More"
-                            onClick={() => setCurrentPage(currentPage + 1)}
-                          />
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                    </div>
-                    {/* {console.log({ collections })} */}
-                  </>
-                ) : profileActiveTab === 4 ? (
-                  collections &&
-                  onChainCollections &&
-                  onChainCollections.length > 0 &&
-                  collections.length > 0 ? (
-                    collections.length > 0 ? (
-                      <div className="explore-items-wrapper">
-                        {collections.map((item) => (
-                          <CollectionCard key={item._id} {...item} />
-                        ))}
-
-                        {onChainCollections.map((item) => (
-                          <OnChainCollectionCard
-                            key={item.tokenAddress}
-                            {...item}
-                          />
-                        ))}
-                      </div>
-                    ) : (
-                      ""
-                    )
-                  ) : collections &&
-                    collections.length > 0 &&
-                    onChainCollections.length === 0 ? (
-                    collections.length > 0 ? (
-                      <div className="explore-items-wrapper">
-                        {collections.map((item) => (
-                          <CollectionCard key={item._id} {...item} />
-                        ))}
-                      </div>
-                    ) : (
-                      ""
-                    )
-                  ) : onChainCollections &&
-                    onChainCollections.length > 0 &&
-                    collections.length === 0 ? (
-                    onChainCollections.length > 0 ? (
-                      <div className="explore-items-wrapper">
-                        {onChainCollections.map((item) => (
-                          <OnChainCollectionCard
-                            key={item.tokenAddress}
-                            {...item}
-                          />
-                        ))}
-                      </div>
-                    ) : (
-                      ""
-                    )
-                  ) : (
-                    ""
-                  )
-                ) : null}
-              </div>
-            ) : (
-              <div className="profile-user-nfts">
-                <img src="/images/404-illustration.png" alt="empty-nfts" />
-                <span className="profile-empty-nft-title">
-                  You do not own any NFT
-                </span>
-                <p className="profile-empty-nft-description">
-                  There&apos;s lots of other NFTs to explore
-                </p>
-
-                <GradientButton
-                  title="Explore NFTs"
-                  onClick={handleNavigateToHome}
-                />
-              </div>
-            )}
-          </div>
-        </div>
-        <Footer />
+        )}
       </div>
     </DashboardLayout>
   );

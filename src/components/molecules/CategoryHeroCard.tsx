@@ -13,7 +13,7 @@ const CategoryHeroCard = ({ category }) => {
   };
 
   return (
-    <div className="space-y-[9rem] center ">
+    <div className="space-y-[9rem]">
       <section className="category-hero">
         <div>
           <span className="uppercase font-bold tracking-widest earnings-card-history">

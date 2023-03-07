@@ -26,7 +26,7 @@ const NftList = ({
         ))}
         <div></div>
       </div>
-      <div className="flex flex-col gap-y-6 h-[60vh] overflow-auto my-8 scrollbar-hide">
+      <div className="flex flex-col gap-y-6">
         {lists.map((lists, i) => (
           <div
             key={lists.owner as string}

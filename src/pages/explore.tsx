@@ -11,7 +11,7 @@ import DashboardLayout from "../template/DashboardLayout";
 
 const Explore = () => {
   // const [activeTab, setActiveTab] = useState("trending");
-  const [isFetching, setIsFetching] = useState(false);
+  // const [isFetching, setIsFetching] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [nextPage, setNextPage] = useState(1);
@@ -23,7 +23,7 @@ const Explore = () => {
   const fetchCollections = async () => {
     try {
       const HEADER = {};
-      const REQUEST_URL = "nft-collection/index?page="+currentPage;
+      const REQUEST_URL = "nft-collection/index?page=" + currentPage;
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -35,12 +35,11 @@ const Explore = () => {
           toast("Unauthorized request!");
           return;
         } else if (response?.status == 200) {
-          if(collections && collections.length > 0){
+          if (collections && collections.length > 0) {
             for (let index = 0; index < response.data.data.length; index++) {
-              setCollections(prev => [...prev, response.data.data[index]]);
+              setCollections((prev) => [...prev, response.data.data[index]]);
             }
-          }
-          else{
+          } else {
             setCollections(response.data.data);
           }
 
@@ -61,45 +60,42 @@ const Explore = () => {
   useEffect(() => {
     fetchCollections();
     // fetchLaunchPadDrops();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
-
 
   return (
     <DashboardLayout>
-      <div className="sub-layout-wrapper scrollbar-hide">
-        <div className="center flex-1">
-          <Heading2 title="Explore Collections" />
-          {/* <Heading2 title="Recently Collections" /> */}
-          <Tab
-            placeholder={activeTab}
-            setStage={setActiveTab}
-            stages={exploreTabs}
-          />
+      <Heading2 title="Explore Collections" />
+      <Tab
+        placeholder={activeTab}
+        setStage={setActiveTab}
+        stages={exploreTabs}
+      />
 
-          {collections ? (
-            <div className="explore-items-wrapper">
-              {collections.map((item) => (
-                <CollectionCard key={item._id} {...item} />
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-wrap justify-evenly lg:justify-between gap-y-12">
-              {Array(12)
-                .fill(0)
-                .map((_, i) => (
-                  <NftCardSkeleton key={i + "explore-skeleton-card"} />
-                ))}
-            </div>
-          )}
-          <div className="mt-8">
-            {nextPage < totalPages ? (
-              <Button title="Load More" onClick={() => setCurrentPage(currentPage + 1)} />
-            ) : (
-              ""
-            )}
-          </div>
+      {collections ? (
+        <div className="explore-items-wrapper">
+          {collections.map((item) => (
+            <CollectionCard key={item._id} {...item} />
+          ))}
         </div>
-        <Footer />
+      ) : (
+        <div className="flex flex-wrap justify-evenly lg:justify-between gap-y-12">
+          {Array(12)
+            .fill(0)
+            .map((_, i) => (
+              <NftCardSkeleton key={i + "explore-skeleton-card"} />
+            ))}
+        </div>
+      )}
+      <div className="mt-8">
+        {nextPage < totalPages ? (
+          <Button
+            title="Load More"
+            onClick={() => setCurrentPage(currentPage + 1)}
+          />
+        ) : (
+          ""
+        )}
       </div>
     </DashboardLayout>
   );

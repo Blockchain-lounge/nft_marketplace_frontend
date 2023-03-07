@@ -34,7 +34,7 @@ const CategoryPage = () => {
   const fetchCategoryDetail = async () => {
     if (id !== undefined) {
       const HEADER = {};
-      const REQUEST_URL = "category/collections/" + id+"?page="+currentPage;
+      const REQUEST_URL = "category/collections/" + id + "?page=" + currentPage;
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
@@ -61,47 +61,43 @@ const CategoryPage = () => {
   useEffect(() => {
     fetchCategoryDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id,currentPage]);
+  }, [id, currentPage]);
   return (
     <DashboardLayout>
-      <div className="sub-layout-wrapper scrollbar-hide">
-        <div className="center">
-          <CategoryHeroCard category={category} />
-          <div className="mt-20">
-            <NftHeaderCard
-              heading="Collections"
-              to="/explore"
-              // selectTitle="Last 24 hours"
-            />
-            {collections && collections.length === 0 ? (
-              "No matching collections found"
-            ) : collections && collections.length > 0 ? (
-              <div className="explore-items-wrapper">
-                {collections.map((item) => (
-                  <CollectionCard key={item._id} {...item} />
-                ))}
-              </div>
-            ) : (
-              <div className="flex flex-wrap justify-evenly lg:justify-between gap-y-12">
-                {Array(9)
-                  .fill(0)
-                  .map((_, i) => (
-                    <NftCardSkeleton key={i + "explore-skeleton-card"} />
-                  ))}
-              </div>
-            )}
+      <CategoryHeroCard category={category} />
+      <div className="mt-20">
+        <NftHeaderCard
+          heading="Collections"
+          to="/explore"
+          // selectTitle="Last 24 hours"
+        />
+        {collections && collections.length === 0 ? (
+          "No matching collections found"
+        ) : collections && collections.length > 0 ? (
+          <div className="explore-items-wrapper">
+            {collections.map((item) => (
+              <CollectionCard key={item._id} {...item} />
+            ))}
           </div>
-          <div className="mt-8">
-            {
-              nextPage < totalPages
-              ?
-              <Button title="Load More" onClick={() => setCurrentPage(currentPage+1)} />
-              :
-              ""
-            }
+        ) : (
+          <div className="flex flex-wrap justify-evenly lg:justify-between gap-y-12">
+            {Array(9)
+              .fill(0)
+              .map((_, i) => (
+                <NftCardSkeleton key={i + "explore-skeleton-card"} />
+              ))}
           </div>
-        </div>
-        <Footer />
+        )}
+      </div>
+      <div className="mt-8">
+        {nextPage < totalPages ? (
+          <Button
+            title="Load More"
+            onClick={() => setCurrentPage(currentPage + 1)}
+          />
+        ) : (
+          ""
+        )}
       </div>
     </DashboardLayout>
   );

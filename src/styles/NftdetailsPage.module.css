@@ -1,9 +1,5 @@
-.nft-detail-wrapper {
-  @apply h-screen overflow-auto;
-}
-
 .nft-detail-wrapper-content {
-  @apply flex-col-reverse flex lg:flex-row justify-between items-center gap-x-[3.94rem] p-[1.125rem] rounded-3xl lg:rounded-none mb-12;
+  @apply flex-col-reverse h-[70vh] flex lg:flex-row justify-between gap-x-[3.94rem] rounded-3xl lg:rounded-none;
 }
 
 .nft-detail-wrapper p {
@@ -72,5 +68,5 @@
 }
 
 .nft-detail-detail-img {
-  @apply relative h-[40vh] sm:h-[60vh] w-full sm:w-[50vw];
+  @apply relative h-[40vh] sm:h-[70vh] w-full sm:w-[50vw];
 }

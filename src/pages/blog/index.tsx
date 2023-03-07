@@ -63,26 +63,23 @@ const Blog = () => {
   ];
   return (
     <DashboardLayout>
-      <div className="sub-layout-wrapper scrollbar-hide">
-        <div className="center space-y-[3rem]">
-          <Heading2 title="Blog" />
-          <div className="flex items-center gap-x-8">
-            <Input /> <Button title="Search" />
-          </div>
-          <section className="grid sm:grid-cols-2 lg:grid-cols-3 gap-9 2xl:gap-12">
-            {blogSection.map(({ content, image, name }, i) => (
-              <div key={"about-us-blog-section - " + name + i}>
-                <BlogCard
-                  content={content}
-                  image={image}
-                  name={name}
-                  wt="w-full cursor-pointer"
-                />
-              </div>
-            ))}
-          </section>
+      <div className=" space-y-[3rem]">
+        <Heading2 title="Blog" />
+        <div className="flex items-center gap-x-8">
+          <Input /> <Button title="Search" />
         </div>
-        <Footer />
+        <section className="grid sm:grid-cols-2 lg:grid-cols-3 gap-9 2xl:gap-12">
+          {blogSection.map(({ content, image, name }, i) => (
+            <div key={"about-us-blog-section - " + name + i}>
+              <BlogCard
+                content={content}
+                image={image}
+                name={name}
+                wt="w-full cursor-pointer"
+              />
+            </div>
+          ))}
+        </section>
       </div>
     </DashboardLayout>
   );

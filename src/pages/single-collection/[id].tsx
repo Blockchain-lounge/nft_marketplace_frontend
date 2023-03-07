@@ -266,222 +266,221 @@ const ViewCollection = () => {
   return (
     <DashboardLayout isLoading={isLoading}>
       <ToastContainer />
-      <div className="sub-layout-wrapper scrollbar-hide flex flex-col justify-between">
-        <div className="center">
-          <div className="single-collection-banner-img">
-            <div className="h-[20rem] relative flex">
-              <div className="h-32 w-32 absolute -bottom-14 left-6 rounded-full border-bg-3 border-[4px] z-10">
-                <div className={`h-full w-full rounded-full relative`}>
-                  <Image
-                    src={
-                      imgError
-                        ? APPCONFIG.DEFAULT_NFT_ART
-                        : singleCollectionDetail &&
-                          singleCollectionDetail.collectionLogoImage !==
-                            undefined &&
-                          singleCollectionDetail.collectionLogoImage !== "" &&
-                          singleCollectionDetail.collectionLogoImage !== null
-                        ? singleCollectionDetail.collectionLogoImage
-                        : "/images/avatar.png"
-                    }
-                    alt="collection-logo"
-                    objectFit="cover"
-                    layout="fill"
-                    placeholder="blur"
-                    blurDataURL="/images/placeholder.png"
-                    className="rounded-full"
-                    onError={handleImgError}
-                  />
-                </div>
-              </div>
-
-              {singleCollectionDetail &&
-              singleCollectionDetail.cover_image_id !== undefined &&
-              singleCollectionDetail.cover_image_id !== "" &&
-              singleCollectionDetail.cover_image_id !== null ? (
+      <div className="flex flex-col justify-between">
+        <div className="single-collection-banner-img">
+          <div className="h-[20rem] relative flex">
+            <div className="h-32 w-32 absolute -bottom-14 left-6 rounded-full border-bg-3 border-[4px] z-10">
+              <div className={`h-full w-full rounded-full relative`}>
                 <Image
-                  priority
                   src={
                     imgError
                       ? APPCONFIG.DEFAULT_NFT_ART
-                      : singleCollectionDetail.cover_image_id
+                      : singleCollectionDetail &&
+                        singleCollectionDetail.collectionLogoImage !==
+                          undefined &&
+                        singleCollectionDetail.collectionLogoImage !== "" &&
+                        singleCollectionDetail.collectionLogoImage !== null
+                      ? singleCollectionDetail.collectionLogoImage
+                      : "/images/avatar.png"
                   }
-                  alt="collection-img-banner"
+                  alt="collection-logo"
                   objectFit="cover"
                   layout="fill"
                   placeholder="blur"
                   blurDataURL="/images/placeholder.png"
+                  className="rounded-full"
                   onError={handleImgError}
                 />
+              </div>
+            </div>
+
+            {singleCollectionDetail &&
+            singleCollectionDetail.cover_image_id !== undefined &&
+            singleCollectionDetail.cover_image_id !== "" &&
+            singleCollectionDetail.cover_image_id !== null ? (
+              <Image
+                priority
+                src={
+                  imgError
+                    ? APPCONFIG.DEFAULT_NFT_ART
+                    : singleCollectionDetail.cover_image_id
+                }
+                alt="collection-img-banner"
+                objectFit="cover"
+                layout="fill"
+                placeholder="blur"
+                blurDataURL="/images/placeholder.png"
+                onError={handleImgError}
+              />
+            ) : (
+              <label className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d49]">
+                <Image
+                  src="/images/banner-placeholder.svg"
+                  alt="banner-img-svg"
+                  width="64px"
+                  height="64px"
+                  objectFit="cover"
+                />
+              </label>
+            )}
+          </div>
+        </div>
+        <div className="single-collection-info">
+          <div className="flex flex-col lg:gap-y-3">
+            <div className="flex">
+              <span className="text-3xl font-bold mr-1">
+                {singleCollectionDetail.name}
+              </span>
+              <div className="h-8 w-8 relative">
+                <Image
+                  src="/images/verify.svg"
+                  alt="verified-img"
+                  layout="fill"
+                  objectFit="contain"
+                  className="rounded-full"
+                />
+              </div>
+            </div>
+            <p className="max-w-xl">{singleCollectionDetail.description}</p>
+
+            <div className="w-[80%] sm:w-[35%] lg:w-full my-4 lg:my-0 flex gap-x-4 items-center">
+              {singleCollectionDetail &&
+              singleCollectionDetail.website !== "" ? (
+                <a
+                  href={
+                    /^http/.test(singleCollectionDetail.website)
+                      ? singleCollectionDetail.website
+                      : "https://" + singleCollectionDetail.website
+                  }
+                  target="_blank"
+                  className="flex items-center rounded-md border-border-1-line border p-2 h-12"
+                  rel="noreferrer"
+                >
+                  <ProfileLinkIcon />
+                </a>
               ) : (
-                <label className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d49]">
-                  <Image
-                    src="/images/banner-placeholder.svg"
-                    alt="banner-img-svg"
-                    width="64px"
-                    height="64px"
-                    objectFit="cover"
-                  />
-                </label>
+                <span className="rounded-md border-border-1-line border p-2 h-12">
+                  <ProfileLinkIcon color="#A2A3B8" />
+                </span>
+              )}
+              {singleCollectionDetail &&
+              singleCollectionDetail.discord !== "" ? (
+                <a
+                  target="_blank"
+                  href={
+                    /^http/.test(singleCollectionDetail.discord)
+                      ? singleCollectionDetail.discord
+                      : "https://" + singleCollectionDetail.discord
+                  }
+                  rel="noreferrer"
+                  className="rounded-md border-border-1-line border p-2 h-12 flex items-center"
+                >
+                  <DiscordIcon />
+                </a>
+              ) : (
+                <span className="rounded-md border-border-1-line border p-2 h-12 flex items-center">
+                  <DiscordIcon color="#A2A3B8" />
+                </span>
+              )}
+              {singleCollectionDetail &&
+              singleCollectionDetail.twitter !== "" ? (
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href={
+                    /^http/.test(singleCollectionDetail.twitter)
+                      ? singleCollectionDetail.twitter
+                      : "https://" + singleCollectionDetail.twitter
+                  }
+                  className="rounded-md border-border-1-line border p-1 h-12  flex items-center"
+                >
+                  <TwitterIcon />
+                </a>
+              ) : (
+                <span className="rounded-md border-border-1-line border p-2 h-12 flex items-center">
+                  <TwitterIcon color="#A2A3B8" />
+                </span>
+              )}
+              {singleCollectionDetail &&
+              singleCollectionDetail.instagram !== "" ? (
+                <a
+                  href={
+                    /^http/.test(singleCollectionDetail.instagram)
+                      ? singleCollectionDetail.instagram
+                      : "https://" + singleCollectionDetail.instagram
+                  }
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-md border-border-1-line border p-2 h-12 flex items-center"
+                >
+                  <InstagramIcon />
+                </a>
+              ) : (
+                <span className="rounded-md border-border-1-line border p-2 h-12 flex items-center">
+                  <InstagramIcon color="#A2A3B8" />
+                </span>
+              )}
+              <span
+                className="border border-border-1-line p-2 rounded-md cursor-pointer h-12 flex items-center"
+                onClick={handleCopyToClipBoard}
+              >
+                <CopyToClipboard content={baseUrl + asPath} />
+              </span>
+              {/*You will write a logic to hide this icon if the current user is not the creator of the collection, i have a state to hide it or make it visible*/}
+              {isLoggedIn === true &&
+              loggedId !== null &&
+              loggedId === singleCollectionDetail.user_id ? (
+                <span
+                  className={clsx(
+                    "border border-border-1-line p-2 rounded-md cursor-pointer h-12 flex items-center"
+                  )}
+                  onClick={handleCollectionUpdate}
+                >
+                  <EditIcon />
+                </span>
+              ) : (
+                ""
               )}
             </div>
           </div>
-          <div className="single-collection-info">
-            <div className="flex flex-col lg:gap-y-3">
-              <div className="flex">
-                <span className="text-3xl font-bold mr-1">
-                  {singleCollectionDetail.name}
-                </span>
-                <div className="h-8 w-8 relative">
-                  <Image
-                    src="/images/verify.svg"
-                    alt="verified-img"
-                    layout="fill"
-                    objectFit="contain"
-                    className="rounded-full"
-                  />
-                </div>
-              </div>
-              <p className="max-w-xl">{singleCollectionDetail.description}</p>
 
-              <div className="w-[80%] sm:w-[35%] lg:w-full my-4 lg:my-0 flex gap-x-4 items-center">
-                {singleCollectionDetail &&
-                singleCollectionDetail.website !== "" ? (
-                  <a
-                    href={
-                      /^http/.test(singleCollectionDetail.website)
-                        ? singleCollectionDetail.website
-                        : "https://" + singleCollectionDetail.website
-                    }
-                    target="_blank"
-                    className="flex items-center rounded-md border-border-1-line border p-2 h-12"
-                    rel="noreferrer"
-                  >
-                    <ProfileLinkIcon />
-                  </a>
-                ) : (
-                  <span className="rounded-md border-border-1-line border p-2 h-12">
-                    <ProfileLinkIcon color="#A2A3B8" />
-                  </span>
-                )}
-                {singleCollectionDetail &&
-                singleCollectionDetail.discord !== "" ? (
-                  <a
-                    target="_blank"
-                    href={
-                      /^http/.test(singleCollectionDetail.discord)
-                        ? singleCollectionDetail.discord
-                        : "https://" + singleCollectionDetail.discord
-                    }
-                    rel="noreferrer"
-                    className="rounded-md border-border-1-line border p-2 h-12 flex items-center"
-                  >
-                    <DiscordIcon />
-                  </a>
-                ) : (
-                  <span className="rounded-md border-border-1-line border p-2 h-12 flex items-center">
-                    <DiscordIcon color="#A2A3B8" />
-                  </span>
-                )}
-                {singleCollectionDetail &&
-                singleCollectionDetail.twitter !== "" ? (
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={
-                      /^http/.test(singleCollectionDetail.twitter)
-                        ? singleCollectionDetail.twitter
-                        : "https://" + singleCollectionDetail.twitter
-                    }
-                    className="rounded-md border-border-1-line border p-1 h-12  flex items-center"
-                  >
-                    <TwitterIcon />
-                  </a>
-                ) : (
-                  <span className="rounded-md border-border-1-line border p-2 h-12 flex items-center">
-                    <TwitterIcon color="#A2A3B8" />
-                  </span>
-                )}
-                {singleCollectionDetail &&
-                singleCollectionDetail.instagram !== "" ? (
-                  <a
-                    href={
-                      /^http/.test(singleCollectionDetail.instagram)
-                        ? singleCollectionDetail.instagram
-                        : "https://" + singleCollectionDetail.instagram
-                    }
-                    target="_blank"
-                    rel="noreferrer"
-                    className="rounded-md border-border-1-line border p-2 h-12 flex items-center"
-                  >
-                    <InstagramIcon />
-                  </a>
-                ) : (
-                  <span className="rounded-md border-border-1-line border p-2 h-12 flex items-center">
-                    <InstagramIcon color="#A2A3B8" />
-                  </span>
-                )}
-                <span
-                  className="border border-border-1-line p-2 rounded-md cursor-pointer h-12 flex items-center"
-                  onClick={handleCopyToClipBoard}
-                >
-                  <CopyToClipboard content={baseUrl + asPath} />
-                </span>
-                {/*You will write a logic to hide this icon if the current user is not the creator of the collection, i have a state to hide it or make it visible*/}
-                {isLoggedIn === true &&
-                loggedId !== null &&
-                loggedId === singleCollectionDetail.user_id ? (
-                  <span
-                    className={clsx(
-                      "border border-border-1-line p-2 rounded-md cursor-pointer h-12 flex items-center"
-                    )}
-                    onClick={handleCollectionUpdate}
-                  >
-                    <EditIcon />
-                  </span>
-                ) : (
-                  ""
-                )}
-              </div>
-            </div>
-
-            <div className="mt-4 flex-wrap justify-around lg:flex-nowrap lg:mt-0 lg:max-w-[20%] w-full flex lg:flex-col gap-3 lg:gap-y-3 lg:border border-border-1-line lg:p-3 rounded-xl">
-              {collectionPriceInfo.map((info) => (
-                <div
-                  className="flex lg:gap-x-12 w-[48%] lg:w-full justify-between items-center p-4 bg-bg-5 rounded-md"
-                  key={info.label}
-                >
-                  <span className="capitalize font-medium">{info.label}</span>
-                  <div className="flex items-center">
-                    {info.type === "coin" && (
-                      <span className="relative h-5 w-5">
-                        <Image
-                          src="/icon-svg/coin-case.svg"
-                          alt="coin-svg"
-                          layout="fill"
-                        />
-                      </span>
-                    )}
-                    <span className="font-medium">
-                      {info.price}
-                      {info.type === "coin" && "k"}
+          <div className="mt-4 flex-wrap justify-around lg:flex-nowrap lg:mt-0 lg:max-w-[20%] w-full flex lg:flex-col gap-3 lg:gap-y-3 lg:border border-border-1-line lg:p-3 rounded-xl">
+            {collectionPriceInfo.map((info) => (
+              <div
+                className="flex lg:gap-x-12 w-[48%] lg:w-full justify-between items-center p-4 bg-bg-5 rounded-md"
+                key={info.label}
+              >
+                <span className="capitalize font-medium">{info.label}</span>
+                <div className="flex items-center">
+                  {info.type === "coin" && (
+                    <span className="relative h-5 w-5">
+                      <Image
+                        src="/icon-svg/coin-case.svg"
+                        alt="coin-svg"
+                        layout="fill"
+                      />
                     </span>
-                  </div>
+                  )}
+                  <span className="font-medium">
+                    {info.price}
+                    {info.type === "coin" && "k"}
+                  </span>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
+        </div>
 
-          <Tab
-            stages={collectionStages}
-            placeholder={activeStage}
-            setStage={setActiveStage}
-          />
+        <Tab
+          stages={collectionStages}
+          placeholder={activeStage}
+          setStage={setActiveStage}
+        />
 
-          {activeStage === "items" ? (
-            <div className="single-collection-items">
-              {/*single collections filters*/}
-              {/* <div className="single-collection-filter">
+        {activeStage === "items" ? (
+          <div className="single-collection-items">
+            {/*single collections filters*/}
+            {/* <div className="single-collection-filter">
                 <div
                   className={clsx(
                     "flex items-center justify-around font-bold p-4 rounded-xl cursor-pointer",
@@ -511,78 +510,75 @@ const ViewCollection = () => {
                   </span>
                 </div>
               </div> */}
-              <div className="single-collection-lists">
-                {/* <div>hello</div> */}
-                <div className="">
-                  {singleCollectionsListedItemsData ||
-                  singleCollectionsCreatedItemsData ? (
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
-                      {singleCollectionsListedItemsData.length > 0
-                        ? singleCollectionsListedItemsData.map((val, i) => (
-                            <NftMediumCard2 {...val} key={val._id} />
-                          ))
-                        : ""}
-                      {singleCollectionsCreatedItemsData.length > 0
-                        ? singleCollectionsCreatedItemsData.map((val, i) => (
-                            <NftMediumCard2
-                              {...val}
-                              key={val._id}
-                              to="view-unlisted-nft"
-                            />
-                          ))
-                        : ""}
-                    </div>
-                  ) : (
-                    <Heading2 title="You have no items in this collection." />
-                  )}
-                </div>
+            <div className="single-collection-lists">
+              {/* <div>hello</div> */}
+              <div className="">
+                {singleCollectionsListedItemsData ||
+                singleCollectionsCreatedItemsData ? (
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
+                    {singleCollectionsListedItemsData.length > 0
+                      ? singleCollectionsListedItemsData.map((val, i) => (
+                          <NftMediumCard2 {...val} key={val._id} />
+                        ))
+                      : ""}
+                    {singleCollectionsCreatedItemsData.length > 0
+                      ? singleCollectionsCreatedItemsData.map((val, i) => (
+                          <NftMediumCard2
+                            {...val}
+                            key={val._id}
+                            to="view-unlisted-nft"
+                          />
+                        ))
+                      : ""}
+                  </div>
+                ) : (
+                  <Heading2 title="You have no items in this collection." />
+                )}
               </div>
             </div>
-          ) : activeStage === "activity" ? (
-            <>
-              {/*Activities Heading-*/}
-              {/* <Heading2 title="You have not perform any activity." /> */}
-              <div className="collection-activity-headers-tab">
-                {activityHeaders.map((header, i) => (
-                  <span key={header + i} className="profile-activity-header">
-                    {header}
-                  </span>
-                ))}
-              </div>
-              <div className="">
-                {singleCollectionActivities.length === 0 &&
-                singleCollectionItemsActivities.length === 0
-                  ? "No activities yet!"
-                  : singleCollectionActivities.length > 0
-                  ? singleCollectionActivities.map((activity, i) => (
-                      <CollectionActivityCard {...activity} key={i} />
-                    ))
-                  : ""}
-
-                {singleCollectionItemsActivities.length === 0
-                  ? ""
-                  : singleCollectionItemsActivities.length >= 1
-                  ? singleCollectionItemsActivities.map((activity, i) => (
-                      <CollectionActivityCard {...activity} key={i} />
-                    ))
-                  : ""}
-              </div>
-            </>
-          ) : null}
-
-          <div className="mt-8">
-            {nextPage < totalPages ? (
-              <Button
-                title="Load More"
-                onClick={() => setCurrentPage(currentPage + 1)}
-              />
-            ) : (
-              ""
-            )}
           </div>
-        </div>
+        ) : activeStage === "activity" ? (
+          <>
+            {/*Activities Heading-*/}
+            {/* <Heading2 title="You have not perform any activity." /> */}
+            <div className="collection-activity-headers-tab">
+              {activityHeaders.map((header, i) => (
+                <span key={header + i} className="profile-activity-header">
+                  {header}
+                </span>
+              ))}
+            </div>
+            <div className="">
+              {singleCollectionActivities.length === 0 &&
+              singleCollectionItemsActivities.length === 0
+                ? "No activities yet!"
+                : singleCollectionActivities.length > 0
+                ? singleCollectionActivities.map((activity, i) => (
+                    <CollectionActivityCard {...activity} key={i} />
+                  ))
+                : ""}
 
-        <Footer />
+              {singleCollectionItemsActivities.length === 0
+                ? ""
+                : singleCollectionItemsActivities.length >= 1
+                ? singleCollectionItemsActivities.map((activity, i) => (
+                    <CollectionActivityCard {...activity} key={i} />
+                  ))
+                : ""}
+            </div>
+          </>
+        ) : null}
+
+        <div className="mt-8">
+          {nextPage < totalPages ? (
+            <Button
+              title="Load More"
+              onClick={() => setCurrentPage(currentPage + 1)}
+            />
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </DashboardLayout>
   );
