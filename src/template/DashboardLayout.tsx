@@ -38,7 +38,7 @@ const DashboardLayout = ({
   }, []);
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden w-full">
+    <div className="main-container">
       <NavBar
         showProfile={showProfile}
         setShowProfile={setShowProfile}

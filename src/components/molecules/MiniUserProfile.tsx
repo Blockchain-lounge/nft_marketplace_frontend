@@ -1,9 +1,6 @@
 import clsx from "clsx";
 import { useRouter } from "next/router";
 
-import Toggle from "react-toggle";
-import "react-toggle/style.css";
-
 import {
   ProfileIcon,
   SettingsIcon,
@@ -12,7 +9,7 @@ import {
 } from "@/src/components/atoms/vectors";
 import { toggleLoggedInUser } from "@/src/reducers/authReducer";
 import { useDispatch } from "react-redux";
-import {disconnectWallet} from "../../functions/onChain/authFunction";
+import { disconnectWallet } from "../../functions/onChain/authFunction";
 
 interface IMiniUserProfile {
   showProfile: boolean;
