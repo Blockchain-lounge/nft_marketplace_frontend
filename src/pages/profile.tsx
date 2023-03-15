@@ -116,16 +116,16 @@ const Profile = () => {
           response.data.data.userBannerImg &&
             response.data.data.userBannerImg !== undefined
             ? APPCONFIG.ENV_BASE_URL +
-                "images/" +
-                response.data.data.userBannerImg
+            "images/" +
+            response.data.data.userBannerImg
             : ""
         );
         setUserProfileImg(
           response.data.data.userProfileImg &&
             response.data.data.userProfileImg !== undefined
             ? APPCONFIG.ENV_BASE_URL +
-                "images/" +
-                response.data.data.userProfileImg
+            "images/" +
+            response.data.data.userProfileImg
             : ""
         );
         if (currentPage && response.data.data._id) {
@@ -227,7 +227,7 @@ const Profile = () => {
       const METHOD = "GET";
       const DATA = {};
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-        
+
         if (response.status == 400) {
           var error = response.data.error;
           toast(error);
@@ -263,7 +263,7 @@ const Profile = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
-          console.log('response.data',response.data.data)
+          console.log('response.data', response.data.data)
 
           setOnChainCollections(response.data.data);
           setIsLoading(false);
@@ -399,7 +399,7 @@ const Profile = () => {
       if (response !== null) {
         await fetchTokenOwned(response);
       }
-      
+
       if (tokenCreatedCurrentPage) {
         await fetchTokenCreated(tokenCreatedCurrentPage);
       }
@@ -407,11 +407,11 @@ const Profile = () => {
       if (tokenListedCurrentPage) {
         await fetchTokenListed(tokenListedCurrentPage);
       }
-      if(!myProfile || myProfile === null){
+      if (!myProfile || myProfile === null) {
         await fetchUser();
       }
     });
-    
+
     fetchCollections();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, tokenCreatedCurrentPage, tokenListedCurrentPage]);
@@ -645,8 +645,8 @@ const Profile = () => {
                     <div className="overflow-x-auto">
                       {activities !== []
                         ? activities.map((activity, i) => (
-                            <UserActivityCard {...activity} key={i} />
-                          ))
+                          <UserActivityCard {...activity} key={i} />
+                        ))
                         : ""}
                       <div className="mt-8">
                         {nextPage < totalPages ? (
@@ -660,14 +660,14 @@ const Profile = () => {
                       </div>
                     </div>
                     {
-                      console.log({collections})
+                      console.log({ collections })
                     }
                   </>
                 ) : profileActiveTab === 4 ? (
                   collections &&
-                  onChainCollections &&
-                  onChainCollections.length > 0 &&
-                  collections.length > 0 ? (
+                    onChainCollections &&
+                    onChainCollections.length > 0 &&
+                    collections.length > 0 ? (
                     collections.length > 0 ? (
                       <div className="explore-items-wrapper">
                         {collections.map((item) => (
@@ -685,14 +685,14 @@ const Profile = () => {
                       ""
                     )
                   ) : collections &&
-                      collections.length > 0 &&
-                      onChainCollections.length === 0 ? (
-                      collections.length > 0 ? (
-                        <div className="explore-items-wrapper">
-                          {collections.map((item) => (
-                            <CollectionCard key={item._id} {...item} />
-                          ))}
-                        </div>
+                    collections.length > 0 &&
+                    onChainCollections.length === 0 ? (
+                    collections.length > 0 ? (
+                      <div className="explore-items-wrapper">
+                        {collections.map((item) => (
+                          <CollectionCard key={item._id} {...item} />
+                        ))}
+                      </div>
                     ) : (
                       ""
                     )
