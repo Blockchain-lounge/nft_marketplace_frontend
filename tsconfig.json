@@ -14,8 +14,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": ".",
     "checkJs": false,
+    "baseUrl": ".",
     "paths": {
       "@/src/*": ["src/*"]
     }

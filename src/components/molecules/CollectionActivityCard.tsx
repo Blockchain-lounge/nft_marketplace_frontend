@@ -1,8 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 //@ts-nocheck
 import React from "react";
-import { CoinIcon } from "../atoms/vectors";
 import * as moment from "moment";
+import { CoinIcon } from "../atoms/vectors";
+import useHandleImgError from "@/src/hooks/useHandleImgError";
+import APPCONFIG from "@/src/constants/Config";
 
 const CollectionActivityCard = ({
   collection_id,
@@ -23,6 +25,7 @@ const CollectionActivityCard = ({
   activity_type: string;
   createdAt: string;
 }) => {
+  const { handleImgError, imgError } = useHandleImgError();
   var activityType = "";
   switch (activity_type) {
     case "newly_created_item":
@@ -80,35 +83,44 @@ const CollectionActivityCard = ({
         {collection_id ? (
           <img
             src={
-              collection_id &&
-              collection_id !== undefined &&
-              collection_id !== null
+              imgError
+                ? APPCONFIG.DEFAULT_NFT_ART
+                : collection_id &&
+                  collection_id !== undefined &&
+                  collection_id !== null
                 ? collection_id.collectionLogoImage
                 : "/images/profile-nft.png"
             }
-            alt=""
+            alt="collection_img"
+            onError={handleImgError}
           />
         ) : created_item ? (
           <img
             src={
-              created_item &&
-              created_item !== undefined &&
-              created_item !== null
+              imgError
+                ? APPCONFIG.DEFAULT_NFT_ART
+                : created_item &&
+                  created_item !== undefined &&
+                  created_item !== null
                 ? created_item.item_art_url
                 : "/images/profile-nft.png"
             }
-            alt=""
+            alt="created_item_img"
+            onError={handleImgError}
           />
         ) : created_item_listed ? (
           <img
             src={
-              created_item_listed &&
-              created_item_listed !== undefined &&
-              created_item_listed !== null
+              imgError
+                ? APPCONFIG.DEFAULT_NFT_ART
+                : created_item_listed &&
+                  created_item_listed !== undefined &&
+                  created_item_listed !== null
                 ? created_item_listed.item_art_url
                 : "/images/profile-nft.png"
             }
-            alt=""
+            alt="created_item_listed"
+            onError={handleImgError}
           />
         ) : (
           ""
@@ -157,13 +169,16 @@ const CollectionActivityCard = ({
         {from_user_id && from_user_id !== undefined ? (
           <img
             src={
-              from_user_id &&
-              from_user_id !== undefined &&
-              from_user_id.userBannerImg !== undefined
+              imgError
+                ? APPCONFIG.DEFAULT_NFT_ART
+                : from_user_id &&
+                  from_user_id !== undefined &&
+                  from_user_id.userBannerImg !== undefined
                 ? from_user_id.userBannerImg
                 : "/images/ape.png"
             }
-            alt=""
+            alt="from_user_img"
+            onError={handleImgError}
           />
         ) : (
           "--"

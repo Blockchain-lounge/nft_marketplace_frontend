@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 // @ts-nocheck
+
 import { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import clsx from "clsx";
 
@@ -99,12 +100,11 @@ const Settings = () => {
           toast(msg);
           return false;
         }
+
         setUserImg(URL.createObjectURL(files[0]));
 
         const { imgUrl } = await uploadFile(files[0], toast);
         setUserImgPreview(imgUrl);
-
-        // setUserImgPreview(URL.createObjectURL(files[0]));
       }
     } else if (name === "userBannerImg") {
       if (files[0] && files[0].size > 0 && files[0].size !== null) {
@@ -130,18 +130,15 @@ const Settings = () => {
         }
         setUserBannerImg(URL.createObjectURL(files[0]));
         const { imgUrl } = await uploadFile(files[0], toast);
-        setUserBannerImgPreview(imgUrl);
 
-        // setUserBannerImgPreview(URL.createObjectURL(files[0]));
+        setUserBannerImgPreview(imgUrl);
       }
     }
-
-    // if (userBannerImg !== null && userImg !== null) {
-    // }
   };
 
   const handleSubmit = async () => {
     setIsLoading((prev) => !prev);
+
     var profileData = {
       username: userDetailsPayload.username,
       email: userDetailsPayload.userEmail,
@@ -214,9 +211,8 @@ const Settings = () => {
 
   return (
     <DashboardLayout isLoading={isTransLoading}>
-      <div className="sub-layout-wrapper scrollbar-hide">
-        <div className="center mx-auto max-w-[90%] lg:max-w-[70%] w-full">
-          {/* <div className="settings-tab">
+      <div className="mx-auto max-w-[90%] lg:max-w-[70%] w-full">
+        {/* <div className="settings-tab">
             {settingStages.map(({ label, stage }) => (
               <div
                 className={clsx(
@@ -238,93 +234,47 @@ const Settings = () => {
               </div>
             ))}
           </div> */}
-          <ToastContainer />
-          {settingStage === "edit-profile" ? (
-            <div className="setting-edit-profile">
-              {/* <BannerImg
+        <ToastContainer />
+        {settingStage === "edit-profile" ? (
+          <div className="setting-edit-profile">
+            {/* <BannerImg
                 userImg={userImg}
                 userImgBanner={userImgBanner}
                 setUserImg={setUserImg}
                 setUserImgBanner={setUserImgBanner}
               /> */}
-              <Heading2 title="Profile Settings" />
-              <div className="h-[20rem] relative mt-6">
-                <div className="h-32 w-32 absolute -bottom-14 left-6 rounded-full border-bg-3 border-[4px] z-10">
-                  <div className={`h-full w-full rounded-full relative`}>
-                    <Image
-                      priority
-                      src={
-                        userImg !== ""
-                          ? userImg
-                          : userImgPreview
-                          ? userImgPreview
-                          : userDetailsPayload.profileImg ||
-                            "/images/avatar.png"
-                      }
-                      alt="user-profile-img"
-                      objectFit="cover"
-                      layout="fill"
-                      className="rounded-full"
-                    />
-
-                    {/* <img src={userImgPreview} alt="user-img-preview" /> */}
-                  </div>
-
-                  <input
-                    type="file"
-                    id="userProfileImg"
-                    onChange={(e) => handleImageFieldChange(e)}
-                    className="hidden"
-                    name="userProfileImg"
-                  />
-                  <label
-                    htmlFor="userProfileImg"
-                    className="absolute inset-0 rounded-full flex flex-col justify-center items-center bg-[#1c1e3d49]"
-                  >
-                    <Image
-                      src="/gallery-add.svg"
-                      alt="add-img-svg"
-                      width="24px"
-                      height="24px"
-                    />
-                  </label>
-                </div>
-                <div
-                  className={`h-full w-full relative 
-                  ${
-                    userBannerImgPreview || userDetailsPayload.bannerImg
-                      ? "block"
-                      : "hidden"
-                  }
-                  `}
-                >
+            <Heading2 title="Profile Settings" />
+            <div className="h-[20rem] relative mt-6">
+              <div className="h-32 w-32 absolute -bottom-14 left-6 rounded-full border-bg-3 border-[4px] z-10">
+                <div className={`h-full w-full rounded-full relative`}>
                   <Image
                     priority
                     src={
-                      userBannerImg !== ""
-                        ? userBannerImg
-                        : userBannerImgPreview
-                        ? userBannerImgPreview
-                        : userDetailsPayload.bannerImg ||
-                          "/images/banner-placeholder.svg"
+                      userImg !== ""
+                        ? userImg
+                        : userImgPreview
+                        ? userImgPreview
+                        : userDetailsPayload.profileImg || "/images/avatar.png"
                     }
-                    alt="userBannerImg"
+                    alt="user-profile-img"
                     objectFit="cover"
                     layout="fill"
-                    // className="rounded-3xl"
+                    className="rounded-full"
                   />
+
+                  {/* <img src={userImgPreview} alt="user-img-preview" /> */}
                 </div>
 
                 <input
                   type="file"
-                  id="userBannerImg"
+                  id="userProfileImg"
                   onChange={(e) => handleImageFieldChange(e)}
                   className="hidden"
-                  name="userBannerImg"
+                  name="userProfileImg"
                 />
                 <label
-                  htmlFor="userBannerImg"
-                  className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d7f]"
+                  htmlFor="userProfileImg"
+                  className="absolute inset-0 rounded-full flex flex-col justify-center items-center bg-[#1c1e3d49]"
                 >
                   <Image
                     src="/gallery-add.svg"
@@ -332,114 +282,157 @@ const Settings = () => {
                     width="24px"
                     height="24px"
                   />
-                  <span
-                    className={clsx(
-                      userImgBanner || userDetailsPayload.bannerImg
-                        ? "hidden"
-                        : "block"
-                    )}
-                  >
-                    Click to change image
-                  </span>
                 </label>
               </div>
-
-              <div className="setting-edit-profile-form">
-                <Input2
-                  name="username"
-                  label="Username"
-                  placeholder="Please enter your username"
-                  onChange={handleFieldChange}
-                  value={userDetailsPayload.username}
+              <div
+                className={`h-full w-full relative 
+                  ${
+                    userBannerImgPreview || userDetailsPayload.bannerImg
+                      ? "block"
+                      : "hidden"
+                  }
+                  `}
+              >
+                <Image
+                  priority
+                  src={
+                    userBannerImg !== ""
+                      ? userBannerImg
+                      : userBannerImgPreview
+                      ? userBannerImgPreview
+                      : userDetailsPayload.bannerImg ||
+                        "/images/banner-placeholder.svg"
+                  }
+                  alt="userBannerImg"
+                  objectFit="cover"
+                  layout="fill"
+                  // className="rounded-3xl"
                 />
-                {/* <Input2
+              </div>
+
+              <input
+                type="file"
+                id="userBannerImg"
+                onChange={(e) => handleImageFieldChange(e)}
+                className="hidden"
+                name="userBannerImg"
+              />
+              <label
+                htmlFor="userBannerImg"
+                className="absolute inset-0 flex flex-col justify-center items-center bg-[#1c1e3d7f]"
+              >
+                <Image
+                  src="/gallery-add.svg"
+                  alt="add-img-svg"
+                  width="24px"
+                  height="24px"
+                />
+                <span
+                  className={clsx(
+                    userImgBanner || userDetailsPayload.bannerImg
+                      ? "hidden"
+                      : "block"
+                  )}
+                >
+                  Click to change image
+                </span>
+              </label>
+            </div>
+
+            <div className="setting-edit-profile-form">
+              <Input2
+                name="username"
+                label="Username"
+                placeholder="Please enter your username"
+                onChange={handleFieldChange}
+                value={userDetailsPayload.username}
+              />
+              {/* <Input2
                   name="name"
                   label="Name"
                   placeholder="Peter Doe"
                   onChange={handleFieldChange}
                   value={userDetailsPayload.name}
                 /> */}
-                <Input2
-                  name="userEmail"
-                  label="Email"
-                  placeholder="Please enter your email"
+              <Input2
+                name="userEmail"
+                label="Email"
+                placeholder="Please enter your email"
+                onChange={handleFieldChange}
+                value={userDetailsPayload.userEmail}
+              />
+              <div>
+                <span className="create-new-nft-wrapper-2-label">Bio</span>
+                <textarea
+                  name="bio"
+                  className="w-full bg-transparent  outline-none select"
+                  placeholder="Enter your description..."
+                  rows={5}
+                  maxLength={250}
                   onChange={handleFieldChange}
-                  value={userDetailsPayload.userEmail}
-                />
-                <div>
-                  <span className="create-new-nft-wrapper-2-label">Bio</span>
-                  <textarea
-                    name="bio"
-                    className="w-full bg-transparent  outline-none select"
-                    placeholder="Enter your description..."
-                    rows={5}
-                    maxLength={250}
-                    onChange={handleFieldChange}
-                    value={userDetailsPayload.bio}
-                  ></textarea>
-                </div>
-                <Button
-                  title="Update profile"
-                  onClick={handleSubmit}
-                  isDisabled={isLoading}
-                />
+                  value={userDetailsPayload.bio}
+                ></textarea>
               </div>
+              <Button
+                title="Update profile"
+                onClick={handleSubmit}
+                isDisabled={isLoading}
+              />
             </div>
-          ) : settingStage === "my-links" ? (
-            <div className="setting-my-links">
-              {userProfileLinks.map(({ label, icon, connected }, i) => (
+          </div>
+        ) : settingStage === "my-links" ? (
+          <div className="setting-my-links">
+            {userProfileLinks.map(({ label, icon, connected }, i) => (
+              <div
+                key={label + i}
+                className="grid grid-cols-[0.8fr_0.2fr] items-center"
+              >
                 <div
-                  key={label + i}
-                  className="grid grid-cols-[0.8fr_0.2fr] items-center"
+                  className={clsx(
+                    "flex items-center justify-between py-4 px-5 rounded-xl",
+                    connected ? "bg-bg-5" : "border border-bg-5"
+                  )}
                 >
-                  <div
-                    className={clsx(
-                      "flex items-center justify-between py-4 px-5 rounded-xl",
-                      connected ? "bg-bg-5" : "border border-bg-5"
-                    )}
-                  >
-                    <span className="flex items-center gap-x-5">
-                      {icon} {label}
-                    </span>
-                    <span
-                      className={clsx(
-                        "text-positive-color gap-x-3",
-                        connected ? "flex" : "hidden"
-                      )}
-                    >
-                      <span className="bg-positive-color h-6 w-6 grid place-items-center rounded-full">
-                        <CheckIcon color="#15152E" />
-                      </span>
-                      Connected
-                    </span>
-                  </div>
+                  <span className="flex items-center gap-x-5">
+                    {icon} {label}
+                  </span>
                   <span
                     className={clsx(
-                      "text-negative-color text-center",
-                      connected ? "block" : "hidden"
+                      "text-positive-color gap-x-3",
+                      connected ? "flex" : "hidden"
                     )}
                   >
-                    Disconnect
+                    <span className="bg-positive-color h-6 w-6 grid place-items-center rounded-full">
+                      <CheckIcon color="#15152E" />
+                    </span>
+                    Connected
                   </span>
                 </div>
-              ))}
-            </div>
-          ) : // : settingStage === "notifications" ? (
-          //   <div className="setting-notifications">
-          //     <CheckBox
-          //       check={checked}
-          //       checked={checked}
-          //       onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          //         setChecked((prev) => !prev)
-          //       }
-          //       label="Email-"
-          //     />
-          //   </div>
-          // )
+                <span
+                  className={clsx(
+                    "text-negative-color text-center",
+                    connected ? "block" : "hidden"
+                  )}
+                >
+                  Disconnect
+                </span>
+              </div>
+            ))}
+          </div>
+        ) : // : settingStage === "notifications" ? (
+        //   <div className="setting-notifications">
+        //     <CheckBox
+        //       check={checked}
+        //       checked={checked}
+        //       onChange={(e: ChangeEvent<HTMLInputElement>) =>
+        //         setChecked((prev) => !prev)
+        //       }
+        //       label="Email-"
+        //     />
+        //   </div>
+        // )
 
-          null}
-        </div>
-        <Footer />
+        null}
       </div>
     </DashboardLayout>
   );

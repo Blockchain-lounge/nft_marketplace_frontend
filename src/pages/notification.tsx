@@ -153,90 +153,87 @@ const Notification = () => {
 
   return (
     <DashboardLayout>
-      <div className="sub-layout-wrapper scrollbar-hide flex flex-col justify-between">
-        <div className="center">
-          <div className="collection-page-top">
-            <div className="collection-page-sub-top">
-              <Heading2 title="Notification" />
-              <ActivitiesSelect
-                title="Event type"
-                placeholder={
-                  typeof currentEvent === "object" ? currentEvent.name : ""
-                }
-                handleChange={"fetchActivities(currentEvent.value)"}
-                onClick={
-                  setCurrentEvent as React.Dispatch<
-                    React.SetStateAction<string | Record<string, string>>
-                  >
-                }
-                lists={events}
-                wt="w-[13.5rem]"
-              />
-            </div>
-          </div>
-          <div className="flex items-center gap-x-4 mb-6">
-            {selectedCollection.map((val, i) => (
-              <div
-                key={val.label + i}
-                className="p-4 bg-bg-5 rounded-md gap-x-4 flex items-center"
-              >
-                <div className="flex items-center gap-x-3">
-                  {val.img && (
-                    <span className="relative h-[2.375rem] w-[2.375rem]">
-                      <Image
-                        src={val.img as string}
-                        alt={val.label}
-                        layout="fill"
-                        objectFit="cover"
-                        className="rounded-full"
-                      />
-                    </span>
-                  )}
-                  {val.label}
-                  {val.isVerified && (
-                    <span className="relative h-5 w-5">
-                      <Image
-                        src="/images/verify.svg"
-                        alt={val.label}
-                        layout="fill"
-                        objectFit="cover"
-                      />
-                    </span>
-                  )}
-                </div>
-                <span className="cursor-pointer">
-                  <CloseIcon />
-                </span>
-              </div>
-            ))}
-          </div>
-          <div className="total-earnings-history-wrapper ">
-            {notification.length === 0 && isFetching
-              ? Array(8)
-                  .fill(0)
-                  .map((_, i) => (
-                    <ActivityLoader key={"activity-skeleton-key" + i} />
-                  ))
-              : notification && notification.length === 0
-              ? "No notification yet!"
-              : notification && notification.length > 0
-              ? notification.map((txn, i) => (
-                  <NotificationCard key={i} {...txn} />
-                ))
-              : null}
-          </div>
-          <div className="mt-8">
-            {nextPage < totalPages ? (
-              <Button
-                title="Load More"
-                onClick={() => setCurrentPage(currentPage + 1)}
-              />
-            ) : (
-              ""
-            )}
+      <div className="flex flex-col justify-between">
+        <div className="collection-page-top">
+          <div className="collection-page-sub-top">
+            <Heading2 title="Notification" />
+            <ActivitiesSelect
+              title="Event type"
+              placeholder={
+                typeof currentEvent === "object" ? currentEvent.name : ""
+              }
+              handleChange={"fetchActivities(currentEvent.value)"}
+              onClick={
+                setCurrentEvent as React.Dispatch<
+                  React.SetStateAction<string | Record<string, string>>
+                >
+              }
+              lists={events}
+              wt="w-[13.5rem]"
+            />
           </div>
         </div>
-        <Footer />
+        <div className="flex items-center gap-x-4 mb-6">
+          {selectedCollection.map((val, i) => (
+            <div
+              key={val.label + i}
+              className="p-4 bg-bg-5 rounded-md gap-x-4 flex items-center"
+            >
+              <div className="flex items-center gap-x-3">
+                {val.img && (
+                  <span className="relative h-[2.375rem] w-[2.375rem]">
+                    <Image
+                      src={val.img as string}
+                      alt={val.label}
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded-full"
+                    />
+                  </span>
+                )}
+                {val.label}
+                {val.isVerified && (
+                  <span className="relative h-5 w-5">
+                    <Image
+                      src="/images/verify.svg"
+                      alt={val.label}
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  </span>
+                )}
+              </div>
+              <span className="cursor-pointer">
+                <CloseIcon />
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="total-earnings-history-wrapper ">
+          {notification.length === 0 && isFetching
+            ? Array(8)
+                .fill(0)
+                .map((_, i) => (
+                  <ActivityLoader key={"activity-skeleton-key" + i} />
+                ))
+            : notification && notification.length === 0
+            ? "No notification yet!"
+            : notification && notification.length > 0
+            ? notification.map((txn, i) => (
+                <NotificationCard key={i} {...txn} />
+              ))
+            : null}
+        </div>
+        <div className="mt-8">
+          {nextPage < totalPages ? (
+            <Button
+              title="Load More"
+              onClick={() => setCurrentPage(currentPage + 1)}
+            />
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </DashboardLayout>
   );

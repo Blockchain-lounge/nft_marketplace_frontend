@@ -45,6 +45,8 @@ import {
   toggleLoggedInUser,
 } from "@/src/reducers/authReducer";
 import { apiRequest } from "@/src/functions/offChain/apiRequests";
+import UseHandleImgError from "@/src/hooks/useHandleImgError";
+import APPCONFIG from "@/src/constants/Config";
 
 interface INav {
   showProfile: boolean;
@@ -63,10 +65,6 @@ const NavBar: FC<INav> = ({
   setShowProfile,
   showCreateNft,
 }) => {
-  const dispatch = useDispatch();
-
-  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
-
   const [modalType, setModaltype] = useState("wallet");
   const [myProfile, setMyProfile] = useState<null | Record<string, string>>(
     null
@@ -79,6 +77,12 @@ const NavBar: FC<INav> = ({
 
   // const [stage, setStage] = useState(0);
   const [connectedAddress, setConnectedAddress] = useState(null);
+
+  const dispatch = useDispatch();
+
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+
+  const { handleImgError, imgError } = UseHandleImgError();
 
   account_listener();
 
@@ -123,24 +127,24 @@ const NavBar: FC<INav> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectedAddress, isLoggedIn]);
 
-  const statusArr = [
-    {
-      title: "Volume 24h",
-      value: "105.717 Eth",
-    },
-    {
-      title: "Volume total",
-      value: "26.306.477 Eth",
-    },
-    {
-      title: "Eth/USD",
-      value: "$357.60",
-    },
-    {
-      title: "Ethereum Network",
-      value: "3,009 TPS",
-    },
-  ];
+  // const statusArr = [
+  //   {
+  //     title: "Volume 24h",
+  //     value: "105.717 Eth",
+  //   },
+  //   {
+  //     title: "Volume total",
+  //     value: "26.306.477 Eth",
+  //   },
+  //   {
+  //     title: "Eth/USD",
+  //     value: "$357.60",
+  //   },
+  //   {
+  //     title: "Ethereum Network",
+  //     value: "3,009 TPS",
+  //   },
+  // ];
 
   const handleLogin = () => {
     // toast("Please wait for your sign in process");
@@ -148,19 +152,10 @@ const NavBar: FC<INav> = ({
       connectUserWallet();
       setIsLoading((prev) => !prev);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
-
-    // then((res) => {
-    //   console.log(res);
-    //   setSignInStage((prev) => prev + 1);
-    // })
-    // .catch((err) => {
-    //   console.log(err.msg);
-    //   toast.error(err.msg);
-    // });
   };
-  // console.log({ signInStage });
+
   const handleProfileDisplay = () => {
     setShowProfile(false);
     setShowBal(false);
@@ -241,9 +236,11 @@ const NavBar: FC<INav> = ({
               >
                 <Image
                   src={
-                    myProfile !== null &&
-                    myProfile.profileImg !== undefined &&
-                    myProfile.profileImg !== ""
+                    imgError
+                      ? APPCONFIG.DEFAULT_NFT_ART
+                      : myProfile !== null &&
+                        myProfile.profileImg !== undefined &&
+                        myProfile.profileImg !== ""
                       ? myProfile.profileImg
                       : "/images/avatar.png"
                   }
@@ -252,6 +249,7 @@ const NavBar: FC<INav> = ({
                   placeholder="blur"
                   blurDataURL="/images/avatar.png"
                   className="rounded-full"
+                  onError={handleImgError}
                 />
               </div>
               <div className="flex space-x-[1rem] cursor-pointer">

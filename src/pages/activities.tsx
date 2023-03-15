@@ -167,7 +167,7 @@ const Activities = () => {
 
   return (
     <DashboardLayout>
-      <div className="sub-layout-wrapper scrollbar-hide flex flex-col justify-between">
+      <div className="sub-layout-wrapper flex flex-col justify-between">
         <div className="center">
           <div className="collection-page-top">
             <div className="collection-page-sub-top">
@@ -265,7 +265,6 @@ const Activities = () => {
             )}
           </div>
         </div>
-        <Footer />
       </div>
     </DashboardLayout>
   );

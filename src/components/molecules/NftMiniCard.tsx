@@ -1,11 +1,12 @@
 // @ts-nocheck
 import { useRouter } from "next/router";
-// import React, { useState, useEffect } from "react";
+import useHandleImgError from "@/src/hooks/useHandleImgError";
 
 import { CoinIcon } from "@/src/components/atoms/vectors";
 import Image from "next/image";
 import APPCONFIG from "../../constants/Config";
 import { textShortener } from "@/src/utilities/helper";
+import { useState } from "react";
 
 interface INftminicards {
   _id: string;
@@ -25,7 +26,10 @@ const NftMiniCards = ({
   collectionFeaturedImage,
   collectionLogoImage,
 }: INftminicards) => {
+  const { handleImgError, imgError } = useHandleImgError();
+
   const { push } = useRouter();
+
   const handleNavigate = () => {
     push(`/single-collection/${_id}`);
   };
@@ -64,13 +68,20 @@ const NftMiniCards = ({
       <div className="flex items-center">
         <div className="img relative">
           <Image
-            src={collectionLogoImage ? collectionLogoImage : ""}
+            src={
+              imgError
+                ? APPCONFIG.DEFAULT_NFT_ART
+                : collectionLogoImage
+                ? collectionLogoImage
+                : APPCONFIG.DEFAULT_NFT_ART
+            }
             alt={name}
             layout="fill"
             objectFit="cover"
             className="rounded-[0.75rem]"
             placeholder="blur"
             blurDataURL="/images/placeholder.png"
+            onError={handleImgError}
           />
         </div>
         <div className="">

@@ -15,7 +15,11 @@ const APPCONFIG = {
     process.env.NEXT_PUBLIC_ENV_BASE_URL + "metadata/contracts/", // E.g. https://cloudax.xyz/metadata/contracts/cloudax
   APP_NETWORK: process.env.NEXT_PUBLIC_APP_NETWORK,
   APP_NETWORK_CHAIN_ID: process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID,
-  
+  SPACES_API_KEY: process.env.NEXT_PUBLIC_ENV_SPACES_API_KEY,
+  SPACES_API_SECRET: process.env.NEXT_PUBLIC_ENV_SPACES_API_SECRET,
+  SPACES_ENDPOINT: process.env.NEXT_PUBLIC_ENV_SPACES_ENDPOINT,
+  SPACES_HOSTNAME: process.env.NEXT_PUBLIC_ENV_SPACES_HOSTNAME,
+  SPACES_BUCKET: process.env.NEXT_PUBLIC_SPACES_BUCKET,
 };
 
 export default APPCONFIG;

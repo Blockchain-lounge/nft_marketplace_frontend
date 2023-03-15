@@ -29,7 +29,6 @@ const Select2 = ({
     onClick(params);
     // onChange;
     setOpenSubmenu((prev) => !prev);
-    console.log(onChange)
   };
 
   return (

@@ -148,6 +148,7 @@ const ListNft = () => {
       setIsTransLoading((prev) => !prev);
       return;
     }
+
     if (priceListingType === "fixed") {
       setPriceListingType((prev) => "fixed");
       if (
@@ -166,47 +167,46 @@ const ListNft = () => {
       }
     } else if (priceListingType === "auction") {
       setPriceListingType((prev) => "auction");
-      setIsTransLoading((prev) => !prev);
       //@ts-ignore
       if (date.startDate.length === 0) {
+        setIsTransLoading((prev) => !prev);
         msg = "Auction end date is empty";
         toast(msg);
-        setIsTransLoading((prev) => !prev);
         return;
         //@ts-ignore
       } else if (date.endDate.length === 0) {
+        setIsTransLoading((prev) => !prev);
         msg = "Auction start date is empty";
         toast(msg);
-        setIsTransLoading((prev) => !prev);
         return;
       } else if (timeSelected.length === 0) {
+        setIsTransLoading((prev) => !prev);
         msg = "Auction time is empty";
         toast(msg);
-        setIsTransLoading((prev) => !prev);
         return;
       } else if (
         nftListingPayload.reserved_bidding_price.length === 0 ||
         parseFloat(nftListingPayload.reserved_bidding_price) <= 0
       ) {
+        setIsTransLoading((prev) => !prev);
         msg = "Auction reserved bidding price is empty";
         toast(msg);
-        setIsTransLoading((prev) => !prev);
         return;
       } else if (
         nftListingPayload.starting_bidding_price.length === 0 ||
         parseFloat(nftListingPayload.starting_bidding_price) <= 0
       ) {
+        setIsTransLoading((prev) => !prev);
         msg = "Auction starting bidding price is empty";
         toast(msg);
-        setIsTransLoading((prev) => !prev);
         return;
       } else if (
         parseFloat(nftListingPayload.reserved_bidding_price) <
         parseFloat(nftListingPayload.starting_bidding_price)
       ) {
+        setIsTransLoading((prev) => !prev);
         msg = "Reserved price must be more than the starting price";
         toast(msg);
-        setIsTransLoading((prev) => !prev);
         return;
       }
 

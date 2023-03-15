@@ -4,6 +4,7 @@ import Image from "next/image";
 import APPCONFIG from "../../constants/Config";
 import { useRouter } from "next/router";
 import { textShortener } from "@/src/utilities/helper";
+import { useState } from "react";
 
 interface IHerocard {
   _id: string;
@@ -30,17 +31,21 @@ const HeroCard = ({
   img,
   price,
 }: IHerocard) => {
-  // const { push } = useRouter();
+  const [imgError, setOnImageError] = useState(false);
+  const handleImgError = () => {
+    setOnImageError((prev) => !prev);
+  };
 
   return (
     <div className="hero-card-wrapper" onClick={onClick}>
       <div className="h-[80%] w-[100%] relative mb-2">
         <Image
-          src={collectionFeaturedImage}
+          src={imgError ? APPCONFIG.DEFAULT_NFT_ART : collectionFeaturedImage}
           alt={name}
           layout="fill"
           objectFit="cover"
           className="rounded-[1.25rem]"
+          onError={handleImgError}
           // onClick={() => push(`/single-collection/${_id}`)}
         />
       </div>

@@ -8,6 +8,7 @@ import { INftcard } from "./NftMediumCard";
 import { useTimeCountDown } from "@/src/hooks/useTimeCountDown";
 import * as moment from "moment";
 import APPCONFIG from "@/src/constants/Config";
+import UseHandleImgError from "@/src/hooks/useHandleImgError";
 
 const HomeNftCard = ({
   _id,
@@ -24,6 +25,7 @@ const HomeNftCard = ({
 Partial<INftcard>) => {
   const [dollarRate] = UseConvertEthToDollar();
   const { push } = useRouter();
+  const { handleImgError, imgError } = UseHandleImgError();
   const { time } = useTimeCountDown(auction_end_date);
 
   return (
@@ -34,23 +36,37 @@ Partial<INftcard>) => {
       <div className="nmc-wrapper-img">
         {item_id ? (
           <Image
-            src={item_id.item_art_url ? item_id.item_art_url : ""}
+            src={
+              imgError
+                ? APPCONFIG.DEFAULT_NFT_ART
+                : item_id.item_art_url
+                ? item_id.item_art_url
+                : APPCONFIG.DEFAULT_NFT_ART
+            }
             alt={item_id.item_title}
             objectFit="cover"
             layout="fill"
             placeholder="blur"
             blurDataURL="/images/placeholder.png"
             className="rounded-t-[0.975rem]"
+            onError={handleImgError}
           />
         ) : resell_item_id ? (
           <Image
-            src={resell_item_id.item_art_url ? resell_item_id.item_art_url : APPCONFIG.DEFAULT_NFT_ART}
+            src={
+              imgError
+                ? APPCONFIG.DEFAULT_NFT_ART
+                : resell_item_id.item_art_url
+                ? resell_item_id.item_art_url
+                : APPCONFIG.DEFAULT_NFT_ART
+            }
             alt={resell_item_id.item_title}
             objectFit="cover"
             layout="fill"
             placeholder="blur"
             blurDataURL="/images/placeholder.png"
             className="rounded-t-[0.975rem]"
+            onError={handleImgError}
           />
         ) : (
           ""
@@ -80,7 +96,7 @@ Partial<INftcard>) => {
                   : ""}
               </span>
               <span className="nmc-sub-wrapper-2-owner justify-center">
-                { listing_quantity !== undefined
+                {listing_quantity !== undefined
                   ? listing_remaining + "/" + listing_quantity
                   : listing_remaining + "/" + listing_quantity}
               </span>
@@ -163,17 +179,22 @@ Partial<INftcard>) => {
             <div className="h-14 w-14 relative">
               {item_id ? (
                 <Image
-                  src={item_id.item_art_url}
+                  src={
+                    imgError ? APPCONFIG.DEFAULT_NFT_ART : item_id.item_art_url
+                  }
                   alt={item_id.item_title}
                   layout="fill"
                   placeholder="blur"
                   blurDataURL="/images/placeholder.png"
                   className="rounded-full"
+                  onError={handleImgError}
                 />
               ) : resell_item_id ? (
                 <Image
                   src={
-                    resell_item_id.item_art_url
+                    imgError
+                      ? APPCONFIG.DEFAULT_NFT_ART
+                      : resell_item_id.item_art_url
                       ? resell_item_id.item_art_url
                       : APPCONFIG.DEFAULT_NFT_ART
                   }
@@ -182,6 +203,7 @@ Partial<INftcard>) => {
                   placeholder="blur"
                   blurDataURL="/images/placeholder.png"
                   className="rounded-full"
+                  onError={handleImgError}
                 />
               ) : (
                 ""

@@ -23,30 +23,20 @@ const Collections = () => {
 
   return (
     <DashboardLayout>
-      <div className="sub-layout-wrapper scrollbar-hide">
-        <div className="center">
-          <div className="collection-page-top">
-            <div className="collection-page-sub-top">
-              <Heading2 title="Top Collections" />
-              {/* <Select title="All categories" />
+      <div className="collection-page-top">
+        <div className="collection-page-sub-top">
+          <Heading2 title="Top Collections" />
+          {/* <Select title="All categories" />
               <Select title="All chains" /> */}
-            </div>
-            <Tab2
-              tabs={tabs}
-              activeTab={currentTab}
-              setActiveTab={setCurrentTab}
-            />
-          </div>
-          <div className="collection-page-lists">
-            <NftList
-              headings={listHeadings}
-              lists={collections}
-              url="/single-collection"
-            />
-          </div>
         </div>
-        <Footer />
+        <Tab2 tabs={tabs} activeTab={currentTab} setActiveTab={setCurrentTab} />
       </div>
+
+      <NftList
+        headings={listHeadings}
+        lists={collections}
+        url="/single-collection"
+      />
     </DashboardLayout>
   );
 };
