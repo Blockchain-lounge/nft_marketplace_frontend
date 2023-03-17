@@ -40,7 +40,10 @@ const ListNft = () => {
   const { query, push } = useRouter();
   const { id, tokenId } = query;
   const [priceListType, setPriceListType] = useState("Fixed price");
-  const [onchainCollectionID, setOnchainCollectionID] = useState(null);
+  const [collectionData, setCollectionData] = useState({
+    collection_creator_fee: 0,
+    collection_address: ''
+  });
   const [collections, setCollections] = useState([]);
   const [nftPayloadselect, setNftPayloadSelect] = useState({
     label: "Select a collection",
@@ -83,11 +86,17 @@ const ListNft = () => {
 
       await apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
         if (response.status == 200) {
-          setOnchainCollectionID(
-            response.data.data.collection_on_chain_id &&
-              parseInt(response.data.data.collection_on_chain_id) > 0
-              ? response.data.data.collection_on_chain_id
+          setCollectionData(
+            {
+              collection_address: response.data.data.collection_address &&
+              parseInt(response.data.data.collection_address) > 0
+              ? response.data.data.collection_address
+              : 0,
+              collection_creator_fee: response.data.data.collection_creator_fee
+              ? response.data.data.collection_creator_fee
               : null
+            }
+            
           );
         } else if (
           response.status !== 200 &&
@@ -198,25 +207,37 @@ const ListNft = () => {
       setIsTransLoading((prev) => !prev);
       return;
     }
-    if (
-      itemDetail &&
-      itemDetail.metadata &&
-      itemDetail.metadata !== null &&
-      itemDetail.metadata.cloudax_token &&
-      itemDetail.metadata.cloudax_token !== null &&
-      itemDetail.metadata.cloudax_token._id &&
-      itemDetail.metadata.cloudax_token._id !== null &&
-      itemDetail.metadata.cloudax_token._id.lenght > 0
-    ) {
-    } else {
-      if (!onchainCollectionID || onchainCollectionID.length === 0) {
-        msg = "listed collection is empty";
-        toast(msg);
-        return;
-      }
-    }
-    if (isNaN(parseFloat(nftListingPayload.listing_price)) === true) {
+    // if (
+    //   itemDetail &&
+    //   itemDetail.metadata &&
+    //   itemDetail.metadata !== null &&
+    //   itemDetail.metadata.cloudax_token &&
+    //   itemDetail.metadata.cloudax_token !== null &&
+    //   itemDetail.metadata.cloudax_token._id &&
+    //   itemDetail.metadata.cloudax_token._id !== null &&
+    //   itemDetail.metadata.cloudax_token._id.lenght > 0
+    // ) {
+    // } else {
+    //   // if (!onchainCollectionID || onchainCollectionID.length === 0) {
+    //   //   msg = "listed collection is empty";
+    //   //   toast(msg);
+    //   //   return;
+    //   // }
+    // }
+    else if (isNaN(parseFloat(nftListingPayload.listing_price)) === true) {
       msg = "price of listed must be a valid positive number";
+      toast(msg);
+      setIsTransLoading((prev) => !prev);
+      return;
+    }
+    else if (!collectionData.collection_creator_fee) {
+      msg = "Please ensure that you choose a collection or refresh this page.";
+      toast(msg);
+      setIsTransLoading((prev) => !prev);
+      return;
+    }
+    else if (!collectionData.collection_address || collectionData.collection_address.length === 0) {
+      msg = "Please ensure that you choose a collection or refresh this page.";
       toast(msg);
       setIsTransLoading((prev) => !prev);
       return;
@@ -244,8 +265,10 @@ const ListNft = () => {
         tokenAddress,
         tokenId,
         listing_price,
-        onchainCollectionID,
-        connectedAddress
+        // onchainCollectionID,
+        connectedAddress,
+        collectionData.collection_address,
+        collectionData.collection_creator_fee
       );
       const tnx = await transaction.wait();
       } catch (err) {

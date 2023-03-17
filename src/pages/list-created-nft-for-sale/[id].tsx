@@ -166,6 +166,8 @@ const ListNft = () => {
         return;
       }
     } else if (priceListingType === "auction") {
+        toast("Auction listing is not yet supported");
+        return
       setPriceListingType((prev) => "auction");
       //@ts-ignore
       if (date.startDate.length === 0) {

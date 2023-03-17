@@ -356,7 +356,10 @@ const ViewNft = () => {
       const priceListed = ethers.utils.parseUnits(
         itemDetail.listing_price.toString()
       );
-
+      const royaltyFee = ethers.utils.parseUnits(
+        itemDetail.item.collection.collection_creator_fee.toString()
+      );
+      
       const price = ethers.utils.parseUnits(totalPrice, "ether");
 
       var tnx = null;
@@ -393,12 +396,14 @@ const ViewNft = () => {
           toast("Please approve this transaction!");
           transaction = await contract.buyItemCopy(
             itemDetail.listed_by.address,
-            itemDetail.item.collection.collection_on_chain_id,
+            // itemDetail.item.collection.collection_on_chain_id,
             itemDetail.item._id,
             item_base_uri,
             priceListed,
             nftPurchasePayload.quantity,
             itemDetail.item.item_supply,
+            itemDetail.item.collection.collection_address,
+            itemDetail.item.collection.collection_creator_fee,
             {
               value: price,
               // gasPrice: 20000000,

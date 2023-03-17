@@ -148,25 +148,27 @@ const Profile = () => {
    * @returns {*} returns users owned token
    */
   const fetchTokenOwned = async (address: string): any => {
-    const HEADER = "authenticated";
-    const REQUEST_URL = "nft/tokens_owned/" + address;
-    const METHOD = "GET";
-    const DATA = {};
-    apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
-      if (response.status == 400) {
-        var error = response.data.error;
-        toast(error);
-        return;
-      } else if (response.status == 401) {
-        toast("Unauthorized request!");
-        return;
-      } else if (response.status == 200) {
-        setUserOwnedProfileData(response.data.data);
-      } else {
-        toast("Something went wrong, please try again!");
-        return;
-      }
-    });
+    if(address.length > 0){
+      const HEADER = "authenticated";
+      const REQUEST_URL = "nft/tokens_owned/" + address;
+      const METHOD = "GET";
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          return;
+        } else if (response.status == 401) {
+          toast("Unauthorized request!");
+          return;
+        } else if (response.status == 200) {
+          setUserOwnedProfileData(response.data.data);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    }
   };
 
   /**

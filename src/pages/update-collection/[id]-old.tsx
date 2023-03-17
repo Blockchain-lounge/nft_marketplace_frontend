@@ -3,23 +3,24 @@ import clsx from "clsx";
 import Image from "next/image";
 
 import { useRouter } from "next/router";
-import { uploadFile } from "../functions/offChain/apiRequests";
+import { uploadFile } from "@/src/functions/offChain/apiRequests";
 
 import React, { ChangeEvent, FC, useEffect, useState } from "react";
-import { Button, Heading2, Input2, Select } from "../components/atoms";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { apiRequest } from "../functions/offChain/apiRequests";
-import EarningLayout from "../template/EarningLayout";
-import { ICategories } from "../utilities/types";
-import { CloseIcon } from "../components/atoms/vectors";
-import { connectedAccount } from "../functions/onChain/authFunction";
+import { apiRequest } from "@/src/functions/offChain/apiRequests";
+import EarningLayout from "@/src/template/EarningLayout";
+import { ICategories } from "@/src/utilities/types";
+import { CloseIcon } from "@/src/components/atoms/vectors";
+import { Button, Heading2, Input2, Select } from "@/src/components/atoms";
+import { connectedAccount } from "@/src/functions/onChain/authFunction";
 import APPCONFIG from "@/src/constants/Config";
-import abi from "../artifacts/abi.json";
+import abi from "@/src/artifacts/abi.json";
 import { BigNumber, ethers } from "ethers";
-import { findEvents } from "../functions/onChain/generalFunction";
+import { findEvents } from "@/src/functions/onChain/generalFunction";
 
-const CreateCollection: FC<ICollectionProps> = () => {
+const UpdateCollection: FC<ICollectionProps> = () => {
   const [collectionBannerPreview, setCollectionBannerPreview] = useState("");
   const [collectionBanner, setCollectionBanner] = useState("");
 
@@ -38,9 +39,9 @@ const CreateCollection: FC<ICollectionProps> = () => {
   const [collectionPayload, setCollectionPayload] = useState({
     collection_name: "",
     collection_description: "",
-    collection_creator_fee: 0,
-    // collection_creator_price: "",
-    creator_fee_receiver_address: "",
+    collection_creator_fee: "",
+    collection_on_chain_id: '',
+    // creator_fee_receiver_address: "",
   });
   const [connectedAddress, setConnectedAddress] = useState(null);
 
@@ -51,28 +52,9 @@ const CreateCollection: FC<ICollectionProps> = () => {
     instagram: "",
   });
 
-  const { push } = useRouter();
+  const { push, query } = useRouter();
+  const { id } = query;
 
-  useEffect(() => {
-    connectedAccount().then((response) => {
-      if (response !== null) {
-        setConnectedAddress(response);
-      } else {
-        push("/");
-      }
-    });
-
-    fetchCategories();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  /**
-   * This function is responsible for changing input value by targeting their name as key and their corresponding input as value.
-   *
-   * @date 12/15/2022 - 3:38:06 PM
-   *
-   * @param {(ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)} e expect the input event as arguement and targets the name assigned to it's value.
-   */
   const handleFieldChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -83,12 +65,6 @@ const CreateCollection: FC<ICollectionProps> = () => {
     });
   };
 
-  /**
-   * This function is responsible for changing item social media links input value by targeting their name as key and their corresponding input as value.
-   * @date 12/15/2022 - 3:40:33 PM
-   *
-   * @param {(ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)} e expect the input event as arguement and targets the name assigned to it's value.
-   */
   const handleSocialLinksFieldChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -179,7 +155,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
           toast("Unauthorized request!");
           return;
         } else if (response.status == 200) {
-          // setCategory(response.data.data[1]);
+          setCategory(response.data.data[1]);
           setCategories(response.data.data);
         } else {
           toast("Something went wrong, please try again!");
@@ -192,13 +168,55 @@ const CreateCollection: FC<ICollectionProps> = () => {
     }
   };
 
+  const fetchCollectionDetails = async (id) => {
+    if (id !== undefined) {
+      const HEADER = {};
+      const REQUEST_URL = "nft-collection/show/" + id;
+      const METHOD = "GET";
+      const DATA = {};
+      apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        // console.log({ response });
+        if (response.status == 400) {
+          var error = response.data.error;
+          toast(error);
+          push("/");
+          return;
+        } else if (response.status == 200) {
+          setCollectionPayload({
+            collection_name: response.data.data.name,
+            collection_description: response.data.data.description,
+            collection_on_chain_id: response.data.data.collection_on_chain_id,
+            collection_creator_fee: response.data.data.collection_creator_fee
+          });
+          setSocialLinksPayload({
+            website: response.data.data.website,
+            discord: response.data.data.discord,
+            instagram: response.data.data.instagram,
+            twitter: response.data.data.twitter,
+          });
+          setCollectionBannerPreview(response.data.data.cover_image_id);
+          setCollectionFeaturedArtPreview(
+            response.data.data.collectionFeaturedImage
+          );
+          setCollectionLogoPreview(response.data.data.collectionLogoImage);
+          setCollectionBanner(response.data.data.cover_image_id);
+          setCollectionFeaturedArt(response.data.data.collectionFeaturedImage);
+          setCollectionLogo(response.data.data.collectionLogoImage);
+        } else {
+          toast("Something went wrong, please try again!");
+          return;
+        }
+      });
+    }
+  };
+
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     var msg = "";
-    var tnx = "";
-    var collection_on_chain_id = "";
-    var transaction = "";
+    var tnx = '';
+    var collection_on_chain_id ='';
+    var transaction = '';
     if (
       !collectionPayload.collection_name ||
       !collectionPayload.collection_description
@@ -211,23 +229,51 @@ const CreateCollection: FC<ICollectionProps> = () => {
       toast(msg);
       return false;
     }
-    else if (!collectionPayload.creator_fee_receiver_address) {
-      msg = "Collection fee address is required";
-      toast(msg);
-      return false;
-    }else if (ethers.utils.isAddress(collectionPayload.creator_fee_receiver_address) !== true) {
-      msg = "Collection fee address is not a valid ETH address";
-      toast(msg);
-      return false;
-    }
 
-    
-    setIsTransLoading(true);
-    const collection_creator_fee =
-      collectionPayload.collection_creator_fee &&
-      isNaN(collectionPayload.collection_creator_fee) === false
-        ? collectionPayload.collection_creator_fee
-        : 0;
+    const collection_creator_fee = collectionPayload.collection_creator_fee && isNaN(collectionPayload.collection_creator_fee) === false ? collectionPayload.collection_creator_fee : 0;
+    const provider = new ethers.providers.Web3Provider(
+      (window as any).ethereum
+    );
+   
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(
+      APPCONFIG.SmartContractAddress,
+      abi,
+      signer
+    );
+
+    try{
+        transaction = await contract.updateCollection(
+        collectionPayload.collection_on_chain_id,
+        collection_creator_fee,
+        connectedAddress
+        );
+    }
+    catch (error) {
+      toast("Transaction unapproved!");
+      setIsTransLoading((prev) => !prev);
+      return
+    }
+   
+      try {
+        tnx = await transaction.wait();
+        const events = findEvents('CollectionCreated', tnx.events, true);
+        // if (events !== undefined && events.length > 0 && events !== true) {
+        //     trackId = events.trackId.toNumber();
+        //     // token BASE URI (metadata URL). e.g. https://thrushapp.xyz/metadata/token/[ERC_TOKEN_TYPE]/[ARTISTE_ID]/[TRACK_ID]
+        //     baseURI = baseURI + state.artiste_id + '/' + trackId;
+        // }
+        if (tnx.events[0]) {
+          
+        } else {
+          toast("We were unable to complete your transaction!");
+          setIsTransLoading(false);
+          return;
+        }
+      } catch (error) {
+        setIsTransLoading(false);
+        return;
+      }
 
     var collectionData = {
       name: collectionPayload.collection_name,
@@ -235,24 +281,22 @@ const CreateCollection: FC<ICollectionProps> = () => {
       cover_image: collectionBanner,
       collectionFeaturedImage: collectionFeaturedArt,
       collectionLogoImage: collectionLogo,
-    //   collection_on_chain_id: collection_on_chain_id,
       category_id: category._id || category.id,
-      collection_address: collectionPayload.creator_fee_receiver_address,
-      collection_creator_fee:
-        collectionPayload.collection_creator_fee &&
-        isNaN(collectionPayload.collection_creator_fee) === false
-          ? collectionPayload.collection_creator_fee
-          : 0,
       ...socialLinksPayload,
+      collection_on_chain_id: collectionPayload.collection_on_chain_id,
+      collection_creator_fee: collectionPayload.collection_creator_fee && isNaN(collectionPayload.collection_creator_fee) === false ? collectionPayload.collection_creator_fee : 0,
     };
-
+    // console.log({ collectionData });
+    setIsTransLoading(true);
+    
     try {
       const HEADER = "authenticated_and_form_data";
-      const REQUEST_URL = "nft-collection/store";
+      const REQUEST_URL = "nft-collection/update/" + id;
       const METHOD = "POST";
       const DATA = collectionData;
 
       apiRequest(REQUEST_URL, METHOD, DATA, HEADER).then((response) => {
+        // console.log({ response });
         if (response.status == 400 || response.status == 404) {
           var error = response.data.error;
           toast(error);
@@ -262,10 +306,10 @@ const CreateCollection: FC<ICollectionProps> = () => {
         if (response.status == 401) {
           toast("Unauthorized request!");
           return;
-        } else if (response.status == 201) {
-          toast.success(response.data.message);
+        } else if (response.status == 200) {
+          toast(response.data.message);
           setIsTransLoading(false);
-          push("/create-new-nft");
+          // closeModal((prev) => !prev);
         } else {
           toast("Something went wrong, please try again!");
           setIsTransLoading(false);
@@ -279,16 +323,24 @@ const CreateCollection: FC<ICollectionProps> = () => {
     }
   };
 
+  useEffect(() => {
+    connectedAccount().then((response) => {
+      if (response !== null) {
+        setConnectedAddress(response);
+      } else {
+        push("/");
+      }
+    });
+    fetchCollectionDetails(id);
+    fetchCategories();
+  }, [id]);
   return (
-    <EarningLayout title="Create a Collection">
-      <div className="create-new-nft-form sm:max-w-[80%] 2xl:max-w-[60%]">
+    <EarningLayout title="Update a Collection">
+      <div className="create-new-nft-form max-w-[80%] 2xl:max-w-[60%]">
         <ToastContainer />
         {/*Logo Image*/}
         <div className="create-new-nft-wrapper-2">
-          <div className="flex gap-x-2">
-            <span className="create-new-nft-wrapper-2-label">Logo Image</span>
-            <span className="text-txt-2">(required)</span>
-          </div>
+          <span className="create-new-nft-wrapper-2-label">Logo Image</span>
           <span className="create-new-nft-wrapper-2-label-type">
             File types supported: JPG, JPEG, PNG, SVG, WEBP and GIF. Max size:
             20 MB
@@ -322,22 +374,12 @@ const CreateCollection: FC<ICollectionProps> = () => {
                 width="24px"
                 height="24px"
               />
-              {/* <span
-                className={clsx(
-                  collectionLogoPreview ? "hidden" : "block mt-2 text-sm"
-                )}
-              >
-                Click to change image
-              </span> */}
             </label>
           </div>
         </div>
         {/*Banner Image*/}
         <div className="create-new-nft-wrapper-2">
-          <div className="flex gap-x-2">
-            <span className="create-new-nft-wrapper-2-label">Banner Image</span>
-            <span className="text-txt-2">(required)</span>
-          </div>
+          <span className="create-new-nft-wrapper-2-label">Banner Image</span>
           <span className="create-new-nft-wrapper-2-label-type">
             File types supported: JPG, JPEG, PNG, SVG, WEBP and GIF. Max size:
             20 MB
@@ -382,12 +424,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
         </div>
         {/*Featured Image*/}
         <div className="create-new-nft-wrapper-2">
-          <div className="flex gap-x-2">
-            <span className="create-new-nft-wrapper-2-label">
-              Featured Image
-            </span>
-            <span className="text-txt-2">(required)</span>
-          </div>
+          <span className="create-new-nft-wrapper-2-label">Featured Image</span>
           <span className="create-new-nft-wrapper-2-label-type">
             File types supported: JPG, JPEG, PNG, SVG, WEBP and GIF. Max size:
             20 MB
@@ -440,29 +477,11 @@ const CreateCollection: FC<ICollectionProps> = () => {
           value={collectionPayload.collection_name}
           required
         />
-        <Input2
-          name="collection_creator_fee"
-          label="NFT Creator Fee"
-          placeholder="Enter NFT Creator Fee in %"
-          onChange={handleFieldChange}
-          value={collectionPayload.collection_creator_fee}
-          required
-        />
-         <Input2
-          name="creator_fee_receiver_address"
-          label="Creator fee receiver address"
-          placeholder="0x7a20d...9257"
-          onChange={handleFieldChange}
-          value={collectionPayload.creator_fee_receiver_address}
-        />
-        <div>
-          <div className="flex gap-x-2">
-            <span className="create-new-nft-wrapper-2-label mb-2">
-              Description
-            </span>
-            <span className="text-txt-2">(required)</span>
-          </div>
 
+        <div>
+          <span className="create-new-nft-wrapper-2-label mb-2">
+            Description
+          </span>
           <textarea
             name="collection_description"
             className="w-full bg-transparent text-white outline-none select"
@@ -470,33 +489,28 @@ const CreateCollection: FC<ICollectionProps> = () => {
             rows={5}
             maxLength={250}
             onChange={handleFieldChange}
-
-            // value={userDetailsPayload.bio}
+            value={collectionPayload.collection_description}
           ></textarea>
         </div>
         <div>
-          <div className="flex gap-x-2 mb-2">
-            <span className="create-new-nft-wrapper-2-label">Category</span>
-            <span className="text-txt-2">(required)</span>
-          </div>
-          {categories !== null ? (
+          <span className="create-new-nft-wrapper-2-label mb-2">Category</span>
+          {category !== null ? (
             <Select
-              title={
-                category !== null ? category.label : "Please select a category"
-              }
+              title={category.name || category.label}
               lists={categories}
               onClick2={handleSelect}
             />
           ) : null}
         </div>
-        {/* <Input2
-          name="collection_creator_prices"
+
+        <Input2
+          name="collection_creator_fee"
           label="Creator fee in %"
           maxLength={4}
           placeholder="0%"
           onChange={handleFieldChange}
-          value={collectionPayload.collection_creator_prices}
-        /> */}
+          value={collectionPayload.collection_creator_fee}
+        />
         {/* <Input2
           name="creator_fee_receiver_address"
           label="Creator fee receiver address"
@@ -504,12 +518,13 @@ const CreateCollection: FC<ICollectionProps> = () => {
           onChange={handleFieldChange}
           value={collectionPayload.creator_fee_receiver_address}
         /> */}
+
         <div>
           <span className="create-new-nft-wrapper-2-label mb-2">Links</span>
           <div className="flex flex-col gap-y-5">
             {/*Website-Link*/}
             <div className="flex items-center gap-x-5">
-              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] px-3 sm:w-[15%] bg-bg-2 rounded-lg">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
                 <div className="relative w-6 h-8">
                   <Image
                     src="/icon-svg/link.svg"
@@ -538,7 +553,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
             </div>
             {/*Discord-Link*/}
             <div className="flex items-center gap-x-5">
-              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] px-3 sm:w-[15%] bg-bg-2 rounded-lg">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
                 <div className="relative w-6 h-5">
                   <Image
                     src="/icon-svg/discord.svg"
@@ -567,7 +582,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
             </div>
             {/*Twitter-Link*/}
             <div className="flex items-center gap-x-5">
-              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] px-3 sm:w-[15%] bg-bg-2 rounded-lg">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
                 <div className="relative w-6 h-5">
                   <Image
                     src="/icon-svg/twitter.svg"
@@ -596,7 +611,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
             </div>
             {/*Instagram-Link*/}
             <div className="flex items-center gap-x-5">
-              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] px-3 sm:w-[15%] bg-bg-2 rounded-lg">
+              <div className="flex items-center justify-center gap-x-4 h-[3.625rem] w-[15%] bg-bg-2 rounded-lg">
                 <div className="relative w-6 h-8">
                   <Image
                     src="/icon-svg/instagram.svg"
@@ -626,7 +641,7 @@ const CreateCollection: FC<ICollectionProps> = () => {
           </div>
         </div>
         <Button
-          title="Create collection"
+          title="Update collection"
           twClasses="w-full"
           onClick={handleSubmit}
           isDisabled={isTransloading}
@@ -636,4 +651,4 @@ const CreateCollection: FC<ICollectionProps> = () => {
   );
 };
 
-export default CreateCollection;
+export default UpdateCollection;

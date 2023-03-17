@@ -41,7 +41,7 @@ const UpdateCollection: FC<ICollectionProps> = () => {
     collection_description: "",
     collection_creator_fee: "",
     collection_on_chain_id: '',
-    // creator_fee_receiver_address: "",
+    creator_fee_receiver_address: "",
   });
   const [connectedAddress, setConnectedAddress] = useState(null);
 
@@ -186,7 +186,8 @@ const UpdateCollection: FC<ICollectionProps> = () => {
             collection_name: response.data.data.name,
             collection_description: response.data.data.description,
             collection_on_chain_id: response.data.data.collection_on_chain_id,
-            collection_creator_fee: response.data.data.collection_creator_fee
+            collection_creator_fee: response.data.data.collection_creator_fee,
+            creator_fee_receiver_address: response.data.data.collection_address
           });
           setSocialLinksPayload({
             website: response.data.data.website,
@@ -229,51 +230,18 @@ const UpdateCollection: FC<ICollectionProps> = () => {
       toast(msg);
       return false;
     }
-
+    else if (!collectionPayload.creator_fee_receiver_address) {
+      msg = "Collection fee address is required";
+      toast(msg);
+      return false;
+    }
+    else if (ethers.utils.isAddress(collectionPayload.creator_fee_receiver_address) !== true) {
+      msg = "Collection fee address is not a valid ETH address";
+      toast(msg);
+      return false;
+    }
     const collection_creator_fee = collectionPayload.collection_creator_fee && isNaN(collectionPayload.collection_creator_fee) === false ? collectionPayload.collection_creator_fee : 0;
-    const provider = new ethers.providers.Web3Provider(
-      (window as any).ethereum
-    );
-   
-    const signer = provider.getSigner();
-    const contract = new ethers.Contract(
-      APPCONFIG.SmartContractAddress,
-      abi,
-      signer
-    );
-
-    try{
-        transaction = await contract.updateCollection(
-        collectionPayload.collection_on_chain_id,
-        collection_creator_fee,
-        connectedAddress
-        );
-    }
-    catch (error) {
-      toast("Transaction unapproved!");
-      setIsTransLoading((prev) => !prev);
-      return
-    }
-   
-      try {
-        tnx = await transaction.wait();
-        const events = findEvents('CollectionCreated', tnx.events, true);
-        // if (events !== undefined && events.length > 0 && events !== true) {
-        //     trackId = events.trackId.toNumber();
-        //     // token BASE URI (metadata URL). e.g. https://thrushapp.xyz/metadata/token/[ERC_TOKEN_TYPE]/[ARTISTE_ID]/[TRACK_ID]
-        //     baseURI = baseURI + state.artiste_id + '/' + trackId;
-        // }
-        if (tnx.events[0]) {
-          
-        } else {
-          toast("We were unable to complete your transaction!");
-          setIsTransLoading(false);
-          return;
-        }
-      } catch (error) {
-        setIsTransLoading(false);
-        return;
-      }
+    
 
     var collectionData = {
       name: collectionPayload.collection_name,
@@ -283,7 +251,8 @@ const UpdateCollection: FC<ICollectionProps> = () => {
       collectionLogoImage: collectionLogo,
       category_id: category._id || category.id,
       ...socialLinksPayload,
-      collection_on_chain_id: collectionPayload.collection_on_chain_id,
+      // collection_on_chain_id: collectionPayload.collection_on_chain_id,
+      collection_address: collectionPayload.creator_fee_receiver_address,
       collection_creator_fee: collectionPayload.collection_creator_fee && isNaN(collectionPayload.collection_creator_fee) === false ? collectionPayload.collection_creator_fee : 0,
     };
     // console.log({ collectionData });
@@ -511,13 +480,13 @@ const UpdateCollection: FC<ICollectionProps> = () => {
           onChange={handleFieldChange}
           value={collectionPayload.collection_creator_fee}
         />
-        {/* <Input2
+        <Input2
           name="creator_fee_receiver_address"
           label="Creator fee receiver address"
           placeholder="0x7a20d...9257"
           onChange={handleFieldChange}
           value={collectionPayload.creator_fee_receiver_address}
-        /> */}
+        />
 
         <div>
           <span className="create-new-nft-wrapper-2-label mb-2">Links</span>
