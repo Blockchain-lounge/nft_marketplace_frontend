@@ -291,7 +291,8 @@ const ViewNft = () => {
             toast.success("Approval Completed");
           } catch (err) {
             toast("Transaction cancelled!");
-            toast(err.message);
+            // toast(err.message);
+            return
           }
           const HEADER = "authenticated";
           const REQUEST_URL = "nft-offer/make_offer?type=listed";
@@ -883,7 +884,7 @@ const ViewNft = () => {
                                   setShowModal((prev) => !prev);
                                 }}
                               />
-                              {/* <Button
+                              <Button
                                 title="Make an offer"
                                 outline2
                                 wt="w-full"
@@ -891,7 +892,7 @@ const ViewNft = () => {
                                   setModaltype("offer");
                                   setShowModal((prev) => !prev);
                                 }}
-                              /> */}
+                              />
                             </>
                           ) : (
                             ""
@@ -1153,10 +1154,20 @@ const ViewNft = () => {
                               : null
                           }
                         >
+                          
                           <div className="flex items-center gap-x-4">
                             <div className="relative h-14 w-14">
                               <Image
-                                src={offer.item_id.item_art_url}
+                                src={
+                                  offer.item_id
+                                  && offer.item_id.item_art_url
+                                  ? offer.item_id.item_art_url
+                                  :
+                                  offer.listing_id.item_id
+                                  && offer.listing_id.item_id.item_art_url
+                                  ? offer.listing_id.item_id.item_art_url
+                                  : APPCONFIG.DEFAULT_NFT_ART
+                                }
                                 alt={"offer-img" + i}
                                 layout="fill"
                                 objectFit="contain"
