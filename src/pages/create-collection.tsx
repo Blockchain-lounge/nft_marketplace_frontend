@@ -219,6 +219,11 @@ const CreateCollection: FC<ICollectionProps> = () => {
       msg = "Collection fee address is not a valid ETH address";
       toast(msg);
       return false;
+    } 
+    else if((!category || category === null) || (category._id && category.id)){
+      msg = "Collection category is required";
+      toast(msg);
+      return false;
     }
 
     
